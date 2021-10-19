@@ -14,9 +14,22 @@ import {
 
 
 class DBConnection {
+    private username:string
+    private password:string
+    private host:string
+    private port:string
+    private db:string
+
+    constructor(username:string,password:string,host:string,port:string,db:string) {
+        this.username = username
+        this.password = password
+        this.host = host
+        this.port = port
+        this.db = db
+    }
 
     async initDB():Promise<Sequelize> { 
-        const sequelize = await new Sequelize(`mysql://${process.env.DEV_USERNAME}:${process.env.DEV_PASSWORD}@${process.env.DEV_HOST}:${process.env.DEV_PORT}/${process.env.DEV_DB}`);
+        const sequelize = await new Sequelize(`mysql://${this.username}:${this.password}@${this.host}:${this.port}/${this.db}`);
         try {
           await sequelize.authenticate()
           console.log("Connect to MySQL succeed.");
@@ -30,4 +43,4 @@ class DBConnection {
 }
 
 
-export default new DBConnection()
+export default DBConnection
