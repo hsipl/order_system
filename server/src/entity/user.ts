@@ -8,7 +8,9 @@ interface UserAttribute {
     id?: number
     username: string
     password: string
-    auth?: number
+    store_id?: number
+    type?: number
+    status?: number
 }
 
 class User extends Model<UserAttribute> 
@@ -16,7 +18,9 @@ implements UserAttribute{
     public id?: number
     public username!: string
     public password!: string
-    public auth!: number
+    public store_id?: number
+    public type!: number
+    public status!: number
    
     public static associations: {
         id: Association<User, Store>;
@@ -28,7 +32,7 @@ User.init(
         id: {
             type: DataType.INTEGER.UNSIGNED,
             autoIncrement: true,
-            primaryKey: true,
+            primaryKey: true
         },
         username: {
             type: DataType.STRING,
@@ -38,9 +42,19 @@ User.init(
             type: DataType.STRING,
             allowNull:false
         },
-        auth: {
+        store_id: {
+            type: DataType.INTEGER.UNSIGNED,
+            allowNull: false
+        },
+        type: {
             type: DataType.TINYINT.UNSIGNED,
-            defaultValue: 0
+            defaultValue: 0,
+            comment: "0: Normal Employee, 1: Store Manager " 
+        },
+        status: {
+            type: DataType.TINYINT.UNSIGNED,
+            defaultValue: 0,
+            comment: "0: On-boarding, 1: Quit"
         },
     },
     {
@@ -50,16 +64,8 @@ User.init(
     }
 )
 
-User.hasMany(Store, {
-    sourceKey: "id",
-    foreignKey: "user_id",
-    onDelete: "SET NULL"
-})
 
-Store.belongsTo(User,{
-    foreignKey: "user_id",
-    targetKey: "id"
-})
+
 
 
 export default User;

@@ -6,18 +6,17 @@ import DBConnection from "../models/mysql"
 
 interface StoreAttribute {
     id?: number
-    user_id: number
     name: string
-    auth: number
-    
+    type?: number
+    status?: number
 }
 
 class Store extends Model<StoreAttribute> 
 implements StoreAttribute{
     public id?: number
-    public user_id!: number
     public name!: string
-    public auth!: number
+    public type!: number
+    public status!: number
 
     public static associations: {
         user_id: Association<Store, User>;
@@ -31,16 +30,19 @@ Store.init(
             autoIncrement: true,
             primaryKey: true
         },
-        user_id: {
-            type: DataType.INTEGER.UNSIGNED,
-        },
         name: {
             type: DataType.STRING,
             allowNull:false
         },
-        auth: {
+        type: {
             type: DataType.TINYINT.UNSIGNED,
-            defaultValue: 0
+            defaultValue: 0,
+            comment: "0: Branch Store, 1: Head Store"
+        },
+        status: {
+            type: DataType.TINYINT.UNSIGNED,
+            defaultValue: 0,
+            comment: "0: Opening, 1: Closing"
         }
     },
     {
@@ -50,7 +52,10 @@ Store.init(
     }
 )
 
-
+Store.hasMany(User,{
+    sourceKey: "id",
+    foreignKey: "store_id",
+})
 
 
 export default Store;
