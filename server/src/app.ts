@@ -2,7 +2,8 @@ import express from "express"
 import dotenv from "dotenv"
 import path from "path"
 import router from "./routes/route"
-
+import DBConnect from "./models/mysql"
+import DBConnection from "./models/mysql"
 // create app class for server
 export class App {
     private app:express.Application = express()
@@ -10,6 +11,7 @@ export class App {
     constructor() {
         this.setEnvironment();
         this.setRoutes();
+        this.setDBConnection();
     }
 
     private setEnvironment():void {
@@ -19,6 +21,10 @@ export class App {
         for (let route of router) {
             this.app.use(`/api/${route.getPrefix()}`,route.getRouter())
         }
+    }
+    private setDBConnection():void {
+        const db = new DBConnection("hsipl","hsipl211","127.0.0.1","3306","dev_db")
+        db.initDB()
     }
     public boot():void {
         this.app.listen(process.env.PORT, () => {
