@@ -7,6 +7,7 @@ class BasicRoutes extends BasicRoute {
         super()
         this.setRoutes()
     }
+    
     protected setRoutes() {
         this.router.get("/healthcheck",(req: Request, res: Response) => {
             res.json({
