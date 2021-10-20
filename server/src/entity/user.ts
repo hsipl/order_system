@@ -1,5 +1,6 @@
 import { Model, Association } from "sequelize"
 import { DataType } from "sequelize-typescript"
+import dotenv from "dotenv"
 import Store from "./store"
 import DBConnection from "../models/mysql"
 
@@ -7,7 +8,7 @@ interface UserAttribute {
     id?: number
     username: string
     password: string
-    auth: number
+    auth?: number
 }
 
 class User extends Model<UserAttribute> 
@@ -27,7 +28,7 @@ User.init(
         id: {
             type: DataType.INTEGER.UNSIGNED,
             autoIncrement: true,
-            primaryKey: true
+            primaryKey: true,
         },
         username: {
             type: DataType.STRING,
@@ -44,14 +45,22 @@ User.init(
     },
     {
         timestamps: true,
-        sequelize: DBConnection.initDB()
+        sequelize: DBConnection,
+        tableName: "user"
     }
 )
 
 User.hasMany(Store, {
-    sourceKey:"id",
-    foreignKey:"user_id"
+    sourceKey: "id",
+    foreignKey: "user_id",
+    onDelete: "SET NULL"
 })
+
+Store.belongsTo(User,{
+    foreignKey: "user_id",
+    targetKey: "id"
+})
+
 
 export default User;
 

@@ -1,5 +1,6 @@
 import { Model, Association } from "sequelize"
-import { DataType } from "sequelize-typescript"
+import { BelongsTo, DataType } from "sequelize-typescript"
+import dotenv from "dotenv"
 import User from "./user"
 import DBConnection from "../models/mysql"
 
@@ -32,7 +33,6 @@ Store.init(
         },
         user_id: {
             type: DataType.INTEGER.UNSIGNED,
-            allowNull: false
         },
         name: {
             type: DataType.STRING,
@@ -45,13 +45,12 @@ Store.init(
     },
     {
         timestamps: true,
-        sequelize: DBConnection.initDB()
+        sequelize: DBConnection,
+        tableName: "store"
     }
 )
 
-Store.hasOne(User, {
-    sourceKey:"user_id",
-    foreignKey:"id"
-})
+
+
 
 export default Store;

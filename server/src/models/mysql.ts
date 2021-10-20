@@ -1,6 +1,10 @@
 import {
     Sequelize,
   } from 'sequelize';
+import dotenv from "dotenv"
+import path from "path"
+
+dotenv.config({path:path.resolve(__dirname,"../.env")})
 
 type envValue = string|undefined
 
@@ -10,7 +14,7 @@ class DBConnection {
     private host: envValue
     private port: envValue
     private db: envValue
-
+    
     constructor() {
         if (process.env.MODE = "DEV") {
             this.username = process.env.DEV_USERNAME
@@ -25,19 +29,17 @@ class DBConnection {
             this.port = process.env.PORT
             this.db = process.env.DB
         }
+        
     }
-
-    initDB(): Sequelize { 
-        const sequelize =  new Sequelize(`mysql://${this.username}:${this.password}@${this.host}:${this.port}/${this.db}`);
+    initDB(): Sequelize {
         try {
-          sequelize.authenticate()
-          console.log("Connect to MySQL succeed.");
+            const sequelize =  new Sequelize(`mysql://${this.username}:${this.password}@${this.host}:${this.port}/${this.db}`);
+            return sequelize
         } catch (error) {
             console.error("Connect to MySQL failed, err:",error)
             throw new Error("Connect to MySQL failed")
         }
-        return sequelize
     }
 }
 
-export default new DBConnection()
+export default new DBConnection().initDB()

@@ -1,18 +1,22 @@
 import express from "express"
 import dotenv from "dotenv"
 import path from "path"
+import { Sequelize } from "sequelize/types"
 import router from "./routes/route"
 import DBConnection from "./models/mysql"
-import { Sequelize } from "sequelize/types"
+import Migrater from "./entity/migrate"
+
+
 // create app class for server
 export class App {
     private app: express.Application = express()
-    private db: Promise<Sequelize>
+    
     
     constructor() {
         this.setEnvironment();
         this.setRoutes();
-        this.db = this.setDBConnection();
+        this.setDBConnection();
+        this.setMigration()
     }
 
     private setEnvironment(): void {
@@ -25,9 +29,18 @@ export class App {
         }
     }
 
-    private setDBConnection(): Promise<Sequelize> {
-        return DBConnection.initDB()
+    private async setDBConnection() {
+        try {
+            DBConnection.authenticate({logging:false})
+            console.log("Connect to MySQL succeed");
+        } catch (error) {
+            throw new Error("MySQL test authentication failed.")
+        }
         
+    }
+
+    private setMigration(): void {
+        new Migrater().migrate()
     }
 
     public boot(): void {
