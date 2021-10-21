@@ -31,7 +31,7 @@ Store.init(
             primaryKey: true
         },
         name: {
-            type: DataType.STRING,
+            type: DataType.STRING(64),
             allowNull:false
         },
         type: {

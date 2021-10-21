@@ -35,11 +35,11 @@ User.init(
             primaryKey: true
         },
         username: {
-            type: DataType.STRING,
+            type: DataType.STRING(64),
             allowNull: false
         },
         password: {
-            type: DataType.STRING,
+            type: DataType.STRING(64),
             allowNull:false
         },
         store_id: {
