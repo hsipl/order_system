@@ -1,67 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:client/pages/login_page.dart';
+import 'package:client/pages/home.dart';
 
+// theme setting
+const primaryColor = Color(0xFFE0E0E0);
+const primaryColorLight = Color(0xFFFFFFFF);
+const primaryColorDark = Color(0xFFAEAEAE);
+const primaryTextColor = Color(0xFF000000);
+ThemeData appTheme = ThemeData(
+  appBarTheme: const AppBarTheme(
+    elevation: 2,
+    shadowColor: primaryColorLight,
+    backgroundColor: primaryColorDark,
+    centerTitle: true,
+    titleTextStyle: TextStyle(color: primaryTextColor, fontSize: 20),
+  ),
+  primaryColor: primaryColor,
+  primaryColorLight: primaryColorLight,
+  primaryColorDark: primaryColorDark,
+  primaryTextTheme: const TextTheme().apply(bodyColor: primaryTextColor),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      onPrimary: primaryTextColor,
+      primary: primaryColorDark,
+    ),
+  ),
+);
+
+//main
 void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+  runApp(MaterialApp(theme: appTheme, initialRoute: '/login', routes: {
+    '/login': (BuildContext content) => const Login(),
+    '/home': (context) =>const Home(),
+  }));
 }
