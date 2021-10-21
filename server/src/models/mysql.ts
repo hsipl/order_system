@@ -1,46 +1,45 @@
 import {
     Sequelize,
-    Model,
-    ModelDefined,
-    DataTypes,
-    HasManyGetAssociationsMixin,
-    HasManyAddAssociationMixin,
-    HasManyHasAssociationMixin,
-    Association,
-    HasManyCountAssociationsMixin,
-    HasManyCreateAssociationMixin,
-    Optional,
   } from 'sequelize';
+import dotenv from "dotenv"
+import path from "path"
 
+dotenv.config({path:path.resolve(__dirname,"../.env")})
+
+type envValue = string|undefined
 
 class DBConnection {
-    private username:string
-    private password:string
-    private host:string
-    private port:string
-    private db:string
-
-    constructor(username:string,password:string,host:string,port:string,db:string) {
-        this.username = username
-        this.password = password
-        this.host = host
-        this.port = port
-        this.db = db
+    private username: envValue
+    private password: envValue
+    private host: envValue
+    private port: envValue
+    private db: envValue
+    
+    constructor() {
+        if (process.env.MODE = "DEV") {
+            this.username = process.env.DEV_USERNAME
+            this.password = process.env.DEV_PASSWORD
+            this.host = process.env.DEV_HOST
+            this.port = process.env.DEV_PORT
+            this.db = process.env.DEV_DB
+        }else {
+            this.username = process.env.USERNAME
+            this.password = process.env.PASSWORD
+            this.host = process.env.HOST
+            this.port = process.env.PORT
+            this.db = process.env.DB
+        }
+        
     }
-
-    async initDB():Promise<Sequelize> { 
-        const sequelize = await new Sequelize(`mysql://${this.username}:${this.password}@${this.host}:${this.port}/${this.db}`);
+    initDB(): Sequelize {
         try {
-          await sequelize.authenticate()
-          console.log("Connect to MySQL succeed.");
+            const sequelize =  new Sequelize(`mysql://${this.username}:${this.password}@${this.host}:${this.port}/${this.db}`);
+            return sequelize
         } catch (error) {
             console.error("Connect to MySQL failed, err:",error)
             throw new Error("Connect to MySQL failed")
         }
-        return sequelize
     }
-
 }
 
-
-export default DBConnection
+export default new DBConnection().initDB()
