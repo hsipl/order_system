@@ -40,7 +40,7 @@ export class App {
     }
 
     private setMigration(): void {
-        new Migrater().migrate()
+        Migrater.migrate()
     }
 
     public boot(): void {

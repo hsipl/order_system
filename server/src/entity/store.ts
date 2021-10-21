@@ -47,6 +47,7 @@ Store.init(
     },
     {
         timestamps: true,
+        paranoid: true,
         sequelize: DBConnection,
         tableName: "store"
     }
@@ -56,6 +57,5 @@ Store.hasMany(User,{
     sourceKey: "id",
     foreignKey: "store_id",
 })
-
 
 export default Store;

@@ -59,14 +59,11 @@ User.init(
     },
     {
         timestamps: true,
+        paranoid: true,
         sequelize: DBConnection,
         tableName: "user"
     }
 )
-
-
-
-
 
 export default User;
 
