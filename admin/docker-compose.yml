@@ -1,0 +1,18 @@
+services:
+  admin:
+    build: .
+    restart: always
+    ports:
+      - 3000:3000
+    networks:
+      - order_net
+    volumes:
+      - admin_data:/order_system/server
+    command: yarn start
+
+networks:
+  order_net:
+    driver: bridge
+
+volumes:
+  admin_data:
