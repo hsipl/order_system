@@ -2,7 +2,7 @@ import { Model, Association } from "sequelize";
 import { BelongsTo, DataType } from "sequelize-typescript";
 import dotenv from "dotenv";
 import DBConnection from "../models/mysql";
-import ProductTag from "./ProductTag";
+import ProductTag from "./productTag";
 interface TagAttribute {
     id?: number
     tag?: string

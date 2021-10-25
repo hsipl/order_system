@@ -2,7 +2,7 @@ import { Model, Association, DataTypes } from "sequelize"
 import { BelongsTo, DataType } from "sequelize-typescript"
 import DBConnection from "../models/mysql"
 import OrderProduct from "./orderProduct";
-import ProductTag from "./ProductTag"
+import ProductTag from "./productTag"
 interface ProductAttribute {
     id?: number
     store_id?: number
