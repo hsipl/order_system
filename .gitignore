@@ -2,3 +2,5 @@ node_modules
 package-lock.json
 server/coverage/
 yarn-error.log
+server/dist
+
