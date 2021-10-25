@@ -1,18 +1,18 @@
-import {Router} from "express"
+import { Router } from "express";
 
 // Abstract BasicRoute for extends and implement
 abstract class BasicRoute {
-    private prefix = "";
-    protected router = Router();
-    protected abstract setRoutes(): void;
-  
-    public getPrefix() {
-      return this.prefix;
-    }
-  
-    public getRouter() {
-      return this.router;
-    }
+  private prefix = "";
+  protected router = Router();
+  protected abstract setRoutes(): void;
+
+  public getPrefix() {
+    return this.prefix;
   }
 
-export default BasicRoute
+  public getRouter() {
+    return this.router;
+  }
+}
+
+export default BasicRoute;

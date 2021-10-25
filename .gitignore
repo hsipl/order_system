@@ -1,4 +1,6 @@
 node_modules
 package-lock.json
-server/coverage
+server/coverage/
+yarn-error.log
 server/dist
+
