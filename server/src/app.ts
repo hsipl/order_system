@@ -1,51 +1,47 @@
-import express from "express"
-import dotenv from "dotenv"
-import path from "path"
-import { Sequelize } from "sequelize/types"
-import router from "./routes/route"
-import DBConnection from "./models/mysql"
-import Migrater from "./entity/migrate"
-
+import express from "express";
+import dotenv from "dotenv";
+import path from "path";
+import router from "./routes/route";
+import DBConnection from "./models/mysql";
+import Migrater from "./entity/migrate";
 
 // create app class for server
 export class App {
-    private app: express.Application = express()
-    
-    
-    constructor() {
-        this.setEnvironment();
-        this.setRoutes();
-        this.setDBConnection();
-        this.setMigration()
-    }
+  private app: express.Application = express();
 
-    private setEnvironment(): void {
-        dotenv.config({path:path.resolve(__dirname,"./.env")})
-    }
+  constructor() {
+    this.setEnvironment();
+    this.setRoutes();
+    this.setDBConnection();
+    this.setMigration();
+  }
 
-    private setRoutes(): void {
-        for (let route of router) {
-            this.app.use(`/api/${route.getPrefix()}`,route.getRouter())
-        }
-    }
+  private setEnvironment(): void {
+    dotenv.config({ path: path.resolve(__dirname, "./.env") });
+  }
 
-    private async setDBConnection() {
-        try {
-            DBConnection.authenticate({logging:false})
-            console.log("Connect to MySQL succeed");
-        } catch (error) {
-            throw new Error("MySQL test authentication failed.")
-        }
-        
+  private setRoutes(): void {
+    for (const route of router) {
+      this.app.use(`/api/${route.getPrefix()}`, route.getRouter());
     }
+  }
 
-    private setMigration(): void {
-        Migrater.migrate()
+  private async setDBConnection() {
+    try {
+      DBConnection.authenticate({ logging: false });
+      console.log("Connect to MySQL succeed");
+    } catch (error) {
+      throw new Error("MySQL test authentication failed.");
     }
+  }
 
-    public boot(): void {
-        this.app.listen(process.env.PORT, () => {
-            console.log(`Server is running on ${process.env.PORT}`);
-        })
-    }
-} 
+  private setMigration(): void {
+    Migrater.migrate();
+  }
+
+  public boot(): void {
+    this.app.listen(process.env.PORT, () => {
+      console.log(`Server is running on ${process.env.PORT}`);
+    });
+  }
+}

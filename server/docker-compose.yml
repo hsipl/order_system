@@ -16,6 +16,37 @@ services:
     restart: always
     ports:
       - 3306:3306
+    networks: 
+      - order_net
+
+  backend:
+    build: .
+    restart: always
+    environment:
+      MODE : DEV
+      PORT : 8000
+      DEV_USERNAME : hsipl
+      DEV_PASSWORD : hsipl211
+      DEV_HOST : db
+      DEV_PORT : 3306
+      DEV_DB : dev_db
+    links:
+      - db
+    ports:
+      - 8000:8000
+    networks: 
+      - order_net
+    depends_on:
+      - db
+    command: yarn dev
+    volumes:
+      - backend_data:/order_system/server
+
 
 volumes:
   mysql_data:
+  backend_data:
+
+networks:
+  order_net:
+    driver: bridge
