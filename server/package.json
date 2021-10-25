@@ -7,7 +7,7 @@
     "test": "jest --coverage",
     "dev": "nodemon --exec ts-node ./src/index.ts",
     "build": "tsc",
-    "start": "npm run build && node ./dist/index.js"
+    "start": "npm run build && node ./dist/src/index.js"
   },
   "author": "GaryHsu",
   "license": "ISC",
