@@ -19,26 +19,27 @@ class _LoginState extends State<Login> {
   LoginTextField usernameField = LoginTextField(
     icon: Icons.person,
     hint: 'username',
-    mask: false,
+    isPasswordField: false,
     title: 'username',
   );
   LoginTextField passwordField = LoginTextField(
-      icon: Icons.lock, hint: 'password', mask: true, title: 'password');
+      icon: Icons.lock, hint: 'password', isPasswordField: true, title: 'password');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Login'),
       ),
       body: Container(
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.all(40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             usernameField,
             passwordField,
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () async {
                 loginChecker(context);
