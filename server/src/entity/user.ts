@@ -1,6 +1,5 @@
-import { Model, Association } from "sequelize";
+import { Model } from "sequelize";
 import { DataType } from "sequelize-typescript";
-import Store from "./store";
 import DBConnection from "../models/mysql";
 
 interface UserAttribute {
@@ -19,10 +18,6 @@ class User extends Model<UserAttribute> implements UserAttribute {
   public storeID?: number;
   public type!: number;
   public status!: number;
-
-  public static associations: {
-    id: Association<User, Store>;
-  };
 }
 
 User.init(

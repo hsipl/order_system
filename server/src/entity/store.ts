@@ -1,6 +1,5 @@
-import { Model, Association } from "sequelize";
+import { Model } from "sequelize";
 import { DataType } from "sequelize-typescript";
-import User from "./user";
 import DBConnection from "../models/mysql";
 
 interface StoreAttribute {
@@ -15,10 +14,6 @@ class Store extends Model<StoreAttribute> implements StoreAttribute {
   public name!: string;
   public type!: number;
   public status!: number;
-
-  public static associations: {
-    user_id: Association<Store, User>;
-  };
 }
 
 Store.init(
@@ -27,6 +22,7 @@ Store.init(
       type: DataType.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
+      onDelete: "cascade",
     },
     name: {
       type: DataType.STRING(64),
@@ -50,10 +46,5 @@ Store.init(
     tableName: "store",
   }
 );
-
-Store.hasMany(User, {
-  sourceKey: "id",
-  foreignKey: "store_id",
-});
 
 export default Store;
