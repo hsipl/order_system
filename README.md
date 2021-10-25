@@ -62,11 +62,11 @@ yarn install
 # change directory to server
 1. cd order_system/admin
 
-# run server using docker-compose on localhost:3000
+# run server using docker-compose on localhost:3003
 2. docker-compose up -d
 
 # try api healthcheck
-3. http://localhost:3000
+3. http://localhost:3003
 ```
 
 
