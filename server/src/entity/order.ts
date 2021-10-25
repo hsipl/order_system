@@ -1,51 +1,41 @@
-import { Model, Association } from "sequelize";
-import { BelongsTo, DataType } from "sequelize-typescript";
-import dotenv from "dotenv";
-import Store from "./store";
+import { Model } from "sequelize";
+import { DataType } from "sequelize-typescript";
 import DBConnection from "../models/mysql";
-import OrderProduct from "./orderProduct";
 interface OrderAttribute {
-    id?: number
-    store_id?: number
-    status?: number
+  id?: number;
+  storeId?: number;
+  status?: number;
 }
 
-class Order extends Model<OrderAttribute>
-    implements OrderAttribute {
-    public id?: number
-    public store_id!: number
-    public status!: number
-
+class Order extends Model<OrderAttribute> implements OrderAttribute {
+  public id?: number;
+  public storeId!: number;
+  public status!: number;
 }
 Order.init(
-    {
-        id: {
-            type: DataType.INTEGER.UNSIGNED,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        store_id: {
-            type: DataType.INTEGER.UNSIGNED,
-            allowNull: false
-        }, status: {
-            type: DataType.TINYINT.UNSIGNED,
-            defaultValue: 0,
-            comment: "0: Unpaid, 1: Paid"
-        }
+  {
+    id: {
+      type: DataType.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    {
-        timestamps: true,
-        paranoid: true,
-        sequelize: DBConnection,
-        tableName: "order"
-    }
-)
-Store.hasMany(Order, {
-    sourceKey: "id",
-    foreignKey: "store_id",
-})
-Order.hasOne(OrderProduct, {
-    sourceKey: "id",
-    foreignKey: "order_id"
-})
+    storeId: {
+      type: DataType.INTEGER.UNSIGNED,
+      allowNull: false,
+      field: "store_id",
+    },
+    status: {
+      type: DataType.TINYINT.UNSIGNED,
+      defaultValue: 0,
+      comment: "0: Unpaid, 1: Paid",
+    },
+  },
+  {
+    timestamps: true,
+    paranoid: true,
+    sequelize: DBConnection,
+    tableName: "order",
+  }
+);
+
 export default Order;
