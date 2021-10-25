@@ -3,7 +3,7 @@ services:
     build: .
     restart: always
     ports:
-      - 3000:3000
+      - 3003:3003
     networks:
       - order_net
     volumes:
