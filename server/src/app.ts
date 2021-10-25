@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import path from "path";
 import router from "./routes/route";
 import DBConnection from "./models/mysql";
+import Migrater from "./entity/migrate";
+
 // create app class for server
 export class App {
   private app: express.Application = express();
@@ -11,26 +13,32 @@ export class App {
     this.setEnvironment();
     this.setRoutes();
     this.setDBConnection();
+    this.setMigration();
   }
 
   private setEnvironment(): void {
     dotenv.config({ path: path.resolve(__dirname, "./.env") });
   }
+
   private setRoutes(): void {
     for (const route of router) {
       this.app.use(`/api/${route.getPrefix()}`, route.getRouter());
     }
   }
-  private setDBConnection(): void {
-    const db = new DBConnection(
-      "hsipl",
-      "hsipl211",
-      "127.0.0.1",
-      "3306",
-      "dev_db"
-    );
-    db.initDB();
+
+  private async setDBConnection() {
+    try {
+      DBConnection.authenticate({ logging: false });
+      console.log("Connect to MySQL succeed");
+    } catch (error) {
+      throw new Error("MySQL test authentication failed.");
+    }
   }
+
+  private setMigration(): void {
+    Migrater.migrate();
+  }
+
   public boot(): void {
     this.app.listen(process.env.PORT, () => {
       console.log(`Server is running on ${process.env.PORT}`);
