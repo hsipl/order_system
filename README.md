@@ -18,7 +18,7 @@ Order System for local shop(Still Devloping)
 
 ```sh
 # clone repo
-git clone https://github.com/linkernetworks/v2.git
+git clone https://github.com/p0937507934/order_system.git
 
 # install dependency
 cd order_system
