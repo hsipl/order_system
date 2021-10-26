@@ -34,16 +34,19 @@ Order.hasOne(OrderProduct, {
 });
 Order.belongsTo(Store, {
   foreignKey: "store_id",
+  targetKey: "id",
   as: "store",
   onDelete: "cascade",
 });
 ProductTag.belongsTo(Tag, {
   foreignKey: "tag_id",
+  targetKey: "id",
   as: "tag",
   onDelete: "cascade",
 });
 ProductTag.belongsTo(Product, {
   foreignKey: "product_id",
+  targetKey: "id",
   as: "product",
   onDelete: "cascade",
 });
@@ -65,17 +68,20 @@ Product.hasOne(ProductTag, {
 });
 Product.belongsTo(Store, {
   foreignKey: "store_id",
+  targetKey: "id",
   as: "store",
   onDelete: "cascade",
 });
 
 OrderProduct.belongsTo(Order, {
   foreignKey: "order_id",
+  targetKey: "id",
   as: "order",
   onDelete: "cascade",
 });
 OrderProduct.belongsTo(Product, {
   foreignKey: "product_id",
+  targetKey: "id",
   as: "product",
   onDelete: "cascade",
 });

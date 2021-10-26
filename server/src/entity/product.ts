@@ -31,7 +31,7 @@ Product.init(
     storeId: {
       type: DataType.INTEGER.UNSIGNED,
       allowNull: false,
-      field: "store_id,",
+      field: "store_id",
     },
     name: {
       type: DataType.STRING(64),
