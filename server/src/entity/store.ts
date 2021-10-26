@@ -1,12 +1,16 @@
 import { Model } from "sequelize";
 import { DataType } from "sequelize-typescript";
 import DBConnection from "../models/mysql";
+import moment from "moment";
 
 interface StoreAttribute {
   id?: number;
   name: string;
   type?: number;
   status?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
 }
 
 class Store extends Model<StoreAttribute> implements StoreAttribute {
@@ -14,6 +18,9 @@ class Store extends Model<StoreAttribute> implements StoreAttribute {
   public name!: string;
   public type!: number;
   public status!: number;
+  public createdAt?: string;
+  public updatedAt?: string;
+  public deletedAt?: string;
 }
 
 Store.init(
@@ -22,7 +29,6 @@ Store.init(
       type: DataType.INTEGER.UNSIGNED,
       autoIncrement: true,
       primaryKey: true,
-      onDelete: "cascade",
     },
     name: {
       type: DataType.STRING(64),
@@ -37,6 +43,19 @@ Store.init(
       type: DataType.TINYINT.UNSIGNED,
       defaultValue: 0,
       comment: "0: Opening, 1: Closing",
+    },
+    createdAt: {
+      type: DataType.STRING,
+      allowNull: false,
+      defaultValue: moment().format("YYYY-MM-DD HH:mm:s"),
+    },
+    updatedAt: {
+      type: DataType.STRING,
+      allowNull: true,
+    },
+    deletedAt: {
+      type: DataType.STRING,
+      allowNull: true,
     },
   },
   {

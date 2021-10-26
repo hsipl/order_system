@@ -11,7 +11,6 @@ export class App {
     this.setEnvironment();
     this.setRoutes();
     this.setDBConnection();
-    this.setMigration();
   }
 
   private setEnvironment(): void {
@@ -31,10 +30,6 @@ export class App {
     } catch (error) {
       throw new Error("MySQL test authentication failed.");
     }
-  }
-
-  private setMigration(): void {
-    require("./entity/index");
   }
 
   public boot(): void {

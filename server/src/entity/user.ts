@@ -1,6 +1,7 @@
 import { Model } from "sequelize";
 import { DataType } from "sequelize-typescript";
 import DBConnection from "../models/mysql";
+import moment from "moment";
 
 interface UserAttribute {
   id?: number;
@@ -9,6 +10,9 @@ interface UserAttribute {
   storeID?: number;
   type?: number;
   status?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  deletedAt?: string;
 }
 
 class User extends Model<UserAttribute> implements UserAttribute {
@@ -18,9 +22,12 @@ class User extends Model<UserAttribute> implements UserAttribute {
   public storeID?: number;
   public type!: number;
   public status!: number;
+  public createdAt?: string;
+  public updatedAt?: string;
+  public deletedAt?: string;
 }
 
-User.init(
+export default User.init(
   {
     id: {
       type: DataType.INTEGER.UNSIGNED,
@@ -34,6 +41,7 @@ User.init(
     password: {
       type: DataType.STRING(64),
       allowNull: false,
+      unique: true,
     },
     storeID: {
       type: DataType.INTEGER.UNSIGNED,
@@ -50,6 +58,19 @@ User.init(
       defaultValue: 0,
       comment: "0: On-boarding, 1: Quit",
     },
+    createdAt: {
+      type: DataType.STRING,
+      allowNull: false,
+      defaultValue: moment().format("YYYY-MM-DD HH:mm:s"),
+    },
+    updatedAt: {
+      type: DataType.STRING,
+      allowNull: true,
+    },
+    deletedAt: {
+      type: DataType.STRING,
+      allowNull: true,
+    },
   },
   {
     timestamps: true,
@@ -58,5 +79,3 @@ User.init(
     tableName: "user",
   }
 );
-
-export default User;

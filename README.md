@@ -54,6 +54,9 @@ yarn install
 
 # try api healthcheck
 3. http://localhost:8000/api/healthcheck
+
+# migrate db
+4. npm run migrate
 ```
 
 ### Frontend Server
