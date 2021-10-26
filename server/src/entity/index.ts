@@ -32,12 +32,6 @@ Order.hasOne(OrderProduct, {
   foreignKey: "order_id",
   onDelete: "cascade",
 });
-Order.belongsTo(Store, {
-  foreignKey: "store_id",
-  targetKey: "id",
-  as: "store",
-  onDelete: "cascade",
-});
 ProductTag.belongsTo(Tag, {
   foreignKey: "tag_id",
   targetKey: "id",
@@ -66,13 +60,6 @@ Product.hasOne(ProductTag, {
   foreignKey: "product_id",
   onDelete: "cascade",
 });
-Product.belongsTo(Store, {
-  foreignKey: "store_id",
-  targetKey: "id",
-  as: "store",
-  onDelete: "cascade",
-});
-
 OrderProduct.belongsTo(Order, {
   foreignKey: "order_id",
   targetKey: "id",
