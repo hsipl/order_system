@@ -9,7 +9,8 @@
     "build": "tsc",
     "start": "npm run build && node ./src/dist/src/index.js",
     "eslint": "eslint  src/*.ts",
-    "format": "eslint --fix src/**"
+    "format": "eslint --fix ./src/**",
+    "migrate": "ts-node ./src/entity/index.ts"
   },
   "author": "GaryHsu",
   "license": "ISC",
