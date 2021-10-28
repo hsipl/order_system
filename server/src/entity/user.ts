@@ -1,81 +1,36 @@
-import { Model } from "sequelize";
-import { DataType } from "sequelize-typescript";
-import DBConnection from "../models/mysql";
-import moment from "moment";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToOne } from "typeorm";
+import { Store } from "./store"
 
-interface UserAttribute {
-  id?: number;
-  username: string;
-  password: string;
-  storeID?: number;
-  type?: number;
-  status?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  deletedAt?: string;
+@Entity()
+export class User {
+    @PrimaryGeneratedColumn({unsigned: true})
+    id: number;
+
+    @Column({length: 64})
+    name: string;
+
+    @Column({length: 64, unique: true})
+    username: string;
+
+    @Column({length: 256})
+    password: string;
+
+    @ManyToOne(() => Store)
+    @JoinColumn({name: "store_id"})
+    storeId: number;
+
+    @Column({unsigned: true, type: "tinyint", comment: "0: Normal Employee, 1: Store Manager ", default: 0})
+    type: number;
+
+    @Column({unsigned: true, type: "tinyint", comment: "0: On-boarding, 1: Quit", default: 0})
+    status: number;
+
+    @CreateDateColumn({name: "createdAt"})
+    createdAt: Date;
+
+    @UpdateDateColumn({name: "updatedAt"})
+    updatedAt: Date;
+
+    @DeleteDateColumn({name: "deletedAt"})
+    deletedAt: Date;
 }
-
-class User extends Model<UserAttribute> implements UserAttribute {
-  public id?: number;
-  public username!: string;
-  public password!: string;
-  public storeID?: number;
-  public type!: number;
-  public status!: number;
-  public createdAt?: string;
-  public updatedAt?: string;
-  public deletedAt?: string;
-}
-
-export default User.init(
-  {
-    id: {
-      type: DataType.INTEGER.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    username: {
-      type: DataType.STRING(64),
-      allowNull: false,
-    },
-    password: {
-      type: DataType.STRING(64),
-      allowNull: false,
-      unique: true,
-    },
-    storeID: {
-      type: DataType.INTEGER.UNSIGNED,
-      allowNull: false,
-      field: "store_id",
-    },
-    type: {
-      type: DataType.TINYINT.UNSIGNED,
-      defaultValue: 0,
-      comment: "0: Normal Employee, 1: Store Manager ",
-    },
-    status: {
-      type: DataType.TINYINT.UNSIGNED,
-      defaultValue: 0,
-      comment: "0: On-boarding, 1: Quit",
-    },
-    createdAt: {
-      type: DataType.STRING,
-      allowNull: false,
-      defaultValue: moment().format("YYYY-MM-DD HH:mm:s"),
-    },
-    updatedAt: {
-      type: DataType.STRING,
-      allowNull: true,
-    },
-    deletedAt: {
-      type: DataType.STRING,
-      allowNull: true,
-    },
-  },
-  {
-    timestamps: true,
-    paranoid: true,
-    sequelize: DBConnection,
-    tableName: "user",
-  }
-);
