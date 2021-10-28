@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn, ManyToOne } from "typeorm";
 import { Store } from "./store"
 
 @Entity()
@@ -9,13 +9,13 @@ export class User {
     @Column({length: 64})
     name: string;
 
-    @Column({length: 64})
+    @Column({length: 64, unique: true})
     username: string;
 
     @Column({length: 256})
     password: string;
 
-    @OneToOne(() => Store)
+    @ManyToOne(() => Store)
     @JoinColumn({name: "store_id"})
     storeId: number;
 
