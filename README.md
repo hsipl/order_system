@@ -27,6 +27,20 @@ cd server
 yarn install
 ```
 
+### For Frontend Developers
+
+
+```sh
+# clone repo
+git clone https://github.com/p0937507934/order_system.git
+
+# install dependency
+cd order_system
+yarn install 
+cd admin
+yarn install
+```
+
 ## Usage
 
 ### Backend Server
@@ -40,6 +54,22 @@ yarn install
 
 # try api healthcheck
 3. http://localhost:8000/api/healthcheck
+
+# migrate db
+4. npm run migrate
+```
+
+### Frontend Server
+
+```sh
+# change directory to server
+1. cd order_system/admin
+
+# run server using docker-compose on localhost:3003
+2. docker-compose up -d
+
+# try api healthcheck
+3. http://localhost:3003
 ```
 
 
@@ -69,7 +99,7 @@ project: Add a new  API for x functionality
 |        |
 |        +-> Summary your works.
 |
-+-------> Type:Admin,Backend,App,DB
++-------> Type:Admin,Backend,App,DB,...etc
 ```
 
 

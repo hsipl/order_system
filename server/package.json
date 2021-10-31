@@ -7,9 +7,7 @@
     "test": "jest --coverage",
     "dev": "nodemon --exec ts-node ./src/index.ts",
     "build": "tsc",
-    "start": "npm run build && node ./dist/index.js",
-    "eslint": "eslint  src/*.ts",
-    "format": "eslint --fix src/**"
+    "start": "npm run build && node ./src/dist/src/index.js"
   },
   "author": "GaryHsu",
   "license": "ISC",
@@ -17,14 +15,8 @@
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.1",
     "@types/validator": "^13.6.3",
-    "@typescript-eslint/eslint-plugin": "^5.1.0",
-    "@typescript-eslint/parser": "^5.1.0",
-    "eslint": "^8.0.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.3.1",
     "nodemon": "^2.0.13",
-    "prettier": "^2.4.1",
     "ts-jest": "^27.0.7",
     "typescript": "^4.4.4"
   },
@@ -34,8 +26,7 @@
     "express": "^4.17.1",
     "mysql2": "^2.3.2",
     "reflect-metadata": "^0.1.13",
-    "sequelize": "^6.7.0",
-    "sequelize-typescript": "^2.1.1",
-    "ts-node": "^10.3.0"
+    "ts-node": "^10.3.0",
+    "typeorm": "^0.2.38"
   }
 }

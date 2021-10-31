@@ -1,25 +1,16 @@
 import express from "express";
-import dotenv from "dotenv";
-import path from "path";
 import router from "./routes/route";
-import DBConnection from "./models/mysql";
-import Migrater from "./entity/migrate";
+import { Connection, createConnection } from "typeorm";
+import "reflect-metadata";
 
 // create app class for server
 export class App {
   private app: express.Application = express();
 
   constructor() {
-    this.setEnvironment();
     this.setRoutes();
     this.setDBConnection();
-    this.setMigration();
   }
-
-  private setEnvironment(): void {
-    dotenv.config({ path: path.resolve(__dirname, "./.env") });
-  }
-
   private setRoutes(): void {
     for (const route of router) {
       this.app.use(`/api/${route.getPrefix()}`, route.getRouter());
@@ -28,15 +19,14 @@ export class App {
 
   private async setDBConnection() {
     try {
-      DBConnection.authenticate({ logging: false });
-      console.log("Connect to MySQL succeed");
+      const connection = await createConnection();   
+      if (connection.isConnected) {
+        console.log("MySQL db already connect.");
+      }
     } catch (error) {
-      throw new Error("MySQL test authentication failed.");
+      console.log(error);
+      throw new Error("MySQL connection failed.");
     }
-  }
-
-  private setMigration(): void {
-    Migrater.migrate();
   }
 
   public boot(): void {
