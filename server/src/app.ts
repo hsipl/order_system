@@ -1,19 +1,23 @@
-import express from "express";
+import express, { urlencoded } from "express";
 import router from "./routes/route";
 import { Connection, createConnection } from "typeorm";
 import "reflect-metadata";
+import errorHandler from "./middlewares/errorhandler"
 
 // create app class for server
 export class App {
   private app: express.Application = express();
 
   constructor() {
-    this.setRoutes();
+    this.app.use(express.json())
     this.setDBConnection();
+    this.setRoutes();
+    this.app.use(errorHandler)
   }
   private setRoutes(): void {
     for (const route of router) {
       this.app.use(`/api/${route.getPrefix()}`, route.getRouter());
+      console.log(`api: ${route.getPrefix()} registered.`)
     }
   }
 
@@ -30,8 +34,9 @@ export class App {
   }
 
   public boot(): void {
-    this.app.listen(process.env.PORT, () => {
-      console.log(`Server is running on ${process.env.PORT}`);
+    const port = process.env.PORT || 8000
+    this.app.listen(port, () => {
+      console.log(`Server is running on ${port}`);
     });
   }
 }

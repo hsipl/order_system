@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToOne, JoinColumn, BaseEntity } from "typeorm";
 
 @Entity()
-export class Store {
+export class Store extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({length: 64})
+    @Column({length: 64, unique: true})
     name: string;
 
     @Column({type: "tinyint", unsigned: true, comment: "0: Branch Store, 1: Head Store", default: 0})
