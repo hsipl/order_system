@@ -1,10 +1,11 @@
 export enum errorMsg {
-    storeParameterError =  "store parameters required.",
-    internalServerError = "there is some error caused.",
-    dataAlreadyExist = "data already exists."
+  ParameterError = "parameters error.",
+  internalServerError = "there is some error caused.",
+  dataAlreadyExist = "data already exists.",
+  dataNotFound = "data not found.",
 }
 export enum errorStatusCode {
-    badRequest = 400,
-    InternalServerError = 500,
-    Forbidden = 403
+  badRequest = 400,
+  InternalServerError = 500,
+  Forbidden = 403,
 }

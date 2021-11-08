@@ -14,7 +14,7 @@ abstract class BasicRoute {
     return this.router;
   }
   public setPrefix(s: string) {
-    this.prefix = s
+    this.prefix = s;
   }
 }
 
