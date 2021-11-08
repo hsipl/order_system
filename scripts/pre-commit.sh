@@ -9,7 +9,7 @@
 # # Eslint check all files under server/src
 # echo "Eslint check all files under server/src/..."
 # cd ./server
-# yarn eslint
+# yarn prettier
 # if [[ "$?" == 1 ]]; then
 #     echo "[failed]ESlint check fail, please fix your code format."
 #     echo "[Hint]Maybe you should use npm run format"
