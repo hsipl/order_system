@@ -1,7 +1,6 @@
 version: "0.01"
 
 services:
-  
   db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
@@ -13,35 +12,33 @@ services:
       MYSQL_DATABASE: dev_db
     volumes:
       - mysql_data:/var/lib/mysql
-    restart: always
     ports:
       - 3306:3306
-    networks: 
+    networks:
       - order_net
 
   backend:
     build: .
     restart: always
     environment:
-      MODE : DEV
-      PORT : 8000
-      DEV_USERNAME : hsipl
-      DEV_PASSWORD : hsipl211
-      DEV_HOST : db
-      DEV_PORT : 3306
-      DEV_DB : dev_db
+      MODE: DEV
+      PORT: 8000
+      DEV_USERNAME: hsipl
+      DEV_PASSWORD: hsipl211
+      DEV_HOST: db
+      DEV_PORT: 3306
+      DEV_DB: dev_db
     links:
       - db
     ports:
       - 8000:8000
-    networks: 
+    networks:
       - order_net
     depends_on:
       - db
     command: yarn dev
     volumes:
       - backend_data:/order_system/server
-
 
 volumes:
   mysql_data:

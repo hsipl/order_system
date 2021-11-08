@@ -13,6 +13,9 @@ abstract class BasicRoute {
   public getRouter() {
     return this.router;
   }
+  public setPrefix(s: string) {
+    this.prefix = s;
+  }
 }
 
 export default BasicRoute;

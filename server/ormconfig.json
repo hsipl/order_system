@@ -9,6 +9,5 @@
     "logging": false,
     "entities": [
        "src/entity/**/*.ts"
-    ]
-   
+    ] 
  }
