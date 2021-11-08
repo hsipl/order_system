@@ -43,3 +43,4 @@ export class Store extends BaseEntity {
   @DeleteDateColumn({ name: "deletedAt" })
   deletedAt: Date;
 }
+

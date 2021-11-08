@@ -53,4 +53,5 @@ export class User {
 
   @DeleteDateColumn({ name: "deletedAt" })
   deletedAt: Date;
+
 }
