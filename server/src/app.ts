@@ -1,51 +1,43 @@
-import express from "express"
-import dotenv from "dotenv"
-import path from "path"
-import { Sequelize } from "sequelize/types"
-import router from "./routes/route"
-import DBConnection from "./models/mysql"
-import Migrater from "./entity/migrate"
-
+import express from 'express';
+import { createConnection } from 'typeorm';
+import router from './routes/route';
+import 'reflect-metadata';
+import errorHandler from './middlewares/errorhandler';
 
 // create app class for server
 export class App {
-    private app: express.Application = express()
-    
-    
-    constructor() {
-        this.setEnvironment();
-        this.setRoutes();
-        this.setDBConnection();
-        this.setMigration()
-    }
+  private app: express.Application = express();
 
-    private setEnvironment(): void {
-        dotenv.config({path:path.resolve(__dirname,"./.env")})
-    }
+  constructor() {
+    this.app.use(express.json());
+    this.setDBConnection();
+    this.setRoutes();
+    this.app.use(errorHandler);
+  }
 
-    private setRoutes(): void {
-        for (let route of router) {
-            this.app.use(`/api/${route.getPrefix()}`,route.getRouter())
-        }
+  private setRoutes(): void {
+    for (const route of router) {
+      this.app.use(`/api/${route.getPrefix()}`, route.getRouter());
+      console.log(`api: ${route.getPrefix()} registered.`);
     }
+  }
 
-    private async setDBConnection() {
-        try {
-            DBConnection.authenticate({logging:false})
-            console.log("Connect to MySQL succeed");
-        } catch (error) {
-            throw new Error("MySQL test authentication failed.")
-        }
-        
+  private async setDBConnection() {
+    try {
+      const connection = await createConnection();
+      if (connection.isConnected) {
+        console.log('MySQL db already connect.');
+      }
+    } catch (error) {
+      console.log(error);
+      throw new Error('MySQL connection failed.');
     }
+  }
 
-    private setMigration(): void {
-        Migrater.migrate()
-    }
-
-    public boot(): void {
-        this.app.listen(process.env.PORT, () => {
-            console.log(`Server is running on ${process.env.PORT}`);
-        })
-    }
-} 
+  public boot(): void {
+    const port = process.env.PORT || 8000;
+    this.app.listen(port, () => {
+      console.log(`Server is running on ${port}`);
+    });
+  }
+}

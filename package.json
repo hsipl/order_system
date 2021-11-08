@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "husky": "^7.0.4"
+  },
+  "scripts": {
+    "prepare": "husky install",
+    "pre-commit": "sh ./scripts/prettier-before-commit.sh"
+    
+  }
+}

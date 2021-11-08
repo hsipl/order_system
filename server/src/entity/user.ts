@@ -1,69 +1,56 @@
-import { Model, Association } from "sequelize"
-import { DataType } from "sequelize-typescript"
-import dotenv from "dotenv"
-import Store from "./store"
-import DBConnection from "../models/mysql"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
+  OneToOne,
+  JoinColumn,
+  ManyToOne,
+} from "typeorm";
+import { Store } from "./store";
 
-interface UserAttribute {
-    id?: number
-    username: string
-    password: string
-    store_id?: number
-    type?: number
-    status?: number
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn({ unsigned: true })
+  id: number;
+
+  @Column({ length: 64 })
+  name: string;
+
+  @Column({ length: 64, unique: true })
+  username: string;
+
+  @Column({ length: 256 })
+  password: string;
+
+  @ManyToOne(() => Store)
+  @JoinColumn({ name: "store_id" })
+  storeId: number;
+
+  @Column({
+    unsigned: true,
+    type: "tinyint",
+    comment: "0: Normal Employee, 1: Store Manager ",
+    default: 0,
+  })
+  type: number;
+
+  @Column({
+    unsigned: true,
+    type: "tinyint",
+    comment: "0: On-boarding, 1: Quit",
+    default: 0,
+  })
+  status: number;
+
+  @CreateDateColumn({ name: "createdAt" })
+  createdAt: Date;
+
+  @UpdateDateColumn({ name: "updatedAt" })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ name: "deletedAt" })
+  deletedAt: Date;
 }
-
-class User extends Model<UserAttribute> 
-implements UserAttribute{
-    public id?: number
-    public username!: string
-    public password!: string
-    public store_id?: number
-    public type!: number
-    public status!: number
-   
-    public static associations: {
-        id: Association<User, Store>;
-    }
-}
-
-User.init(
-    {
-        id: {
-            type: DataType.INTEGER.UNSIGNED,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        username: {
-            type: DataType.STRING(64),
-            allowNull: false
-        },
-        password: {
-            type: DataType.STRING(64),
-            allowNull:false
-        },
-        store_id: {
-            type: DataType.INTEGER.UNSIGNED,
-            allowNull: false
-        },
-        type: {
-            type: DataType.TINYINT.UNSIGNED,
-            defaultValue: 0,
-            comment: "0: Normal Employee, 1: Store Manager " 
-        },
-        status: {
-            type: DataType.TINYINT.UNSIGNED,
-            defaultValue: 0,
-            comment: "0: On-boarding, 1: Quit"
-        },
-    },
-    {
-        timestamps: true,
-        paranoid: true,
-        sequelize: DBConnection,
-        tableName: "user"
-    }
-)
-
-export default User;
-
