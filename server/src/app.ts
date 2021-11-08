@@ -3,6 +3,8 @@ import { createConnection } from 'typeorm';
 import router from './routes/route';
 import 'reflect-metadata';
 import errorHandler from './middlewares/errorhandler';
+import { Store } from './entity/store';
+import { User } from './entity/user';
 
 // create app class for server
 export class App {
@@ -32,7 +34,10 @@ export class App {
         password: "hsipl211",
         database: "dev_db",
         synchronize: true,
-        logging: false
+        logging: false,
+        entities:[
+          Store,User
+        ]
       })
       if (connection.isConnected) {
         console.log('MySQL db already connect.');
