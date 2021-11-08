@@ -24,7 +24,16 @@ export class App {
 
   private async setDBConnection() {
     try {
-      const connection = await createConnection();
+      const connection = await createConnection({
+        type: "mysql",
+        host: "db",
+        port: 3306,
+        username: "hsipl",
+        password: "hsipl211",
+        database: "dev_db",
+        synchronize: true,
+        logging: false
+      })
       if (connection.isConnected) {
         console.log('MySQL db already connect.');
       }
