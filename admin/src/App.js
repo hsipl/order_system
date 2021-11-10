@@ -1,24 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import Login from "./components/Login";
+import Navbar from "./components/Navbar";
+import Muitest from "./components/Muitest";
+import Product from "./components/Product";
+import Order from "./components/Order";
+import Shop from "./components/Shop";
+import Report from "./components/Report";
+import Home from "./components/Home";
+import Handover from "./components/Handover";
+
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Route exact path="/">
+        <Navbar />
+        <Home />
+      </Route>
+
+      <Route exact path="/product">
+        <Navbar />
+        <Product />
+      </Route>
+
+      <Route exact path="/order">
+        <Navbar />
+        <Order />
+      </Route>
+
+      <Route exact path="/shop">
+        <Navbar />
+        <Shop />
+      </Route>
+
+      <Route exact path="/report">
+        <Navbar />
+        <Report />
+      </Route>
+
+      <Route exact path="/handover">
+        <Navbar />
+        <Handover />
+      </Route>
+
+    </Router>
   );
 }
 
