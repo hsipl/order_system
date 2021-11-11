@@ -44,6 +44,11 @@ function App() {
         <Handover />
       </Route>
 
+      <Route exact path="/login">
+        <Login />
+
+      </Route>
+
     </Router>
   );
 }

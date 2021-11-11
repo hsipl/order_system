@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import PersonIcon from "@material-ui/icons/Person";
-import HomeIcon from "@material-ui/icons/Home";
-import DirectionsRunIcon from "@material-ui/icons/DirectionsRun";
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -10,18 +7,16 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
-
+import Tooltip from "@mui/material/Tooltip";
 
 const Topnav = styled.nav`
   position: fixed;
   top: 0px;
-
   background-color: rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: flex-end;
   width: 100%;
   height: 5rem;
-  
 `;
 
 const TopList = styled.div`
@@ -80,7 +75,6 @@ const LeftLi = styled.li`
 const LeftA = styled.a`
   text-decoration-line: none;
   color: black;
-
   &:hover {
     color: red;
   }
@@ -107,18 +101,18 @@ const Navbar = () => {
     console.log(e.target.value);
   };
 
-
-
   return (
     <>
       <Topnav>
         <TopList>
           <TopUl>
             <TopLi>
-              <TopA onClick={handleClickOpen}>
-                {/* <PersonIcon sx={{ fontSize: 35 }} /> */}
-                <img src="https://img.icons8.com/ios-filled/33/000000/store-setting.png"/>
-              </TopA>
+              <Tooltip title="設定">
+                <TopA onClick={handleClickOpen}>
+                  {/* <PersonIcon sx={{ fontSize: 35 }} /> */}
+                  <img src="https://img.icons8.com/ios-filled/33/000000/store-setting.png" />
+                </TopA>
+              </Tooltip>
               <Dialog
                 open={open}
                 onClose={handleClose}
@@ -126,8 +120,8 @@ const Navbar = () => {
                 aria-describedby="alert-dialog-description"
                 onBackdropClick="false"
               >
-                <DialogTitle id="alert-dialog-title" >
-                  {"修改店鋪資訊"}
+                <DialogTitle id="alert-dialog-title">
+                  {"修改資訊"}
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
@@ -141,7 +135,7 @@ const Navbar = () => {
                   <DialogContentText id="alert-dialog-description">
                     Logo圖片:
                   </DialogContentText>
-                  <UploadImg type={"file"} onChange={onImageChange}  />
+                  <UploadImg type={"file"} onChange={onImageChange} />
                   <br />
                   <img width="100#" src={image} />
                 </DialogContent>
@@ -152,17 +146,20 @@ const Navbar = () => {
               </Dialog>
             </TopLi>
             <TopLi>
-              <TopA href="/">
-                {/* <HomeIcon sx={{ fontSize: 35 }} /> */}
-                <img src="https://img.icons8.com/glyph-neue/35/000000/home.png"/>
-              </TopA>
+              <Tooltip title="首頁">
+                <TopA href="/">
+                  {/* <HomeIcon sx={{ fontSize: 35 }} /> */}
+                  <img src="https://img.icons8.com/glyph-neue/35/000000/home.png" />
+                </TopA>
+              </Tooltip>
             </TopLi>
             <TopLi>
-              <TopA href="/">
-                {/* <DirectionsRunIcon sx={{ fontSize: 35 }} /> */}
-                <img src="https://img.icons8.com/external-sbts2018-solid-sbts2018/35/000000/external-logout-social-media-sbts2018-solid-sbts2018.png"/>
-
-              </TopA>
+              <Tooltip title="登出">
+                <TopA href="/login">
+                  {/* <DirectionsRunIcon sx={{ fontSize: 35 }} /> */}
+                  <img src="https://img.icons8.com/external-sbts2018-solid-sbts2018/35/000000/external-logout-social-media-sbts2018-solid-sbts2018.png" />
+                </TopA>
+              </Tooltip>
             </TopLi>
           </TopUl>
         </TopList>
@@ -178,7 +175,7 @@ const Navbar = () => {
               <LeftA href="/order">員工管理</LeftA>
             </LeftLi>
             <LeftLi>
-              <LeftA href="/shop">店鋪管理</LeftA>
+              <LeftA href="/shop">分店資訊</LeftA>
             </LeftLi>
             <LeftLi>
               <LeftA href="/report">財務報表</LeftA>

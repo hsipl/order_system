@@ -48,7 +48,7 @@ const Login = () => {
   }
 
   return (
-    <Loginform>
+    <Loginform id="login">
       <Title>Login</Title>
       <Form onSubmit={handleSubmit}>
         <Textbox
@@ -67,7 +67,7 @@ const Login = () => {
           required
         ></Textbox>
         <br />
-        <Textbox type="submit" value="Sign in"></Textbox>
+        <Textbox type="submit" value="Sign in" ></Textbox>
         <br />
         <Register href="/">Don't have an account? Sign Up</Register>
       </Form>
