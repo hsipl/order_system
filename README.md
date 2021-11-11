@@ -103,5 +103,7 @@ project: Add a new  API for x functionality
 ```
 
 
+### Git Process
+![image](https://user-images.githubusercontent.com/54132183/141301708-b2fc1223-8287-4149-a918-70b150525710.png)
 
 
