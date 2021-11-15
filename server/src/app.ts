@@ -3,15 +3,21 @@ import { createConnection } from 'typeorm';
 import router from './routes/route';
 import 'reflect-metadata';
 import errorHandler from './middlewares/errorhandler';
+import cors from 'cors';
 
 // create app class for server
 export class App {
   private app: express.Application = express();
 
   constructor() {
-    this.app.use(express.json());
+    this.setMiddleWare()
     this.setDBConnection();
     this.setRoutes();
+  }
+
+  private setMiddleWare(): void {
+    this.app.use(express.json());
+    this.app.use(cors())
     this.app.use(errorHandler);
   }
 
