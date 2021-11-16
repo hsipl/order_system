@@ -1,11 +1,11 @@
-import express from 'express';
-import { createConnection } from 'typeorm';
-import router from './routes/route';
-import 'reflect-metadata';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import path from 'path';
-import errorHandler from './middlewares/errorhandler';
+import express from "express";
+import { createConnection } from "typeorm";
+import router from "./routes/route";
+import "reflect-metadata";
+import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+import errorHandler from "./middlewares/errorhandler";
 // create app class for server
 export class App {
   private app: express.Application = express();
@@ -35,14 +35,14 @@ export class App {
   private async setDBConnection() {
     try {
       let mode = process.env.MODE;
-      if (!mode) mode = 'local';
+      if (!mode) mode = "local";
       const connection = await createConnection(mode);
       if (connection.isConnected) {
-        console.log('MySQL db already connect.');
+        console.log("MySQL db already connect.");
       }
     } catch (error) {
       console.log(error);
-      throw new Error('MySQL connection failed.');
+      throw new Error("MySQL connection failed.");
     }
   }
 

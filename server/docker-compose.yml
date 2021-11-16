@@ -1,4 +1,4 @@
-version: "0.01"
+version: "3"
 
 services:
   db:
@@ -21,7 +21,7 @@ services:
     build: .
     restart: always
     environment:
-      MODE: DEV
+      MODE: dev
       PORT: 8000
       DEV_USERNAME: hsipl
       DEV_PASSWORD: hsipl211
