@@ -11,6 +11,10 @@ import {
 } from "typeorm";
 import { Order } from "./order";
 import { Product } from "./product";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1c1c257406f06ca5749cb6617c70fe2e9feccd12
 @Entity()
 export class orderProduct {
     @PrimaryGeneratedColumn({ unsigned: true })

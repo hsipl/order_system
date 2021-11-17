@@ -10,6 +10,10 @@ import {
     BaseEntity,
 } from "typeorm";
 import { Store } from "./store";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1c1c257406f06ca5749cb6617c70fe2e9feccd12
 @Entity()
 export class Product extends BaseEntity {
     @PrimaryGeneratedColumn()
