@@ -9,8 +9,7 @@
     "build": "tsc",
     "start": "npm run build && node ./src/dist/src/index.js",
     "eslint": "eslint --fix ./src/**.ts",
-    "prettier": "prettier --write --ignore-unknown",
-    "linux_prettier": "sudo prettier --write --ignore-unknown ./src/**.ts "
+    "prettier": "prettier --write --ignore-unknown"
   },
   "author": "GaryHsu",
   "license": "ISC",
