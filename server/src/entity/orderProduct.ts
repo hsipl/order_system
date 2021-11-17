@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { Order } from "./order";
 import { Product } from "./product";
+
 @Entity()
 export class orderProduct {
     @PrimaryGeneratedColumn({ unsigned: true })

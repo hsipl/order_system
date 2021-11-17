@@ -9,6 +9,7 @@ import {
 } from "typeorm";
 import { Product } from "./product";
 import { Tag } from "./tag";
+
 @Entity()
 export class ProductTag {
     @PrimaryGeneratedColumn({ unsigned: true })

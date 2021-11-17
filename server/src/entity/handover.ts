@@ -10,6 +10,7 @@ import {
     BaseEntity,
 } from "typeorm";
 import { User } from "./user";
+
 @Entity()
 export class Handover extends BaseEntity{
     @PrimaryGeneratedColumn({ unsigned: true })
