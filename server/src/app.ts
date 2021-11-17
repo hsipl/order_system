@@ -6,7 +6,6 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import errorHandler from './middlewares/errorhandler';
-import UserRouter from './controller/user.controller';
 
 dotenv.config({
   path: path.resolve(__dirname),
