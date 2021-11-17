@@ -5,7 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToOne,
+  BaseEntity,
   JoinColumn,
   ManyToOne,
   BaseEntity,

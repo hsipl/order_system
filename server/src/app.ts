@@ -2,17 +2,30 @@ import express from 'express';
 import { createConnection } from 'typeorm';
 import router from './routes/route';
 import 'reflect-metadata';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import path from 'path';
 import errorHandler from './middlewares/errorhandler';
 import UserRouter from './controller/user.controller';
+
+dotenv.config({
+  path: path.resolve(__dirname),
+});
+
 // create app class for server
 export class App {
   private app: express.Application = express();
 
   constructor() {
-    this.app.use(express.json());
+    this.setMiddleWare();
     this.setDBConnection();
     this.setRoutes();
     this.app.use(errorHandler);
+  }
+
+  private setMiddleWare(): void {
+    this.app.use(express.json());
+    this.app.use(cors());
   }
 
   private setRoutes(): void {
@@ -24,7 +37,9 @@ export class App {
 
   private async setDBConnection() {
     try {
-      const connection = await createConnection();
+      let mode = process.env.MODE;
+      if (!mode) mode = 'local';
+      const connection = await createConnection(mode);
       if (connection.isConnected) {
         console.log('MySQL db already connect.');
       }
