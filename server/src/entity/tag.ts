@@ -11,14 +11,17 @@ import {
 export class Tag extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
+
     @Column({ length: 70, unique: true })
     tag: string;
+
     @Column({
         type: "tinyint",
         unsigned: true,
         default: 0,
     })
     status: number;
+    
     @CreateDateColumn({ name: "createdAt" })
     createdAt: Date;
 
