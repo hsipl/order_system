@@ -53,5 +53,4 @@ export class User extends BaseEntity {
 
   @DeleteDateColumn({ name: "deletedAt" })
   deletedAt: Date;
-
 }

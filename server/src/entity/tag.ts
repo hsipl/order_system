@@ -7,6 +7,7 @@ import {
     DeleteDateColumn,
     BaseEntity,
 } from "typeorm";
+
 @Entity()
 export class Tag extends BaseEntity {
     @PrimaryGeneratedColumn()
