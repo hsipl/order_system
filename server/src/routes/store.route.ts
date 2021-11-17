@@ -1,29 +1,22 @@
-import { NextFunction, Request, Response } from "express";
-import BasicRoute from "../bases/route.abstract";
-import StoreController from "../controller/store.controller";
+import { NextFunction, Request, Response } from 'express';
+import BasicRoute from '../bases/route.abstract';
+import StoreController from '../controller/store.controller';
+import { StoreRepository } from '../repository/store.repository';
+import { StoreService } from '../services/store.service';
 
 export default class StoreRoute extends BasicRoute {
   constructor() {
     super();
-    this.setPrefix("store");
+    this.setPrefix('store');
     this.setRoutes();
   }
 
   protected setRoutes() {
-    this.router.get("/", (req, res, next) =>
-      StoreController.getAll(req, res, next)
-    );
-    this.router.get("/:id", (req, res, next) =>
-      StoreController.getById(req, res, next)
-    );
-    this.router.post("/", (req, res, next) =>
-      StoreController.create(req, res, next)
-    );
-    this.router.put("/:id", (req, res, next) =>
-      StoreController.update(req, res, next)
-    );
-    this.router.delete("/:id", (req, res, next) =>
-      StoreController.delete(req, res, next)
-    );
+    const controller = new StoreController(new StoreService(new StoreRepository()));
+    this.router.get('/', controller.getAll.bind(controller));
+    this.router.get('/:id', controller.getById.bind(controller));
+    this.router.post('/', controller.create.bind(controller));
+    this.router.put('/:id', controller.update.bind(controller));
+    this.router.delete('/:id', controller.delete.bind(controller));
   }
 }

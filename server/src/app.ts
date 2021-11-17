@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm';
 import router from './routes/route';
 import 'reflect-metadata';
 import errorHandler from './middlewares/errorhandler';
-
+import UserRouter from './controller/user.controller';
 // create app class for server
 export class App {
   private app: express.Application = express();
