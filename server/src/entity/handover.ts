@@ -7,10 +7,11 @@ import {
     DeleteDateColumn,
     OneToOne,
     JoinColumn,
+    BaseEntity,
 } from "typeorm";
 import { User } from "./user";
 @Entity()
-export class Handover {
+export class Handover extends BaseEntity{
     @PrimaryGeneratedColumn({ unsigned: true })
     id: number;
 

@@ -5,14 +5,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToOne,
+  BaseEntity,
   JoinColumn,
   ManyToOne,
 } from "typeorm";
 import { Store } from "./store";
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn({ unsigned: true })
   id: number;
 
