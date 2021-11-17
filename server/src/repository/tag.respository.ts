@@ -4,7 +4,6 @@ import { Tag } from "../entity/tag";
 const field: (keyof Tag)[] = ["id", "tag", "status"];
 
 export class TagRepository {
-    /** 取得所有Tag選項 */
     async getAll(): Promise<Tag[]> {
         return await Tag.find({
             where: {
@@ -23,6 +22,15 @@ export class TagRepository {
             select: field,
         });
     }
+
+    async getByTag(tag: string): Promise<Tag | undefined> {
+        return await Tag.findOne({
+          where: {
+            tag: tag,
+          },
+          select: field,
+        });
+      }
 
     async create(t: Tag): Promise<Tag> {
         return await Tag.save(t)
