@@ -25,19 +25,19 @@ class StoreController {
   async getById(req: Request, res: Response, next: NextFunction) {
     const id: number = parseInt(req.params.id);
     if (!id) {
-      return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError));
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
     }
     try {
       const store = await this.service.getById(id);
       if (!store) {
-        return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.dataNotFound));
+        return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
       }
       res.status(200).json(store);
     } catch (error) {
       // print to log
       console.log('create db error: ', error);
       return next(
-        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.internalServerError),
+        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
       );
     }
   }
@@ -45,12 +45,12 @@ class StoreController {
   async create(req: Request, res: Response, next: NextFunction) {
     const { name, status, type }: { name: string; status: number; type: number } = req.body;
     if (!name || status === undefined || type === undefined) {
-      return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError));
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
     }
     try {
       const storeExist = await this.service.checkExistByName(name);
       if (storeExist) {
-        return next(new ErrorHandler(errorStatusCode.Forbidden, errorMsg.dataAlreadyExist));
+        return next(new ErrorHandler(errorStatusCode.Forbidden, errorMsg.DataAlreadyExist));
       }
       const params: IStoreCreateParams = { name, status, type };
       const newStore = await this.service.create(params);
@@ -59,7 +59,7 @@ class StoreController {
       // print to log
       console.log('create db error: ', error);
       return next(
-        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.internalServerError),
+        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
       );
     }
   }
@@ -68,26 +68,29 @@ class StoreController {
     const id: number = parseInt(req.params.id);
     const { name, status, type }: { name: string; status: number; type: number } = req.body;
     if (!name || status === undefined || type === undefined) {
-      return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError));
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
     }
     try {
       const checkIsExist = await this.service.checkExistByID(id);
       if (!checkIsExist) {
-        return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError));
+        return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
       }
       const params: IStoreUpdateParams = {
-        id, name, status, type,
+        id,
+        name,
+        status,
+        type,
       };
       const updatedRes = await this.service.update(params);
       if (updatedRes === undefined) {
-        return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError));
+        return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
       }
       res.status(200).json(updatedRes);
     } catch (error) {
       // print to log
       console.log('create db error: ', error);
       return next(
-        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.internalServerError),
+        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
       );
     }
   }
@@ -96,23 +99,23 @@ class StoreController {
     const id: number = parseInt(req.params.id);
     if (!id) {
       return next(
-        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.internalServerError),
+        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
       );
     }
     try {
       const checkIsExist = await this.service.checkExistByID(id);
       if (!checkIsExist) {
-        return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError));
+        return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
       }
       const params: IStoreDeleteParams = { id };
       const deletedRes = await this.service.delete(params);
       if (deletedRes === undefined) {
-        return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError));
+        return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
       }
       res.status(200).json(deletedRes);
     } catch (error) {
       return next(
-        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.internalServerError),
+        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
       );
     }
   }

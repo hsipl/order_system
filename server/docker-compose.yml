@@ -17,6 +17,15 @@ services:
     networks:
       - order_net
 
+  redis:
+    restart: always
+    container_name: redis
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+
   backend:
     build: .
     restart: always
@@ -43,6 +52,7 @@ services:
 volumes:
   mysql_data:
   backend_data:
+  redis_data:
 
 networks:
   order_net:
