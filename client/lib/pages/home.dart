@@ -52,42 +52,25 @@ class Home extends StatelessWidget {
       ),
       drawer: const NavigationDrawer(),
       body: Row(
-        children: [
-          Expanded(
-              child: Container(
-            color: Colors.white,
-            child: const CardsColumn(type: '雞肉類',),
-          )),
-          Expanded(
-              child: Container(
-            color: Colors.white,
-            child: const CardsColumn(type:'加工類'),
-          )),
-          Expanded(
-              child: Container(
-            color: Colors.white,
-            child: const CardsColumn(type:'蔬菜類'),
-          )),
-          Expanded(
-              child: Container(
-            color: Colors.white,
-            child: const CardsColumn(type:'其他'),
-          )),
-          const Padding(
+        children: const [
+          CardsColumn(type: '雞肉類',),
+          CardsColumn(type: '加工類',),
+          CardsColumn(type: '蔬菜類',),
+          CardsColumn(type: '其他',),
+          Padding(
             padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
             child: VerticalDivider(
               width: 10,
               color: Color(0xFFE0E0E0),
-              thickness: 3,
+              thickness: 2,
             ),
           ),
-          Expanded(
-              child: Container(
-            color: Colors.white,
-            child: const CheckoutCol(),
-          )),
+           CheckoutColumn(),
+
         ],
       ),
     );
   }
 }
+
+

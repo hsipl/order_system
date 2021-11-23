@@ -19,23 +19,25 @@ class _CardsColumnState extends State<CardsColumn> {
             info: 'info',
             product: widget.type + " $i",
             price: 'price'));
-    return Column(children: [
-      Expanded(
-          flex: 1,
-          child: Container(
-              width: double.maxFinite,
-              color: const Color(0xFFFAFAFA),
-              child: Center(
-                  child: Text(
-                widget.type,
-                style: const TextStyle(fontSize: 20),
-              )))),
-      Expanded(
-        flex: 11,
-        child: ListView(
-          children: cards,
+    return Expanded(
+      child: Column(children: [
+        Expanded(
+            flex: 1,
+            child: Container(
+                width: double.maxFinite,
+                color: const Color(0xFFFAFAFA),
+                child: Center(
+                    child: Text(
+                  widget.type,
+                  style: const TextStyle(fontSize: 20),
+                )))),
+        Expanded(
+          flex: 11,
+          child: ListView(
+            children: cards,
+          ),
         ),
-      ),
-    ]);
+      ]),
+    );
   }
 }
