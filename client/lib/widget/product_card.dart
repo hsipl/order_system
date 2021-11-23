@@ -13,13 +13,22 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(widget.img),
-        title: Text(widget.product),
-        subtitle: Text(widget.info),
-        trailing: Text(widget.price),
-        isThreeLine: true,
+    return InkWell (
+      onTap: (){ showDialog(
+          context: context,
+          builder: (_) => const AlertDialog(
+            title: Text('Dialog Title'),
+            content: Text('This is my content'),
+          )
+      );},
+      child: Card(
+        child: ListTile(
+          leading: Icon(widget.img),
+          title: Text(widget.product),
+          subtitle: Text(widget.info),
+          trailing: Text(widget.price),
+          isThreeLine: true,
+        ),
       ),
     );
   }

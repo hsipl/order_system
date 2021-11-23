@@ -11,14 +11,14 @@ class _CheckoutColState extends State<CheckoutCol> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
               flex: 2,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Color(0xFFE74C3C)),
+                style: ElevatedButton.styleFrom(primary: const Color(0xFFE74C3C)),
                 onPressed: () {},
                 child: const Text(
                   "清空",
@@ -49,7 +49,7 @@ class _CheckoutColState extends State<CheckoutCol> {
           Expanded(
               flex: 2,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Color(0xFF003CFF)),
+                style: ElevatedButton.styleFrom(primary: const Color(0xFF003CCC)),
                 onPressed: () {},
                 child: const Text(
                   "送出",
