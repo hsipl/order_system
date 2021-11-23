@@ -15,22 +15,27 @@ const primaryColorLight = Color(0xFFFFFFFF);
 const primaryColorDark = Color(0xFFAEAEAE);
 const primaryTextColor = Color(0xFF000000);
 ThemeData appTheme = ThemeData(
+
   appBarTheme: const AppBarTheme(
     toolbarHeight: 100,
-    elevation: 2,
-    shadowColor: primaryColorLight,
-    backgroundColor: primaryColorDark,
+    elevation: 3,
+    shadowColor: primaryColorDark,
+    backgroundColor: primaryColorLight,
     centerTitle: true,
     titleTextStyle: TextStyle(color: primaryTextColor, fontSize: 20),
+    iconTheme: IconThemeData(
+        color: primaryColorDark,
+    ),
   ),
   primaryColor: primaryColor,
   primaryColorLight: primaryColorLight,
   primaryColorDark: primaryColorDark,
   primaryTextTheme: const TextTheme().apply(bodyColor: primaryTextColor),
+
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      onPrimary: primaryTextColor,
-      primary: primaryColorDark,
+      onPrimary: primaryColorDark,
+      primary: primaryColor,
     ),
   ),
 );
@@ -53,7 +58,6 @@ void main() {
   runApp(MaterialApp(
     theme: appTheme,
     home: const Home(),
-    initialRoute: '/',
     onGenerateRoute: (settings) {
       switch (settings.name) {
         case '/login':
@@ -78,5 +82,6 @@ void main() {
           return null;
       }
     },
+    initialRoute: '/',
   ));
 }
