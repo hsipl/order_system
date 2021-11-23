@@ -1,8 +1,8 @@
-import 'package:client/widget/checkout_col.dart';
+import 'package:client/widget/checkout_column.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widget/navigation_drawer.dart';
-import 'package:client/widget/cards_col.dart';
-import 'package:client/widget/cards_col.dart';
+import 'package:client/widget/cards_column.dart';
+import 'package:client/widget/cards_column.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -56,22 +56,22 @@ class Home extends StatelessWidget {
           Expanded(
               child: Container(
             color: Colors.white,
-            child: const CardsColumn(),
+            child: const CardsColumn(type: '雞肉類',),
           )),
           Expanded(
               child: Container(
             color: Colors.white,
-            child: const CardsColumn(),
+            child: const CardsColumn(type:'加工類'),
           )),
           Expanded(
               child: Container(
             color: Colors.white,
-            child: const CardsColumn(),
+            child: const CardsColumn(type:'蔬菜類'),
           )),
           Expanded(
               child: Container(
             color: Colors.white,
-            child: const CardsColumn(),
+            child: const CardsColumn(type:'其他'),
           )),
           const Padding(
             padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
