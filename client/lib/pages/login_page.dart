@@ -25,7 +25,7 @@ void loginChecker(context, String loginStatus) {
     );
     showDialog(
         context: context,
-        builder: (BuildContextcontext) {
+        builder: (context) {
           return dialog;
         });
   }

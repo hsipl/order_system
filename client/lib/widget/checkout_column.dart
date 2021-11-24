@@ -16,25 +16,21 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-                flex: 2,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: const Color(0xFFE74C3C)),
-                  onPressed: () {},
-                  child: const Text(
-                    "清空",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                )),
+            const Expanded(
+              flex: 2,
+              child: CheckoutBarButton(
+                color: Color(0xFFE74C3C),
+                text: '清空',
+              ),
+            ),
             Expanded(flex: 16, child: Container()),
             const Divider(
-
               color: Colors.black,
             ),
             Expanded(
                 flex: 3,
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0,0,0,10),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                   child: Container(
                     decoration: const BoxDecoration(
                         color: Color(0xFFF0F0F0),
@@ -47,18 +43,38 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
                     )),
                   ),
                 )),
-            Expanded(
-                flex: 2,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: const Color(0xFF003CCC)),
-                  onPressed: () {},
-                  child: const Text(
-                    "送出",
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                )),
+            const Expanded(
+              flex: 2,
+              child: CheckoutBarButton(
+                color: Color(0xFF003CCC),
+                text: '送出',
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CheckoutBarButton extends StatelessWidget {
+  const CheckoutBarButton({
+    required this.text,
+    required this.color,
+    Key? key,
+  }) : super(key: key);
+
+  final String text;
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(primary: color),
+      onPressed: () {},
+      child: Text(
+        text,
+        style: const TextStyle(color: Colors.white, fontSize: 20),
       ),
     );
   }

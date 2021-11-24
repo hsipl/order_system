@@ -21,34 +21,42 @@ class ProductCard extends StatefulWidget {
 class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
-    return Card(
-        elevation: 5,
-        child: InkWell(
-          onTap: () {
-            showDialog(
-                context: context,
-                builder: (BuildContext context) => OrderDialog(
-                      info: widget.info,
-                      img: widget.img,
-                      price: widget.price,
-                      product: widget.product,
-                    ));
-          },
-          child: ListTile(
-            leading: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  widget.img,
-                  color: Colors.blueGrey,
+    return SizedBox(
+      height: 120,
+      child: Card(
+        semanticContainer: true,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          elevation: 5,
+          child: InkWell(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) => OrderDialog(
+                        info: widget.info,
+                        img: widget.img,
+                        price: widget.price,
+                        product: widget.product,
+                      ));
+            },
+            child: Center(
+              child: ListTile(
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+
+                  children: <Widget>[
+                    Icon(
+                      widget.img,
+                      color: Colors.blueGrey,
+                    ),
+                  ],
                 ),
-              ],
+                title: Text(widget.product),
+                subtitle: Text(widget.info),
+                trailing: Text(widget.price),
+                isThreeLine: true,
+              ),
             ),
-            title: Text(widget.product),
-            subtitle: Text(widget.info),
-            trailing: Text(widget.price),
-            isThreeLine: true,
-          ),
-        ));
+          )),
+    );
   }
 }
