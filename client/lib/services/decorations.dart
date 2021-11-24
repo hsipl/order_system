@@ -13,3 +13,9 @@ final kBoxDecorationStyle = BoxDecoration(
     ),
   ],
 );
+
+const kOutlineInputBorder =  OutlineInputBorder(
+  borderSide: BorderSide(color: Colors.grey, width: 2.0),
+  borderRadius: BorderRadius.all(Radius.circular(20)),
+);
+

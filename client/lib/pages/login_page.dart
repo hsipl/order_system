@@ -1,8 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
+import 'package:client/services/api_connection.dart';
 import 'package:client/widget/login_text_field.dart';
-import 'package:http/http.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -11,8 +9,26 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-void loginChecker(context) {
-  Navigator.pushNamed(context, '/home');
+void loginChecker(context, String loginStatus) {
+  if (loginStatus == '"200"') {
+    Navigator.pushNamed(context, '/');
+  } else {
+    AlertDialog dialog = AlertDialog(
+      title: const Text('Login Fail! '),
+      actions: [
+        ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Got it'))
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContextcontext) {
+          return dialog;
+        });
+  }
 }
 
 class _LoginState extends State<Login> {
@@ -23,7 +39,10 @@ class _LoginState extends State<Login> {
     title: 'username',
   );
   LoginTextField passwordField = LoginTextField(
-      icon: Icons.lock, hint: 'password', isPasswordField: true, title: 'password');
+      icon: Icons.lock,
+      hint: 'password',
+      isPasswordField: true,
+      title: 'password');
 
   @override
   Widget build(BuildContext context) {
@@ -33,40 +52,32 @@ class _LoginState extends State<Login> {
         title: const Text('Login'),
       ),
       body: Container(
-        padding: const EdgeInsets.all(40),
+        padding: const EdgeInsets.fromLTRB(40, 40, 40, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            usernameField,
-            passwordField,
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () async {
-                loginChecker(context);
-                String username = usernameField.getText();
-                String password = passwordField.getText();
-                var map = <String, dynamic>{};
-                map['username'] = username;
-                map['password'] = password;
-
-                final uri = Uri.parse('http://hinininininini.ddns.net:8000/login');
-                final headers = {'Content-Type': 'application/json'};
-                final encoding = Encoding.getByName('utf-8');
-                String jsonBody = json.encode(map);
-                Response response = await post(
-                  uri,
-                  headers: headers,
-                  body: jsonBody,
-                  encoding: encoding,
-                );
-                print(response.body);
-
-              },
-              child: const Text('Login'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(100, 48),
+            Expanded(flex: 4, child: usernameField),
+            Expanded(flex: 4, child: passwordField),
+            Expanded(
+              flex: 2,
+              child: ElevatedButton(
+                onPressed: () {
+                  String username = usernameField.getText();
+                  String password = passwordField.getText();
+                  var loginData = <String, String>{
+                    'username': username,
+                    'password': password
+                  };
+                  Future<String> loginResponse = LoginApi.login(loginData);
+                  loginResponse.then((String value) {
+                    print(value);
+                    loginChecker(context, value);
+                  });
+                },
+                child: const Text('Login'),
               ),
             ),
+            const Expanded(flex: 15, child: SizedBox(height: 30)),
           ],
         ),
       ),

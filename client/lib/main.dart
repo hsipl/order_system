@@ -34,13 +34,13 @@ ThemeData appTheme = ThemeData(
 
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      onPrimary: primaryColorDark,
+      onPrimary: primaryTextColor,
       primary: primaryColor,
+
     ),
   ),
 );
 
-// main
 // void main() {
 //   runApp(MaterialApp(theme: appTheme, initialRoute: '/home', routes: {
 //
