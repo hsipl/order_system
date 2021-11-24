@@ -35,7 +35,7 @@ export class App {
   private async setDBConnection() {
     try {
       let mode = process.env.MODE;
-      if (!mode) mode = "local";
+      if (!mode) mode = "default";
       const connection = await createConnection(mode);
       if (connection.isConnected) {
         console.log("MySQL db already connect.");

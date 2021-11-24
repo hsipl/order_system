@@ -7,10 +7,7 @@ import {
     DeleteDateColumn,
     BaseEntity,
 } from "typeorm";
-<<<<<<< HEAD
-=======
 
->>>>>>> 1c1c257406f06ca5749cb6617c70fe2e9feccd12
 @Entity()
 export class Tag extends BaseEntity {
     @PrimaryGeneratedColumn()
@@ -22,6 +19,7 @@ export class Tag extends BaseEntity {
     @Column({
         type: "tinyint",
         unsigned: true,
+        comment: "0: Can choose, 1: Can't choose ",
         default: 0,
     })
     status: number;

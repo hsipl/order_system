@@ -20,6 +20,11 @@ export class TagService {
         return isExist ? true : false;
     }
 
+    async checkUpdateExitByTag(id: number, tag: string): Promise<boolean> {
+        const isExist = await this.repository.getUpdateByTag(id, tag);
+        return isExist ? true : false;
+    }
+
     async checkExistByID(id: number): Promise<boolean> {
         const isExist = await this.repository.getById(id);
         return isExist ? true : false;
