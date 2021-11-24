@@ -25,7 +25,10 @@ export class User extends BaseEntity {
   @Column({ length: 256 })
   password: string;
 
-  @ManyToOne(() => Store)
+  @ManyToOne(() => Store, {
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'store_id' })
   storeId: number;
 

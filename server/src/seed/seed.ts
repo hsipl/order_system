@@ -16,6 +16,7 @@ const genData = async () => {
     .from(Store)
     .where('name=:name', { name: 'kcy main store' })
     .execute();
+
   console.log('START CREATEING MAIN STORE...');
   const store = await Store.createQueryBuilder()
     .insert()
