@@ -53,10 +53,18 @@ class Home extends StatelessWidget {
       drawer: const NavigationDrawer(),
       body: Row(
         children: const [
-          CardsColumn(type: '雞肉類',),
-          CardsColumn(type: '加工類',),
-          CardsColumn(type: '蔬菜類',),
-          CardsColumn(type: '其他',),
+          CardsColumn(
+            type: '雞肉類',
+          ),
+          CardsColumn(
+            type: '加工類',
+          ),
+          CardsColumn(
+            type: '蔬菜類',
+          ),
+          CardsColumn(
+            type: '其他',
+          ),
           Padding(
             padding: EdgeInsets.fromLTRB(0, 2, 0, 2),
             child: VerticalDivider(
@@ -65,12 +73,9 @@ class Home extends StatelessWidget {
               thickness: 2,
             ),
           ),
-           CheckoutColumn(),
-
+          CheckoutColumn(),
         ],
       ),
     );
   }
 }
-
-
