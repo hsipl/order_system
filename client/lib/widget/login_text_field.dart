@@ -5,15 +5,18 @@ class LoginTextField extends StatefulWidget {
   final IconData icon;
   final String hint;
   final String title;
-  final bool mask;
+  final bool isPasswordField;
   final textController = TextEditingController();
-  LoginTextField(
-      {Key? key, required this.icon,
-      required this.hint,
-      required this.mask,
-      required this.title}) : super(key: key);
 
-  String getText(){
+  LoginTextField(
+      {Key? key,
+      required this.icon,
+      required this.hint,
+      required this.isPasswordField,
+      required this.title})
+      : super(key: key);
+
+  String getText() {
     return textController.text;
   }
 
@@ -22,6 +25,7 @@ class LoginTextField extends StatefulWidget {
 }
 
 class _LoginTextFieldState extends State<LoginTextField> {
+  bool _textVisible = true;
 
   @override
   void dispose() {
@@ -30,23 +34,24 @@ class _LoginTextFieldState extends State<LoginTextField> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
-        Text(widget.title,style:const TextStyle(fontSize: 18),),
+        Text(
+          widget.title,
+          style: const TextStyle(fontSize: 18),
+        ),
         const SizedBox(height: 10),
         Container(
           alignment: Alignment.centerLeft,
           decoration: kBoxDecorationStyle,
-          height: 60,
+          height: 50,
           child: TextField(
               controller: widget.textController,
-              obscureText: widget.mask,
+              obscureText: widget.isPasswordField?_textVisible:!_textVisible,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -55,6 +60,22 @@ class _LoginTextFieldState extends State<LoginTextField> {
                   widget.icon,
                   color: Colors.black38,
                 ),
+                suffixIcon: widget.isPasswordField
+                    ? IconButton(
+                        splashRadius: 1,
+                        icon: Icon(
+                          _textVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Theme.of(context).primaryColorDark,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _textVisible = !_textVisible;
+                          });
+                        },
+                      )
+                    : null,
                 hintText: widget.hint,
               )),
         ),
