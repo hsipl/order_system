@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:client/services/decorations.dart';
 import 'product_card.dart';
 
@@ -61,9 +62,16 @@ class _CardsColumnState extends State<CardsColumn> {
             ),
             Expanded(
               flex: 11,
-              child: ListView(
+              child: CupertinoScrollbar(
+                isAlwaysShown: true,
+                thickness: 5,
+                thicknessWhileDragging: 6,
                 controller: _controller,
-                children: cards,
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(0,0,10,0),
+                  controller: _controller,
+                  children: cards,
+                ),
               ),
             ),
           ],

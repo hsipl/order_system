@@ -14,8 +14,8 @@ const primaryColor = Color(0xFFE0E0E0);
 const primaryColorLight = Color(0xFFFFFFFF);
 const primaryColorDark = Color(0xFFAEAEAE);
 const primaryTextColor = Color(0xFF000000);
+const double scrollbarThickness = 10.0;
 ThemeData appTheme = ThemeData(
-
   appBarTheme: const AppBarTheme(
     toolbarHeight: 100,
     elevation: 3,
@@ -24,20 +24,21 @@ ThemeData appTheme = ThemeData(
     centerTitle: true,
     titleTextStyle: TextStyle(color: primaryTextColor, fontSize: 20),
     iconTheme: IconThemeData(
-        color: primaryColorDark,
+      color: primaryColorDark,
     ),
   ),
   primaryColor: primaryColor,
   primaryColorLight: primaryColorLight,
   primaryColorDark: primaryColorDark,
   primaryTextTheme: const TextTheme().apply(bodyColor: primaryTextColor),
-
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       onPrimary: primaryTextColor,
       primary: primaryColor,
-
     ),
+  ),
+  scrollbarTheme: const ScrollbarThemeData().copyWith(
+    thickness: MaterialStateProperty.all(scrollbarThickness),
   ),
 );
 
@@ -56,27 +57,40 @@ ThemeData appTheme = ThemeData(
 
 void main() {
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     theme: appTheme,
     home: const Home(),
     onGenerateRoute: (settings) {
       switch (settings.name) {
         case '/login':
-          return PageTransition(child: const Login(), type: PageTransitionType.rightToLeftWithFade);
+          return PageTransition(
+              child: const Login(),
+              type: PageTransitionType.rightToLeftWithFade);
           break;
         case '/admin':
-          return PageTransition(child: const GoToAdminPage(), type: PageTransitionType.rightToLeftWithFade);
+          return PageTransition(
+              child: const GoToAdminPage(),
+              type: PageTransitionType.rightToLeftWithFade);
           break;
         case '/earning':
-          return PageTransition(child: const EarningPage(), type: PageTransitionType.rightToLeftWithFade);
+          return PageTransition(
+              child: const EarningPage(),
+              type: PageTransitionType.rightToLeftWithFade);
           break;
         case '/block':
-          return PageTransition(child: const BlockGoodsPage(), type: PageTransitionType.rightToLeftWithFade);
+          return PageTransition(
+              child: const BlockGoodsPage(),
+              type: PageTransitionType.rightToLeftWithFade);
           break;
         case '/delete':
-          return PageTransition(child: const DeletedOrderPage(), type: PageTransitionType.rightToLeftWithFade);
+          return PageTransition(
+              child: const DeletedOrderPage(),
+              type: PageTransitionType.rightToLeftWithFade);
           break;
         case '/completed':
-          return PageTransition(child: const CompletedOrderPage(), type: PageTransitionType.rightToLeftWithFade);
+          return PageTransition(
+              child: const CompletedOrderPage(),
+              type: PageTransitionType.rightToLeftWithFade);
           break;
         default:
           return null;
