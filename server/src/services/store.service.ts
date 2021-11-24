@@ -33,14 +33,15 @@ export class StoreService {
   }
 
   async create(params: IStoreCreateParams): Promise<Store> {
-    const store = Store.create(params);
+    const store = new Store();
+    Object.assign(store, params);
     return await this.repository.create(store);
   }
 
   async update(params: IStoreUpdateParams): Promise<UpdateResult | undefined> {
-    const { id } = params;
-    const store = Store.create(params);
-    return await this.repository.update(id, store);
+    const store = new Store();
+    Object.assign(store, params);
+    return await this.repository.update(store);
   }
 
   async delete(params: IStoreDeleteParams): Promise<UpdateResult | undefined> {
@@ -48,7 +49,7 @@ export class StoreService {
     const store = await Store.findOne({ id });
     if (store) {
       store.status = 1;
-      return await this.repository.update(store.id, store);
+      return await this.repository.update(store);
     }
   }
 }

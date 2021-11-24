@@ -45,7 +45,8 @@ services:
       - order_net
     depends_on:
       - db
-    command: yarn dev
+    command: sh -c "yarn migrate && yarn dev"
+    
     volumes:
       - backend_data:/order_system/server
 

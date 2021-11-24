@@ -6,6 +6,7 @@ export enum errorMsg {
   LoginFailed = 'username or password incorrect.',
   LogoutFailed = 'logout failed.',
   AuthFailed = 'authenticated failed.',
+  FileExtNameFailed = 'File does not contain legal extname.',
 }
 export enum errorStatusCode {
   BadRequest = 400,

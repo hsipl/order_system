@@ -36,8 +36,8 @@ export class StoreRepository {
     return await Store.save(s);
   }
 
-  async update(id: number, s: Store): Promise<UpdateResult | undefined> {
-    return await Store.update(id, s);
+  async update(s: Store): Promise<UpdateResult | undefined> {
+    return await Store.update(s.id, s);
   }
 
   async delete(id: number, s: Store): Promise<UpdateResult | undefined> {

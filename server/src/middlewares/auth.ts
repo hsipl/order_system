@@ -12,6 +12,9 @@ export default class Auth {
 
   public async authUser(req: Request, res: Response, next: NextFunction) {
     const { sessionID } = req;
+    if (!sessionID) {
+      return next(new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed));
+    }
     const sessionData = await this.cacheService.get(`sess:${sessionID}`);
     if (sessionData) {
       return next();
@@ -21,8 +24,11 @@ export default class Auth {
 
   public async authAdmin(req: Request, res: Response, next: NextFunction) {
     const { sessionID } = req;
+    if (!sessionID) {
+      return next(new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed));
+    }
     const sessionData = JSON.parse(await this.cacheService.get(`sess:${sessionID}`));
-    if (sessionData.user.role === 1) {
+    if (sessionData && sessionData.user.role === 1) {
       return next();
     }
     return next(new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed));

@@ -3,6 +3,7 @@ interface IStoreParams {
   name?: string;
   status?: number;
   type?: number;
+  image?: string | null;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;

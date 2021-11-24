@@ -4,4 +4,4 @@ server/coverage/
 yarn-error.log
 server/src/dist
 server/dist
-
+server/uploads

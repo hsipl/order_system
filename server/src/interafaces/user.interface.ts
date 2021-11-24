@@ -11,6 +11,8 @@ export interface ICreateUserParams extends IUserParams {
   name: string;
   username: string;
   password: string;
+  storeId: number;
+  image: string;
 }
 
 export interface ILoginUserParams extends IUserParams {

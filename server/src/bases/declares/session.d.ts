@@ -1,5 +1,5 @@
 export declare module 'express-session' {
   interface SessionData {
-    user: { username: string; role: number };
+    user: { username: string; role: number; storeID: number };
   }
 }

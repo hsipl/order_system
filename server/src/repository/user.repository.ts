@@ -17,10 +17,17 @@ export class UserRepository {
     });
   }
 
-  async find(params: IUserParams) {
+  async findMainStoreAuth(params: IUserParams) {
+    const query = await User.createQueryBuilder('u')
+      .innerJoinAndSelect('u.storeId', 's')
+      .where('s.type = :type', { type: params.type })
+      .getOne();
+    return query;
+  }
+
+  async findOne(params: IUserParams) {
     return await User.findOne({
       where: params,
-      select: field,
     });
   }
 }

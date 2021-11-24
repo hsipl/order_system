@@ -45,6 +45,12 @@ export class User extends BaseEntity {
   })
   status: number;
 
+  @Column({
+    length: 256,
+    nullable: true,
+  })
+  image: string;
+
   @CreateDateColumn({ name: 'createdAt' })
   createdAt: Date;
 
