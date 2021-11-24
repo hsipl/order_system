@@ -4,7 +4,8 @@ import { Store } from '../entity/store';
 import { encrypt } from '../utils/md5';
 
 const genData = async () => {
-  const connection = await createConnection();
+  const mode = process.env.MODE as string;
+  const connection = await createConnection(mode);
   await User.createQueryBuilder()
     .delete()
     .from(User)
