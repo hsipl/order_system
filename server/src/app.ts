@@ -1,19 +1,19 @@
-import express from 'express';
-import { createConnection } from 'typeorm';
-import 'reflect-metadata';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import path from 'path';
-import session from 'express-session';
-import redis from 'redis';
-import connectRedis from 'connect-redis';
-import fs from 'fs';
-import router from './routes/route';
-import errorHandler from './middlewares/errorhandler';
-import * as _ from './bases/declares/session';
+import express from "express";
+import { createConnection } from "typeorm";
+import "reflect-metadata";
+import cors from "cors";
+import dotenv from "dotenv";
+import path from "path";
+import session from "express-session";
+import redis from "redis";
+import connectRedis from "connect-redis";
+import fs from "fs";
+import router from "./routes/route";
+import errorHandler from "./middlewares/errorhandler";
+import * as _ from "./bases/declares/session";
 
 dotenv.config({
-  path: path.resolve(__dirname, '../'),
+  path: path.resolve(__dirname, "../"),
 });
 
 // create app class for server
@@ -28,7 +28,7 @@ export class App {
   }
 
   private setMiddleWare(): void {
-    const imagePath = path.resolve(__dirname, '../uploads/images');
+    const imagePath = path.resolve(__dirname, "../uploads/images");
     this.app.use(express.static(imagePath));
     this.app.use(express.json());
     this.app.use(cors());
@@ -45,14 +45,14 @@ export class App {
   private async setDBConnection() {
     try {
       const mode = process.env.MODE as string;
-      const connection = await createConnection('dev');
+      const connection = await createConnection("dev");
       if (connection.isConnected) {
-        console.log('MySQL db already connect.');
+        console.log("MySQL db already connect.");
         // this.genDataBySeed();
       }
     } catch (error) {
       console.log(error);
-      throw new Error('MySQL connection failed.');
+      throw new Error("MySQL connection failed.");
     }
   }
 
@@ -60,11 +60,11 @@ export class App {
     const RedisStore = connectRedis(session);
     const redisClient = redis.createClient({
       port: 6379,
-      host: 'localhost',
+      host: "localhost",
     });
     this.app.use(
       session({
-        secret: 'kcy',
+        secret: "kcy",
         // cookie -> secure: true | only for https
         cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 },
         resave: true,
@@ -72,7 +72,7 @@ export class App {
           client: redisClient,
         }),
         saveUninitialized: false,
-      }),
+      })
     );
   }
 

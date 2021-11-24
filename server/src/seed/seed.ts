@@ -46,7 +46,7 @@ const genData = async () => {
     ])
     .execute();
   console.log('CREATE SUPER USER SUCCESS...');
-  connection.close();
+  await connection.close();
 };
 
 genData();
