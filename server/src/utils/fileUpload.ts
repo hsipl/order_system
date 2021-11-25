@@ -10,6 +10,9 @@ const dirPath = path.resolve(__dirname, '../../uploads/images');
 const extName: string[] = ['jpg', 'jpeg', 'png'];
 const storage = multer.diskStorage({
   destination(req: any, file: any, cb: any) {
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true });
+    }
     cb(null, dirPath);
   },
   filename(req: any, file: any, cb: any) {
