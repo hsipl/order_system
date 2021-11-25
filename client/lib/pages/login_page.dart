@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:client/services/preference_operation.dart';
 import 'package:client/services/api_connection.dart';
 import 'package:client/widget/login_text_field.dart';
 
@@ -13,6 +12,7 @@ class Login extends StatefulWidget {
 
 void loginChecker(context, String loginStatus) {
   if (loginStatus == 'login success.') {
+    setLoginSharedPrefs(true);
     Navigator.pop(context);
   } else {
     AlertDialog dialog = AlertDialog(
@@ -68,8 +68,8 @@ class _LoginState extends State<Login> {
                   String username = usernameField.getText();
                   String password = passwordField.getText();
                   var loginData = <String, String>{
-                    'username': username,
-                    'password': password
+                    'username': 'hsipl206',
+                    'password': 'hsipl206'
                   };
                   Api api = Api();
                   Future<String> loginResponse = api.login(loginData);

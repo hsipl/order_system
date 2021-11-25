@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:client/widget/checkout_column.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widget/navigation_drawer.dart';
@@ -12,26 +13,31 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool? login;
+  bool login = false;
 
   Future<void> getSharedPrefs() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      login = prefs.getBool("login") as bool;
-    });
+    setState(
+      () {
+        if (prefs.getBool("login") == null) {
+          prefs.setBool('login', false);
+        } else {
+          login = prefs.getBool("login") as bool;
+        }
+      },
+    );
   }
 
   @override
   void initState() {
-    super.initState();
     getSharedPrefs();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     getSharedPrefs();
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Home'),
         actions: [
@@ -72,38 +78,28 @@ class _HomeState extends State<Home> {
                   ])
         ],
       ),
-      drawer: const NavigationDrawer(),
-      body: bodySelect(login),
+      drawer:
+          (login == true) ? const ActivateDrawer() : const DeactivateDrawer(),
+      body: (login == true) ? const ActivateHome() : const DeactivateHome(),
     );
   }
 }
 
-dynamic bodySelect(login) {
-  switch (login) {
-    case (true):
-      return const LoginHome();
-      break;
-    case (null):
-      return Container();
-      break;
-    case (false):
-      return const PleaseLoginHome();
-  }
-}
-
-class PleaseLoginHome extends StatelessWidget {
-  const PleaseLoginHome({
+class DeactivateHome extends StatelessWidget {
+  const DeactivateHome({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text('請先登入'));
+    return const Center(
+      child: Text('請先登入',style: TextStyle(color: Colors.grey),),
+    );
   }
 }
 
-class LoginHome extends StatelessWidget {
-  const LoginHome({
+class ActivateHome extends StatelessWidget {
+  const ActivateHome({
     Key? key,
   }) : super(key: key);
 
