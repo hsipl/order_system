@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter/services.dart';
 import 'package:client/pages/login_page.dart';
-import 'package:client/pages/home.dart';
+import 'package:client/pages/home_page.dart';
 import 'package:client/pages/block_goods_page.dart';
 import 'package:client/pages/completed_order_page.dart';
 import 'package:client/pages/delete_order_page.dart';
 import 'package:client/pages/earning_page.dart';
 import 'package:client/pages/go_to_admin_page.dart';
-import 'pages/splash_screen.dart';
+import 'pages/splash_page.dart';
 import 'services/decorations.dart';
 
 
