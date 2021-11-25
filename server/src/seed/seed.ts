@@ -1,25 +1,30 @@
-import { createConnection } from 'typeorm';
+import { createConnection, getConnection, getConnectionManager } from 'typeorm';
 import { User } from '../entity/user';
 import { Store } from '../entity/store';
 import { encrypt } from '../utils/md5';
 
 const genData = async () => {
-  const mode = process.env.MODE as string;
-  const connection = await createConnection(mode);
-  await User.createQueryBuilder()
+  const mode = process.env.MODE ? process.env.MODE : 'default';
+  const defaultConnection = await createConnection(mode);
+  await defaultConnection
+    .createQueryBuilder()
     .delete()
     .from(User)
     .where('name=:name', { name: 'hsipl' })
     .execute();
-  await Store.createQueryBuilder()
+  await defaultConnection
+    .createQueryBuilder()
     .delete()
     .from(Store)
     .where('name=:name', { name: 'kcy main store' })
     .execute();
 
   console.log('START CREATEING MAIN STORE...');
-  const store = await Store.createQueryBuilder()
+
+  const store = await defaultConnection
+    .createQueryBuilder()
     .insert()
+    .into('store')
     .values([
       {
         name: 'kcy main store',
@@ -32,8 +37,11 @@ const genData = async () => {
 
   console.log('CREATE MAIN STORE SUCCESS...');
   console.log('START CREATEING SUPERUSER...');
-  await User.createQueryBuilder()
+
+  await defaultConnection
+    .createQueryBuilder()
     .insert()
+    .into('user')
     .values([
       {
         username: 'hsipl206',
@@ -46,8 +54,9 @@ const genData = async () => {
       },
     ])
     .execute();
+
   console.log('CREATE SUPER USER SUCCESS...');
-  await connection.close();
+  await defaultConnection.close();
 };
 
 genData();
