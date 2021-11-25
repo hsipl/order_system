@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { Tag } from "../entity/tag";
 import { TagRepository } from "../repository/tag.respository";
 import { TagService } from "../services/tag.service";
 import ErrorHandler from "./error.controller";
@@ -10,6 +9,7 @@ class TagController {
     constructor(service: TagService) {
         this.service = service;
     }
+
     async getAll(req: Request, res: Response, next: NextFunction) {
         const tags = await this.service.getAll();
         res.status(200).json(tags);
