@@ -57,7 +57,7 @@ class UserController {
         return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.LoginFailed));
       }
       req.session.user = { username: user.username, role: user.type, storeID: user.storeId };
-      res.status(200).json({ msg: 'login success.' });
+      res.status(200).json({ msg: 'login success.', data: user });
     } catch (error) {
       console.log('error:', error);
     }
