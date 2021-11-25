@@ -1,5 +1,5 @@
 import express from "express";
-import { createConnection } from "typeorm";
+import { Any, createConnection } from "typeorm";
 import "reflect-metadata";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -8,10 +8,12 @@ import session from "express-session";
 import redis from "redis";
 import connectRedis from "connect-redis";
 import fs from "fs";
+import { dirname } from "path/posix";
 import router from "./routes/route";
 import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
+import getConn from "./entity";
 
 // create app class for server
 export class App {
@@ -21,8 +23,8 @@ export class App {
 
   constructor() {
     this.mode = process.env.MODE ? process.env.MODE : "default";
-    this.setMiddleWare();
     this.setDBConnection();
+    this.setMiddleWare();
     this.setRoutes();
     this.app.use(errorHandler);
   }
@@ -47,7 +49,7 @@ export class App {
       const connection = await createConnection(this.mode);
       if (connection.isConnected) {
         console.log("MySQL db already connect.");
-        // this.genDataBySeed();
+        getConn(connection);
       }
     } catch (error) {
       console.log(error);
