@@ -1,22 +1,26 @@
-import express from "express";
-import { createConnection } from "typeorm";
-import "reflect-metadata";
-import cors from "cors";
-import dotenv from "dotenv";
-import path from "path";
-import session from "express-session";
-import redis from "redis";
-import connectRedis from "connect-redis";
-import fs from "fs";
-import router from "./routes/route";
-import errorHandler from "./middlewares/errorhandler";
-import * as _ from "./bases/declares/session";
+import express from 'express';
+import { createConnection } from 'typeorm';
+import 'reflect-metadata';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import path from 'path';
+import session from 'express-session';
+import redis from 'redis';
+import connectRedis from 'connect-redis';
+import fs from 'fs';
+import router from './routes/route';
+import errorHandler from './middlewares/errorhandler';
+import * as _ from './bases/declares/session';
+import { config } from './config/config';
 
 // create app class for server
 export class App {
   private app: express.Application = express();
 
+  private mode: string;
+
   constructor() {
+    this.mode = process.env.MODE ? process.env.MODE : 'default';
     this.setMiddleWare();
     this.setDBConnection();
     this.setRoutes();
@@ -24,7 +28,7 @@ export class App {
   }
 
   private setMiddleWare(): void {
-    const imagePath = path.resolve(__dirname, "../uploads/images");
+    const imagePath = path.resolve(__dirname, '../uploads/images');
     this.app.use(express.static(imagePath));
     this.app.use(express.json());
     this.app.use(cors());
@@ -40,27 +44,26 @@ export class App {
 
   private async setDBConnection() {
     try {
-      const mode = process.env.MODE ? process.env.MODE : "default";
-      const connection = await createConnection(mode);
+      const connection = await createConnection(this.mode);
       if (connection.isConnected) {
-        console.log("MySQL db already connect.");
+        console.log('MySQL db already connect.');
         // this.genDataBySeed();
       }
     } catch (error) {
       console.log(error);
-      throw new Error("MySQL connection failed.");
+      throw new Error('MySQL connection failed.');
     }
   }
 
   private setSession() {
     const RedisStore = connectRedis(session);
     const redisClient = redis.createClient({
-      port: 6379,
-      host: "localhost",
+      port: config[this.mode].REDIS_PORT,
+      host: config[this.mode].REDIS_HOST,
     });
     this.app.use(
       session({
-        secret: "kcy",
+        secret: 'kcy',
         // cookie -> secure: true | only for https
         cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 },
         resave: true,
@@ -68,7 +71,7 @@ export class App {
           client: redisClient,
         }),
         saveUninitialized: false,
-      })
+      }),
     );
   }
 
