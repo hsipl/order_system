@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:client/services/api_connection.dart';
 import 'package:client/widget/login_text_field.dart';
@@ -11,7 +13,7 @@ class Login extends StatefulWidget {
 
 void loginChecker(context, String loginStatus) {
   if (loginStatus == 'login success.') {
-    Navigator.pushNamed(context, '/');
+    Navigator.pop(context);
   } else {
     AlertDialog dialog = AlertDialog(
       title: Text(loginStatus),

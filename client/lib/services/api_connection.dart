@@ -32,7 +32,8 @@ class Api {
       uri,
       headers: headers,
     );
-
+    await prefs.setBool('login', false);
+    print(prefs.getBool('login'));
     return response.body;
   }
 
@@ -46,6 +47,8 @@ class Api {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var stringHeader = json.encode(headers);
       await prefs.setString('cookie', stringHeader);
+      await prefs.setBool('login', true);
+      print(prefs.getBool('login'));
     }
   }
 }
