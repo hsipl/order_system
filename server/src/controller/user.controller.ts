@@ -69,7 +69,7 @@ class UserController {
       req.session.destroy((err) => {
         if (err) console.log('destory session error: ', err);
       });
-      res.send('logout success.');
+      res.json({ msg: 'logout success.' });
     } catch (error) {
       console.log(error);
       return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.LogoutFailed));
