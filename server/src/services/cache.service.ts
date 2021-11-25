@@ -1,11 +1,21 @@
 import { rejects } from 'assert';
 import redis from 'redis';
+import { config } from '../config/config';
 
 export default class CacheService {
   service: redis.RedisClient;
 
   constructor() {
-    this.service = redis.createClient({ host: 'localhost', port: 6379 });
+    const mode = process.env.MODE ? process.env.MODE : 'default';
+    try {
+      this.service = redis.createClient({
+        host: config[mode].REDIS_HOST,
+        port: config[mode].REDIS_PORT,
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error('Redis connect failed.');
+    }
   }
 
   async set() {}
