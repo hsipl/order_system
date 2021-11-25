@@ -1,10 +1,12 @@
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
-const String kLoginPath = 'http://10.0.2.2:8000/login';
+const String kLoginPath = 'http://140.125.45.167:8000/api/user/login';
+const String kStorePath = 'http://140.125.45.167:8000/api/store';
 
-class LoginApi {
-  static Future<String> login(Map loginData) async {
+class Api {
+  Future<String> login(Map loginData) async {
     final uri = Uri.parse(kLoginPath);
     final headers = {'Content-Type': 'application/json'};
     final encoding = Encoding.getByName('utf-8');
@@ -15,6 +17,35 @@ class LoginApi {
       body: jsonBody,
       encoding: encoding,
     );
+    updateCookie(response);
+    var status = jsonDecode(response.body);
+    return status['msg'];
+  }
+
+  Future<String> store() async {
+    final uri = Uri.parse(kStorePath);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String,dynamic> headersWithNull = jsonDecode(prefs.getString('cookie').toString());
+    Map<String, String> headers = <String, String>{};
+    headersWithNull.forEach((key, value) => headers[key] = value.toString());
+    Response response = await get(
+      uri,
+      headers: headers,
+    );
+
     return response.body;
+  }
+
+  void updateCookie(Response response) async {
+    Map<String, String> headers = {};
+    String? rawCookie = response.headers['set-cookie'];
+    if (rawCookie != null) {
+      int index = rawCookie.indexOf(';');
+      headers['cookie'] =
+          (index == -1) ? rawCookie : rawCookie.substring(0, index);
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var stringHeader = json.encode(headers);
+      await prefs.setString('cookie', stringHeader);
+    }
   }
 }

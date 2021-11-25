@@ -1,3 +1,4 @@
+import 'package:client/services/api_connection.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutColumn extends StatefulWidget {
@@ -71,7 +72,13 @@ class CheckoutBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(primary: color),
-      onPressed: () {},
+      onPressed: () {
+        Api api = Api();
+        Future<String> loginResponse = api.store();
+        loginResponse.then((String value) {
+          print(value);
+        });
+      },
       child: Text(
         text,
         style: const TextStyle(color: Colors.white, fontSize: 20),

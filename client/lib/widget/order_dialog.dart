@@ -26,12 +26,38 @@ class _OrderDialogState extends State<OrderDialog> {
         height: 600.0,
         width: 900.0,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(widget.img),
-            Text(widget.product),
-            Text(widget.price),
-            Text(widget.info),
+            ColorFiltered(
+              colorFilter: const ColorFilter.mode(
+                Colors.blueGrey,
+                BlendMode.modulate,
+              ),
+              child: Container(
+                height: 200,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(12),
+                      topRight: Radius.circular(12)),
+                  image: DecorationImage(
+                    image: AssetImage("assets/img/test_img.jpg"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Column(
+                      children: [
+                        Text(widget.product),
+                        Text(widget.price),
+                        Text(widget.info),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
             TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();

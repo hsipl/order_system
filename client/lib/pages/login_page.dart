@@ -10,11 +10,11 @@ class Login extends StatefulWidget {
 }
 
 void loginChecker(context, String loginStatus) {
-  if (loginStatus == '"200"') {
+  if (loginStatus == 'login success.') {
     Navigator.pushNamed(context, '/');
   } else {
     AlertDialog dialog = AlertDialog(
-      title: const Text('Login Fail! '),
+      title: Text(loginStatus),
       actions: [
         ElevatedButton(
             onPressed: () {
@@ -24,10 +24,11 @@ void loginChecker(context, String loginStatus) {
       ],
     );
     showDialog(
-        context: context,
-        builder: (context) {
-          return dialog;
-        });
+      context: context,
+      builder: (context) {
+        return dialog;
+      },
+    );
   }
 }
 
@@ -68,7 +69,8 @@ class _LoginState extends State<Login> {
                     'username': username,
                     'password': password
                   };
-                  Future<String> loginResponse = LoginApi.login(loginData);
+                  Api api = Api();
+                  Future<String> loginResponse = api.login(loginData);
                   loginResponse.then((String value) {
                     print(value);
                     loginChecker(context, value);
