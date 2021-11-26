@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class OrderDialog extends StatefulWidget {
   const OrderDialog(
@@ -22,89 +23,151 @@ class _OrderDialogState extends State<OrderDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+      child: SingleChildScrollView(
+        child: SizedBox(
+          height: 600.0,
+          width: 900.0,
+          child: Column(
+            children: <Widget>[
+              Stack(children: [
+                ColorFiltered(
+                  colorFilter: const ColorFilter.mode(
+                    Colors.grey,
+                    BlendMode.modulate,
+                  ),
+                  child: Container(
+                    height: 200,
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12)),
+                      image: DecorationImage(
+                        image: AssetImage("assets/img/test_img.jpg"),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.product,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 30),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            widget.price,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 30),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            widget.info,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 30),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ]),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text(
+                        '+',
+                      ),
+                    ),
+                    Container(
+                        height: 40,
+                        width: 200,
+                        child: TextField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                        )),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: const Text(
+                        '-',
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Row(
+                children: const [
+                  labelTextContainer(),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Row(
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          '確定',
+                        )),
+                    const Spacer(),
+                    ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text(
+                          '取消',
+                        )),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class labelTextContainer extends StatelessWidget {
+  const labelTextContainer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
       child: SizedBox(
-        height: 600.0,
-        width: 900.0,
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children:[ColorFiltered(
-                colorFilter: const ColorFilter.mode(
-                  Colors.grey,
-                  BlendMode.modulate,
-                ),
-                child: Container(
-                  height: 200,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(12),
-                        topRight: Radius.circular(12)),
-                    image: DecorationImage(
-                      image: AssetImage("assets/img/test_img.jpg"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              ),Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(widget.product,style: const TextStyle(color: Colors.white,fontSize: 30),),
-                        const SizedBox(height: 10,),
-                        Text(widget.price,style:const TextStyle(color: Colors.white,fontSize: 30),),
-                        const SizedBox(height: 10,),
-                        Text(widget.info,style:const TextStyle(color: Colors.white,fontSize: 30),),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ]),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Row(
-                children:[
-                  ElevatedButton(onPressed: () {},
-                    child: const Text(
-                      '+',
-                    ),),
-                  Container(height:40,width: 200,child: TextField()),
-                  ElevatedButton(onPressed: () {},
-                    child: const Text(
-                      '-',
-                    ),),
-                ],
-              ),
+        height: 200,
+        width: 350,
+        child: InputDecorator(
+          expands: true,
+          decoration: InputDecoration(
+            labelText: '客製化選項',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
             ),
-            Spacer(),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(30, 0, 30, 20),
-              child: Row(
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        '確定',
-                      )),
-                  const Spacer(),
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text(
-                        '取消',
-                      )),
-                ],
-              ),
-            )
-          ],
+          ),
+          child: Text('沙小拉'),
         ),
       ),
     );
