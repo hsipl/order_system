@@ -53,7 +53,7 @@ class StoreController {
       if (image !== '') await deleteFile(image);
       return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
     }
-    const { name, status, type }: { name: string; status: number; type: number } = req.body;
+    const { name, type }: { name: string; type: number } = req.body;
 
     try {
       const storeExist = await this.service.checkExistByName(name);
@@ -63,11 +63,10 @@ class StoreController {
       }
       const params: IStoreCreateParams = {
         name,
-        status,
         type,
         image,
       };
-      const newStore = await this.service.create(params);
+      const newStore = await this.service.create(req, params);
       res.status(200).json(newStore);
     } catch (error) {
       // print to log

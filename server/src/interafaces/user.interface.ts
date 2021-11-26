@@ -5,6 +5,7 @@ export interface IUserParams {
   password?: string;
   type?: number;
   status?: number;
+  storeId?: number;
 }
 
 export interface ICreateUserParams extends IUserParams {
@@ -18,4 +19,9 @@ export interface ICreateUserParams extends IUserParams {
 export interface ILoginUserParams extends IUserParams {
   username: string;
   password: string;
+}
+
+export interface ICheckExist extends IUserParams {
+  name: string;
+  username: string;
 }

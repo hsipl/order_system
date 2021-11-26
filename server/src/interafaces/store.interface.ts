@@ -12,7 +12,6 @@ interface IStoreParams {
 export interface IStoreCreateParams extends IStoreParams {
   name: string;
   type: number;
-  status: number;
 }
 
 export interface IStoreUpdateParams extends IStoreParams {

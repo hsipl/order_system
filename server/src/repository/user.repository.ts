@@ -1,7 +1,7 @@
 import { ICreateUserParams, IUserParams } from '../interafaces/user.interface';
 import { User } from '../entity/user';
 
-const field: (keyof User)[] = ['id', 'username', 'name', 'status', 'type', 'image', 'createdAt'];
+const field: (keyof User)[] = ['id', 'name', 'status', 'type', 'image', 'createdAt'];
 
 export class UserRepository {
   async create(user: User) {
@@ -10,9 +10,6 @@ export class UserRepository {
 
   async getAll() {
     return await User.find({
-      where: {
-        status: 0,
-      },
       select: field,
     });
   }
@@ -21,7 +18,7 @@ export class UserRepository {
     const query = await User.createQueryBuilder('u')
       .innerJoinAndSelect('u.storeId', 's')
       .where('s.type = :type', { type: params.type })
-      .getOne();
+      .getRawOne();
     return query;
   }
 

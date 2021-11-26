@@ -6,6 +6,7 @@ import { StoreRepository } from '../repository/store.repository';
 import { StoreService } from '../services/store.service';
 import { upload } from '../utils/fileUpload';
 import { StoreValidator } from '../validator/store';
+import CacheService from '../services/cache.service';
 
 export default class StoreRoute extends BasicRoute {
   constructor() {
@@ -15,7 +16,9 @@ export default class StoreRoute extends BasicRoute {
   }
 
   protected setRoutes() {
-    const controller = new StoreController(new StoreService(new StoreRepository()));
+    const controller = new StoreController(
+      new StoreService(new StoreRepository(), new CacheService()),
+    );
     const validator = new StoreValidator();
     const auth = new Auth();
     this.router.get('/', auth.authAdmin.bind(auth), controller.getAll.bind(controller));

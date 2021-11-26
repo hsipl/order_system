@@ -6,9 +6,6 @@ const field: (keyof Store)[] = ['id', 'name', 'status', 'type', 'image', 'create
 export class StoreRepository {
   async getAll(): Promise<Store[]> {
     return await Store.find({
-      where: {
-        status: 0,
-      },
       select: field,
     });
   }

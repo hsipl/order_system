@@ -1,3 +1,4 @@
+import { Request } from 'express';
 import { UpdateResult } from 'typeorm';
 import { errorMsg, errorStatusCode } from '../bases/errorTypes';
 import ErrorHandler from '../controller/error.controller';
@@ -8,9 +9,13 @@ import {
   IStoreUpdateParams,
 } from '../interafaces/store.interface';
 import { StoreRepository } from '../repository/store.repository';
+import CacheService from './cache.service';
 
 export class StoreService {
-  constructor(private readonly repository: StoreRepository) {}
+  constructor(
+    private readonly repository: StoreRepository,
+    private readonly cacheService: CacheService,
+  ) {}
 
   async getAll(): Promise<Store[]> {
     const store = await this.repository.getAll();
@@ -32,7 +37,13 @@ export class StoreService {
     return !!isExist;
   }
 
-  async create(params: IStoreCreateParams): Promise<Store> {
+  async create(req: Request, params: IStoreCreateParams): Promise<Store> {
+    const { sessionID } = req;
+    const sessionData = await this.cacheService.get(`sess:${sessionID}`);
+    const { username, role, storeId } = JSON.parse(sessionData).user;
+    if (role !== 1) {
+      throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
+    }
     const store = new Store();
     Object.assign(store, params);
     return await this.repository.create(store);

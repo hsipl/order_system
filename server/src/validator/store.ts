@@ -5,7 +5,7 @@ import {
 
 export class StoreValidator {
   public create() {
-    return [validateStatus(), validateType(), validateName()];
+    return [validateType(), validateName()];
   }
 
   public update() {

@@ -23,7 +23,8 @@ class UserController {
       username,
       password,
       storeId,
-    }: { name: string; username: string; password: string; storeId: number } = req.body;
+      type,
+    }: { name: string; username: string; password: string; storeId: number; type: number } = req.body;
 
     const user = {
       name,
@@ -31,8 +32,13 @@ class UserController {
       password,
       storeId,
       image,
+      type,
     };
     try {
+      const isExist = await this.service.checkIsExistByUsernameAndName({ name, username });
+      if (isExist) {
+        return next(new ErrorHandler(errorStatusCode.Forbidden, errorMsg.DataAlreadyExist));
+      }
       const newUser = await this.service.create(user, req);
       res.status(200).json({ msg: 'register success.' });
     } catch (error) {

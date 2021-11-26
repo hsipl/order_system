@@ -14,7 +14,6 @@ export class UserValidator {
     return [
       validateUsername(),
       validatePassword(),
-      validateStatus(),
       validateType(),
       validateName(),
       validateStoreID(),
