@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:client/services/decorations.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'product_card.dart';
 
 class CardsColumn extends StatefulWidget {
@@ -67,10 +68,13 @@ class _CardsColumnState extends State<CardsColumn> {
                 thickness: 5,
                 thicknessWhileDragging: 6,
                 controller: _controller,
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(0,0,10,0),
-                  controller: _controller,
-                  children: cards,
+                child: LazyLoadScrollView(
+                  onEndOfPage: () =>(){},
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(0,0,10,0),
+                    controller: _controller,
+                    children: cards,
+                  ),
                 ),
               ),
             ),

@@ -12,8 +12,10 @@ class Login extends StatefulWidget {
 
 void loginChecker(context, String loginStatus) {
   if (loginStatus == 'login success.') {
-    setLoginSharedPrefs(true);
-    Navigator.pop(context);
+    setLoginSharedPrefs(true).then((value) {
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/home_activate', (Route<dynamic> route) => false);
+    });
   } else {
     AlertDialog dialog = AlertDialog(
       title: Text(loginStatus),
@@ -22,7 +24,7 @@ void loginChecker(context, String loginStatus) {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Got it'))
+            child: const Text('確定'))
       ],
     );
     showDialog(
@@ -64,7 +66,7 @@ class _LoginState extends State<Login> {
             Expanded(
               flex: 2,
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   String username = usernameField.getText();
                   String password = passwordField.getText();
                   var loginData = <String, String>{
@@ -73,7 +75,7 @@ class _LoginState extends State<Login> {
                   };
                   Api api = Api();
                   Future<String> loginResponse = api.login(loginData);
-                  loginResponse.then((String value) {
+                  await loginResponse.then((String value) {
                     print(value);
                     loginChecker(context, value);
                   });

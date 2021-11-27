@@ -140,6 +140,7 @@ void selectedItem(BuildContext context, int index) {
       break;
     case 5:
       setLoginSharedPrefs(false);
+      Navigator.pushNamedAndRemoveUntil(context, '/home_deactivate',(Route<dynamic> route) => false);
       break;
     case 6:
       Navigator.pushNamed(context, '/login');

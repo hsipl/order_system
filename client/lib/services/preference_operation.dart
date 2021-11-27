@@ -6,3 +6,8 @@ Future<void> setLoginSharedPrefs(bool status) async {
   print(
       'printed by setLoginSharedPrefs : ' + prefs.getBool('login').toString());
 }
+
+Future<bool?> getLoginSharedPrefs() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  return  prefs.getBool('login') ;
+}
