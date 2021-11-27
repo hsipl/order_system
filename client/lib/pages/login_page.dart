@@ -12,10 +12,9 @@ class Login extends StatefulWidget {
 
 void loginChecker(context, String loginStatus) {
   if (loginStatus == 'login success.') {
-    setLoginSharedPrefs(true).then((value) {
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/home_activate', (Route<dynamic> route) => false);
-    });
+    setLoginSharedPrefs(true);
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/home_activate', (Route<dynamic> route) => false);
   } else {
     AlertDialog dialog = AlertDialog(
       title: Text(loginStatus),
