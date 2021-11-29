@@ -6,6 +6,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import errorHandler from "./middlewares/errorhandler";
+import { validationResult } from "express-validator";
 // create app class for server
 export class App {
   private app: express.Application = express();
@@ -17,12 +18,12 @@ export class App {
     this.setMiddleWare();
     this.setDBConnection();
     this.setRoutes();
+    this.app.use(errorHandler);
   }
 
   private setMiddleWare(): void {
     this.app.use(express.json());
     this.app.use(cors());
-    this.app.use(errorHandler);
   }
 
   private setRoutes(): void {

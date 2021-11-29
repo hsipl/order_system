@@ -1,7 +1,7 @@
 import { UpdateResult } from "typeorm";
 import { Product } from "../entity/product";
 
-const field: (keyof Product)[] = ["id", "storeId", "name", "money", "image", "option", "status"];
+const field: (keyof Product)[] = ["id", "storeId", "name", "money", "image", "category", "status"];
 
 export class ProductRepository {
     async getAll(): Promise<Product[]> {
