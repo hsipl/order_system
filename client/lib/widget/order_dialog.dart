@@ -30,115 +30,17 @@ class _OrderDialogState extends State<OrderDialog> {
           child: Column(
             children: <Widget>[
               Stack(children: [
-                ColorFiltered(
-                  colorFilter: const ColorFilter.mode(
-                    Colors.grey,
-                    BlendMode.modulate,
-                  ),
-                  child: Container(
-                    height: 200,
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(12),
-                          topRight: Radius.circular(12)),
-                      image: DecorationImage(
-                        image: AssetImage("assets/img/test_img.jpg"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.product,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 30),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            widget.price,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 30),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            widget.info,
-                            style: const TextStyle(
-                                color: Colors.white, fontSize: 30),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                const FilteredImage(
+                    image: AssetImage("assets/img/test_img.jpg")),
+                ProductInfo(widget: widget),
               ]),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const Text(
-                        '+',
-                      ),
-                    ),
-                    Container(
-                        height: 40,
-                        width: 200,
-                        child: TextField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                        )),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: const Text(
-                        '-',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              AmountRow(),
               Row(
                 children: const [
-                  labelTextContainer(),
+                  LabelTextContainer(),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          '確定',
-                        )),
-                    const Spacer(),
-                    ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          '取消',
-                        )),
-                  ],
-                ),
-              )
+              const ButtomRow(),
             ],
           ),
         ),
@@ -147,8 +49,151 @@ class _OrderDialogState extends State<OrderDialog> {
   }
 }
 
-class labelTextContainer extends StatelessWidget {
-  const labelTextContainer({
+class ButtomRow extends StatelessWidget {
+  const ButtomRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      child: Row(
+        children: [
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                '確定',
+              )),
+          const Spacer(),
+          ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text(
+                '取消',
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class AmountRow extends StatelessWidget {
+  const AmountRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Row(
+        children: [
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text(
+              '+',
+            ),
+          ),
+          Container(
+              height: 40,
+              width: 200,
+              child: TextField(
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              )),
+          ElevatedButton(
+            onPressed: () {},
+            child: const Text(
+              '-',
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FilteredImage extends StatelessWidget {
+  const FilteredImage({
+    Key? key,
+    required this.image,
+  }) : super(key: key);
+
+  final AssetImage image;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColorFiltered(
+      colorFilter: const ColorFilter.mode(
+        Colors.grey,
+        BlendMode.modulate,
+      ),
+      child: Container(
+        height: 200,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+          image: DecorationImage(
+            image: image,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProductInfo extends StatelessWidget {
+  const ProductInfo({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final OrderDialog widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.product,
+                style: const TextStyle(color: Colors.white, fontSize: 30),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                widget.price,
+                style: const TextStyle(color: Colors.white, fontSize: 30),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                widget.info,
+                style: const TextStyle(color: Colors.white, fontSize: 30),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class LabelTextContainer extends StatelessWidget {
+  const LabelTextContainer({
     Key? key,
   }) : super(key: key);
 

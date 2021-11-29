@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'order_dialog.dart';
 
@@ -19,30 +20,70 @@ class ProductCard extends StatefulWidget {
 }
 
 class _ProductCardState extends State<ProductCard> {
+  List<double> position = [];
+
+  List<double> getTapPosition(
+      TapDownDetails details, double width, double height) {
+    var dx = details.globalPosition.dx;
+    var dy = details.globalPosition.dy;
+    double xHalf = (width / 2);
+    double yHalf = (height / 2);
+    dx = (dx - xHalf) / xHalf;
+    dy = (dy - yHalf) / yHalf;
+    dx = double.parse(dx.toStringAsFixed(2));
+    dy = double.parse(dy.toStringAsFixed(2));
+    print(dx.toString() + '    ' + dy.toString());
+    return [dx, dy];
+  }
+
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+
     return SizedBox(
       height: 120,
       child: Card(
-        semanticContainer: true,
+          semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: 5,
           child: InkWell(
+            onTapDown: (TapDownDetails details) {
+              setState(() {
+                position = getTapPosition(details, width, height);
+              });
+            },
             onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) => OrderDialog(
-                        info: widget.info,
-                        img: widget.img,
-                        price: widget.price,
-                        product: widget.product,
-                      ));
+              showGeneralDialog(
+                barrierColor: Colors.black.withOpacity(0.5),
+                transitionBuilder: (context, a1, a2, widget) {
+                  return Transform.scale(
+                    alignment: Alignment(position[0], position[1]),
+                    scale: a1.value,
+                    child: Opacity(
+                      opacity: a1.value,
+                      child: OrderDialog(
+                        img: super.widget.img,
+                        info: super.widget.info,
+                        product: super.widget.product,
+                        price: super.widget.price,
+                      ),
+                    ),
+                  );
+                },
+                transitionDuration: const Duration(milliseconds: 200),
+                barrierDismissible: true,
+                barrierLabel: '',
+                context: context,
+                pageBuilder: (context, animation1, animation2) {
+                  return Container();
+                },
+              );
             },
             child: Center(
               child: ListTile(
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-
                   children: <Widget>[
                     Icon(
                       widget.img,

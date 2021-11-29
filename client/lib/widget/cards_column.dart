@@ -68,13 +68,10 @@ class _CardsColumnState extends State<CardsColumn> {
                 thickness: 5,
                 thicknessWhileDragging: 6,
                 controller: _controller,
-                child: LazyLoadScrollView(
-                  onEndOfPage: () =>(){},
-                  child: ListView(
-                    padding: const EdgeInsets.fromLTRB(0,0,10,0),
-                    controller: _controller,
-                    children: cards,
-                  ),
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                  controller: _controller,
+                  children: cards,
                 ),
               ),
             ),
