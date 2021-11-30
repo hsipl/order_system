@@ -1,29 +1,52 @@
-import { NextFunction, Request, Response } from "express";
-import BasicRoute from "../bases/route.abstract";
-import StoreController from "../controller/store.controller";
+import { body } from 'express-validator';
+import BasicRoute from '../bases/route.abstract';
+import StoreController from '../controller/store.controller';
+import Auth from '../middlewares/auth';
+import { StoreRepository } from '../repository/store.repository';
+import { StoreService } from '../services/store.service';
+import { upload } from '../utils/fileUpload';
+import { StoreValidator } from '../validator/store';
+import CacheService from '../services/cache.service';
 
 export default class StoreRoute extends BasicRoute {
   constructor() {
     super();
-    this.setPrefix("store");
+    this.setPrefix('store');
     this.setRoutes();
   }
 
   protected setRoutes() {
-    this.router.get("/", (req, res, next) =>
-      StoreController.getAll(req, res, next)
+    const controller = new StoreController(
+      new StoreService(new StoreRepository(), new CacheService()),
     );
-    this.router.get("/:id", (req, res, next) =>
-      StoreController.getById(req, res, next)
+    const validator = new StoreValidator();
+    const auth = new Auth();
+    this.router.get('/', auth.authAdmin.bind(auth), controller.getAll.bind(controller));
+    this.router.get(
+      '/:id',
+      auth.authAdmin.bind(auth),
+      validator.getByID(),
+      controller.getById.bind(controller),
     );
-    this.router.post("/", (req, res, next) =>
-      StoreController.create(req, res, next)
+    this.router.post(
+      '/',
+      upload.single('image'),
+      validator.create(),
+      auth.authAdmin.bind(auth),
+      controller.create.bind(controller),
     );
-    this.router.put("/:id", (req, res, next) =>
-      StoreController.update(req, res, next)
+    this.router.put(
+      '/:id',
+      upload.single('image'),
+      validator.update(),
+      auth.authAdmin.bind(auth),
+      controller.update.bind(controller),
     );
-    this.router.delete("/:id", (req, res, next) =>
-      StoreController.delete(req, res, next)
+    this.router.delete(
+      '/:id',
+      auth.authAdmin.bind(auth),
+      validator.delete(),
+      controller.delete.bind(controller),
     );
   }
 }
