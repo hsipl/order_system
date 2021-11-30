@@ -17,7 +17,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
-  runApp(const EnterPoint());
+  runApp(const OrderSystem());
 }
 
 class EnterPoint extends StatelessWidget {
@@ -45,11 +45,9 @@ class EnterPoint extends StatelessWidget {
 
 class Init {
   Init._();
-
   static final instance = Init._();
-
   Future<bool?> initialize() async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 2));
     return getLoginSharedPrefs();
   }
 }
@@ -70,13 +68,13 @@ class OrderSystem extends StatelessWidget {
             return PageTransition(
                 child: const HomeDeactivate(),
                 type: PageTransitionType.scale,
-                duration: const Duration(milliseconds: 800),
+                duration: const Duration(milliseconds: 200),
                 alignment: Alignment.center);
           case '/home_activate':
             return PageTransition(
                 child: const Home(),
                 type: PageTransitionType.scale,
-                duration: const Duration(milliseconds: 800),
+                duration: const Duration(milliseconds: 200),
                 alignment: Alignment.center);
           case '/login':
             return PageTransition(

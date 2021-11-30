@@ -15,8 +15,9 @@ class HomeDeactivate extends StatelessWidget {
       drawer: const DeactivateDrawer(),
       body: const Center(
         child: Text(
-          '請先登入',
+          '請先登入\n點選右邊工具列進行登入',
           style: TextStyle(color: Colors.grey),
+          textAlign: TextAlign.center,
         ),
       ),
     );

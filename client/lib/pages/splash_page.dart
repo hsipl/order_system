@@ -8,7 +8,7 @@ class SplashPage extends StatelessWidget {
     return const Scaffold(
       backgroundColor: Colors.grey,
       body: SafeArea(
-        child: SpinKitRotatingCircle(
+        child: SpinKitSpinningCircle(
           duration: Duration(milliseconds: 1000),
           color: Colors.white,
           size: 150.0,

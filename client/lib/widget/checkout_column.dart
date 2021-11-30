@@ -1,4 +1,5 @@
-import 'package:client/services/api_connection.dart';
+import 'package:client/services/decorations.dart';
+import 'package:client/widget/styling_buttons.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutColumn extends StatefulWidget {
@@ -17,11 +18,12 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Expanded(
+            Expanded(
               flex: 2,
-              child: CheckoutBarButton(
-                color: Color(0xFFE74C3C),
+              child: CheckoutColumnButton(
+                color: kCancelButtonColor,
                 text: '清空',
+                onPress:(){},
               ),
             ),
             Expanded(flex: 16, child: Container()),
@@ -44,11 +46,12 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
                     )),
                   ),
                 )),
-            const Expanded(
+            Expanded(
               flex: 2,
-              child: CheckoutBarButton(
-                color: Color(0xFF003CCC),
+              child: CheckoutColumnButton(
+                color: kConfirmButtonColor,
                 text: '送出',
+                onPress: (){},
               ),
             ),
           ],
@@ -58,25 +61,4 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
   }
 }
 
-class CheckoutBarButton extends StatelessWidget {
-  const CheckoutBarButton({
-    required this.text,
-    required this.color,
-    Key? key,
-  }) : super(key: key);
 
-  final String text;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(primary: color),
-      onPressed: () {},
-      child: Text(
-        text,
-        style: const TextStyle(color: Colors.white, fontSize: 20),
-      ),
-    );
-  }
-}

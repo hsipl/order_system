@@ -1,3 +1,4 @@
+import 'package:client/services/api_connection.dart';
 import 'package:client/services/preference_operation.dart';
 import 'package:flutter/material.dart';
 
@@ -139,8 +140,10 @@ void selectedItem(BuildContext context, int index) {
       Navigator.pushNamed(context, '/earning');
       break;
     case 5:
+      Api().logout();
       setLoginSharedPrefs(false);
-      Navigator.pushNamedAndRemoveUntil(context, '/home_deactivate',(Route<dynamic> route) => false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/home_deactivate', (Route<dynamic> route) => false);
       break;
     case 6:
       Navigator.pushNamed(context, '/login');

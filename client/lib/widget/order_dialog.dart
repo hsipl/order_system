@@ -1,3 +1,6 @@
+import 'package:client/services/decorations.dart';
+import 'package:client/widget/styling_buttons.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -19,6 +22,27 @@ class OrderDialog extends StatefulWidget {
 }
 
 class _OrderDialogState extends State<OrderDialog> {
+  List<Widget> numButtons = List.generate(
+      10,
+      (i) => Padding(
+        padding: const EdgeInsets.fromLTRB(0,0,10,0),
+        child: ActionButton(
+              action: " $i",
+              color: primaryTextColor,
+              onPress: () {print("num:$i");},
+            ),
+      ));
+  List<Widget> tagButtons = List.generate(
+      10,
+          (i) => Padding(
+        padding: const EdgeInsets.fromLTRB(0,0,10,0),
+        child: ActionButton(
+          action: " tag $i",
+          color: primaryTextColor,
+          onPress: () {print("tag:$i");},
+        ),
+      ));
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -34,13 +58,17 @@ class _OrderDialogState extends State<OrderDialog> {
                     image: AssetImage("assets/img/test_img.jpg")),
                 ProductInfo(widget: widget),
               ]),
-              AmountRow(),
+              const AmountRow(),
               Row(
-                children: const [
-                  LabelTextContainer(),
+                children: [
+                  const LabelTextContainer(),
+                  NumInput(numButtons: numButtons),
+                  SizedBox(width: 25,),
+                  NumInput(numButtons: tagButtons),
+
                 ],
               ),
-              const ButtomRow(),
+              const ActionRow(),
             ],
           ),
         ),
@@ -49,8 +77,37 @@ class _OrderDialogState extends State<OrderDialog> {
   }
 }
 
-class ButtomRow extends StatelessWidget {
-  const ButtomRow({
+class NumInput extends StatelessWidget {
+  const NumInput({
+    Key? key,
+    required this.numButtons,
+  }) : super(key: key);
+
+  final List<Widget> numButtons;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: numButtons.sublist(7),
+        ),
+        Row(
+          children: numButtons.sublist(4, 7),
+        ),
+        Row(
+          children: numButtons.sublist(1, 4),
+        ),
+        Row(
+          children: [numButtons[0]],
+        ),
+      ],
+    );
+  }
+}
+
+class ActionRow extends StatelessWidget {
+  const ActionRow({
     Key? key,
   }) : super(key: key);
 
@@ -60,21 +117,17 @@ class ButtomRow extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: Row(
         children: [
-          ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                '確定',
-              )),
-          const Spacer(),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text(
-                '取消',
-              )),
+          ActionButton(
+            action: '確定',
+            color: kConfirmButtonColor,
+            onPress: () => Navigator.pop(context),
+          ),
+          Spacer(),
+          ActionButton(
+            action: '取消',
+            color: kCancelButtonColor,
+            onPress: () => Navigator.pop(context),
+          ),
         ],
       ),
     );
@@ -89,27 +142,42 @@ class AmountRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text(
-              '+',
-            ),
+          ActionButton(
+            color: primaryTextColor,
+            action: '+',
+            onPress: () {},
+          ),
+          const SizedBox(
+            width: 20,
           ),
           Container(
-              height: 40,
-              width: 200,
-              child: TextField(
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              )),
-          ElevatedButton(
-            onPressed: () {},
-            child: const Text(
-              '-',
+            decoration: BoxDecoration(
+              border: Border.all(color: primaryTextColor),
+              borderRadius: BorderRadius.circular(12),
             ),
+            width: 180,
+            height: 50,
+            child: TextField(
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "0",
+              ),
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          ActionButton(
+            color: primaryTextColor,
+            action: '-',
+            onPress: () {},
           ),
         ],
       ),
@@ -162,7 +230,7 @@ class ProductInfo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(30, 30, 0, 0),
+          padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -212,7 +280,7 @@ class LabelTextContainer extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
-          child: Text('沙小拉'),
+          child: const Text('沙小拉'),
         ),
       ),
     );

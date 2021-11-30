@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const String kLoginPath = 'http://140.125.45.167:8000/api/user/login';
+const String kLogoutPath = 'http://140.125.45.167:8000/api/user/logout';
 const String kStorePath = 'http://140.125.45.167:8000/api/store';
 
 class Api {
@@ -18,6 +19,19 @@ class Api {
       encoding: encoding,
     );
     updateCookie(response);
+    var status = jsonDecode(response.body);
+    return status['msg'];
+  }
+
+  Future<String> logout() async {
+    final uri = Uri.parse(kLogoutPath);
+    final headers = {'Content-Type': 'application/json'};
+    Response response = await get(
+      uri,
+      headers: headers,
+    );
+    updateCookie(response);
+    print(response.body);
     var status = jsonDecode(response.body);
     return status['msg'];
   }
@@ -44,6 +58,7 @@ class Api {
           (index == -1) ? rawCookie : rawCookie.substring(0, index);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       var stringHeader = json.encode(headers);
+      print(headers);
       await prefs.setString('cookie', stringHeader);
     }
   }

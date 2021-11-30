@@ -58,8 +58,8 @@ class _ProductCardState extends State<ProductCard> {
                 barrierColor: Colors.black.withOpacity(0.5),
                 transitionBuilder: (context, a1, a2, widget) {
                   return Transform.scale(
-                    alignment: Alignment(position[0], position[1]),
                     scale: a1.value,
+                    alignment: Alignment(position[0], position[1]),
                     child: Opacity(
                       opacity: a1.value,
                       child: OrderDialog(
