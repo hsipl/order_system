@@ -56,4 +56,16 @@ export class UserService {
     const isExist = await this.repository.findOne(params);
     return isExist;
   }
+
+  public async getAllEmployee(req: Request) {
+    const { sessionID } = req;
+    const sessionData = await this.cacheService.get(`sess:${sessionID}`);
+    const { role, storeId } = JSON.parse(sessionData).user;
+    if (role !== 1) {
+      throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
+    }
+    console.log(storeId);
+    const employees = await this.repository.getAllEmployee({ storeId });
+    return employees;
+  }
 }

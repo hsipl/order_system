@@ -59,10 +59,14 @@ class UserController {
       const { username, password }: { username: string; password: string } = req.body;
       const params: ILoginUserParams = { username, password };
       const user = await this.service.login(params);
-      if (!user) {
+      if (!user || !user.storeId) {
         return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.LoginFailed));
       }
-      req.session.user = { username: user.username, role: user.type, storeID: user.storeId };
+      req.session.user = {
+        username: user.username,
+        role: user.type,
+        store: { id: user.storeId.id, type: user.storeId.type },
+      };
       res.status(200).json({ msg: 'login success.', data: user });
     } catch (error) {
       console.log('error:', error);
@@ -79,6 +83,19 @@ class UserController {
     } catch (error) {
       console.log(error);
       return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.LogoutFailed));
+    }
+  }
+
+  async getAllEmployee(req: Request, res: Response, next: NextFunction) {
+    try {
+      const employees = await this.service.getAllEmployee(req);
+      console.log(employees);
+      res.status(200).json(employees);
+    } catch (error) {
+      console.log('get employees error: ', error);
+      return next(
+        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
+      );
     }
   }
 }

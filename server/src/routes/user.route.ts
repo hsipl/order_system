@@ -31,5 +31,10 @@ export default class UserRoute extends BasicRoute {
     );
     this.router.post('/login', validator.login(), controller.login.bind(controller));
     this.router.get('/logout', controller.logout.bind(controller));
+    this.router.get(
+      '/employee',
+      auth.authAdmin.bind(auth),
+      controller.getAllEmployee.bind(controller),
+    );
   }
 }

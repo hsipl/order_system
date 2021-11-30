@@ -30,7 +30,7 @@ export class User extends BaseEntity {
     onUpdate: 'CASCADE',
   })
   @JoinColumn({ name: 'store_id' })
-  storeId: number;
+  storeId: Store;
 
   @Column({
     unsigned: true,

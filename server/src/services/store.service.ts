@@ -40,13 +40,14 @@ export class StoreService {
   async create(req: Request, params: IStoreCreateParams): Promise<Store> {
     const { sessionID } = req;
     const sessionData = await this.cacheService.get(`sess:${sessionID}`);
-    const { username, role, storeId } = JSON.parse(sessionData).user;
-    if (role !== 1) {
+    const { username, role, store } = JSON.parse(sessionData).user;
+    console.log('1');
+    if (role !== 1 || store.type !== 1) {
       throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
     }
-    const store = new Store();
-    Object.assign(store, params);
-    return await this.repository.create(store);
+    const newStore = new Store();
+    Object.assign(newStore, params);
+    return await this.repository.create(newStore);
   }
 
   async update(params: IStoreUpdateParams): Promise<UpdateResult | undefined> {

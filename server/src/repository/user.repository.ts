@@ -1,16 +1,19 @@
-import { ICreateUserParams, IUserParams } from '../interafaces/user.interface';
+import { ICreateUserParams, IUserGetEmployee, IUserParams } from '../interafaces/user.interface';
 import { User } from '../entity/user';
 
 const field: (keyof User)[] = ['id', 'name', 'status', 'type', 'image', 'createdAt'];
-
+const loginField: (keyof User)[] = ['name', 'type', 'storeId'];
 export class UserRepository {
   async create(user: User) {
     return await User.save(user);
   }
 
-  async getAll() {
+  async getAllEmployee(params: IUserGetEmployee) {
     return await User.find({
       select: field,
+      where: {
+        storeId: params.storeId,
+      },
     });
   }
 
@@ -23,9 +26,11 @@ export class UserRepository {
   }
 
   async findOne(params: IUserParams) {
-    return await User.findOne({
+    const user = await User.findOne({
       where: params,
-      select: field,
+      relations: ['storeId'],
     });
+    console.log(user);
+    return user;
   }
 }

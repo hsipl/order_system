@@ -25,3 +25,8 @@ export interface ICheckExist extends IUserParams {
   name: string;
   username: string;
 }
+
+export interface IUserGetEmployee extends IUserParams {
+  storeId: number;
+  superAuth?: boolean;
+}
