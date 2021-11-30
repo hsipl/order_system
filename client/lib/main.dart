@@ -17,7 +17,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
-  runApp(const OrderSystem());
+  runApp(const EnterPoint());
 }
 
 class EnterPoint extends StatelessWidget {
@@ -32,8 +32,7 @@ class EnterPoint extends StatelessWidget {
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const MaterialApp(
-              debugShowCheckedModeBanner: false,
-              home: SplashPage());
+              debugShowCheckedModeBanner: false, home: SplashPage());
         } else {
           login = snapshot.data;
           return OrderSystem(login: login);
@@ -45,7 +44,9 @@ class EnterPoint extends StatelessWidget {
 
 class Init {
   Init._();
+
   static final instance = Init._();
+
   Future<bool?> initialize() async {
     await Future.delayed(const Duration(seconds: 2));
     return getLoginSharedPrefs();

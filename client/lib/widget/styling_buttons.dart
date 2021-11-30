@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
 class ActionButton extends StatelessWidget {
   const ActionButton({
     required this.color,
@@ -13,20 +11,26 @@ class ActionButton extends StatelessWidget {
   final String action;
   final Color color;
   final Function onPress;
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         primary: Colors.white,
-        shadowColor:Colors.transparent,
+        shadowColor: Colors.transparent,
         elevation: 0,
         side: BorderSide(width: 1.0, color: color),
       ),
-      onPressed:()=>onPress(),
-      child: Text(action, style: TextStyle(color: color,),),);
+      onPressed: () => onPress(),
+      child: Text(
+        action,
+        style: TextStyle(
+          color: color,
+        ),
+      ),
+    );
   }
 }
-
 
 class CheckoutColumnButton extends StatelessWidget {
   const CheckoutColumnButton({
@@ -39,11 +43,12 @@ class CheckoutColumnButton extends StatelessWidget {
   final String text;
   final Color color;
   final Function onPress;
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(primary: color),
-      onPressed: ()=>onPress(),
+      onPressed: () => onPress(),
       child: Text(
         text,
         style: const TextStyle(color: Colors.white),

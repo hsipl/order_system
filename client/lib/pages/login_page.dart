@@ -101,12 +101,15 @@ class ErrorDialog extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(32.0))),
       contentPadding: const EdgeInsets.only(top: 10.0),
       title: Text(loginStatus),
-      actions:  [
+      actions: [
         Center(
-          child: ActionButton(action: '確定', color: kConfirmButtonColor,onPress:()=>Navigator.pop(context),),
+          child: ActionButton(
+            action: '確定',
+            color: kConfirmButtonColor,
+            onPress: () => Navigator.pop(context),
+          ),
         )
       ],
     );
   }
 }
-

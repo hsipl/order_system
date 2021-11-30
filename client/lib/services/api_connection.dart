@@ -39,7 +39,8 @@ class Api {
   Future<String> store() async {
     final uri = Uri.parse(kStorePath);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    Map<String,dynamic> headersWithNull = jsonDecode(prefs.getString('cookie').toString());
+    Map<String, dynamic> headersWithNull =
+        jsonDecode(prefs.getString('cookie').toString());
     Map<String, String> headers = <String, String>{};
     headersWithNull.forEach((key, value) => headers[key] = value.toString());
     Response response = await get(

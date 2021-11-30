@@ -23,7 +23,7 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
               child: CheckoutColumnButton(
                 color: kCancelButtonColor,
                 text: '清空',
-                onPress:(){},
+                onPress: () {},
               ),
             ),
             Expanded(flex: 16, child: Container()),
@@ -51,7 +51,7 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
               child: CheckoutColumnButton(
                 color: kConfirmButtonColor,
                 text: '送出',
-                onPress: (){},
+                onPress: () {},
               ),
             ),
           ],
@@ -60,5 +60,3 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
     );
   }
 }
-
-

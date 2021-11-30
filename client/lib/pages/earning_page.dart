@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class EarningPage extends StatelessWidget {
   const EarningPage({Key? key}) : super(key: key);
 
@@ -8,7 +7,7 @@ class EarningPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('EarningPage'),
-        ));
+      title: const Text('EarningPage'),
+    ));
   }
 }

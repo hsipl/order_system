@@ -36,7 +36,7 @@ class _LoginTextFieldState extends State<LoginTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: const TextStyle(fontSize: 20),
+        style: const TextStyle(fontSize: 20),
         controller: widget.textController,
         obscureText: widget.isPasswordField ? _textVisible : !_textVisible,
         keyboardType: TextInputType.text,

@@ -25,23 +25,27 @@ class _OrderDialogState extends State<OrderDialog> {
   List<Widget> numButtons = List.generate(
       10,
       (i) => Padding(
-        padding: const EdgeInsets.fromLTRB(0,0,10,0),
-        child: ActionButton(
+            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: ActionButton(
               action: " $i",
               color: primaryTextColor,
-              onPress: () {print("num:$i");},
+              onPress: () {
+                print("num:$i");
+              },
             ),
-      ));
+          ));
   List<Widget> tagButtons = List.generate(
       10,
-          (i) => Padding(
-        padding: const EdgeInsets.fromLTRB(0,0,10,0),
-        child: ActionButton(
-          action: " tag $i",
-          color: primaryTextColor,
-          onPress: () {print("tag:$i");},
-        ),
-      ));
+      (i) => Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: ActionButton(
+              action: " tag $i",
+              color: primaryTextColor,
+              onPress: () {
+                print("tag:$i");
+              },
+            ),
+          ));
 
   @override
   Widget build(BuildContext context) {
@@ -63,9 +67,10 @@ class _OrderDialogState extends State<OrderDialog> {
                 children: [
                   const LabelTextContainer(),
                   NumInput(numButtons: numButtons),
-                  SizedBox(width: 25,),
+                  SizedBox(
+                    width: 25,
+                  ),
                   NumInput(numButtons: tagButtons),
-
                 ],
               ),
               const ActionRow(),

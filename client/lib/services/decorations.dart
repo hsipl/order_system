@@ -19,15 +19,13 @@ const kOutlineInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.all(Radius.circular(20)),
 );
 
-
-
 // theme setting
 const primaryColor = Color(0xFFE0E0E0);
 const primaryColorLight = Color(0xFFFFFFFF);
 const primaryColorDark = Color(0xFFAEAEAE);
 const primaryTextColor = Color(0xFF000000);
 const double scrollbarThickness = 10.0;
-ThemeData  appTheme = ThemeData(
+ThemeData appTheme = ThemeData(
   appBarTheme: const AppBarTheme(
     toolbarHeight: 100,
     elevation: 3,
