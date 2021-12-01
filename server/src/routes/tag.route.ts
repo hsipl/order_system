@@ -1,5 +1,6 @@
 import BasicRoute from "../bases/route.abstract";
 import TagController from "../controller/tag.controller";
+import Auth from '../middlewares/auth';
 
 export default class TagRoute extends BasicRoute {
     constructor() {
@@ -9,10 +10,11 @@ export default class TagRoute extends BasicRoute {
     }
 
     protected setRoutes() {
-        this.router.get("/", (req, res, next) => TagController.getAll(req, res, next));
-        this.router.get("/:id", (req, res, next) => TagController.getById(req, res, next));
-        this.router.post("/", (req, res, next) => TagController.create(req, res, next));
-        this.router.put("/:id", (req, res, next) => TagController.update(req, res, next));
-        this.router.delete("/:id", (req, res, next) => TagController.delete(req, res, next));
+        const auth = new Auth();
+        this.router.get("/", auth.authAdmin.bind(auth), (req, res, next) => TagController.getAll(req, res, next));
+        this.router.get("/:id", auth.authAdmin.bind(auth), (req, res, next) => TagController.getById(req, res, next));
+        this.router.post("/", auth.authAdmin.bind(auth), (req, res, next) => TagController.create(req, res, next));
+        this.router.put("/:id", auth.authAdmin.bind(auth), (req, res, next) => TagController.update(req, res, next));
+        this.router.delete("/:id", auth.authAdmin.bind(auth), (req, res, next) => TagController.delete(req, res, next));
     }
 }
