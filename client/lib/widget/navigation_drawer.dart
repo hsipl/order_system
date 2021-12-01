@@ -1,5 +1,7 @@
 import 'package:client/services/api_connection.dart';
+import 'package:client/services/decorations.dart';
 import 'package:client/services/preference_operation.dart';
+import 'package:client/widget/styling_buttons.dart';
 import 'package:flutter/material.dart';
 
 class ActivateDrawer extends StatefulWidget {
@@ -121,29 +123,53 @@ Widget buildMenuItem({
 }
 
 void selectedItem(BuildContext context, int index) {
-  Navigator.pop(context);
-
   switch (index) {
     case 0:
+      Navigator.pop(context);
       Navigator.pushNamed(context, '/completed');
       break;
     case 1:
+      Navigator.pop(context);
       Navigator.pushNamed(context, '/delete');
       break;
     case 2:
+      Navigator.pop(context);
       Navigator.pushNamed(context, '/block');
       break;
     case 3:
+      Navigator.pop(context);
       Navigator.pushNamed(context, '/admin');
       break;
     case 4:
+      Navigator.pop(context);
       Navigator.pushNamed(context, '/earning');
       break;
     case 5:
-      Api().logout();
-      setLoginSharedPrefs(false);
-      Navigator.pushNamedAndRemoveUntil(
-          context, '/home_deactivate', (Route<dynamic> route) => false);
+      AlertDialog dialog = AlertDialog(
+        title: const Text('確定要登出嗎',textAlign: TextAlign.center,),
+        content:  Row(
+          children: [
+            ActionButton(
+                color: kConfirmButtonColor,
+                action: '確定',
+                onPress: () {
+                  Api().logout();
+                  setLoginSharedPrefs(false);
+                  Navigator.pushNamedAndRemoveUntil(context,
+                      '/home_deactivate', (Route<dynamic> route) => false);
+                }),
+            const Spacer(),
+            ActionButton(
+              color: kCancelButtonColor,
+              action: '取消',
+              onPress: () => Navigator.pop(context),
+            ),
+          ],
+        ),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+      );
+      showDialog(context: context, builder: (context) => dialog);
       break;
     case 6:
       Navigator.pushNamed(context, '/login');
