@@ -108,7 +108,7 @@ class TagController {
         if (!id) {
             return next(
                 new ErrorHandler(
-                    errorStatusCode.InternalServerError,
+                    errorStatusCode.BadRequest,
                     errorMsg.ParameterError
                 )
             );
