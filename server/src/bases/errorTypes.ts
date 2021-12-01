@@ -1,12 +1,16 @@
 export enum errorMsg {
-  ParameterError = "parameters error.",
-  internalServerError = "there is some error caused.",
-  dataAlreadyExist = "data already exists.",
-  dataNotFound = "data not found.",
-  dataReapet = "data reapet."
+  ParameterError = 'parameters error.',
+  InternalServerError = 'there is some error caused.',
+  DataAlreadyExist = 'data already exists.',
+  DataNotFound = 'data not found.',
+  LoginFailed = 'username or password incorrect.',
+  LogoutFailed = 'logout failed.',
+  AuthFailed = 'authenticated failed.',
+  FileExtNameFailed = 'File does not contain legal extname.',
 }
 export enum errorStatusCode {
-  badRequest = 400,
+  BadRequest = 400,
   InternalServerError = 500,
   Forbidden = 403,
+  UnAuthorization = 401,
 }

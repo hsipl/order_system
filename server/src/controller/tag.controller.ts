@@ -19,13 +19,13 @@ class TagController {
         const id: number = parseInt(req.params.id);
         if (!id) {
             return next(
-                new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+                new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
             );
         }
         try {
             const tag = await this.service.getById(id);
             if (!tag) {
-                return next(new ErrorHandler(errorStatusCode.badRequest, errorMsg.dataNotFound));
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
             }
             res.status(200).json(tag);
         } catch (error) {
@@ -33,7 +33,7 @@ class TagController {
             return next(
                 new ErrorHandler(
                     errorStatusCode.InternalServerError,
-                    errorMsg.internalServerError
+                    errorMsg.InternalServerError
                 )
             );
         }
@@ -43,14 +43,14 @@ class TagController {
         const { tag, status }: { tag: string, status: number } = req.body;
         if (!tag || status === undefined) {
             return next(
-                new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+                new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
             );
         }
         try {
             const tagExist = await this.service.checkExistByTag(tag);
             if (tagExist) {
                 return next(
-                    new ErrorHandler(errorStatusCode.Forbidden, errorMsg.dataAlreadyExist)
+                    new ErrorHandler(errorStatusCode.Forbidden, errorMsg.DataAlreadyExist)
                 );
             }
             const newTag = await this.service.create(tag, status);
@@ -60,7 +60,7 @@ class TagController {
             return next(
                 new ErrorHandler(
                     errorStatusCode.InternalServerError,
-                    errorMsg.internalServerError
+                    errorMsg.InternalServerError
                 )
             );
         }
@@ -70,26 +70,26 @@ class TagController {
         const { tag, status }: { tag: string, status: number } = req.body;
         if (!tag || status === undefined) {
             return next(
-                new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+                new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
             );
         }
         try {
             const checkIsExist = await this.service.checkExistByID(id);
             if (!checkIsExist) {
                 return next(
-                    new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+                    new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
                 );
             }
             const checkUpdateExitByTag = await this.service.checkUpdateExitByTag(id, tag);
             if (checkUpdateExitByTag) {
                 return next(
-                    new ErrorHandler(errorStatusCode.Forbidden, errorMsg.dataReapet)
+                    new ErrorHandler(errorStatusCode.Forbidden, errorMsg.DataAlreadyExist)
                 );
             }
             const updatedRes = await this.service.update(id, tag, status);
             if (updatedRes === undefined) {
                 return next(
-                    new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+                    new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
                 );
             }
             res.status(200).json(updatedRes);
@@ -98,7 +98,7 @@ class TagController {
             return next(
                 new ErrorHandler(
                     errorStatusCode.InternalServerError,
-                    errorMsg.internalServerError
+                    errorMsg.InternalServerError
                 )
             );
         }
@@ -109,7 +109,7 @@ class TagController {
             return next(
                 new ErrorHandler(
                     errorStatusCode.InternalServerError,
-                    errorMsg.internalServerError
+                    errorMsg.ParameterError
                 )
             );
         }
@@ -117,13 +117,13 @@ class TagController {
             const checkIsExist = await this.service.checkExistByID(id);
             if (!checkIsExist) {
                 return next(
-                    new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+                    new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
                 );
             }
             const deletedRes = await this.service.delete(id);
             if (deletedRes === undefined) {
                 return next(
-                    new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+                    new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
                 );
             }
             res.status(200).json(deletedRes);
@@ -131,7 +131,7 @@ class TagController {
             return next(
                 new ErrorHandler(
                     errorStatusCode.InternalServerError,
-                    errorMsg.internalServerError
+                    errorMsg.InternalServerError
                 )
             );
         }
