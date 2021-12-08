@@ -63,9 +63,11 @@ export class UserService {
     const { role, storeId } = JSON.parse(sessionData).user;
     if (role !== 1) {
       throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
-    }
+    }<<<<<<< HEAD
+    console.log(storeId);
+=======
     // console.log(storeId);
-
+>>>>>>> b001f2ba675f0a9c3e0bfeab07080906440e9f88
     const employees = await this.repository.getAllEmployee({ storeId });
     return employees;
   }

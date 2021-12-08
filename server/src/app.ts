@@ -13,7 +13,7 @@ import router from "./routes/route";
 import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
-import getConn from "./entity";
+import getConn from "./entity/index";
 
 // create app class for server
 export class App {
@@ -33,8 +33,13 @@ export class App {
     const imagePath = path.resolve(__dirname, "../uploads/images");
     this.app.use(express.static(imagePath));
     this.app.use(express.json());
-    const corsOptions= {credentials:true};
-    this.app.use(cors(corsOptions));
+    // const corsOptions = {
+    //   credentials: true,
+    //   origin: ["http://140.125.45.154", "http://140.125.45.161", "http://localhost", "http://mymaskdetection.ddns.net"],
+    //   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    //   allowedHeaders: ['Content-Type', 'Authorization']
+    // }corsOptions
+    this.app.use(cors());
     this.setSession();
   }
 
