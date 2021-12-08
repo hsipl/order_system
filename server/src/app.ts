@@ -34,10 +34,15 @@ export class App {
     this.app.use(express.json());
     const corsOptions = {
       credentials: true,
-      origin: ["http://140.125.45.154", "http://140.125.45.161", "http://localhost", "http://mymaskdetection.ddns.net"],
+      origin: [
+        "http://140.125.45.154",
+        "http://140.125.45.161",
+        "http://localhost",
+        "http://mymaskdetection.ddns.net",
+      ],
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    }
-    this.app.use(function(req, res, next) {
+    };
+    this.app.use(function (req, res, next) {
       res.header("Access-Control-Allow-Origin", "http://140.125.45.161"); // update to match the domain you will make the request from
       next();
     });
@@ -75,7 +80,12 @@ export class App {
       session({
         secret: "kcy",
         // cookie -> secure: true | only for https
-        cookie: { sameSite:'none',secure: true, httpOnly: true, maxAge: 1000 * 60 * 60 },
+        cookie: {
+          sameSite: "none",
+          secure: true,
+          httpOnly: true,
+          maxAge: 1000 * 60 * 60,
+        },
         resave: true,
         store: new RedisStore({
           client: redisClient,
