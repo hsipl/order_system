@@ -30,7 +30,7 @@ export class UserRepository {
       where: params,
       relations: ['storeId'],
     });
-    console.log(user);
+    // console.log(user);
     return user;
   }
 }

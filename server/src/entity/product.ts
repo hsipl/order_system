@@ -35,7 +35,7 @@ export class Product extends BaseEntity {
         comment: "0: Chicken, 1: Vegetable, 2: Processing, 3: Other",
         default: 0,
     })
-    option: number;
+    category: number;
 
     @Column({
         type: "tinyint",
