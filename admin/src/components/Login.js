@@ -48,11 +48,14 @@ const Login = () => {
 
   let config ={
     headers:{
+      'Accept' : 'application/json',
       "Content-Type": "application/json" ,
       
-      "withCredentials":"ture"
-    }
+      
+    },
+    withCredentials: true
   }
+
 
   useEffect(() => {
     if (localStorage.getItem("user-info")) {
@@ -87,9 +90,15 @@ const Login = () => {
    
     await axios
       .post(
-        "http://140.125.45.152:8000/api/user/login",
+        "http://140.125.45.167:8000/api/user/login",
         {username,password},
-        config,
+        {
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
              
       )
       .then((result) => {
