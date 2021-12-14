@@ -109,8 +109,12 @@ const Shop = () => {
     // let cookie_value = document.cookie
     axios.get(url,{
       headers:{
-        headers: { "Content-Type": "application/json" },
-        
+
+        headers: {
+          'Accept' : 'application/json',
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
       }
     })
     .then((result) => {console.log(result.data)})
