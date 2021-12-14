@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 
 import Dialog from "@mui/material/Dialog";
@@ -108,6 +109,26 @@ const Navbar = (props) => {
 
   const handleLogOut = () =>{
     localStorage.clear()
+
+    axios
+      .get(
+        "http://140.125.45.167:8000/api/user/logout",
+        {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }    
+      )
+      .then((result) => {
+        console.log(result.data.msg);
+        console.log(result.headers);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
   }
 
   return (

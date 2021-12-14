@@ -93,11 +93,7 @@ const Login = () => {
         "http://140.125.45.167:8000/api/user/login",
         {username,password},
         {
-          headers: {
-            'Accept' : 'application/json',
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
+          config
         }
              
       )
