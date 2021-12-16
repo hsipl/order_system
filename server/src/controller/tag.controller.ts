@@ -6,7 +6,6 @@ import { errorMsg, errorStatusCode } from "../bases/errorTypes";
 
 class TagController {
     public readonly service: TagService;
-
     constructor(service: TagService) {
         this.service = service;
     }
