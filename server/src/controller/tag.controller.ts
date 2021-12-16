@@ -3,6 +3,7 @@ import { TagRepository } from "../repository/tag.respository";
 import { TagService } from "../services/tag.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
+
 class TagController {
     public readonly service: TagService;
 
