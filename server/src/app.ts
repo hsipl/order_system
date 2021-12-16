@@ -40,10 +40,11 @@ export class App {
         "http://140.125.45.167:3000",
         "http://localhost:3000",
         "http://localhost",
-        "http://mymaskdetection.ddns.net"],
+        "http://mymaskdetection.ddns.net",
+      ],
       methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-      allowedHeaders: ['Content-Type', 'Authorization', 'set_cookie'],
-      credential: true
+      allowedHeaders: ["Content-Type", "Authorization", "set_cookie"],
+      credential: true,
     };
     this.app.use(cors(corsOptions));
     this.setSession();
