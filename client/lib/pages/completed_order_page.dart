@@ -7,7 +7,7 @@ class CompletedOrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('CompletedOrderPage'),
-        ));
+      title: const Text('CompletedOrderPage'),
+    ));
   }
 }
