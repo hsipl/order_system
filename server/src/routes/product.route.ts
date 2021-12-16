@@ -1,5 +1,13 @@
 import BasicRoute from "../bases/route.abstract";
 import ProductController from "../controller/product.controller";
+import { ProductRepository } from "../repository/product.repository";
+import { StoreRepository } from "../repository/store.repository";
+import { ProductService } from "../services/product.service";
+import { StoreService } from "../services/store.service";
+import CacheService from '../services/cache.service';
+import { upload } from '../utils/fileUpload';
+import { TagService } from "../services/tag.service";
+import { TagRepository } from "../repository/tag.respository";
 
 export default class ProductRoute extends BasicRoute {
     constructor() {
@@ -9,11 +17,16 @@ export default class ProductRoute extends BasicRoute {
     }
 
     protected setRoutes() {
-        this.router.get("/", (req, res, next) => ProductController.getAll(req, res, next));
-        this.router.get("/:id", (req, res, next) => ProductController.getById(req, res, next));
-        this.router.get("/:id", (req, res, next) => ProductController.getById(req, res, next));
-        this.router.post("/", (req, res, next) => ProductController.create(req, res, next));
-        this.router.put("/:id", (req, res, next) => ProductController.update(req, res, next));
-        this.router.delete("/:id", (req, res, next) => ProductController.delete(req, res, next));
+        const controller = new ProductController(
+            new ProductService(new ProductRepository),
+            new StoreService(new StoreRepository(), new CacheService()),
+            new TagService(new TagRepository())
+        );
+        this.router.get("/", controller.getAll.bind(controller));
+        this.router.get("/:id", controller.getById.bind(controller));
+        this.router.get("/:id", controller.getById.bind(controller));
+        this.router.post("/",  upload.single('image'),controller.create.bind(controller));
+        this.router.put("/:id", upload.single('image'), controller.update.bind(controller));
+        this.router.delete("/:id", controller.delete.bind(controller));
     }
 }

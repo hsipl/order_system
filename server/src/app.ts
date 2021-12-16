@@ -32,13 +32,20 @@ export class App {
     const imagePath = path.resolve(__dirname, "../uploads/images");
     this.app.use(express.static(imagePath));
     this.app.use(express.json());
-    // const corsOptions = {
-    //   credentials: true,
-    //   origin: ["http://140.125.45.154", "http://140.125.45.161", "http://localhost", "http://mymaskdetection.ddns.net"],
-    //   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    //   allowedHeaders: ['Content-Type', 'Authorization']
-    // }corsOptions
-    this.app.use(cors());
+    const corsOptions = {
+      credentials: true,
+      origin: [
+        "http://140.125.45.154:3000",
+        "http://140.125.45.161:3000",
+        "http://140.125.45.167:3000",
+        "http://localhost:3000",
+        "http://localhost",
+        "http://mymaskdetection.ddns.net"],
+      methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+      allowedHeaders: ['Content-Type', 'Authorization', 'set_cookie'],
+      credential: true
+    };
+    this.app.use(cors(corsOptions));
     this.setSession();
   }
 

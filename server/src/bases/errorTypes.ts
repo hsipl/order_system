@@ -7,6 +7,8 @@ export enum errorMsg {
   LogoutFailed = 'logout failed.',
   AuthFailed = 'authenticated failed.',
   FileExtNameFailed = 'File does not contain legal extname.',
+  StoreIdError = 'Wrong store id.',
+  TagAssociationError = 'Tag association error.'
 }
 export enum errorStatusCode {
   BadRequest = 400,

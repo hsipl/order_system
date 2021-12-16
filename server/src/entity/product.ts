@@ -8,14 +8,17 @@ import {
     JoinColumn,
     ManyToOne,
     BaseEntity,
+    ManyToMany,
+    JoinTable
 } from "typeorm";
 import { Store } from "./store";
+import { Tag } from "./tag";
 
 @Entity()
 export class Product extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
-
+    
     @ManyToOne(() => Store)
     @JoinColumn({ name: "store_id" })
     storeId: number;
@@ -36,6 +39,19 @@ export class Product extends BaseEntity {
         default: 0,
     })
     category: number;
+
+    @ManyToMany(() => Tag)
+    @JoinTable({
+        name: "product_tag",
+        joinColumn: {
+            name: "prodcut_id",
+            referencedColumnName: "id"
+        }, inverseJoinColumn: {
+            name: "tag_id",
+            referencedColumnName: "id"
+        }
+    })
+    tags: Tag[];
 
     @Column({
         type: "tinyint",

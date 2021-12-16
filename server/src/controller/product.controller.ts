@@ -4,11 +4,20 @@ import { ProductService } from "../services/product.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
 import { IProductCreateParams, IProductUpdateParams, IProductDeleteParams } from "../interafaces/product.interface";
+import { deleteFile } from '../utils/fileUpload';
+import { StoreService } from "../services/store.service";
+import { TagService } from "../services/tag.service";
+import { Tag } from "../entity/tag";
+
 class ProductController {
     public readonly service: ProductService;
+    public readonly storeService: StoreService;
+    public readonly tagService: TagService;
 
-    constructor(service: ProductService) {
+    constructor(service: ProductService, storeService: StoreService, tagService: TagService) {
         this.service = service;
+        this.storeService = storeService;
+        this.tagService = tagService;
     }
 
     async getAll(req: Request, res: Response, next: NextFunction) {
@@ -34,16 +43,26 @@ class ProductController {
     }
 
     async create(req: Request, res: Response, next: NextFunction) {
-        const { name, money, image, option, status }: IProductCreateParams = req.body;
-        if (!name || !money || !option || status === undefined) {
+        const image = req.file ? req.file.filename : '';
+        let { name, money, category, status, tags, storeId }: IProductCreateParams = req.body;
+        if (!name || !money || category === undefined || status === undefined) {
+            if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
         try {
-            const nameExit = await this.service.checkExistByName(name);
-            if (nameExit) {
-                return next(new ErrorHandler(errorStatusCode.Forbidden, errorMsg.DataAlreadyExist));
+            const checkforeignKeyExit = await this.storeService.getById(storeId);
+            if (!checkforeignKeyExit) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
             }
-            const params: IProductCreateParams = { name, money, image, option, status };
+            let tagsData: Tag[] | undefined;
+            if (tags) {
+                tagsData = await this.tagService.getByIds(<number[]>tags);
+                if (!tagsData) {
+                    return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.TagAssociationError));
+                }
+            }
+            tags = tagsData;
+            const params = { name, money, image, storeId, category, status, tags };
             const newProduct = await this.service.create(params);
             res.status(200).json(newProduct);
         } catch (error) {
@@ -54,20 +73,32 @@ class ProductController {
 
     async update(req: Request, res: Response, next: NextFunction) {
         const id: number = parseInt(req.params.id);
-        const { name, money, image, option, status }: IProductUpdateParams = req.body;
-        if (!name || !money || !option || status === undefined) {
+        const image = req.file ? req.file.filename : '';
+        let { name, storeId, money, category, status, tags }: IProductUpdateParams = req.body;
+        if (!name || !money || status === undefined || status === undefined) {
+            if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
         try {
-            const nameExit = await this.service.checkExistByName(name);
-            if (nameExit) {
-                return next(new ErrorHandler(errorStatusCode.Forbidden, errorMsg.DataAlreadyExist));
+            const checkforeignKeyExit = await this.storeService.getById(storeId);
+            if (!checkforeignKeyExit) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
             }
-            const params: IProductCreateParams = { name, money, image, option, status };
+            let tagsData: Tag[] | undefined;
+            if (tags) {
+                tagsData = await this.tagService.getByIds(<number[]>tags);
+                if (!tagsData) {
+                    return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.TagAssociationError));
+                }
+            }
+            tags = tagsData;
+            const params: IProductUpdateParams = { id, name, money, storeId, image, category, status, tags };
+            console.log(params);
             const updatedRes = await this.service.update(params);
             res.status(200).json(updatedRes);
         } catch (error) {
             console.log("create db error: ", error);
+            if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
     }
@@ -103,8 +134,8 @@ class ProductController {
     }
 }
 
-const productRep = new ProductRepository();
-const productService = new ProductService(productRep);
-const productController = new ProductController(productService);
+// const productRep = new ProductRepository();
+// const productService = new ProductService(productRep);
+// const productController = new ProductController(productService);
 
-export default productController;
+export default ProductController;
