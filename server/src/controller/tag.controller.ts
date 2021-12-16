@@ -54,7 +54,7 @@ class TagController {
                 );
             }
             const newTag = await this.service.create(tag, status);
-            res.status(200).json(newTag);
+            res.status(200).send({ result: true });
         } catch (error) {
             console.log("create db error: ", error);
             return next(
@@ -92,7 +92,7 @@ class TagController {
                     new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
                 );
             }
-            res.status(200).json(updatedRes);
+            res.status(200).send({ result: true });
         } catch (error) {
             console.log("create db error: ", error);
             return next(
@@ -126,7 +126,7 @@ class TagController {
                     new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
                 );
             }
-            res.status(200).json(deletedRes);
+            res.status(200).send({ result: true });
         } catch (error) {
             return next(
                 new ErrorHandler(

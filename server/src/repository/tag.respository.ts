@@ -22,7 +22,7 @@ export class TagRepository {
             select: field,
         });
     }
-
+    /** 新增時，查看是否有命名重複 */
     async getByTag(tag: string): Promise<Tag | undefined> {
         return await Tag.findOne({
             where: {
@@ -31,7 +31,7 @@ export class TagRepository {
             select: field,
         });
     }
-
+    /** 更新時，查看是否有與其它命名重複 */
     async getUpdateByTag(id: number, tag: string): Promise<Tag | undefined> {
         return await Tag.findOne({
             where: {

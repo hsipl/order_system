@@ -26,7 +26,7 @@ export class Product extends BaseEntity {
     @Column({ type: "int", default: 0, })
     money: number;
 
-    @Column({ length: 128, unique: true })
+    @Column({ length: 128, nullable: true })
     image: string;
 
     @Column({
