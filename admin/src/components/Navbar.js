@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 
 import Dialog from "@mui/material/Dialog";
@@ -60,16 +61,21 @@ const LeftNav = styled.nav`
 const LeftList = styled.div``;
 
 const LeftUl = styled.ul`
-  padding-left: 0%;
+  padding: 0% 8%;
+   margin-left:5%;
+
 `;
 
 const LeftLi = styled.li`
   margin-top: 2rem;
-  display: inline-block;
   border-radius: 10px;
-  width: 85%;
+  width: 95%;
   font-weight: bold;
+  height:3rem;
   background: #ffffff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 `;
 
 const LeftA = styled.a`
@@ -80,7 +86,7 @@ const LeftA = styled.a`
   }
 `;
 
-const Navbar = () => {
+const Navbar = (props) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -100,6 +106,30 @@ const Navbar = () => {
   const handlePassword = (e) => {
     console.log(e.target.value);
   };
+
+  const handleLogOut = () =>{
+    localStorage.clear()
+
+    axios
+      .get(
+        "http://140.125.45.167:8000/api/user/logout",
+        {
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      }    
+      )
+      .then((result) => {
+        console.log(result.data.msg);
+        console.log(result.headers);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+  }
 
   return (
     <>
@@ -147,14 +177,14 @@ const Navbar = () => {
             </TopLi>
             <TopLi>
               <Tooltip title="首頁">
-                <TopA href="/">
+                <TopA href="/home">
                   {/* <HomeIcon sx={{ fontSize: 35 }} /> */}
                   <img src="https://img.icons8.com/glyph-neue/35/000000/home.png" />
                 </TopA>
               </Tooltip>
             </TopLi>
             <TopLi>
-              <Tooltip title="登出">
+              <Tooltip title="登出" onClick={handleLogOut}>
                 <TopA href="/login">
                   {/* <DirectionsRunIcon sx={{ fontSize: 35 }} /> */}
                   <img src="https://img.icons8.com/external-sbts2018-solid-sbts2018/35/000000/external-logout-social-media-sbts2018-solid-sbts2018.png" />
