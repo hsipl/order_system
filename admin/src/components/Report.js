@@ -140,9 +140,26 @@ const Report = () => {
                 </TableCell>
               </TableRow>
             </TableHead>
+            <TableRow>
+              <TableCell align="center">
+                <TextField
+                  id="input-with-sx"
+                  label="搜尋產品"
+                  variant="standard"
+                  type="search"
+                />
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell align="center">Product</TableCell>
+              <TableCell align="center">30</TableCell>
+              <TableCell align="center">1</TableCell>
+            </TableRow>
+
+            
           </Table>
 
-          <Box>
+          {/* <Box>
             <Box sx={{ display: "flex", mx: 20, my: 1 }}>
               <TextField
                 id="input-with-sx"
@@ -152,7 +169,7 @@ const Report = () => {
               />
             </Box>
           </Box>
-
+                  
           <Table>
             <TableCell align="center" style={{ width: "33%" }}>
               Product
@@ -163,8 +180,18 @@ const Report = () => {
             <TableCell align="center" style={{ width: "33%" }}>
               1
             </TableCell>
-          </Table>
-
+          </Table> */}
+          {/* <TableRow>
+              <TableCell align="center">
+            
+                <TextField
+                  id="input-with-sx"
+                  label="搜尋產品"
+                  variant="standard"
+                  type="search"
+                />
+              </TableCell>
+            </TableRow> */}
         </TableContainer>
       </Reportcon>
     </>
