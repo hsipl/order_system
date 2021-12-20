@@ -26,7 +26,7 @@ export class Product extends BaseEntity {
     @Column({ type: "int", default: 0, })
     money: number;
 
-    @Column({ length: 128, unique: true })
+    @Column({ length: 128, nullable: true })
     image: string;
 
     @Column({
@@ -35,7 +35,7 @@ export class Product extends BaseEntity {
         comment: "0: Chicken, 1: Vegetable, 2: Processing, 3: Other",
         default: 0,
     })
-    option: number;
+    category: number;
 
     @Column({
         type: "tinyint",

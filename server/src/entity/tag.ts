@@ -19,6 +19,7 @@ export class Tag extends BaseEntity {
     @Column({
         type: "tinyint",
         unsigned: true,
+        comment: "0: Can choose, 1: Can't choose ",
         default: 0,
     })
     status: number;
