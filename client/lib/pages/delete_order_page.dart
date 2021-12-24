@@ -7,7 +7,7 @@ class DeletedOrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('DeletedOrderPage'),
-        ));
+      title: const Text('DeletedOrderPage'),
+    ));
   }
 }
