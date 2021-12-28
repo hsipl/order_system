@@ -40,6 +40,10 @@ export class ProductRepository {
         return await Product.save(p)
     }
 
+    async updateRelation(p:Product):Promise<Product>{
+        return await Product.save(p)
+    }
+    
     async update(p: Product): Promise<UpdateResult | undefined> {
         return await Product.update(p.id, p);
     }

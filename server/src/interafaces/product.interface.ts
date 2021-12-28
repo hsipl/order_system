@@ -23,6 +23,17 @@ export interface IProductCreateParams extends IProductParams {
     status: number;
 }
 
+export interface IProudctUpdate extends IProductParams {
+    id: number;
+    name: string;
+    money: number;
+    image: string | null;
+    storeId: number;
+    option: number;
+    status: number;
+    tags: Tag[];
+}
+
 
 export interface IProductUpdateParams extends IProductParams {
     id: number;

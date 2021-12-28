@@ -1,7 +1,7 @@
 import { UpdateResult } from "typeorm";
 import { Product } from "../entity/product";
 import { ProductRepository } from "../repository/product.repository";
-import { IProductCreateParams, IProductUpdateParams, IProductDeleteParams } from "../interafaces/product.interface";
+import { IProductCreateParams, IProductUpdateParams, IProductDeleteParams, IProudctUpdate } from "../interafaces/product.interface";
 
 export class ProductService {
     constructor(private readonly repository: ProductRepository) { }
@@ -32,6 +32,12 @@ export class ProductService {
     }
 
     public async create(params: IProductCreateParams): Promise<Product> {
+        const product = new Product()
+        Object.assign(product, params);
+        return await this.repository.create(product);
+    }
+
+    public async updateRelation(params: IProductCreateParams): Promise<Product> {
         const product = new Product()
         Object.assign(product, params);
         return await this.repository.create(product);
