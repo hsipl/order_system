@@ -5,7 +5,7 @@ steps:
 - name: unit-test
   image: python
   commands:
-  - echo "ok" 
+  - echo "ok!" 
 
 - name: ssh commands
   image: appleboy/drone-ssh
