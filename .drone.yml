@@ -18,5 +18,11 @@ steps:
       from_secret: password 
     port: 22
     script:
-      - cd /home/hsipl/feng/drone
-      - mkdir order_system
+      - cd /home/hsipl/feng/Order_System/prd/
+      - git clone https://github.com/Milesfeng/order_system.git
+
+trigger:
+  branch: 
+    - main
+  event: 
+    - pull_request
