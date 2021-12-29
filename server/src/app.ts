@@ -14,6 +14,7 @@ import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity";
+import { encrypt } from "./utils/md5";
 
 // create app class for server
 export class App {
@@ -23,6 +24,7 @@ export class App {
 
   constructor() {
     this.mode = process.env.MODE ? process.env.MODE : "default";
+    console.log(encrypt('hsipl206'));
     this.setDBConnection();
     this.setMiddleWare();
     this.setRoutes();

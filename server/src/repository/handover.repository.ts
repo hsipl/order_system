@@ -1,7 +1,7 @@
 import { UpdateResult } from "typeorm";
 import { Handover } from "../entity/handover";
 
-const field: (keyof Handover)[] = ["id", "userId", "sysmoney", "realcash", "createdAt"];
+const field: (keyof Handover)[] = ["id", "userId", "sysmoney", "realcash","status", "createdAt"];
 
 export class HandoverRepository {
   async getAll(): Promise<Handover[]> {

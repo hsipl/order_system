@@ -26,6 +26,14 @@ export class Handover extends BaseEntity{
     @Column({ type: "int" })
     realcash: number;
 
+    @Column({
+        type: 'tinyint',
+        unsigned: true,
+        comment: '0: Opening, 1: Closing',
+        default: 0,
+      })
+    status: number;
+
     @CreateDateColumn({ name: "createdAt" })
     createdAt: Date;
 

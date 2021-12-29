@@ -21,14 +21,14 @@ class HandoverController {
     const id: number = parseInt(req.params.id);
     if (!id) {
       return next(
-        new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+        new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
       );
     }
     try {
       const handover = await this.service.getById(id);
       if (!handover) {
         return next(
-          new ErrorHandler(errorStatusCode.badRequest, errorMsg.dataNotFound)
+          new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound)
         );
       }
       res.status(200).json(handover);
@@ -38,23 +38,27 @@ class HandoverController {
       return next(
         new ErrorHandler(
           errorStatusCode.InternalServerError,
-          errorMsg.internalServerError
+          errorMsg.InternalServerError
         )
       );
     }
   }
 
   async create(req: Request, res: Response, next: NextFunction) {
+    console.log(req.body)
     const {
       user_id,
       sysmoney,
       realcash,
-    }: { user_id: number; sysmoney: number; realcash: number } = req.body;
+      status
+    }: { user_id: number; sysmoney: number; realcash: number ;status:number} = req.body;
     if (!user_id || sysmoney === undefined || realcash === undefined) {
+      console.log(req.body)
       return next(
-        new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+        new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
       );
     }
+    res.status(200).json({res:true});
 
   }
 
@@ -64,36 +68,14 @@ class HandoverController {
         user_id,
         sysmoney,
         realcash,
-      }: { user_id: number; sysmoney: number; realcash: number } = req.body;
+        status
+      }: { user_id: number; sysmoney: number; realcash: number ;status:number} = req.body;
       if (!user_id || sysmoney === undefined || realcash === undefined) {
       return next(
-        new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
+        new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
       );
     }
-    try {
-      const checkIsExist = await this.service.checkExistByID(id);
-      if (!checkIsExist) {
-        return next(
-          new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
-        );
-      }
-      const updatedRes = await this.service.update(id, user_id, sysmoney, realcash);
-      if (updatedRes === undefined) {
-        return next(
-          new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
-        );
-      }
-      res.status(200).json(updatedRes);
-    } catch (error) {
-      // print to log
-      console.log("create db error: ", error);
-      return next(
-        new ErrorHandler(
-          errorStatusCode.InternalServerError,
-          errorMsg.internalServerError
-        )
-      );
-    }
+
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
@@ -102,32 +84,11 @@ class HandoverController {
       return next(
         new ErrorHandler(
           errorStatusCode.InternalServerError,
-          errorMsg.internalServerError
+          errorMsg.InternalServerError
         )
       );
     }
-    try {
-      const checkIsExist = await this.service.checkExistByID(id);
-      if (!checkIsExist) {
-        return next(
-          new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
-        );
-      }
-      const deletedRes = await this.service.delete(id);
-      if (deletedRes === undefined) {
-        return next(
-          new ErrorHandler(errorStatusCode.badRequest, errorMsg.ParameterError)
-        );
-      }
-      res.status(200).json(deletedRes);
-    } catch (error) {
-      return next(
-        new ErrorHandler(
-          errorStatusCode.InternalServerError,
-          errorMsg.internalServerError
-        )
-      );
-    }
+
   }
 }
 const handoverRepo = new HandoverRepository();

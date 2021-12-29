@@ -1,6 +1,4 @@
 import { UpdateResult } from "typeorm";
-import { errorMsg, errorStatusCode } from "../bases/errorTypes";
-import ErrorHandler from "../controller/error.controller";
 import { Handover } from "../entity/handover";
 import { HandoverRepository } from "../repository/handover.repository";
 
@@ -17,16 +15,11 @@ export class HandoverService {
     return handover;
   }
 
-  async checkExistByID(id: number): Promise<boolean> {
-    const isExist = await this.repository.getById(id);
-    return isExist ? true : false;
-  }
-
-  async create(sysmoney: number, realcash: number): Promise<Handover> {
+  async create(sysmoney: number, realcash: number,status: number): Promise<Handover> {
     const handover = new Handover();
     handover.sysmoney = sysmoney;
     handover.realcash = realcash;
-    
+    handover.status=status
     return await this.repository.create(handover);
   }
 
@@ -34,12 +27,14 @@ export class HandoverService {
     id: number,
     userId: number,
     sysmoney: number,
-    realcash: number
+    realcash: number,
+    status: number
   ): Promise<UpdateResult | undefined> {
     const handover = new Handover();
     handover.userId = userId;
     handover.sysmoney = sysmoney;
     handover.realcash = realcash;
+    handover.status=status
     return await this.repository.update(id, handover);
 }
 
