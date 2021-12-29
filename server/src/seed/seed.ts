@@ -3,6 +3,7 @@ import { User } from '../entity/user';
 import { Store } from '../entity/store';
 import { encrypt } from '../utils/md5';
 import { Tag } from '../entity/tag';
+import { Product } from '../entity/product';
 const genData = async () => {
   const mode = process.env.MODE ? process.env.MODE : 'default';
   const defaultConnection = await createConnection(mode);
@@ -24,7 +25,12 @@ const genData = async () => {
     .from(Tag)
     .where('tag=:tag', { tag: '胡椒粉' })
     .execute();
-
+  await defaultConnection
+    .createQueryBuilder()
+    .delete()
+    .from(Product)
+    .where('name=:name', { name: '鹽酥雞' })
+    .execute();
   console.log('START CREATEING MAIN STORE...');
 
   const store = await defaultConnection
@@ -63,7 +69,7 @@ const genData = async () => {
 
   console.log('CREATE SUPER USER SUCCESS...');
   console.log('START CREATE TAG SUCCESS...');
-  await defaultConnection
+  const tag = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('tag')
@@ -74,7 +80,21 @@ const genData = async () => {
       }
     ]).execute();
   console.log('CREATE TAG SUCCESS...');
-
+  console.log('START PRODUCT SUCCESS...');
+  await defaultConnection
+    .createQueryBuilder()
+    .insert()
+    .into('product')
+    .values([
+      {
+        name: "鹽酥雞",
+        money: 50,
+        category: 0,
+        storeId: store.identifiers[0].id,
+        status: 0
+      }
+    ]).execute();
+  console.log('CREATE PRODUCT SUCCESS...');
   await defaultConnection.close();
 };
 
