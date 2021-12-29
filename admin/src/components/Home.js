@@ -1,26 +1,28 @@
 import React from "react";
-import styled from "styled-components";
-import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+import styledC from "styled-components";
+import { styled } from "@mui/material/styles";
+import Navbar from "./Navbar";
+import { Paper } from "@mui/material";
 
 
-const HomeCon = styled.div`
-  position: relative;
-  top: 6rem;
-  left: 10rem;
-  max-width: 88%;
-  font-size: 20px;
-`;
+const HomeCon = styled(Paper)({
+  position: "fixed",
+  top: "6rem",
+  left: "10rem",
+  right:'0px',
+  bottom:'0px',
+  fontSize:"20px",
+  backgroundColor:'#efebe9',
+  borderRadius: '2px',
+});
 
 const Home = () => {
   return(
     <>
-  <HomeCon id="home">Welcome to Home page.
-  <Box sx={{ display: 'flex' }}>
-      <CircularProgress />
-    </Box>
+    <Navbar />
+    <HomeCon id="home">
 
-  </HomeCon>
+    </HomeCon>
 
     </>
   );

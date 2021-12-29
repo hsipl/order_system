@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import styled from "styled-components";
-
+import styledC from "styled-components";
+import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -9,82 +9,93 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
+import { CardMedia, Container, Paper, TextField } from "@mui/material";
+import { Box } from "@mui/system";
+import IconButton from "@mui/material/IconButton";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import Home from "@material-ui/icons/Home";
+import ExitToApp from "@material-ui/icons/ExitToApp";
 
-const Topnav = styled.nav`
-  position: fixed;
-  top: 0px;
-  background-color: rgba(0, 0, 0, 0.2);
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  height: 5rem;
-`;
+const Topnav = styled(Paper)({
+  position: "fixed",
+  top: "0px",
+  backgroundColor: "rgb(208, 216, 229, 0.83)",
+  display: "flex",
+  justifyContent: "space-between",
+  width: "100%",
+  height: "6rem",
+  left: "0px",
+  paddingLeft: "1rem",
+});
 
-const TopList = styled.div`
-  padding: 0.5rem 2rem;
-`;
+const TopList = styled(Box)({
+  padding: "0.5rem 2rem",
+  alignSelf: "center",
+  minWidth:'12rem',
+});
 
-const TopUl = styled.ul``;
+const FormContent = styled(DialogContent)({
+  display: "grid",
+  margin: "1.5rem",
+});
 
-const TopLi = styled.li`
-  display: inline;
-  margin: 1.5rem;
-`;
+const Input = styled(TextField)({
+  margin: "1.5rem",
+  color: "gray",
 
-const TopA = styled.a`
-  text-decoration-line: none;
-  color: black;
-  cursor: pointer;
-  &:hover {
+});
+
+const DialogText = styled(DialogContentText)({
+  margin: "1rem 0 0 1.5rem",
+});
+
+const UploadImg = styledC.input`
+  ::-webkit-file-upload-button {
+    margin:1rem 1rem 0 0;
+    border: 0px;
+    line-height: 1.75;
+    padding: 6px 16px;
+    border-radius: 4px;
     color: white;
+    background-color: rgb(25, 118, 210);
+
   }
 `;
 
-const InputAccount = styled.input``;
+const LeftNav = styled(Paper)({
+  position: "fixed",
+  top: "6rem",
 
-const InputPassword = styled.input``;
+  width: "10rem",
+  height: "100%",
+  overflow: "auto",
+  backgroundColor: "rgb(208, 216, 229, 0.83)",
+});
 
-const UploadImg = styled.input``;
+const LeftList = styled(Box)({
+  display: "grid",
+  margin: "2rem",
+  justifyContent:'center',
+  minWidth:'5rem'
+});
 
-const LeftNav = styled.nav`
-  position: fixed;
-  top: 5rem;
-  display: flex;
-  flex-direction: column;
-  width: 8rem;
-  height: 95%;
-  text-align: center;
-  overflow: auto;
-  background-color: rgb(208, 216, 229, 0.83);
-`;
+const LeftButton = styled(Button)({
+  marginBottom: "1.5rem",
+  color: "black",
+  fontSize: 16,
+  padding: "6px 12px",
+  border: "1px solid",
+  lineHeight: 1.5,
+  backgroundColor: "#FFFFFF",
+  borderColor: "#7B7B7B",
+  textAlign:'center',
+  borderRadius: '10px',
 
-const LeftList = styled.div``;
-
-const LeftUl = styled.ul`
-  padding: 0% 8%;
-   margin-left:5%;
-
-`;
-
-const LeftLi = styled.li`
-  margin-top: 2rem;
-  border-radius: 10px;
-  width: 95%;
-  font-weight: bold;
-  height:3rem;
-  background: #ffffff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-`;
-
-const LeftA = styled.a`
-  text-decoration-line: none;
-  color: black;
-  &:hover {
-    color: red;
-  }
-`;
+  "&:hover": {
+    backgroundColor: "#9fa8da",
+    borderColor: "#7986cb",
+  },
+});
 
 const Navbar = (props) => {
   const [open, setOpen] = React.useState(false);
@@ -107,20 +118,17 @@ const Navbar = (props) => {
     console.log(e.target.value);
   };
 
-  const handleLogOut = () =>{
-    localStorage.clear()
+  const handleLogOut = () => {
+    localStorage.clear();
 
     axios
-      .get(
-        "http://140.125.45.167:8000/api/user/logout",
-        {
+      .get("http://140.125.45.167:8000/api/user/logout", {
         headers: {
-          "Accept": "application/json",
+          Accept: "application/json",
           "Content-Type": "application/json",
         },
         withCredentials: true,
-      }    
-      )
+      })
       .then((result) => {
         console.log(result.data.msg);
         console.log(result.headers);
@@ -128,92 +136,107 @@ const Navbar = (props) => {
       .catch((err) => {
         console.log(err);
       });
-
-  }
+  };
 
   return (
     <>
-      <Topnav>
+      <Topnav square elevation={3}>
+        <CardMedia
+          component="img"
+          sx={{ width: "10rem" }}
+          image="https://www.moedict.tw/%E9%B9%BD%E9%85%A5%E9%9B%9E.png?font=wt064"
+        />
         <TopList>
-          <TopUl>
-            <TopLi>
-              <Tooltip title="設定">
-                <TopA onClick={handleClickOpen}>
-                  {/* <PersonIcon sx={{ fontSize: 35 }} /> */}
-                  <img src="https://img.icons8.com/ios-filled/33/000000/store-setting.png" />
-                </TopA>
-              </Tooltip>
-              <Dialog
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-                onBackdropClick="false"
-              >
-                <DialogTitle id="alert-dialog-title">
-                  {"修改資訊"}
-                </DialogTitle>
-                <DialogContent>
-                  <DialogContentText id="alert-dialog-description">
+          <Tooltip title="設定" onClick={handleClickOpen}>
+            <IconButton size="large" color="inherit" >
+              <AccountCircle fontSize="large"/>
+            </IconButton>
+          </Tooltip>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            onBackdropClick="false"
+            fullWidth="90vw"
+            fullheight="100vh"
+          >
+            <DialogTitle
+              id="alert-dialog-title"
+              sx={{ fontWeight: "bold", textAlign: "center" }}
+            >
+              {"修改資訊"}
+            </DialogTitle>
+            <FormContent>
+              {/* <DialogContentText id="alert-dialog-description">
                     帳號:
-                  </DialogContentText>
-                  <InputAccount disabled value="Head office" />
-                  <DialogContentText id="alert-dialog-description">
+                  </DialogContentText> */}
+              <Input
+                disabled
+                value="Head office"
+                label="帳號"
+                variant="filled"
+              />
+              {/* <DialogContentText id="alert-dialog-description">
                     密碼:
-                  </DialogContentText>
-                  <InputPassword onChange={handlePassword} />
-                  <DialogContentText id="alert-dialog-description">
-                    Logo圖片:
-                  </DialogContentText>
-                  <UploadImg type={"file"} onChange={onImageChange} />
-                  <br />
-                  <img width="100#" src={image} />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleClose}>取消</Button>
-                  <Button onClick={handleClose}>確認</Button>
-                </DialogActions>
-              </Dialog>
-            </TopLi>
-            <TopLi>
-              <Tooltip title="首頁">
-                <TopA href="/home">
-                  {/* <HomeIcon sx={{ fontSize: 35 }} /> */}
-                  <img src="https://img.icons8.com/glyph-neue/35/000000/home.png" />
-                </TopA>
-              </Tooltip>
-            </TopLi>
-            <TopLi>
-              <Tooltip title="登出" onClick={handleLogOut}>
-                <TopA href="/login">
-                  {/* <DirectionsRunIcon sx={{ fontSize: 35 }} /> */}
-                  <img src="https://img.icons8.com/external-sbts2018-solid-sbts2018/35/000000/external-logout-social-media-sbts2018-solid-sbts2018.png" />
-                </TopA>
-              </Tooltip>
-            </TopLi>
-          </TopUl>
+                  </DialogContentText> */}
+              <Input
+                required
+                onChange={handlePassword}
+                label="密碼"
+                variant="outlined"
+                type="password"
+                required
+                // variant="filled"
+              />
+              <DialogText>Logo圖片:</DialogText>
+              <Container>
+                <UploadImg
+                  accept="image/*"
+                  id="contained-button-file"
+                  multiple
+                  type="file"
+                  onChange={onImageChange}
+                />
+                <img width="100#" src={image} />
+              </Container>
+            </FormContent>
+            <DialogActions>
+              <Button onClick={handleClose}>取消</Button>
+              <Button onClick={handleClose}>確認</Button>
+            </DialogActions>
+          </Dialog>
+          <Tooltip title="首頁" href='/'>
+            <IconButton size="large" color="inherit" > 
+              <Home fontSize="large" />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="登出" onClick={handleLogOut} href='/login'>
+            <IconButton size="large" color="inherit" >
+              <ExitToApp fontSize="large" />
+            </IconButton>
+          </Tooltip>
         </TopList>
       </Topnav>
 
-      <LeftNav>
+      <LeftNav square elevation={3}>
         <LeftList>
-          <LeftUl>
-            <LeftLi>
-              <LeftA href="/product">商品管理</LeftA>
-            </LeftLi>
-            <LeftLi>
-              <LeftA href="/order">員工管理</LeftA>
-            </LeftLi>
-            <LeftLi>
-              <LeftA href="/shop">分店資訊</LeftA>
-            </LeftLi>
-            <LeftLi>
-              <LeftA href="/report">財務報表</LeftA>
-            </LeftLi>
-            <LeftLi>
-              <LeftA href="/handover">交班紀錄</LeftA>
-            </LeftLi>
-          </LeftUl>
+          <LeftButton id="BtnProduct"  href="/product">
+            商品管理
+          </LeftButton>
+          <LeftButton variant="contained" href="/order">
+            員工管理
+          </LeftButton>
+          <LeftButton variant="contained" href="/shop">
+            分店資訊
+          </LeftButton>
+          <LeftButton variant="contained" href="/report">
+            財務報表
+          </LeftButton>
+          <LeftButton variant="contained" href="/handover">
+            交班紀錄
+          </LeftButton>
         </LeftList>
       </LeftNav>
     </>

@@ -1,29 +1,44 @@
 import React,{useState} from "react";
-import styled from "styled-components";
+import styledC from "styled-components";
+import { styled } from "@mui/material/styles";
+import Navbar from "../components/Navbar";
+import { Paper } from "@mui/material";
 
 
+const Productcon = styled(Paper)({
+  position: "fixed",
+  top: "6rem",
+  left: "10rem",
+  right:'0px',
+  bottom:'0px',
+  fontSize:"20px",
+  backgroundColor:'#efebe9',
+  borderRadius: '2px',
+});
 
-const Productcon = styled.div`
-  position: relative;
-  top: 6rem;
-  left: 10rem;
-  max-width: 88%;
-  font-size: 20px;
-`;
-
-const textInput = styled.input`
+const textInput = styledC.input`
 
 `; 
 
-const addBtn = styled.button`
+const addBtn = styledC.button`
 
 `;
 
+
+
+
 const Product = () => {
-  return <Productcon id="product">Welcome to product page.
+
+  return (
+    
+  <>
+  <Navbar />
+  <Productcon id="product" >
 
 
-  </Productcon>;
+  </Productcon>
+  </>
+  );
 };
 
 export default Product;
