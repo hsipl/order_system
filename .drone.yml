@@ -5,7 +5,7 @@ steps:
 - name: unit-test
   image: python
   commands:
-  - echo "ok" 
+  - echo "ok!" 
 
 - name: ssh commands
   image: appleboy/drone-ssh
@@ -18,11 +18,11 @@ steps:
       from_secret: password 
     port: 22
     script:
-      - cd /home/hsipl/feng/Order_System/dev/order_system
+      - cd /home/hsipl/feng/Order_System/prd/order_system
       - git pull 
 
 trigger:
   branch: 
-    - dev
+    - main
   event: 
-    - push
+    - pull_request
