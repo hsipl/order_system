@@ -25,11 +25,7 @@
     "eslint-plugin-import": "^2.25.2",
     "jest": "^27.3.1",
     "nodemon": "^2.0.13",
-<<<<<<< HEAD
-    "prettier": "^2.4.1",
-=======
     "prettier": "^2.5.1",
->>>>>>> 0f5e1c7b12f8252d26295cbaee60ca1db512883c
     "swagger-jsdoc": "^6.1.0",
     "ts-jest": "^27.0.7",
     "typescript": "^4.4.4"
