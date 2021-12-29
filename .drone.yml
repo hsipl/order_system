@@ -19,7 +19,7 @@ steps:
     port: 22
     script:
       - cd /home/hsipl/feng/Order_System/prd/
-      - git clone https://github.com/Milesfeng/order_system.git
+      - git pull https://github.com/Milesfeng/order_system.git
 
 trigger:
   branch: 
