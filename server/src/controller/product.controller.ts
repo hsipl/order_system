@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { ProductRepository } from "../repository/product.repository";
 import { ProductService } from "../services/product.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
@@ -64,7 +63,7 @@ class ProductController {
             tags = tagsData;
             const params = { name, money, image, storeId, category, status, tags };
             const newProduct = await this.service.create(params);
-            res.status(200).json(newProduct);
+            res.status(200).json({ result: true });
         } catch (error) {
             console.log("create db error: ", error);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
@@ -77,49 +76,55 @@ class ProductController {
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
         const image = req.file ? req.file.filename : '';
-        // let { name, storeId, money, category, status, tags }: IProductUpdateParams = req.body;
-        // if (!name || !money || status === undefined || status === undefined) {
-        //     if (image !== '') await deleteFile(image);
-        //     return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
-        // }
+        let { name, storeId, money, category, status, tags }: IProductUpdateParams = req.body;
+        if (!name || !money || status === undefined || status === undefined) {
+            if (image !== '') await deleteFile(image);
+            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+        }
         try {
-            // const checkforeignKeyExit = await this.storeService.getById(storeId);
-            // if (!checkforeignKeyExit) {
-            //     return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
-            // }
+            const checkforeignKeyExit = await this.storeService.getById(storeId);
+            if (!checkforeignKeyExit) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
+            }
+
+            let tagsData: Tag[] | undefined;
+            if (tags) {
+                tagsData = await this.tagService.getByIds(<number[]>tags);
+                if (!tagsData) {
+                    return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.TagAssociationError));
+                }
+            }
             const product = await this.service.getById(id);
             if (!product) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
             }
-            const tagId: number[] = [];
-            product?.tags.forEach(t => tagId.push(t.id));
-            console.log(tagId)
-            product.tags = product.tags.filter(t => {
-                return t.id !== tagId[0]
-            })
+            const newTagId: number[] = <number[]>tags
+            const oldTagId: number[] = [];
+            product?.tags.forEach(t => oldTagId.push(t.id));
+            const createTagId = newTagId.filter(t => { return oldTagId.indexOf(t) == -1 })
+            const mixTagId = oldTagId.filter(v => { return newTagId.indexOf(v) > -1 })
+            const saveTagId = createTagId.concat(mixTagId);
+
+            if (saveTagId.length != 0) {
+                tagsData = await this.tagService.getByIds(<number[]>saveTagId);
+            }
+            product.tags = <Tag[]>tagsData;
+
+            product.name = name;
+            product.money = money;
+            product.category = category;
+            product.status = status;
+            product.image = image;
             const newProduct = await this.service.updateRelation(product);
-            // const { product }: IProudctUpdate = p;
-            // const s = await this.service.softRemove(product)
-            res.status(200).json(newProduct);
-            // const checkforeignKeyExit = await this.storeService.getById(storeId);
-            // if (!checkforeignKeyExit) {
-            //     return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
-            // }
-            // let tagsData: Tag[] | undefined;
-            // if (tags) {
-            //     tagsData = await this.tagService.getByIds(<number[]>tags);
-            //     if (!tagsData) {
-            //         return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.TagAssociationError));
-            //     }
-            // }
-            // tags = tagsData;
-            // const params: IProductUpdateParams = { id, name, money, storeId, image, category, status, tags };
-            // console.log(params);
-            // const updatedRes = await this.service.update(params);
-            // res.status(200).json(updatedRes);
+            if (newProduct === undefined) {
+                return next(
+                    new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
+                );
+            }
+            res.status(200).json({ result: true });
         } catch (error) {
             console.log("create db error: ", error);
-            // if (image !== '') await deleteFile(image);
+            if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
     }
@@ -150,10 +155,9 @@ class ProductController {
 
             })
             const newProduct = await this.service.updateRelation(product);
-            if(newProduct === undefined){
+            if (newProduct === undefined) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
             }
-            // 
             const param: IProductDeleteParams = { id };
             const deletedRes = await this.service.delete(param);
             if (deletedRes === undefined) {
@@ -173,8 +177,5 @@ class ProductController {
     }
 }
 
-// const productRep = new ProductRepository();
-// const productService = new ProductService(productRep);
-// const productController = new ProductController(productService);
 
 export default ProductController;
