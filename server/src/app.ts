@@ -96,5 +96,6 @@ export class App {
     const port = process.env.PORT || 8000;
     this.app.listen(port, () => {
       console.log(`Server is running on ${port}`);
-      er-compose
+    });
+  }
 }
