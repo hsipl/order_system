@@ -1,0 +1,28 @@
+kind: pipeline
+name: drone-CICD
+
+steps:
+- name: unit-test
+  image: python
+  commands:
+  - echo "ok!" 
+
+- name: ssh commands
+  image: appleboy/drone-ssh
+  settings:
+    host: 
+      from_secret: host 
+    username: 
+      from_secret: user 
+    password: 
+      from_secret: password 
+    port: 22
+    script:
+      - cd /home/hsipl/feng/Order_System/prd/order_system
+      - git pull 
+
+trigger:
+  branch: 
+    - main
+  event: 
+    - pull_request
