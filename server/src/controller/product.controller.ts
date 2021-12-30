@@ -36,7 +36,7 @@ class ProductController {
             }
             res.status(200).json(product);
         } catch (error) {
-            console.log("create db error: ", error);
+            console.log("get product by id error: ", error);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
     }
@@ -44,19 +44,18 @@ class ProductController {
     async create(req: Request, res: Response, next: NextFunction) {
         const image = req.file ? req.file.filename : '';
         let { name, money, category, status, tags, storeId }: IProductCreateParams = req.body;
-        if (!name || !money || category === undefined || status === undefined) {
+        if (!name || !money || !category || !status) {
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
         try {
-            
             const checkforeignKeyExit = await this.storeService.getById(storeId);
             if (!checkforeignKeyExit) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
             }
             /** 確認 name 是否有重複命名 */
-            const checkExistByName = await this.service.checkExistByName(name,storeId);
-            if(checkExistByName){
+            const checkExistByName = await this.service.checkExistByName(name, storeId);
+            if (checkExistByName) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataAlreadyExist));
             }
             let tagsData: Tag[] | undefined;
@@ -71,7 +70,7 @@ class ProductController {
             const newProduct = await this.service.create(params);
             res.status(200).json({ result: true });
         } catch (error) {
-            console.log("create db error: ", error);
+            console.log("create product error: ", error);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
     }
@@ -83,7 +82,7 @@ class ProductController {
         }
         const image = req.file ? req.file.filename : '';
         let { name, storeId, money, category, status, tags }: IProductUpdateParams = req.body;
-        if (!name || !money || status === undefined || status === undefined) {
+        if (!name || !money || !category || !status) {
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
@@ -129,7 +128,7 @@ class ProductController {
             }
             res.status(200).json({ result: true });
         } catch (error) {
-            console.log("create db error: ", error);
+            console.log("update product error: ", error);
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
