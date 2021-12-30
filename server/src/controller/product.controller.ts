@@ -49,9 +49,15 @@ class ProductController {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
         try {
+            
             const checkforeignKeyExit = await this.storeService.getById(storeId);
             if (!checkforeignKeyExit) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
+            }
+            /** 確認 name 是否有重複命名 */
+            const checkExistByName = await this.service.checkExistByName(name,storeId);
+            if(checkExistByName){
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataAlreadyExist));
             }
             let tagsData: Tag[] | undefined;
             if (tags) {
