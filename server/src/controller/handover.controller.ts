@@ -19,13 +19,16 @@ class HandoverController {
 
   async getById(req: Request, res: Response, next: NextFunction) {
     const id: number = parseInt(req.params.id);
+
     if (!id) {
       return next(
         new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
       );
     }
+
     try {
       const handover = await this.service.getById(id);
+      // console.log(handover)
       if (!handover) {
         return next(
           new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound)
@@ -45,23 +48,23 @@ class HandoverController {
   }
 
   async create(req: Request, res: Response, next: NextFunction) {
-    console.log(req.body)
+    
     const {
       user_id,
       sysmoney,
       realcash,
       status
     }: { user_id: number; sysmoney: number; realcash: number ;status:number} = req.body;
-    if (!user_id || sysmoney === undefined || realcash === undefined) {
-      console.log(req.body)
+    if (!user_id || sysmoney === undefined || realcash === undefined ) {
       return next(
         new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
       );
-    }
-    res.status(200).json({res:true});
+    }    
+    const newTag = await this.service.create(user_id, sysmoney,realcash,status);
+    res.status(200).send({ result: true });
+    // res.status(200).json(req.body);
 
   }
-
   async update(req: Request, res: Response, next: NextFunction) {
     const id: number = parseInt(req.params.id);
     const {
@@ -70,16 +73,18 @@ class HandoverController {
         realcash,
         status
       }: { user_id: number; sysmoney: number; realcash: number ;status:number} = req.body;
-      if (!user_id || sysmoney === undefined || realcash === undefined) {
+      if (!user_id || sysmoney === undefined || realcash === undefined || status === undefined) {
       return next(
         new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
       );
     }
-
+    const updateHandover = await this.service.update(id,user_id, sysmoney,realcash,status);
+    res.status(200).send({ result: true });
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
     const id: number = parseInt(req.params.id);
+    const deletedRes = await this.service.delete(id);
     if (!id) {
       return next(
         new ErrorHandler(
@@ -88,7 +93,7 @@ class HandoverController {
         )
       );
     }
-
+    res.status(200).send({ result: true });
   }
 }
 const handoverRepo = new HandoverRepository();

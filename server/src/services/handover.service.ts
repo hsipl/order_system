@@ -7,19 +7,25 @@ export class HandoverService {
 
   async getAll(): Promise<Handover[]> {
     const handover = await this.repository.getAll();
+
     return handover;
   }
 
   async getById(id: number): Promise<Handover | undefined> {
+
     const handover = await this.repository.getById(id);
+    console.log(handover)
     return handover;
   }
 
-  async create(sysmoney: number, realcash: number,status: number): Promise<Handover> {
+
+  async create(user_id:number,sysmoney: number, realcash: number,status: number): Promise<Handover> {
     const handover = new Handover();
+    handover.userId=user_id
     handover.sysmoney = sysmoney;
     handover.realcash = realcash;
     handover.status=status
+
     return await this.repository.create(handover);
   }
 
@@ -39,8 +45,12 @@ export class HandoverService {
 }
 
   async delete(id: number): Promise<UpdateResult | undefined> {
-    const handover = new Handover();
-    return await this.repository.update(id, handover);
+
+    const handover = await Handover.findOne({ id });
+    if (handover) {
+      handover.status = 1;
+      return await this.repository.update(handover.id,handover);
+    }
 
   }
 }

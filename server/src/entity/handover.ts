@@ -5,7 +5,7 @@ import {
     CreateDateColumn,
     UpdateDateColumn,
     DeleteDateColumn,
-    OneToOne,
+    ManyToOne,
     JoinColumn,
     BaseEntity,
 } from "typeorm";
@@ -16,7 +16,7 @@ export class Handover extends BaseEntity{
     @PrimaryGeneratedColumn({ unsigned: true })
     id: number;
 
-    @OneToOne(() => User)
+    @ManyToOne(() => User)
     @JoinColumn({ name: "user_id" })
     userId: number;
 

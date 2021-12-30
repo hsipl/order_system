@@ -1,6 +1,11 @@
 import { NextFunction, Request, Response } from "express";
+import Auth from '../middlewares/auth';
+import { HandoverRepository } from '../repository/handover.repository';
+import { HandoverService } from '../services/handover.service';
+
 import BasicRoute from "../bases/route.abstract";
 import HandoverController from "../controller/handover.controller";
+import CacheService from '../services/cache.service';
 
 export default class HandoverRoute extends BasicRoute {
   constructor() {
@@ -10,19 +15,21 @@ export default class HandoverRoute extends BasicRoute {
   }
 
   protected setRoutes() {
-    this.router.get("/", (req, res, next) =>
+
+    const auth = new Auth();
+    this.router.get("/",  auth.authAdmin.bind(auth),(req, res, next) =>
     HandoverController.getAll(req, res, next)
     );
-    this.router.get("/:id", (req, res, next) =>
+    this.router.get("/:id", auth.authAdmin.bind(auth), (req, res, next) =>
     HandoverController.getById(req, res, next)
     );
-    this.router.post("/", (req, res, next) =>
+    this.router.post("/",  auth.authAdmin.bind(auth),(req, res, next) =>
     HandoverController.create(req, res, next)
     );
-    this.router.put("/:id", (req, res, next) =>
+    this.router.put("/:id", auth.authAdmin.bind(auth), (req, res, next) =>
     HandoverController.update(req, res, next)
     );
-    this.router.delete("/:id", (req, res, next) =>
+    this.router.delete("/:id",  auth.authAdmin.bind(auth),(req, res, next) =>
     HandoverController.delete(req, res, next)
     );
   }

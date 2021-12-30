@@ -24,6 +24,7 @@ export class StoreService {
 
   async getById(id: number): Promise<Store | undefined> {
     const store = await this.repository.getById(id);
+    console.log(store)
     return store;
   }
 
