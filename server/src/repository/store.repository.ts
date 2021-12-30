@@ -30,7 +30,6 @@ export class StoreRepository {
   }
 
   async create(s: Store): Promise<Store> {
-    console.log("OK")
     return await Store.save(s);
   }
 

@@ -7,14 +7,12 @@ export class HandoverService {
 
   async getAll(): Promise<Handover[]> {
     const handover = await this.repository.getAll();
-
     return handover;
   }
 
   async getById(id: number): Promise<Handover | undefined> {
 
     const handover = await this.repository.getById(id);
-    console.log(handover)
     return handover;
   }
 
