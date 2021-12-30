@@ -20,10 +20,10 @@ export class ProductRepository {
         })
     }
 
-    async getByName(id: number, name: string): Promise<Product | undefined> {
+    async getByName(name: string, storeId: number): Promise<Product | undefined> {
         return await Product.findOne({
             relations: ["tags"],
-            where: { name: name, id: Not(id) },
+            where: { name: name, storeId: storeId, status: 0 },
             select: field
         })
     }
@@ -40,10 +40,10 @@ export class ProductRepository {
         return await Product.save(p)
     }
 
-    async updateRelation(p:Product):Promise<Product>{
+    async updateRelation(p: Product): Promise<Product> {
         return await Product.save(p)
     }
-    
+
     async update(p: Product): Promise<UpdateResult | undefined> {
         return await Product.update(p.id, p);
     }
