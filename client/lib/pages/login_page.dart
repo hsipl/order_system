@@ -54,7 +54,9 @@ class _LoginState extends State<Login> {
                   await Future.delayed(const Duration(seconds: 1));
                   Api().login(loginData).then((status) {
                     if (status == '200') {
-                      Api().product().then((status) {});
+                      Api().product().then((status) {
+                        loginChecker(context,status);
+                      });
                     } else {
                       loginChecker(context, status);
                     }

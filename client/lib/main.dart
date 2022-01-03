@@ -75,7 +75,7 @@ class OrderSystem extends StatelessWidget {
             return PageTransition(
                 child: const HomePage(),
                 type: PageTransitionType.scale,
-                duration: const Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 400),
                 alignment: Alignment.center);
           case '/login':
             return PageTransition(
