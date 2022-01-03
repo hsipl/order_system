@@ -2,7 +2,6 @@ import 'package:client/services/decorations.dart';
 import 'package:client/widget/styling_buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class OrderDialog extends StatefulWidget {
   const OrderDialog(
@@ -23,29 +22,31 @@ class OrderDialog extends StatefulWidget {
 
 class _OrderDialogState extends State<OrderDialog> {
   List<Widget> numButtons = List.generate(
-      10,
-      (i) => Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: ActionButton(
-              action: " $i",
-              color: primaryTextColor,
-              onPress: () {
-                print("num:$i");
-              },
-            ),
-          ));
+    10,
+    (i) => Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+      child: ActionButton(
+        action: " $i",
+        color: primaryTextColor,
+        onPress: () {
+          print("num:$i");
+        },
+      ),
+    ),
+  );
   List<Widget> tagButtons = List.generate(
-      10,
-      (i) => Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: ActionButton(
-              action: " tag $i",
-              color: primaryTextColor,
-              onPress: () {
-                print("tag:$i");
-              },
-            ),
-          ));
+    10,
+    (i) => Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+      child: ActionButton(
+        action: " tag $i",
+        color: primaryTextColor,
+        onPress: () {
+          print("tag:$i");
+        },
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -62,12 +63,17 @@ class _OrderDialogState extends State<OrderDialog> {
                     image: AssetImage("assets/img/test_img.jpg")),
                 ProductInfo(widget: widget),
               ]),
-              const AmountRow(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  AmountRow(),
+                ],
+              ),
               Row(
                 children: [
                   const LabelTextContainer(),
                   NumInput(numButtons: numButtons),
-                  SizedBox(
+                  const SizedBox(
                     width: 25,
                   ),
                   NumInput(numButtons: tagButtons),
@@ -121,17 +127,26 @@ class ActionRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: Row(
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          ActionButton(
-            action: '確定',
-            color: kConfirmButtonColor,
-            onPress: () => Navigator.pop(context),
+          SizedBox(
+            width: 150,
+            height: 50,
+            child: ActionButton(
+              action: '確定',
+              color: kConfirmButtonColor,
+              onPress: () => Navigator.pop(context),
+            ),
           ),
-          Spacer(),
-          ActionButton(
-            action: '取消',
-            color: kCancelButtonColor,
-            onPress: () => Navigator.pop(context),
+          const Spacer(),
+          SizedBox(
+            width: 150,
+            height: 50,
+            child: ActionButton(
+              action: '取消',
+              color: kCancelButtonColor,
+              onPress: () => Navigator.pop(context),
+            ),
           ),
         ],
       ),
@@ -151,7 +166,7 @@ class AmountRow extends StatefulWidget {
 class _AmountRowState extends State<AmountRow> {
   int amount = 0;
 
-  var textController = TextEditingController();
+  var textController = TextEditingController(text: '0');
 
   @override
   Widget build(BuildContext context) {
@@ -187,24 +202,17 @@ class _AmountRowState extends State<AmountRow> {
               border: Border.all(color: primaryTextColor),
               borderRadius: BorderRadius.circular(12),
             ),
-            width: 180,
-            height: 50,
+            width: 150,
+            height: 40,
             child: TextField(
-              onSubmitted: (text) {
-                if (text == '') {
-                  text = '0';
-                }
-                amount = int.parse(text);
-                textController.text = amount.toString();
-              },
               controller: textController,
               decoration: const InputDecoration(
-                border: InputBorder.none,
                 hintText: "0",
+                border: InputBorder.none,
               ),
               textAlign: TextAlign.center,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              readOnly: true,
+              enableInteractiveSelection: false,
             ),
           ),
           const SizedBox(
@@ -261,7 +269,9 @@ class FilteredImage extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+            topLeft: Radius.circular(12),
+            topRight: Radius.circular(12),
+          ),
           image: DecorationImage(
             image: image,
             fit: BoxFit.cover,
@@ -341,6 +351,7 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
               borderRadius: BorderRadius.circular(10.0),
             ),
           ),
+          //TODO tags adder
           child: const Text('沙小拉'),
         ),
       ),

@@ -45,60 +45,61 @@ class _ProductCardState extends State<ProductCard> {
     return SizedBox(
       height: 120,
       child: Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          elevation: 5,
-          child: InkWell(
-            onTapDown: (TapDownDetails details) {
-              setState(() {
-                position = getTapPosition(details, width, height);
-              });
-            },
-            onTap: () {
-              showGeneralDialog(
-                barrierColor: Colors.black.withOpacity(0.5),
-                transitionBuilder: (context, a1, a2, widget) {
-                  return Transform.scale(
-                    scale: a1.value,
-                    alignment: Alignment(position[0], position[1]),
-                    child: Opacity(
-                      opacity: a1.value,
-                      child: OrderDialog(
-                        img: super.widget.img,
-                        info: super.widget.info,
-                        product: super.widget.product,
-                        price: super.widget.price,
-                      ),
+        semanticContainer: true,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: 5,
+        child: InkWell(
+          onTapDown: (TapDownDetails details) {
+            setState(() {
+              position = getTapPosition(details, width, height);
+            });
+          },
+          onTap: () {
+            showGeneralDialog(
+              barrierColor: Colors.black.withOpacity(0.5),
+              transitionBuilder: (context, a1, a2, widget) {
+                return Transform.scale(
+                  scale: a1.value,
+                  alignment: Alignment(position[0], position[1]),
+                  child: Opacity(
+                    opacity: a1.value,
+                    child: OrderDialog(
+                      img: super.widget.img,
+                      info: super.widget.info,
+                      product: super.widget.product,
+                      price: super.widget.price,
                     ),
-                  );
-                },
-                transitionDuration: const Duration(milliseconds: 200),
-                barrierDismissible: true,
-                barrierLabel: '',
-                context: context,
-                pageBuilder: (context, animation1, animation2) {
-                  return Container();
-                },
-              );
-            },
-            child: Center(
-              child: ListTile(
-                leading: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      widget.img,
-                      color: Colors.blueGrey,
-                    ),
-                  ],
-                ),
-                title: Text(widget.product),
-                subtitle: Text(widget.info),
-                trailing: Text(widget.price),
-                isThreeLine: true,
+                  ),
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 200),
+              barrierDismissible: true,
+              barrierLabel: '',
+              context: context,
+              pageBuilder: (context, animation1, animation2) {
+                return Container();
+              },
+            );
+          },
+          child: Center(
+            child: ListTile(
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    widget.img,
+                    color: Colors.blueGrey,
+                  ),
+                ],
               ),
+              title: Text(widget.product),
+              subtitle: Text(widget.info),
+              trailing: Text(widget.price),
+              isThreeLine: true,
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -26,6 +26,7 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
                 onPress: () {},
               ),
             ),
+            //TODO : the cehckout row
             Expanded(flex: 16, child: Container()),
             const Divider(
               color: Colors.black,
@@ -48,11 +49,9 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
                 )),
             Expanded(
               flex: 2,
+              // TODO:submit order
               child: CheckoutColumnButton(
-                color: kConfirmButtonColor,
-                text: '送出',
-                onPress: () {},
-              ),
+                  color: kConfirmButtonColor, text: '送出', onPress: () {}),
             ),
           ],
         ),

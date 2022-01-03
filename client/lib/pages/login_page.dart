@@ -1,4 +1,3 @@
-import 'package:client/pages/splash_page.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/widget/loading_dialog.dart';
 import 'package:client/widget/styling_buttons.dart';
@@ -52,11 +51,13 @@ class _LoginState extends State<Login> {
                     'password': 'hsipl206'
                   };
                   showLoaderDialog(context);
-                  Api api = Api();
-                  Future<String> loginResponse = api.login(loginData);
                   await Future.delayed(const Duration(seconds: 1));
-                  loginResponse.then((value) {
-                    loginChecker(context, value);
+                  Api().login(loginData).then((status) {
+                    if (status == '200') {
+                      Api().product().then((status) {});
+                    } else {
+                      loginChecker(context, status);
+                    }
                   });
                 },
                 child: const Text('Login'),
@@ -70,18 +71,17 @@ class _LoginState extends State<Login> {
   }
 }
 
-void loginChecker(context, String loginStatus) {
-  if (loginStatus == 'login success.') {
+void loginChecker(context, String status) {
+  if (status == '200') {
     setLoginSharedPrefs(true);
     Navigator.pushNamedAndRemoveUntil(
         context, '/home_activate', (Route<dynamic> route) => false);
   } else {
     Navigator.pop(context);
-
     showDialog(
       context: context,
       builder: (context) {
-        return ErrorDialog(loginStatus: loginStatus);
+        return ErrorDialog(status: status);
       },
     );
   }
@@ -89,10 +89,10 @@ void loginChecker(context, String loginStatus) {
 
 class ErrorDialog extends StatelessWidget {
   const ErrorDialog({
-    required this.loginStatus,
+    required this.status,
     Key? key,
   }) : super(key: key);
-  final String loginStatus;
+  final String status;
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +100,7 @@ class ErrorDialog extends StatelessWidget {
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(32.0))),
       contentPadding: const EdgeInsets.only(top: 10.0),
-      title: Text(loginStatus),
+      title: Center(child: Text(status)),
       actions: [
         Center(
           child: ActionButton(
