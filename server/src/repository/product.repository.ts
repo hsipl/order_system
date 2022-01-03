@@ -1,4 +1,4 @@
-import { UpdateResult, Not } from "typeorm";
+import { UpdateResult, Not, In } from "typeorm";
 import { Product } from "../entity/product";
 
 const field: (keyof Product)[] = ["id", "storeId", "name", "money", "image", "category", "status"];
@@ -18,6 +18,16 @@ export class ProductRepository {
             where: { id: id, status: 0, },
             select: field,
         })
+    }
+
+    /** Select Ids from Product */
+    async getByIds(ids: number[]): Promise<Product[] | undefined> {
+        return await Product.find({
+            where: {
+                id: In(ids)
+            },
+            select: field,
+        });
     }
 
     async getByName(id: number, name: string): Promise<Product | undefined> {
@@ -40,10 +50,10 @@ export class ProductRepository {
         return await Product.save(p)
     }
 
-    async updateRelation(p:Product):Promise<Product>{
+    async updateRelation(p: Product): Promise<Product> {
         return await Product.save(p)
     }
-    
+
     async update(p: Product): Promise<UpdateResult | undefined> {
         return await Product.update(p.id, p);
     }

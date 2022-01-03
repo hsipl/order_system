@@ -1,10 +1,10 @@
-import { Order } from "../entity/order";
+import { Product } from "../entity/product";
 
 interface IOrderParams {
     id?: number;
     storeId?: number;
     description?: string;
-    products?: number[] | Order[];
+    products?: number[] | Product[];
     pay?: number;
     status?: number;
     createdAt?: Date;

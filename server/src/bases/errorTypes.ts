@@ -8,7 +8,8 @@ export enum errorMsg {
   AuthFailed = 'authenticated failed.',
   FileExtNameFailed = 'File does not contain legal extname.',
   StoreIdError = 'Wrong store id.',
-  TagAssociationError = 'Tag association error.'
+  TagAssociationError = 'Tag association error.',
+  ProductAssociationError = 'Product association error.'
 }
 export enum errorStatusCode {
   BadRequest = 400,

@@ -1,13 +1,21 @@
 import { NextFunction, Request, Response } from "express";
 import { OrderService } from "../services/order.service";
+import { ProductService } from "../services/product.service";
+import { StoreService } from "../services/store.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
+import { IOrderCreateParams } from "../interafaces/order.interface";
+import { Product } from "../entity/product";
+import { deleteFile } from "../utils/fileUpload";
 
 class OrederController {
     public readonly service: OrderService;
-
-    constructor(service: OrderService) {
+    public readonly productService: ProductService;
+    public readonly storeService: StoreService;
+    constructor(service: OrderService, productService: ProductService, storeService: StoreService) {
         this.service = service;
+        this.productService = productService;
+        this.storeService = storeService;
     }
 
     async getAll(req: Request, res: Response, next: NextFunction) {
@@ -51,6 +59,30 @@ class OrederController {
 
     async create(req: Request, res: Response, next: NextFunction) {
         const image = req.file ? req.file.filename : '';
-        // let { description, status }: IOrderCreateParams
+        let { description, status, storeId, pay, products }: IOrderCreateParams = req.body;
+        if (!status || !pay || !storeId) {
+            if (image !== '') await deleteFile(image);
+            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+        }
+        try {
+            const checkforeignKeyExit = await this.storeService.getById(storeId);
+            if (!checkforeignKeyExit) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
+            }
+            let productsData: Product[] | undefined;
+            if (products) {
+                productsData = await this.productService.getByIds(<number[]>products);
+                if (!productsData) {
+                    return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
+                }
+            }
+            products = productsData;
+            const params = { description, status, storeId, pay, products };
+            const newOrder = await this.service.create(params);
+            res.status(200).json({ result: true });
+        } catch (e) {
+            console.log("create order db error: ", e);
+            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError))
+        }
     }
 }
