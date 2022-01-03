@@ -32,6 +32,7 @@ class _ProductCardState extends State<ProductCard> {
     dy = (dy - yHalf) / yHalf;
     dx = double.parse(dx.toStringAsFixed(2));
     dy = double.parse(dy.toStringAsFixed(2));
+    //DEBUG
     print(dx.toString() + '    ' + dy.toString());
     return [dx, dy];
   }

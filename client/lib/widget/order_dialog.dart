@@ -139,10 +139,19 @@ class ActionRow extends StatelessWidget {
   }
 }
 
-class AmountRow extends StatelessWidget {
+class AmountRow extends StatefulWidget {
   const AmountRow({
     Key? key,
   }) : super(key: key);
+
+  @override
+  State<AmountRow> createState() => _AmountRowState();
+}
+
+class _AmountRowState extends State<AmountRow> {
+  int amount = 0;
+
+  var textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -153,8 +162,22 @@ class AmountRow extends StatelessWidget {
         children: [
           ActionButton(
             color: primaryTextColor,
+            action: '+5',
+            onPress: () {
+              amount = amount + 5;
+              textController.text = amount.toString();
+            },
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          ActionButton(
+            color: primaryTextColor,
             action: '+',
-            onPress: () {},
+            onPress: () {
+              amount = amount + 1;
+              textController.text = amount.toString();
+            },
           ),
           const SizedBox(
             width: 20,
@@ -167,6 +190,14 @@ class AmountRow extends StatelessWidget {
             width: 180,
             height: 50,
             child: TextField(
+              onSubmitted: (text) {
+                if (text == '') {
+                  text = '0';
+                }
+                amount = int.parse(text);
+                textController.text = amount.toString();
+              },
+              controller: textController,
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 hintText: "0",
@@ -182,7 +213,27 @@ class AmountRow extends StatelessWidget {
           ActionButton(
             color: primaryTextColor,
             action: '-',
-            onPress: () {},
+            onPress: () {
+              amount = amount - 1;
+              if (amount < 0) {
+                amount = 0;
+              }
+              textController.text = amount.toString();
+            },
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          ActionButton(
+            color: primaryTextColor,
+            action: '-5',
+            onPress: () {
+              amount = amount - 5;
+              if (amount < 0) {
+                amount = 0;
+              }
+              textController.text = amount.toString();
+            },
           ),
         ],
       ),
@@ -265,11 +316,16 @@ class ProductInfo extends StatelessWidget {
   }
 }
 
-class LabelTextContainer extends StatelessWidget {
+class LabelTextContainer extends StatefulWidget {
   const LabelTextContainer({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<LabelTextContainer> createState() => _LabelTextContainerState();
+}
+
+class _LabelTextContainerState extends State<LabelTextContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
