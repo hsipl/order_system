@@ -33,7 +33,6 @@ export default class Auth {
 
   public async authAdmin(req: Request, res: Response, next: NextFunction) {
     const { sessionID } = req;
-    console.log(req)
     if (!sessionID) {
       return next(new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed));
     }
