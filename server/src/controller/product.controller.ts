@@ -114,7 +114,6 @@ class ProductController {
                 tagsData = await this.tagService.getByIds(<number[]>saveTagId);
             }
             product.tags = <Tag[]>tagsData;
-
             product.name = name;
             product.money = money;
             product.category = category;
