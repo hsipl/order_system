@@ -21,6 +21,11 @@ export class OrderService {
         return order;
     }
 
+    public async checkExitById(id: number): Promise<boolean> {
+        const isExist = await this.repository.getById(id);
+        return isExist ? true : false;
+    }
+
     public async create(params: IOrderCreateParams): Promise<Order> {
         const order = new Order();
         Object.assign(order, params)
