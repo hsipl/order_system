@@ -13,12 +13,7 @@ const genData = async () => {
     .from(User)
     .where('name=:name', { name: 'hsipl' })
     .execute();
-  await defaultConnection
-    .createQueryBuilder()
-    .delete()
-    .from(Store)
-    .where('name=:name', { name: 'kcy main store' })
-    .execute();
+
   await defaultConnection
     .createQueryBuilder()
     .delete()
@@ -29,7 +24,14 @@ const genData = async () => {
     .createQueryBuilder()
     .delete()
     .from(Product)
-    .where('name=:name', { name: '鹽酥雞' })
+    .where('name IN (:name)', { name: ['鹽酥雞', "雞排", "薯條", "甜不辣", "四季豆", "青椒", "香菇", "地瓜"] })
+    .execute();
+
+  await defaultConnection
+    .createQueryBuilder()
+    .delete()
+    .from(Store)
+    .where('name=:name', { name: 'kcy main store' })
     .execute();
   console.log('START CREATEING MAIN STORE...');
 
@@ -90,6 +92,55 @@ const genData = async () => {
         name: "鹽酥雞",
         money: 50,
         category: 0,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "雞排",
+        money: 60,
+        category: 0,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "薯條",
+        money: 30,
+        category: 1,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "甜不辣",
+        money: 30,
+        category: 1,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "四季豆",
+        money: 30,
+        category: 2,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "青椒",
+        money: 30,
+        category: 2,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "香菇",
+        money: 50,
+        category: 3,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "地瓜",
+        money: 30,
+        category: 3,
         storeId: store.identifiers[0].id,
         status: 0
       }
