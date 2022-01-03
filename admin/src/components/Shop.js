@@ -28,13 +28,12 @@ import EditIcon from "@material-ui/icons/Edit";
 import Box from "@mui/material/Box";
 import SearchIcon from "@material-ui/icons/Search";
 import Navbar from "../components/Navbar";
-import Cookies from "js-cookie";
 
 const Shopcon = styled.div`
   position: relative;
-  top: 6rem;
-  left: 10rem;
-  max-width: 88%;
+  top: 8rem;
+  left: 13rem;
+  max-width: 87%;
   font-size: 20px;
 `;
 
@@ -51,24 +50,32 @@ const breadcrumbs = [
   </Typography>,
 ];
 
-axios.defaults.headers.post["Content-Type"] =
-  "application/x-www-form-urlencoded";
-
 const Shop = () => {
-  const url = "http://140.125.45.167:8000/api/store";
   const [arrayData, setArratData] = useState([]);
+  const [changeArrayData, setChangeArrayData]=useState([]);
   const [searchInput, setSearchInput] = useState("");
-  const [filteredResults, setFilteredResults] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [openDe, setOpenDe] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [shopInfo, setShopInfo] = useState({
+    name: "",
+    type: 0,
+    status: 0,
+  });
+
+  const [currentId, setCurrentId] = useState("");
+
+  const [currentShopInfo, setCurrentShopInfo] = useState();
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleDeClickOpen = () => {
+  const handleDeClickOpen = (id) => {
     setOpenDe(true);
+    setCurrentId(id);
+
+    console.log(currentId);
   };
 
   const handleDeClose = () => {
@@ -79,146 +86,116 @@ const Shop = () => {
     setOpen(false);
   };
 
-  const handleEditOpen = () => {
+  const handleEditOpen = (id, name) => {
     setOpenEdit(true);
+    setCurrentShopInfo(name);
+    setCurrentId(id);
   };
 
   const handleEditClose = () => {
     setOpenEdit(false);
   };
-  const [shopInfo, setShopInfo] = useState({
-    // id: "",
-    name: "",
-    type: "0",
-    status: "0",
-    //create: "",
-    images: [],
-  });
+  const url = "http://localhost:8000/api/store";
 
-  // useEffect(() => {
-  //   const get_api = async () => {
-  //     let { data } = await axios.get(`${url}`);
-  //     setArratData(data);
-  //     console.log(data);
-  //   };
-  //   get_api();
-  // }, []);
   let config = {
     headers: {
-      Accept: "application/json",
       "Content-Type": "application/json",
     },
     withCredentials: true,
   };
 
   useEffect(() => {
-    axios
-      .get(url, {
-        headers: {
-          "Accept": "application/json",
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
-      .then((result) => {
-        console.log(result.data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  });
+    const get_api = async () => {
+      let { data } = await axios.get(url, config);
+      setArratData(data);
+      console.log(data)
+      for (var i=0;i<data.length;i++){
+        data[i].type==0? data[i].type="分店": data[i].type="總店"
+        data[i].status==0? data[i].status="營業中": data[i].status="已歇業"
+      }
+      
+      setChangeArrayData(data)
+      console.log(changeArrayData)
+    };
+    get_api();
+  }, []);
 
-  const searchItems = (searchValue) => {
-    setSearchInput(searchValue);
-    // console.log(searchValue);
-    if (searchInput !== "") {
-      const filteredData = arrayData.filter((item) => {
-        return Object.values(item)
-          .join("")
-          .toLowerCase()
-          .includes(searchInput.toLowerCase());
-      });
-      setFilteredResults(filteredData);
-      console.log(filteredData);
-    } else {
-      setFilteredResults(arrayData);
-    }
-  };
+  function SearchOnChange(e) {
+    setSearchInput(e.target.value);
+  }
 
-  // const handleSearch =(e)=>{
-  //   setSearchInput(e.target.value)
-  // }
-
-  // useEffect(()=>{
-  //   const results = arrayData.filter(arrayData =>
-  //     arrayData.toLowerCase().includes(searchInput)
-  //   );
-  //   setFilteredResults(results);
-  // }, [searchInput])
+  const filtered = !searchInput
+    ? arrayData
+    : arrayData.filter((item)=>
+      item.name.toLowerCase().includes(searchInput.toLocaleLowerCase())
+    );
 
   function handleShopInfo(e) {
-    // Array.from(e.target.files).forEach((i) => {
-    //   // 建立 FromData 物件例項
-    //   let formData = new FormData();
-    //   // key 值為 後臺介面引數名 ，傳入遍歷的每一項
-    //   formData.append("file", i);
-    //   // 傳送對應的請求
-    //   axios
-    //     .post("http://140.125.45.167:8000/api/store", formData)
-    //   console.log(formData)
-    //   });
-
-    // console.log(e.target.files);
-    shopInfo.images = e.target.files;
-    // console.log(shopInfo.images)
     const { value, name } = e.target;
 
     setShopInfo((preData) => ({
       ...preData,
       [name]: value,
     }));
-    console.log(shopInfo);
   }
+
+  const handleShopInfoImage = (e) => {
+    setShopInfo((preData) => ({
+      ...preData,
+      ["image"]: e.target.files[0],
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    Array.from(shopInfo.images).forEach((image) => {
-      const formData = new FormData();
-      formData.append("files", image);
-      console.log(image);
-    });
+    const formData = new FormData();
+    formData.append("name", shopInfo.name);
+    formData.append("type", shopInfo.type);
+    formData.append("status", shopInfo.status);
+    formData.append("image", shopInfo.image);
 
-    // axios
-    //   .post(`http://140.125.45.167:8000/api/store`, shopInfo, {
-    //     headers: { 'Content-Type': 'multipart/form-data' },
-    //   })
-
-    const data = await axios.post(
-      "http://140.125.45.167:8000/api/store",
-      shopInfo
-    );
-
-    // console.log(shopInfo);
-
-    // console.log(JSON.stringify(shopInfo));
-
-    // const data = await axios.post(
-    //   "http://140.125.45.167:8000/api/store",
-    //   shopInfo
-    // );
-
-    // console.log(data);
+    axios
+      .post(url, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
     window.location.reload();
   };
 
-  const handleEditSubmit = (id) => {
-    axios.put("http://140.125.45.167:8000/api/store", shopInfo);
-    console.log(shopInfo);
+  const handleEditSubmit = () => {
+    const formData = new FormData();
+    formData.append("name", shopInfo.name);
+    formData.append("type", shopInfo.type);
+    formData.append("status", shopInfo.status);
+    formData.append("image", shopInfo.image);
+
+    axios
+      .put("http://localhost:8000/api/store/" + currentId, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(currentId));
+    window.location.reload();
   };
 
-  function handleDelete(id) {
-    axios.delete("http://140.125.45.167:8000/api/store/" + id);
+  function handleDelete() {
+    axios
+      .delete("http://localhost:8000/api/store/" + currentId, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error));
     window.location.reload();
   }
 
@@ -234,6 +211,7 @@ const Shop = () => {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
+        {/* Dialog1*/}
         <Dialog
           open={open}
           onClose={handleClose}
@@ -281,7 +259,11 @@ const Shop = () => {
               </Select>
               <br />
               <br />
-              <input type="file" name="files" onChange={handleShopInfo}></input>
+              <input
+                type="file"
+                accept="image/png, image/jpeg"
+                onChange={handleShopInfoImage}
+              ></input>
             </DialogContent>
             <DialogActions sx={{ height: 40 }}>
               <Button onClick={handleClose}>取消</Button>
@@ -291,13 +273,6 @@ const Shop = () => {
             </DialogActions>
           </AddForm>
         </Dialog>
-
-        {/* <input
-        type="search"
-        onChange={(e) => searchItems(e.target.value)}
-        placeholder="Search..."
-      /> */}
-
         <br />
         <Box>
           <Box sx={{ display: "flex", alignItems: "flex-end" }}>
@@ -308,8 +283,7 @@ const Shop = () => {
               variant="standard"
               type="search"
               value={searchInput}
-              onChange={(e) => searchItems(e.target.value)}
-              // onChange={(e)=>setSearchInput(e.target.value)}
+              onChange={SearchOnChange}
             />
           </Box>
         </Box>
@@ -317,68 +291,136 @@ const Shop = () => {
         <Button onClick={handleClickOpen} variant="contained" color="success">
           新增分店資訊
         </Button>
+        <br />
+        <br />
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 850 }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">店家編號</TableCell>
-                <TableCell align="center">店家照片</TableCell>
-                <TableCell align="center">店家名稱</TableCell>
-                <TableCell align="center">類型</TableCell>
-                <TableCell align="center">狀態</TableCell>
-                <TableCell align="center">創店日期</TableCell>
-                <TableCell align="center">操作</TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    backgroundColor: "#6379A1",
+                    color: "white",
+                  }}
+                >
+                  店家編號
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    backgroundColor: "#6379A1",
+                    color: "white",
+                  }}
+                >
+                  店家照片
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    backgroundColor: "#6379A1",
+                    color: "white",
+                  }}
+                >
+                  店家名稱
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    backgroundColor: "#6379A1",
+                    color: "white",
+                  }}
+                >
+                  類型
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    backgroundColor: "#6379A1",
+                    color: "white",
+                  }}
+                >
+                  狀態
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    backgroundColor: "#6379A1",
+                    color: "white",
+                  }}
+                >
+                  創店日期
+                </TableCell>
+                <TableCell
+                  align="center"
+                  style={{
+                    backgroundColor: "#6379A1",
+                    color: "white",
+                  }}
+                >
+                  操作
+                </TableCell>
               </TableRow>
             </TableHead>
 
-            {searchInput.length > 1
-              ? filteredResults.map((item) => {
-                  return (
+                {filtered.map((item)=>{
+                  return(
                     <>
-                      <TableRow
-                        key={item.name}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell component="th" scope="item">
-                          {item.id}
+                    <TableRow
+                      key={item.id}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                      }}
+                    >
+                      <TableCell align="center" component="th" scope="item">
+                        {item.id}
+                      </TableCell>
+                      <TableCell align="center">
+                        <img
+                          src={"http://localhost:8000/" + item.image}
+                          alt={item.image}
+                          width="200"
+                          hight="100"
+                        />
+                      </TableCell>
+                      <TableCell align="center">{item.name}</TableCell>
+                      <TableCell align="center">
+                        {item.type}
                         </TableCell>
-                        <TableCell align="center">{item.img}</TableCell>
-                        <TableCell align="center">{item.name}</TableCell>
-                        <TableCell align="center">{item.type}</TableCell>
-                        <TableCell align="center">{item.status}</TableCell>
-                        <TableCell align="center">{item.createdAt}</TableCell>
-                        <TableCell align="center">
-                          <Button onClick={handleDeClickOpen}>
-                            <DeleteIcon />
-                          </Button>
+                      <TableCell align="center">{item.status}</TableCell>
+                      <TableCell align="center">{item.createdAt}</TableCell>
+                      <TableCell align="center">
+                        <Button onClick={() => handleDeClickOpen(item.id)}>
+                          <DeleteIcon />
+                        </Button>
+                        <Button
+                          onClick={() => handleEditOpen(item.id, item.name)}
+                        >
+                          <EditIcon />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
 
-                          <Button onClick={handleEditOpen}>
-                            <EditIcon />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                      <Dialog
-                        open={openDe}
-                        onClose={handleDeClose}
-                        aria-labelledby="delete"
-                        aria-describedby="delete"
-                        onBackdropClick="false"
-                        fullWidth="true"
-                        maxWidth="xs"
-                      >
-                        <DialogTitle id="delete">
-                          {"確定要刪除此項目?"}
-                        </DialogTitle>
-                        <DialogContent>
-                          <Button onClick={handleDeClose}>取消</Button>
-                          <Button onClick={() => handleDelete(item.id)}>
-                            確認
-                          </Button>
-                        </DialogContent>
-                      </Dialog>
-                      {/* 
+                   
+                    <Dialog
+                      open={openDe}
+                      onClose={handleDeClose}
+                      aria-labelledby="delete"
+                      aria-describedby="delete"
+                      onBackdropClick="false"
+                      fullWidth="true"
+                      maxWidth="xs"
+                    >
+                      <DialogTitle id="delete">
+                        {"確定要刪除此項目?"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <Button onClick={handleDeClose}>取消</Button>
+                       
+                        <Button onClick={() => handleDelete()}>確認</Button>
+                      </DialogContent>
+                    </Dialog>
+
                     <Dialog
                       open={openEdit}
                       onClose={handleEditClose}
@@ -388,143 +430,23 @@ const Shop = () => {
                       fullWidth="true"
                       maxWidth="xs"
                     >
-                      <DialogTitle id="alert-dialog-title">
-                        {"修改店鋪資訊"}
-                      </DialogTitle>
-
-                      <AddForm >
-                        <DialogContent>
-                          <TextField
-                            defaultValue={item.name}
-                            onChange={handleShopInfo}
-                            // value={shopInfo.name}
-                            name="name"
-                            label="店家名稱"
-                            variant="outlined"
-                            sx={{ width: 250 }}
-                          />
-                          <br /> <br />
-                          <InputLabel id="demo-simple-select-label">
-                            類型
-                          </InputLabel>
-                          <Select
-                            onChange={handleShopInfo}
-                            value={shopInfo.type}
-                            label="類型"
-                            name="type"
-                            sx={{ width: 250 }}
-                          >
-                            <MenuItem value={0}>分店</MenuItem>
-                            <MenuItem value={1}>總店</MenuItem>
-                          </Select>
-                          <br /> <br />
-                          <InputLabel id="demo-simple-select-label">
-                            狀態
-                          </InputLabel>
-                          <Select
-                            onChange={handleShopInfo}
-                            value={shopInfo.status}
-                            name="status"
-                            label="狀態"
-                            sx={{ width: 250 }}
-                          >
-                            <MenuItem value={0}>營業中</MenuItem>
-                           
-                          </Select>
-                          <br />
-                          <br />
-                          <input
-                            type="file"
-                            name="files"
-                            onChange={handleShopInfo}
-                          ></input>
-                        </DialogContent>
-                        <DialogActions sx={{ height: 40 }}>
-                          <Button onClick={handleEditClose}>取消</Button>
-                          <Button onClick={handleEditSubmit}>確認</Button>
-                        </DialogActions>
-                      </AddForm>
-                    </Dialog> */}
-                    </>
-                  );
-                })
-              : arrayData.map((item) => {
-                  return (
-                    <>
-                      <TableRow
-                        key={item.name}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell align="center" component="th" scope="item">
-                          {item.id}
-                        </TableCell>
-                        <TableCell align="center">{item.img}</TableCell>
-                        <TableCell align="center">{item.name}</TableCell>
-                        <TableCell align="center">{item.type}</TableCell>
-                        <TableCell align="center">{item.status}</TableCell>
-                        <TableCell align="center">{item.createdAt}</TableCell>
-                        <TableCell align="center">
-                          <Button onClick={handleDeClickOpen}>
-                            <DeleteIcon />
-                          </Button>
-                          <Button onClick={handleEditOpen}>
-                            <EditIcon />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                      <Dialog
-                        open={openDe}
-                        onClose={handleDeClose}
-                        aria-labelledby="delete"
-                        aria-describedby="delete"
-                        onBackdropClick="false"
-                        fullWidth="true"
-                        maxWidth="xs"
-                      >
-                        <DialogTitle id="delete">
-                          {"確定要刪除此項目?"}
-                        </DialogTitle>
-                        <DialogContent>
-                          <Button onClick={handleDeClose}>取消</Button>
-                          <Button onClick={() => handleDelete(item.id)}>
-                            確認
-                          </Button>
-                        </DialogContent>
-                      </Dialog>
-
-                      {/* <Dialog
-                      open={openEdit}
-                      onClose={handleEditClose}
-                      aria-labelledby="edit"
-                      aria-describedby="edit"
-                      onBackdropClick="false"
-                      fullWidth="true"
-                      maxWidth="xs"
-                    >
-                      <DialogTitle id="alert-dialog-title">
-                        {"修改店鋪資訊"}
-                      </DialogTitle>
+                      <DialogTitle id="edit">{"修改店鋪資訊"}</DialogTitle>
 
                       <AddForm>
                         <DialogContent>
                           <TextField
-                            defaultValue={item.name}
+                            defaultValue={currentShopInfo}
                             onChange={handleShopInfo}
-                            // value={shopInfo.name}
                             name="name"
                             label="店家名稱"
                             variant="outlined"
                             sx={{ width: 250 }}
                           />
                           <br /> <br />
-                          <InputLabel id="demo-simple-select-label">
-                            類型
-                          </InputLabel>
+                          <InputLabel id="edit">類型</InputLabel>
                           <Select
                             onChange={handleShopInfo}
-                            value={shopInfo.type}
+                            value={0}
                             label="類型"
                             name="type"
                             sx={{ width: 250 }}
@@ -533,35 +455,35 @@ const Shop = () => {
                             <MenuItem value={1}>總店</MenuItem>
                           </Select>
                           <br /> <br />
-                          <InputLabel id="demo-simple-select-label">
-                            狀態
-                          </InputLabel>
+                          <InputLabel id="edit">狀態</InputLabel>
                           <Select
                             onChange={handleShopInfo}
-                            value={shopInfo.status}
+                            value={0}
                             name="status"
                             label="狀態"
                             sx={{ width: 250 }}
                           >
                             <MenuItem value={0}>營業中</MenuItem>
-                            
                           </Select>
                           <br />
                           <br />
                           <input
                             type="file"
                             name="files"
-                            onChange={handleShopInfo}
+                            onChange={handleShopInfoImage}
+                            accept="image/png, image/jpeg"
                           ></input>
                         </DialogContent>
                         <DialogActions sx={{ height: 40 }}>
                           <Button onClick={handleEditClose}>取消</Button>
-                          <Button onClick={handleEditSubmit}>確認</Button>
+                          <Button onClick={() => handleEditSubmit()}>
+                            確認
+                          </Button>
                         </DialogActions>
                       </AddForm>
-                    </Dialog> */}
-                    </>
-                  );
+                    </Dialog>
+                  </>
+                  )
                 })}
           </Table>
         </TableContainer>

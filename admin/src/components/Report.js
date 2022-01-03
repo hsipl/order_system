@@ -27,11 +27,11 @@ import Paper from "@mui/material/Paper";
 import { Button } from "@mui/material";
 
 const Reportcon = styled.div`
-  position: relative;
-  top: 6rem;
-  left: 10rem;
-  max-width: 88%;
-  font-size: 20px;
+position: relative;
+top: 8rem;
+left: 13rem;
+max-width: 87%;
+font-size: 20px;
 `;
 
 const breadcrumbs = [

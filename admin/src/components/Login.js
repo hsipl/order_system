@@ -50,8 +50,6 @@ const Login = () => {
     headers:{
       'Accept' : 'application/json',
       "Content-Type": "application/json" ,
-      
-      
     },
     withCredentials: true
   }
@@ -76,26 +74,24 @@ const Login = () => {
   async function login() {
     console.warn(username, password);
     let item = { username, password };
-    // userLogin==false && setIsLogon(true)
-
-    // return(userLogin == false && <Wrong>錯ㄉ</Wrong>)
-
     // history.push("/");
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-//http://140.125.45.167:8000/api/user/login
-//http://140.125.45.152:8000/api/user/login
+
    
-    await axios
+    axios
       .post(
-        "http://140.125.45.167:8000/api/user/login",
+        "http://localhost:8000/api/user/login",
         {username,password},
         {
-          config
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
         }
-             
       )
       .then((result) => {
         console.log(result.data.msg);
