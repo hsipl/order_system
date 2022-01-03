@@ -90,56 +90,56 @@ const genData = async () => {
     .values([
       {
         name: "鹽酥雞",
-        money: 50,
+        price: 50,
         category: 0,
         storeId: store.identifiers[0].id,
         status: 0
       },
       {
         name: "雞排",
-        money: 60,
+        price: 60,
         category: 0,
         storeId: store.identifiers[0].id,
         status: 0
       },
       {
         name: "薯條",
-        money: 30,
+        price: 30,
         category: 1,
         storeId: store.identifiers[0].id,
         status: 0
       },
       {
         name: "甜不辣",
-        money: 30,
+        price: 30,
         category: 1,
         storeId: store.identifiers[0].id,
         status: 0
       },
       {
         name: "四季豆",
-        money: 30,
+        price: 30,
         category: 2,
         storeId: store.identifiers[0].id,
         status: 0
       },
       {
         name: "青椒",
-        money: 30,
+        price: 30,
         category: 2,
         storeId: store.identifiers[0].id,
         status: 0
       },
       {
         name: "香菇",
-        money: 50,
+        price: 50,
         category: 3,
         storeId: store.identifiers[0].id,
         status: 0
       },
       {
         name: "地瓜",
-        money: 30,
+        price: 30,
         category: 3,
         storeId: store.identifiers[0].id,
         status: 0
