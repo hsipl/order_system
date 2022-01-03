@@ -3,7 +3,7 @@ import { Order } from "../entity/order";
 import { IOrderCreateParams, IOrderDeleteParams } from "../interafaces/order.interface";
 import { OrderRepository } from "../repository/order.repository";
 
-export class ProductService {
+export class OrderService {
     constructor(private readonly repository: OrderRepository) { }
 
     public async getAll(): Promise<Order[]> {
@@ -27,10 +27,10 @@ export class ProductService {
         return await this.repository.create(order);
     }
 
-    public async delete(params:IOrderDeleteParams):Promise<UpdateResult | undefined>{
-        const {id} = params;
-        const order = await Order.findOne({id});
-        if(order){
+    public async delete(params: IOrderDeleteParams): Promise<UpdateResult | undefined> {
+        const { id } = params;
+        const order = await Order.findOne({ id });
+        if (order) {
             order.status = 1;
             return await this.repository.update(order);
         }
