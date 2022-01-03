@@ -6,7 +6,9 @@ const field: (keyof Handover)[] = ["id", "userId", "sysmoney", "realcash","statu
 export class HandoverRepository {
   async getAll(): Promise<Handover[]> {
     return await Handover.find({
-
+      where: {
+        status: 0,
+      },
       select: field,
     });
   }
