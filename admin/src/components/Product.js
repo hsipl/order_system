@@ -1,11 +1,9 @@
 import React,{useState} from "react";
-import styledC from "styled-components";
 import { styled } from "@mui/material/styles";
 import Navbar from "../components/Navbar";
 import { Paper } from "@mui/material";
 
-
-const Productcon = styled(Paper)({
+const ProductCon = styled(Paper)({
   position: "fixed",
   top: "6rem",
   left: "10rem",
@@ -16,27 +14,12 @@ const Productcon = styled(Paper)({
   borderRadius: '2px',
 });
 
-const textInput = styledC.input`
-
-`; 
-
-const addBtn = styledC.button`
-
-`;
-
-
-
-
 const Product = () => {
-
   return (
-    
   <>
   <Navbar />
-  <Productcon id="product" >
-
-
-  </Productcon>
+  <ProductCon id="product" >
+  </ProductCon>
   </>
   );
 };

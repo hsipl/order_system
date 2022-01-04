@@ -1,5 +1,4 @@
 import React from "react";
-import styledC from "styled-components";
 import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
 import Navbar from "../components/Navbar";
