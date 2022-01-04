@@ -1,10 +1,9 @@
 import React from "react";
-import styledC from "styled-components";
 import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
 import Navbar from "../components/Navbar";
 
-const Shopcon = styled(Paper)({
+const ShopContainer = styled(Paper)({
   position: "fixed",
   top: "6rem",
   left: "10rem",
@@ -19,9 +18,9 @@ const Shop = () => {
   return (
   <>
   <Navbar />
-  <Shopcon id="shop">
+  <ShopContainer id="shop">
 
-  </Shopcon>;
+  </ShopContainer>;
   </>
 )};
 
