@@ -6,41 +6,35 @@ import Shop from "./components/Shop";
 import Report from "./components/Report";
 import Home from "./components/Home";
 import Handover from "./components/Handover";
+import React from "react";
+import PrivateRoute from "./components/PrivateRoute";
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from "react-router-dom";
 
 function App() {
   return (
-    <Router>
-      <Route exact path="/">
-        <Home />
-      </Route>
+    <div>
+      <Router>
+        <Route path="/login">
+          <Login />
+        </Route>
 
-      <Route exact path="/product" >
-        <Product  />
-      </Route>
-
-      <Route exact path="/order">
-        <Order />
-      </Route>
-
-      <Route exact path="/shop">
-        <Shop />
-      </Route>
-
-      <Route exact path="/report">
-        <Report />
-      </Route>
-
-      <Route exact path="/handover">
-        <Handover />
-      </Route>
-
-      <Route exact path="/login">
-        <Login />
-      </Route>
-
-    </Router>
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <PrivateRoute path="/home" component={Home} />
+          <PrivateRoute path="/product" component={Product} />
+          <PrivateRoute path="/shop" component={Shop} />
+          <PrivateRoute path="/order" component={Order} />
+          <PrivateRoute path="/report" component={Report} />
+          <PrivateRoute path="/handover" component={Handover} />
+          <Route path="/login" render={() => <login />}></Route>
+        </Switch>
+      </Router>
+    </div>
   );
 }
 

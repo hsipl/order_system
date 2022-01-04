@@ -26,6 +26,7 @@ const TopNav = styled(Paper)({
   height: "6rem",
   left: "0px",
   paddingLeft: "1rem",
+  zIndex:"100"
 });
 
 const TopList = styled(Box)({
@@ -88,6 +89,7 @@ const LeftButton = styled(Button)({
   borderColor: "#7B7B7B",
   textAlign:'center',
   borderRadius: '10px',
+
   "&:hover": {
     backgroundColor: "#9fa8da",
     borderColor: "#7986cb",
@@ -122,7 +124,7 @@ const Navbar = (props) => {
     withCredentials: true,
   }
 
-  const url ="http://140.125.45.167:8000/api/user/logout"
+  const url ="http://localhost:8000/api/user/logout"
 
   const handleLogOut = () => {
     localStorage.clear();

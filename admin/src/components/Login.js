@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router";
 import axios from "axios";
 import { styled } from "@mui/material/styles";
+import { useHistory } from "react-router";
 import {
   Dialog,
   DialogTitle,
@@ -17,6 +17,7 @@ const LoginContainer = styled(Dialog)({
   },
 });
 
+
 const Input = styled(TextField)({
   margin: "1rem 5rem",
   width: "40vh",
@@ -29,6 +30,7 @@ const Submit = styled(Button)({
 const Wrong = styled(Alert)({
   margin: "1rem 5rem",
 });
+
 
 const Login = () => {
   const [username, setUserName] = useState("");
@@ -59,7 +61,7 @@ const Login = () => {
     withCredentials: true,
   }
 
-  const url = "http://140.125.45.154:8000/api/user/login"
+  const url = "http://localhost:8000/api/user/login"
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -80,6 +82,8 @@ const Login = () => {
         setUserLogin(false);
         setErrMes(true);
       });
+      localStorage.setItem("name", JSON.stringify(username));
+      localStorage.setItem("password", JSON.stringify(password));
   }
 
   const handleKeypress = (e) => {
