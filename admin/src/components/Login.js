@@ -46,13 +46,6 @@ const Login = () => {
   const [userLogin, setUserLogin] = useState(false);
   const [errMes, setErrMes] = useState(false);
 
-  let config ={
-    headers:{
-      'Accept' : 'application/json',
-      "Content-Type": "application/json" ,
-    },
-    withCredentials: true
-  }
 
 
   useEffect(() => {
@@ -77,21 +70,27 @@ const Login = () => {
     // history.push("/");
   }
 
+  const url = "http://localhost:8000/api/user/login"
+
+  let config ={
+    
+    headers:{
+      'Accept' : 'application/json',
+      'Content-Type': "application/json" ,
+    },
+    withCredentials: true
+  }
+
+
   async function handleSubmit(e) {
     e.preventDefault();
 
    
     axios
       .post(
-        "http://localhost:8000/api/user/login",
+        url,
         {username,password},
-        {
-          headers: {
-            'Accept' : 'application/json',
-            'Content-Type': 'application/json'
-          },
-          withCredentials: true
-        }
+        config
       )
       .then((result) => {
         console.log(result.data.msg);
