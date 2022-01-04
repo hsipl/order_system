@@ -10,14 +10,6 @@ export default class Auth {
     this.cacheService = new CacheService();
   }
 
-  // public async handle($request, Closure $next)
-  // {
-  //     if(!session('username')){
-  //         return redirect('/login');
-  //     }
-  //     return $next($request);
-  // }
-
   public async authUser(req: Request, res: Response, next: NextFunction) {
     const { sessionID } = req;
 

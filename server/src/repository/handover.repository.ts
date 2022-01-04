@@ -24,15 +24,15 @@ export class HandoverRepository {
   }
 
   
-  async create(s: Handover): Promise<Handover> {
-    return await Handover.save(s);
+  async create(h: Handover): Promise<Handover> {
+    return await Handover.save(h);
   }
 
-  async update(id: number, s: Handover): Promise<UpdateResult | undefined> {
-    return await Handover.update(id, s);
+  async update(h:Handover): Promise<UpdateResult | undefined> {
+    return await Handover.update(h.id, h);
   }
 
-  async delete(id: number, s: Handover): Promise<UpdateResult | undefined> {
-    return await Handover.update(id, s);
+  async delete(h:Handover): Promise<UpdateResult | undefined> {
+    return await Handover.update(h.id, h);
   }
 }
