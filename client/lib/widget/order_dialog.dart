@@ -21,32 +21,46 @@ class OrderDialog extends StatefulWidget {
 }
 
 class _OrderDialogState extends State<OrderDialog> {
-  List<Widget> numButtons = List.generate(
-    10,
-    (i) => Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-      child: ActionButton(
-        action: " $i",
-        color: primaryTextColor,
-        onPress: () {
-          print("num:$i");
-        },
+  List<Widget> numButtons = [];
+
+  List<Widget> tagButtons = [];
+
+  @override
+  void initState() {
+    numButtons = List.generate(
+      10,
+      (i) => Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+        child: ActionButton(
+          action: " $i",
+          color: primaryTextColor,
+          onPress: () {
+            setState(() {
+              labels = labels + "*$i \n";
+            });
+          },
+        ),
       ),
-    ),
-  );
-  List<Widget> tagButtons = List.generate(
-    10,
-    (i) => Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-      child: ActionButton(
-        action: " tag $i",
-        color: primaryTextColor,
-        onPress: () {
-          print("tag:$i");
-        },
+    );
+    tagButtons = List.generate(
+      10,
+      (i) => Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+        child: ActionButton(
+          action: " tag $i",
+          color: primaryTextColor,
+          onPress: () {
+            setState(() {
+              labels = labels + "tag:$i";
+            });
+          },
+        ),
       ),
-    ),
-  );
+    );
+    super.initState();
+  }
+
+  String labels = '';
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +77,11 @@ class _OrderDialogState extends State<OrderDialog> {
                     image: AssetImage("assets/img/test_img.jpg")),
                 ProductInfo(widget: widget),
               ]),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  AmountRow(),
-                ],
-              ),
+              const AmountRow(),
+              const Divider(),
               Row(
                 children: [
-                  const LabelTextContainer(),
+                  LabelTextContainer(labels: labels),
                   NumInput(numButtons: numButtons),
                   const SizedBox(
                     width: 25,
@@ -127,7 +137,6 @@ class ActionRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
       child: Row(
-        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           SizedBox(
             width: 150,
@@ -171,8 +180,9 @@ class _AmountRowState extends State<AmountRow> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ActionButton(
@@ -184,7 +194,7 @@ class _AmountRowState extends State<AmountRow> {
             },
           ),
           const SizedBox(
-            width: 20,
+            width: 30,
           ),
           ActionButton(
             color: primaryTextColor,
@@ -195,7 +205,7 @@ class _AmountRowState extends State<AmountRow> {
             },
           ),
           const SizedBox(
-            width: 20,
+            width: 30,
           ),
           Container(
             decoration: BoxDecoration(
@@ -216,7 +226,7 @@ class _AmountRowState extends State<AmountRow> {
             ),
           ),
           const SizedBox(
-            width: 20,
+            width: 30,
           ),
           ActionButton(
             color: primaryTextColor,
@@ -230,7 +240,7 @@ class _AmountRowState extends State<AmountRow> {
             },
           ),
           const SizedBox(
-            width: 20,
+            width: 30,
           ),
           ActionButton(
             color: primaryTextColor,
@@ -328,16 +338,30 @@ class ProductInfo extends StatelessWidget {
 
 class LabelTextContainer extends StatefulWidget {
   const LabelTextContainer({
+    required this.labels,
     Key? key,
   }) : super(key: key);
+
+  final String labels;
 
   @override
   State<LabelTextContainer> createState() => _LabelTextContainerState();
 }
 
 class _LabelTextContainerState extends State<LabelTextContainer> {
+  final _scrollController = ScrollController();
+
+  void _scrollDown() {
+    _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollDown();
+      }
+    });
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: SizedBox(
@@ -352,7 +376,16 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
             ),
           ),
           //TODO tags adder
-          child: const Text('沙小拉'),
+          child: MediaQuery.removePadding(
+            context: context,
+            removeTop: true,
+            child: CupertinoScrollbar(
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                child: Text(widget.labels),
+              ),
+            ),
+          ),
         ),
       ),
     );
