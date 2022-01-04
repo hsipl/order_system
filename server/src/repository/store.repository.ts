@@ -1,14 +1,11 @@
-import { UpdateResult } from "typeorm";
-import { Store } from "../entity/store";
+import { UpdateResult } from 'typeorm';
+import { Store } from '../entity/store';
 
-const field: (keyof Store)[] = ["id", "name", "status", "type", "createdAt"];
+const field: (keyof Store)[] = ['id', 'name', 'status', 'type', 'image', 'createdAt'];
 
 export class StoreRepository {
   async getAll(): Promise<Store[]> {
     return await Store.find({
-      where: {
-        status: 0,
-      },
       select: field,
     });
   }
@@ -16,7 +13,7 @@ export class StoreRepository {
   async getById(id: number): Promise<Store | undefined> {
     return await Store.findOne({
       where: {
-        id: id,
+        id,
         status: 0,
       },
       select: field,
@@ -26,7 +23,7 @@ export class StoreRepository {
   async getByName(name: string): Promise<Store | undefined> {
     return await Store.findOne({
       where: {
-        name: name,
+        name,
       },
       select: field,
     });
@@ -36,8 +33,8 @@ export class StoreRepository {
     return await Store.save(s);
   }
 
-  async update(id: number, s: Store): Promise<UpdateResult | undefined> {
-    return await Store.update(id, s);
+  async update(s: Store): Promise<UpdateResult | undefined> {
+    return await Store.update(s.id, s);
   }
 
   async delete(id: number, s: Store): Promise<UpdateResult | undefined> {

@@ -8,7 +8,7 @@ import {
   OneToOne,
   JoinColumn,
   BaseEntity,
-} from "typeorm";
+} from 'typeorm';
 
 @Entity()
 export class Store extends BaseEntity {
@@ -19,28 +19,33 @@ export class Store extends BaseEntity {
   name: string;
 
   @Column({
-    type: "tinyint",
+    type: 'tinyint',
     unsigned: true,
-    comment: "0: Branch Store, 1: Head Store",
+    comment: '0: Branch Store, 1: Head Store',
     default: 0,
   })
   type: number;
 
   @Column({
-    type: "tinyint",
+    type: 'tinyint',
     unsigned: true,
-    comment: "0: Opening, 1: Closing",
+    comment: '0: Opening, 1: Closing',
     default: 0,
   })
   status: number;
 
-  @CreateDateColumn({ name: "createdAt" })
+  @Column({
+    length: 256,
+    nullable: true,
+  })
+  image: string;
+
+  @CreateDateColumn({ name: 'createdAt' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: "updatedAt" })
+  @UpdateDateColumn({ name: 'updatedAt' })
   updatedAt: Date;
 
-  @DeleteDateColumn({ name: "deletedAt" })
+  @DeleteDateColumn({ name: 'deletedAt' })
   deletedAt: Date;
 }
-
