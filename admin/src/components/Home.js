@@ -1,11 +1,9 @@
 import React from "react";
-import styledC from "styled-components";
 import { styled } from "@mui/material/styles";
 import Navbar from "./Navbar";
 import { Paper } from "@mui/material";
 
-
-const HomeCon = styled(Paper)({
+const HomeContainer = styled(Paper)({
   position: "fixed",
   top: "6rem",
   left: "10rem",
@@ -20,10 +18,8 @@ const Home = () => {
   return(
     <>
     <Navbar />
-    <HomeCon id="home">
-
-    </HomeCon>
-
+    <HomeContainer id="home">
+    </HomeContainer>
     </>
   );
 };

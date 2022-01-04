@@ -16,7 +16,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import Home from "@material-ui/icons/Home";
 import ExitToApp from "@material-ui/icons/ExitToApp";
 
-const Topnav = styled(Paper)({
+const TopNav = styled(Paper)({
   position: "fixed",
   top: "0px",
   backgroundColor: "rgb(208, 216, 229, 0.83)",
@@ -42,7 +42,6 @@ const FormContent = styled(DialogContent)({
 const Input = styled(TextField)({
   margin: "1.5rem",
   color: "gray",
-
 });
 
 const DialogText = styled(DialogContentText)({
@@ -58,7 +57,6 @@ const UploadImg = styledC.input`
     border-radius: 4px;
     color: white;
     background-color: rgb(25, 118, 210);
-
   }
 `;
 
@@ -90,7 +88,6 @@ const LeftButton = styled(Button)({
   borderColor: "#7B7B7B",
   textAlign:'center',
   borderRadius: '10px',
-
   "&:hover": {
     backgroundColor: "#9fa8da",
     borderColor: "#7986cb",
@@ -99,6 +96,7 @@ const LeftButton = styled(Button)({
 
 const Navbar = (props) => {
   const [open, setOpen] = React.useState(false);
+  const [image, setImage] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -108,8 +106,6 @@ const Navbar = (props) => {
     setOpen(false);
   };
 
-  const [image, setImage] = useState(null);
-
   const onImageChange = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));
   };
@@ -118,20 +114,22 @@ const Navbar = (props) => {
     console.log(e.target.value);
   };
 
+  const config = {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  }
+
+  const url ="http://140.125.45.167:8000/api/user/logout"
+
   const handleLogOut = () => {
     localStorage.clear();
-
     axios
-      .get("http://140.125.45.167:8000/api/user/logout", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
+      .get(url,config )
       .then((result) => {
         console.log(result.data.msg);
-        console.log(result.headers);
       })
       .catch((err) => {
         console.log(err);
@@ -140,7 +138,7 @@ const Navbar = (props) => {
 
   return (
     <>
-      <Topnav square elevation={3}>
+      <TopNav square elevation={3}>
         <CardMedia
           component="img"
           sx={{ width: "10rem" }}
@@ -168,18 +166,12 @@ const Navbar = (props) => {
               {"修改資訊"}
             </DialogTitle>
             <FormContent>
-              {/* <DialogContentText id="alert-dialog-description">
-                    帳號:
-                  </DialogContentText> */}
               <Input
                 disabled
                 value="Head office"
                 label="帳號"
                 variant="filled"
               />
-              {/* <DialogContentText id="alert-dialog-description">
-                    密碼:
-                  </DialogContentText> */}
               <Input
                 required
                 onChange={handlePassword}
@@ -187,7 +179,6 @@ const Navbar = (props) => {
                 variant="outlined"
                 type="password"
                 required
-                // variant="filled"
               />
               <DialogText>Logo圖片:</DialogText>
               <Container>
@@ -218,7 +209,7 @@ const Navbar = (props) => {
             </IconButton>
           </Tooltip>
         </TopList>
-      </Topnav>
+      </TopNav>
 
       <LeftNav square elevation={3}>
         <LeftList>

@@ -1,10 +1,9 @@
 import React from "react";
-import styledC from "styled-components";
 import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
 import Navbar from "../components/Navbar";
 
-const Reportcon = styled(Paper)({
+const ReportContainer = styled(Paper)({
   position: "fixed",
   top: "6rem",
   left: "10rem",
@@ -19,7 +18,7 @@ const Report = () => {
   return (
     <>
       <Navbar />
-      <Reportcon id="report"></Reportcon>;
+      <ReportContainer id="report"></ReportContainer>;
     </>
   );
 };
