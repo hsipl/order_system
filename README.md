@@ -4,7 +4,7 @@
 [![Types: Typescript](https://img.shields.io/badge/Types-Typescript-blue?style=flat&logo=typescript)](https://www.typescriptlang.org/)
 [![App: Flutter](https://img.shields.io/badge/App-Flutter-blue.svg?style=flat&logo=flutter)](https://flutter.dev/)
 [![Code style: Prettier](https://img.shields.io/badge/Code_style-Prettier-ff69b4.svg?style=flat&logo=prettier)](https://prettier.io/)
-
+[![Build Status](https://a100-59-125-76-249.ngrok.io/api/badges/Milesfeng/order_system/status.svg?ref=refs/heads/main)](https://a100-59-125-76-249.ngrok.io/Milesfeng/order_system)
 
 Order System for local shop(Still Devloping)
 
@@ -103,5 +103,7 @@ project: Add a new  API for x functionality
 ```
 
 
+### Git Process
+![image](https://user-images.githubusercontent.com/54132183/141301708-b2fc1223-8287-4149-a918-70b150525710.png)
 
 

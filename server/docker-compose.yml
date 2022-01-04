@@ -1,4 +1,4 @@
-version: "0.01"
+version: "3"
 
 services:
   db:
@@ -17,11 +17,21 @@ services:
     networks:
       - order_net
 
+  redis:
+    restart: always
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - order_net
+
   backend:
     build: .
     restart: always
     environment:
-      MODE: DEV
+      MODE: dev
       PORT: 8000
       DEV_USERNAME: hsipl
       DEV_PASSWORD: hsipl211
@@ -36,13 +46,15 @@ services:
       - order_net
     depends_on:
       - db
-    command: yarn dev
+    command: sh -c "yarn migrate && yarn dev"
+    
     volumes:
       - backend_data:/order_system/server
 
 volumes:
   mysql_data:
   backend_data:
+  redis_data:
 
 networks:
   order_net:

@@ -1,11 +1,21 @@
-import { UpdateResult } from "typeorm";
-import { errorMsg, errorStatusCode } from "../bases/errorTypes";
-import ErrorHandler from "../controller/error.controller";
-import { Store } from "../entity/store";
-import { StoreRepository } from "../repository/store.repository";
+import { Request } from 'express';
+import { UpdateResult } from 'typeorm';
+import { errorMsg, errorStatusCode } from '../bases/errorTypes';
+import ErrorHandler from '../controller/error.controller';
+import { Store } from '../entity/store';
+import {
+  IStoreCreateParams,
+  IStoreDeleteParams,
+  IStoreUpdateParams,
+} from '../interafaces/store.interface';
+import { StoreRepository } from '../repository/store.repository';
+import CacheService from './cache.service';
 
 export class StoreService {
-  constructor(private readonly repository: StoreRepository) {}
+  constructor(
+    private readonly repository: StoreRepository,
+    private readonly cacheService: CacheService,
+  ) {}
 
   async getAll(): Promise<Store[]> {
     const store = await this.repository.getAll();
@@ -19,40 +29,39 @@ export class StoreService {
 
   async checkExistByName(name: string): Promise<boolean> {
     const isExist = await this.repository.getByName(name);
-    return isExist ? true : false;
+    return !!isExist;
   }
 
   async checkExistByID(id: number): Promise<boolean> {
     const isExist = await this.repository.getById(id);
-    return isExist ? true : false;
+    return !!isExist;
   }
 
-  async create(name: string, status: number, type: number): Promise<Store> {
+  async create(req: Request, params: IStoreCreateParams): Promise<Store> {
+    const { sessionID } = req;
+    const sessionData = await this.cacheService.get(`sess:${sessionID}`);
+    const { username, role, store } = JSON.parse(sessionData).user;
+    console.log('1');
+    if (role !== 1 || store.type !== 1) {
+      throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
+    }
+    const newStore = new Store();
+    Object.assign(newStore, params);
+    return await this.repository.create(newStore);
+  }
+
+  async update(params: IStoreUpdateParams): Promise<UpdateResult | undefined> {
     const store = new Store();
-    store.name = name;
-    store.type = type;
-    store.status = status;
-    return await this.repository.create(store);
+    Object.assign(store, params);
+    return await this.repository.update(store);
   }
 
-  async update(
-    id: number,
-    name: string,
-    status: number,
-    type: number
-  ): Promise<UpdateResult | undefined> {
-    const store = new Store();
-    store.name = name;
-    store.type = type;
-    store.status = status;
-    return await this.repository.update(id, store);
-  }
-
-  async delete(id: number): Promise<UpdateResult | undefined> {
-    const store = await Store.findOne({ id: id });
+  async delete(params: IStoreDeleteParams): Promise<UpdateResult | undefined> {
+    const { id } = params;
+    const store = await Store.findOne({ id });
     if (store) {
       store.status = 1;
-      return await this.repository.update(store.id, store);
+      return await this.repository.update(store);
     }
   }
 }
