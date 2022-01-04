@@ -3,7 +3,7 @@ import { ITagFieldParams } from "./tag";
 interface IProductParams {
     id?: number;
     name?: string;
-    money?: number;
+    price?: number;
     image?: string | null;
     storeId?: number;
     option?: number;
@@ -16,7 +16,7 @@ interface IProductParams {
 
 export interface IProductCreateParams extends IProductParams {
     name: string;
-    money: number;
+    price: number;
     image: string | null;
     storeId: number;
     category: number;
@@ -26,7 +26,7 @@ export interface IProductCreateParams extends IProductParams {
 export interface IProudctUpdate extends IProductParams {
     id: number;
     name: string;
-    money: number;
+    price: number;
     image: string | null;
     storeId: number;
     option: number;

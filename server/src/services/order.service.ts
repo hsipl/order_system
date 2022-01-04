@@ -1,5 +1,7 @@
 import { UpdateResult } from "typeorm";
 import { Order } from "../entity/order";
+import { OrderProduct } from "../entity/orderProuct";
+import { Product } from "../entity/product";
 import { IOrderCreateParams, IOrderDeleteParams } from "../interafaces/order.interface";
 import { OrderRepository } from "../repository/order.repository";
 
@@ -26,9 +28,10 @@ export class OrderService {
         return isExist ? true : false;
     }
 
-    public async create(params: IOrderCreateParams): Promise<Order> {
+    public async create(params: IOrderCreateParams, productData: OrderProduct[]): Promise<Order> {
         const order = new Order();
         Object.assign(order, params)
+        order.orderProducts = productData
         return await this.repository.create(order);
     }
 

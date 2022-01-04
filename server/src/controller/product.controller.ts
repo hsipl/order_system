@@ -43,8 +43,8 @@ class ProductController {
 
     async create(req: Request, res: Response, next: NextFunction) {
         const image = req.file ? req.file.filename : '';
-        let { name, money, category, status, tags, storeId }: IProductCreateParams = req.body;
-        if (!name || !money || category === undefined || status === undefined) {
+        let { name, price, category, status, tags, storeId }: IProductCreateParams = req.body;
+        if (!name || !price || category === undefined || status === undefined) {
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
@@ -61,7 +61,7 @@ class ProductController {
                 }
             }
             tags = tagsData;
-            const params = { name, money, image, storeId, category, status, tags };
+            const params = { name, price, image, storeId, category, status, tags };
             const newProduct = await this.service.create(params);
             res.status(200).json({ result: true });
         } catch (error) {
@@ -76,8 +76,8 @@ class ProductController {
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
         const image = req.file ? req.file.filename : '';
-        let { name, storeId, money, category, status, tags }: IProductUpdateParams = req.body;
-        if (!name || !money || status === undefined || status === undefined) {
+        let { name, storeId, price, category, status, tags }: IProductUpdateParams = req.body;
+        if (!name || !price || status === undefined || status === undefined) {
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
@@ -111,7 +111,7 @@ class ProductController {
             product.tags = <Tag[]>tagsData;
 
             product.name = name;
-            product.money = money;
+            product.price = price;
             product.category = category;
             product.status = status;
             product.image = image;

@@ -7,6 +7,7 @@ import { errorMsg, errorStatusCode } from "../bases/errorTypes";
 import { IOrderCreateParams, IOrderDeleteParams } from "../interafaces/order.interface";
 import { Product } from "../entity/product";
 import { deleteFile } from "../utils/fileUpload";
+import { OrderProduct } from "../entity/orderProuct";
 
 class OrederController {
     public readonly service: OrderService;
@@ -59,26 +60,40 @@ class OrederController {
 
     async create(req: Request, res: Response, next: NextFunction) {
         const image = req.file ? req.file.filename : '';
-        let { description, status, storeId, pay, products }: IOrderCreateParams = req.body;
-        if (!status || !pay || !storeId) {
-            if (image !== '') await deleteFile(image);
-            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
-        }
+        let { status, storeId, pay, products }: IOrderCreateParams = req.body;
+        const productID = products.map(item => Object.keys(item));
+        console.log(productID)
+
+        // let productData: Product[] | undefined;
+        // productData = await this.productService.getByIds(<number[]>products);
+        // if (!productData) {
+        //     return next(new ErrorHandler(errorStatusCode.BadRequest, 'errorjsadjiasdjoisajdijsaoi'))
+        // }
+        // const productID = productData.map(item => Object.values(item)[0]);
+        // console.log(productID);
+        // const orderProducts: OrderProduct[] = []
+        // if (productID.length !== 0) {
+
+        // }
+        // if (!status || !pay || !storeId) {
+        //     if (image !== '') await deleteFile(image);
+        //     return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+        // }
         try {
-            const checkforeignKeyExit = await this.storeService.getById(storeId);
-            if (!checkforeignKeyExit) {
-                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
-            }
-            let productsData: Product[] | undefined;
-            if (products) {
-                productsData = await this.productService.getByIds(<number[]>products);
-                if (!productsData) {
-                    return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
-                }
-            }
-            products = productsData;
-            const params = { description, status, storeId, pay, products };
-            const newOrder = await this.service.create(params);
+            //     const checkforeignKeyExit = await this.storeService.getById(storeId);
+            //     if (!checkforeignKeyExit) {
+            //         return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
+            //     }
+            //     let productsData: OrderProduct[] | undefined;
+            //     if (productsData) {
+            //         // productsData = await this.productService.getByIds(<number[]>products);
+            //         if (!productsData) {
+            //             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
+            //         }
+            //     }
+            //     orderProducts = productsData;
+            // const params = { status, storeId, pay };
+            // const newOrder = await this.service.create(params, <Product[]>productData);
             res.status(200).json({ result: true });
         } catch (e) {
             console.log("create order db error: ", e);

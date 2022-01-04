@@ -9,8 +9,10 @@ import {
     ManyToOne,
     BaseEntity,
     ManyToMany,
-    JoinTable
+    JoinTable,
+    OneToMany
 } from "typeorm";
+import { OrderProduct } from "./orderProuct";
 import { Store } from "./store";
 import { Tag } from "./tag";
 
@@ -27,7 +29,7 @@ export class Product extends BaseEntity {
     name: string;
 
     @Column({ type: "int", default: 0, })
-    money: number;
+    price: number;
 
     @Column({ length: 128, nullable: true, })
     image: string;
@@ -53,6 +55,9 @@ export class Product extends BaseEntity {
     })
     tags: Tag[];
 
+    @OneToMany(() => OrderProduct, orderProduct => orderProduct.prodcutId)
+    orderProducts: OrderProduct[];
+
     @Column({
         type: "tinyint",
         unsigned: true,
@@ -60,6 +65,7 @@ export class Product extends BaseEntity {
         default: 0,
     })
     status: number;
+
     @CreateDateColumn({ name: "createdAt" })
     createdAt: Date;
 
