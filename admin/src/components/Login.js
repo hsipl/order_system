@@ -11,7 +11,7 @@ import {
   Stack,
 } from "@mui/material";
 
-const LoginCon = styled(Dialog)({
+const LoginContainer = styled(Dialog)({
   ".MuiBackdrop-root": {
     backgroundColor: "#F3F3FA",
   },
@@ -90,7 +90,7 @@ const Login = () => {
 
   return (
     <>
-      <LoginCon open="true" maxWidth="xl">
+      <LoginContainer open="true" maxWidth="xl">
         <DialogTitle sx={{ fontWeight: "bold", textAlign: "center" }}>
           登入
         </DialogTitle>
@@ -124,7 +124,7 @@ const Login = () => {
             </Submit>
           </Stack>
         </form>
-      </LoginCon>
+      </LoginContainer>
     </>
   );
 };

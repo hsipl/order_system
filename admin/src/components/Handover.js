@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
 import Navbar from "../components/Navbar";
 
-const HandoverCon = styled(Paper)({
+const HandoverContainer = styled(Paper)({
     position: "fixed",
     top: "6rem",
     left: "10rem",
@@ -18,7 +18,7 @@ const Handover = () => {
   return (
     <>
       <Navbar />
-      <HandoverCon id="handover"></HandoverCon>
+      <HandoverContainer id="handover"></HandoverContainer>
     </>
   );
 };

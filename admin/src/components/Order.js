@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
 import Navbar from "../components/Navbar";
 
-const OrderCon = styled(Paper)({
+const OrderContainer = styled(Paper)({
   position: "fixed",
   top: "6rem",
   left: "10rem",
@@ -18,7 +18,7 @@ const Order = () => {
   return (
     <>
       <Navbar />
-      <OrderCon></OrderCon>
+      <OrderContainer></OrderContainer>
     </>
   );
 };

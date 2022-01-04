@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import Navbar from "../components/Navbar";
 import { Paper } from "@mui/material";
 
-const ProductCon = styled(Paper)({
+const ProductContainer = styled(Paper)({
   position: "fixed",
   top: "6rem",
   left: "10rem",
@@ -18,8 +18,8 @@ const Product = () => {
   return (
   <>
   <Navbar />
-  <ProductCon id="product" >
-  </ProductCon>
+  <ProductContainer id="product" >
+  </ProductContainer>
   </>
   );
 };
