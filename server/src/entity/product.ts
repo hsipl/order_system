@@ -8,8 +8,11 @@ import {
     JoinColumn,
     ManyToOne,
     BaseEntity,
+    ManyToMany,
+    JoinTable
 } from "typeorm";
 import { Store } from "./store";
+import { Tag } from "./tag";
 
 @Entity()
 export class Product extends BaseEntity {
@@ -24,18 +27,31 @@ export class Product extends BaseEntity {
     name: string;
 
     @Column({ type: "int", default: 0, })
-    money: number;
+    price: number;
 
-    @Column({ length: 128, nullable: true })
+    @Column({ length: 128, nullable: true, })
     image: string;
 
     @Column({
         type: "tinyint",
         unsigned: true,
-        comment: "0: Chicken, 1: Vegetable, 2: Processing, 3: Other",
+        comment: "0: Chicken, 1: Processing, 2: Vegetable, 3: Other",
         default: 0,
     })
     category: number;
+
+    @ManyToMany(() => Tag)
+    @JoinTable({
+        name: "product_tag",
+        joinColumn: {
+            name: "prodcut_id",
+            referencedColumnName: "id"
+        }, inverseJoinColumn: {
+            name: "tag_id",
+            referencedColumnName: "id"
+        }
+    })
+    tags: Tag[];
 
     @Column({
         type: "tinyint",
