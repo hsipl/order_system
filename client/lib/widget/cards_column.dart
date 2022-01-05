@@ -16,19 +16,24 @@ class CardsColumn extends StatefulWidget {
 
 class _CardsColumnState extends State<CardsColumn> {
   List<dynamic>? product;
-
   List<Widget> cards = [];
 
   @override
   void initState() {
     getProductSharedPrefs().then((value) {
       product = value!;
+
       setState(() {
         cards = List.generate(product!.length, (i) {
           if (product![i]['category'] == widget.category) {
+            List<String> tags = [];
+            for (final tag in product![i]['tags']) {
+              tags.add(tag['tag']);
+            }
             return ProductCard(
-                img: Icons.ac_unit,
-                info: product![i]['tags'].toString(),
+                img:
+                    'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a',
+                info: tags,
                 product: product![i]['name'].toString(),
                 price: product![i]['price'].toString() + '元');
           } else {

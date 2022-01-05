@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'order_dialog.dart';
 
 class ProductCard extends StatefulWidget {
-  const ProductCard(
-      {Key? key,
-      required this.img,
-      required this.info,
-      required this.product,
-      required this.price})
-      : super(key: key);
+  const ProductCard({
+    Key? key,
+    required this.img,
+    required this.info,
+    required this.product,
+    required this.price,
+  }) : super(key: key);
   final String product;
-  final String info;
+  final List<String> info;
   final String price;
-  final IconData img;
+  final String img;
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -32,8 +32,6 @@ class _ProductCardState extends State<ProductCard> {
     dy = (dy - yHalf) / yHalf;
     dx = double.parse(dx.toStringAsFixed(2));
     dy = double.parse(dy.toStringAsFixed(2));
-    //DEBUG
-    print(dx.toString() + '    ' + dy.toString());
     return [dx, dy];
   }
 
@@ -86,14 +84,15 @@ class _ProductCardState extends State<ProductCard> {
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Icon(
-                    widget.img,
-                    color: Colors.blueGrey,
-                  ),
+                  SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Image(image: NetworkImage(widget.img)),
+                  )
                 ],
               ),
               title: Text(widget.product),
-              subtitle: Text(widget.info),
+              subtitle: Text(widget.info.toString()),
               trailing: Text(widget.price),
               isThreeLine: true,
             ),

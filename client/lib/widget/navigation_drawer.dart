@@ -1,7 +1,7 @@
 import 'package:client/services/api_connection.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/preference_operation.dart';
-import 'package:client/widget/styling_buttons.dart';
+import 'package:client/widget/styled_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -112,11 +112,14 @@ class DeactivateDrawer extends StatelessWidget {
           ),
           const Divider(height: 2),
           const Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 0), child: Text('登入')),
+            padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+            child: Text('登入'),
+          ),
           buildMenuItem(
-              text: "登入",
-              icon: Icons.login,
-              onClicked: () => selectedItem(context, 6)),
+            text: "登入",
+            icon: Icons.login,
+            onClicked: () => selectedItem(context, 6),
+          ),
         ],
       ),
     );
@@ -185,7 +188,10 @@ void selectedItem(BuildContext context, int index) {
           ],
         ),
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(32.0),
+          ),
+        ),
       );
       showDialog(context: context, builder: (context) => dialog);
       break;

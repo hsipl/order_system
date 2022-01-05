@@ -1,5 +1,5 @@
 import 'package:client/services/decorations.dart';
-import 'package:client/widget/styling_buttons.dart';
+import 'package:client/widget/styled_buttons.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutColumn extends StatefulWidget {
@@ -27,7 +27,10 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
               ),
             ),
             //TODO : the cehckout row
-            Expanded(flex: 16, child: Container()),
+            Expanded(
+              flex: 16,
+              child: Container(),
+            ),
             const Divider(
               color: Colors.black,
             ),

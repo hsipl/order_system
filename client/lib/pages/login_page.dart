@@ -1,10 +1,9 @@
-import 'package:client/services/decorations.dart';
 import 'package:client/widget/loading_dialog.dart';
-import 'package:client/widget/styling_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:client/services/preference_operation.dart';
 import 'package:client/services/api_connection.dart';
 import 'package:client/widget/login_text_field.dart';
+import 'package:client/widget/error_dialog.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -44,6 +43,7 @@ class _LoginState extends State<Login> {
               flex: 2,
               child: ElevatedButton(
                 onPressed: () async {
+                  // DEBUG
                   String username = usernameField.getText();
                   String password = passwordField.getText();
                   var loginData = <String, String>{
@@ -52,15 +52,19 @@ class _LoginState extends State<Login> {
                   };
                   showLoaderDialog(context);
                   await Future.delayed(const Duration(seconds: 1));
-                  Api().login(loginData).then((status) {
-                    if (status == '200') {
-                      Api().product().then((status) {
-                        loginChecker(context,status);
-                      });
-                    } else {
-                      loginChecker(context, status);
-                    }
-                  });
+                  Api().login(loginData).then(
+                    (status) {
+                      if (status == '200') {
+                        Api().product().then(
+                          (status) {
+                            loginChecker(context, status);
+                          },
+                        );
+                      } else {
+                        loginChecker(context, status);
+                      }
+                    },
+                  );
                 },
                 child: const Text('Login'),
               ),
@@ -85,33 +89,6 @@ void loginChecker(context, String status) {
       builder: (context) {
         return ErrorDialog(status: status);
       },
-    );
-  }
-}
-
-class ErrorDialog extends StatelessWidget {
-  const ErrorDialog({
-    required this.status,
-    Key? key,
-  }) : super(key: key);
-  final String status;
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(32.0))),
-      contentPadding: const EdgeInsets.only(top: 10.0),
-      title: Center(child: Text(status)),
-      actions: [
-        Center(
-          child: ActionButton(
-            action: '確定',
-            color: kConfirmButtonColor,
-            onPress: () => Navigator.pop(context),
-          ),
-        )
-      ],
     );
   }
 }
