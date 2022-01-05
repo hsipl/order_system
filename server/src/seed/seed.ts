@@ -6,8 +6,8 @@ import { Tag } from '../entity/tag';
 import { Product } from '../entity/product';
 const genData = async () => {
   const mode = process.env.MODE ? process.env.MODE : 'default';
-  const productDeleteName = ['鹽酥雞', "雞排", "薯條", "甜不辣", "四季豆", "青椒", "香菇", "地瓜"];
-  for (let i = 0; i < 24; i++) {
+  const productDeleteName = [];
+  for (let i = 0; i < 32; i++) {
     productDeleteName.push("測資" + i.toString())
   }
   const defaultConnection = await createConnection(mode);
@@ -17,7 +17,9 @@ const genData = async () => {
     .from(User)
     .where('name=:name', { name: 'hsipl' })
     .execute();
-
+  try {
+    await defaultConnection.query("TRUNCATE TABLE product_tag");
+  } catch (e) { console.log(e) }
   await defaultConnection
     .createQueryBuilder()
     .delete()
@@ -52,7 +54,6 @@ const genData = async () => {
       },
     ])
     .execute();
-
   console.log('CREATE MAIN STORE SUCCESS...');
   console.log('START CREATEING SUPERUSER...');
 
@@ -85,80 +86,33 @@ const genData = async () => {
         status: 0
       }
     ]).execute();
-  const productData = [
-    {
-      name: "鹽酥雞",
-      price: 50,
-      category: 0,
-      storeId: store.identifiers[0].id,
-      status: 0
-    },
-    {
-      name: "雞排",
-      price: 60,
-      category: 0,
-      storeId: store.identifiers[0].id,
-      status: 0
-    },
-    {
-      name: "薯條",
-      price: 30,
-      category: 1,
-      storeId: store.identifiers[0].id,
-      status: 0
-    },
-    {
-      name: "甜不辣",
-      price: 30,
-      category: 1,
-      storeId: store.identifiers[0].id,
-      status: 0
-    },
-    {
-      name: "四季豆",
-      price: 30,
-      category: 2,
-      storeId: store.identifiers[0].id,
-      status: 0
-    },
-    {
-      name: "青椒",
-      price: 30,
-      category: 2,
-      storeId: store.identifiers[0].id,
-      status: 0
-    },
-    {
-      name: "香菇",
-      price: 50,
-      category: 3,
-      storeId: store.identifiers[0].id,
-      status: 0
-    },
-    {
-      name: "地瓜",
-      price: 30,
-      category: 3,
-      storeId: store.identifiers[0].id,
-      status: 0
-    }
-  ];
-  for (let i = 0; i < 24; i++) {
-    productData.push({
-      name: "測資" + i.toString(),
-      price: 50,
-      category: i % 4,
-      storeId: store.identifiers[0].id,
-      status: 0
-    })
+  console.log('CREATE TAG SUCCESS...');
+  console.log('START PRODUCT TAG SUCCESS...');
+  const productData = []
+  for (let i = 0; i < 32; i++) {
+    let product = new Product();
+    product.name = "測資" + i.toString();
+    product.price = 50;
+    product.category = i % 4;
+    product.storeId = store.identifiers[0].id;
+    product.status = 0
+    productData.push(product);
   }
-  await defaultConnection
+  const product = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('product')
     .values(productData)
     .execute();
   console.log('CREATE PRODUCT SUCCESS...');
+  let productIds = product.identifiers.map(a => a.id);
+  let values = '';
+  for (let i = 0; i < productIds.length; i++) {
+    values += "(\'" + productIds[i] + "\',\'" + tag.identifiers[0].id + "\'),"
+  }
+  const quertString = "INSERT INTO product_tag (prodcut_id,tag_id) VALUES " + values.slice(0, -1);
+  await defaultConnection.query(quertString)
+
   await defaultConnection.close();
 };
 
