@@ -9,8 +9,8 @@ import {
     ManyToOne,
     BaseEntity,
     ManyToMany,
-    JoinTable,
-    OneToMany
+    OneToMany,
+    JoinTable
 } from "typeorm";
 import { OrderProduct } from "./orderProuct";
 import { Store } from "./store";
@@ -37,7 +37,7 @@ export class Product extends BaseEntity {
     @Column({
         type: "tinyint",
         unsigned: true,
-        comment: "0: Chicken, 1: Vegetable, 2: Processing, 3: Other",
+        comment: "0: Chicken, 1: Processing, 2: Vegetable, 3: Other",
         default: 0,
     })
     category: number;

@@ -30,10 +30,11 @@ export class ProductRepository {
         });
     }
 
-    async getByName(id: number, name: string): Promise<Product | undefined> {
+
+    async getByName(name: string, storeId: number): Promise<Product | undefined> {
         return await Product.findOne({
             relations: ["tags"],
-            where: { name: name, id: Not(id) },
+            where: { name: name, storeId: storeId, status: 0 },
             select: field
         })
     }

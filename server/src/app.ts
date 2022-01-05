@@ -39,6 +39,7 @@ export class App {
         "http://140.125.45.154:3000",
         "http://140.125.45.161:3000",
         "http://140.125.45.167:3000",
+        "http://140.125.45.167:6000",
         "http://localhost:3000",
         "http://localhost",
         "http://mymaskdetection.ddns.net",

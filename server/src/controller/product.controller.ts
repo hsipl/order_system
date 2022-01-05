@@ -36,7 +36,7 @@ class ProductController {
             }
             res.status(200).json(product);
         } catch (error) {
-            console.log("create db error: ", error);
+            console.log("get product by id error: ", error);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
     }
@@ -53,6 +53,11 @@ class ProductController {
             if (!checkforeignKeyExit) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
             }
+            /** 確認 name 是否有重複命名 */
+            const checkExistByName = await this.service.checkExistByName(name, storeId);
+            if (checkExistByName) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataAlreadyExist));
+            }
             let tagsData: Tag[] | undefined;
             if (tags) {
                 tagsData = await this.tagService.getByIds(<number[]>tags);
@@ -65,7 +70,7 @@ class ProductController {
             const newProduct = await this.service.create(params);
             res.status(200).json({ result: true });
         } catch (error) {
-            console.log("create db error: ", error);
+            console.log("create product error: ", error);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }
     }
@@ -77,7 +82,7 @@ class ProductController {
         }
         const image = req.file ? req.file.filename : '';
         let { name, storeId, price, category, status, tags }: IProductUpdateParams = req.body;
-        if (!name || !price || status === undefined || status === undefined) {
+        if (!name || !price || category === undefined || status === undefined) {
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
@@ -123,7 +128,7 @@ class ProductController {
             }
             res.status(200).json({ result: true });
         } catch (error) {
-            console.log("create db error: ", error);
+            console.log("update product error: ", error);
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
         }

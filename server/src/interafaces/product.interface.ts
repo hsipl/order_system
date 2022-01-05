@@ -38,7 +38,7 @@ export interface IProudctUpdate extends IProductParams {
 export interface IProductUpdateParams extends IProductParams {
     id: number;
     name: string;
-    money: number;
+    price: number;
     image: string | null;
     storeId: number;
     category: number;
