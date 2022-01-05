@@ -26,7 +26,7 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
                 onPress: () {},
               ),
             ),
-            //TODO : the cehckout row
+            //TODO : the checkout row
             Expanded(
               flex: 16,
               child: Container(),

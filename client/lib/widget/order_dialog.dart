@@ -1,6 +1,7 @@
 import 'package:client/services/decorations.dart';
 import 'package:client/widget/styled_buttons.dart';
 import 'package:client/widget/widget_for_order_dialog/action_row.dart';
+import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
 import 'package:client/widget/widget_for_order_dialog/num_input.dart';
 import 'package:client/widget/widget_for_order_dialog/tag_input.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,15 +35,16 @@ class _OrderDialogState extends State<OrderDialog> {
 
   @override
   void initState() {
+    //TODO Refactor those ugly code
     editButtons = [
       ActionButton(
           color: kConfirmButtonColor,
           action: '輸入下列',
           onPress: () {
             setState(() {
-              if(labels.last.contains(RegExp(r'([*][0-9])'))){
+              if (labels.last.contains(RegExp(r'([*][0-9])'))) {
                 labels.add('');
-              }else{
+              } else {
                 labels.last = '';
                 const snackBar = SnackBar(
                   content: Text('不符合規範，因此刪除'),
@@ -56,7 +58,9 @@ class _OrderDialogState extends State<OrderDialog> {
           action: '清除單行',
           onPress: () {
             setState(() {
-              (labels.length == 1)?labels = ['']:labels.removeAt(labels.length - 1);
+              (labels.length == 1)
+                  ? labels = ['']
+                  : labels.removeAt(labels.length - 1);
             });
           }),
       const SizedBox(height: 48),
@@ -69,6 +73,7 @@ class _OrderDialogState extends State<OrderDialog> {
             });
           }),
     ];
+
     numButtons = List.generate(
       10,
       (i) => ActionButton(
@@ -81,6 +86,7 @@ class _OrderDialogState extends State<OrderDialog> {
         },
       ),
     );
+
     tagButtons = List.generate(
       widget.info.length,
       (i) => ActionButton(
@@ -127,10 +133,11 @@ class _OrderDialogState extends State<OrderDialog> {
                     LabelTextContainer(labels: labels),
                     TagsInput(tagButtons: tagButtons),
                     NumInput(numButtons: numButtons),
-                    EditColumnForBox(buttons: editButtons),
+                    EditButtonsForTextContainer(buttons: editButtons),
                   ],
                 ),
               ),
+              //TODO send values to ActionRow()
               const ActionRow(),
             ],
           ),
@@ -140,17 +147,4 @@ class _OrderDialogState extends State<OrderDialog> {
   }
 }
 
-class EditColumnForBox extends StatelessWidget {
-  const EditColumnForBox({
-    required this.buttons,
-    Key? key,
-  }) : super(key: key);
-  final List<Widget> buttons;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: buttons,
-    );
-  }
-}
