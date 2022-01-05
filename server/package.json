@@ -9,12 +9,8 @@
     "build": "tsc",
     "start": "npm run build && node ./src/dist/src/index.js",
     "eslint": "eslint --fix ./src/**.ts",
-<<<<<<< HEAD
-    "prettier":"prettier --write --ignore-unknown"
-=======
     "prettier": "prettier --write --ignore-unknown ./src/**.ts",
     "migrate": "ts-node ./src/seed/seed.ts"
->>>>>>> 17af2dd9f2f26362d618c9f6c3692ee45e57635c
   },
   "author": "GaryHsu",
   "license": "ISC",
