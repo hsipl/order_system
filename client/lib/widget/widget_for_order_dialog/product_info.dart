@@ -35,7 +35,7 @@ class ProductInfo extends StatelessWidget {
               ),
               Text(
                 widget.info.toString(),
-                style: TextStyle(color: Colors.white, fontSize: 30),
+                style: const TextStyle(color: Colors.white, fontSize: 10),
               ),
             ],
           ),
