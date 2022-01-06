@@ -4,6 +4,7 @@ import { Store } from '../entity/store';
 import { encrypt } from '../utils/md5';
 import { Tag } from '../entity/tag';
 import { Product } from '../entity/product';
+import { Handover } from '../entity/handover';
 const genData = async () => {
   const mode = process.env.MODE ? process.env.MODE : 'default';
   const productDeleteName = [];
@@ -39,9 +40,17 @@ const genData = async () => {
     .from(Store)
     .where('name=:name', { name: 'kcy main store' })
     .execute();
+  
+    await defaultConnection
+    .createQueryBuilder()
+    .delete()
+    .from(Handover)
+    .where('sysmoney=:sysmoney', { sysmoney: 30 })
+    .execute();
   console.log('START CREATEING MAIN STORE...');
 
   const store = await defaultConnection
+ 
     .createQueryBuilder()
     .insert()
     .into('store')
@@ -55,9 +64,9 @@ const genData = async () => {
     ])
     .execute();
   console.log('CREATE MAIN STORE SUCCESS...');
-  console.log('START CREATEING SUPERUSER...');
+  console.log('START CREATEING SUPERUSER...'); 
 
-  await defaultConnection
+ const users = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('user')
@@ -153,13 +162,14 @@ const genData = async () => {
   console.log('CREATE PRODUCT SUCCESS...');
 
   console.log('START CREATE HANDOVER SUCCESS...');
-  const handover = await defaultConnection
+
+  await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('handover')
     .values([
       {
-        userId: 1,
+        userId: users.identifiers[0].id,
         sysmoney: 30,
         realcash:30,
         status:0
