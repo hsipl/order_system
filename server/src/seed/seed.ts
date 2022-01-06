@@ -6,6 +6,14 @@ import { Tag } from '../entity/tag';
 import { Product } from '../entity/product';
 const genData = async () => {
   const mode = process.env.MODE ? process.env.MODE : 'default';
+  const productDeleteName = [];
+  for (let i = 0; i < 32; i++) {
+    productDeleteName.push("測資" + i.toString())
+  }
+  const tagDelete = [];
+  for (let i = 0; i < 13; i++) {
+    tagDelete.push("測資" + i.toString())
+  }
   const defaultConnection = await createConnection(mode);
   await defaultConnection
     .createQueryBuilder()
@@ -13,18 +21,20 @@ const genData = async () => {
     .from(User)
     .where('name=:name', { name: 'hsipl' })
     .execute();
-
+  try {
+    await defaultConnection.query("TRUNCATE TABLE product_tag");
+  } catch (e) { console.log(e) }
   await defaultConnection
     .createQueryBuilder()
     .delete()
     .from(Tag)
-    .where('tag=:tag', { tag: '胡椒粉' })
+    .where('tag IN (:tag)', { tag: tagDelete })
     .execute();
   await defaultConnection
     .createQueryBuilder()
     .delete()
     .from(Product)
-    .where('name IN (:name)', { name: ['鹽酥雞', "雞排", "薯條", "甜不辣", "四季豆", "青椒", "香菇", "地瓜"] })
+    .where('name IN (:name)', { name: productDeleteName })
     .execute();
 
   await defaultConnection
@@ -48,7 +58,6 @@ const genData = async () => {
       },
     ])
     .execute();
-
   console.log('CREATE MAIN STORE SUCCESS...');
   console.log('START CREATEING SUPERUSER...');
 
@@ -71,80 +80,37 @@ const genData = async () => {
 
   console.log('CREATE SUPER USER SUCCESS...');
   console.log('START CREATE TAG SUCCESS...');
+  const tagData = [];
+  for (let i = 0; i < 13; i++) {
+    let data = new Tag();
+    data.tag = "測資" + i.toString();
+    data.status = 0;
+    tagData.push(data);
+  }
   const tag = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('tag')
-    .values([
-      {
-        tag: '胡椒粉',
-        status: 0
-      }
-    ]).execute();
+    .values(tagData).execute();
+  const tagId = [tag.identifiers[0].id, tag.identifiers[1].id]
   console.log('CREATE TAG SUCCESS...');
-  console.log('START PRODUCT SUCCESS...');
-  await defaultConnection
+  console.log('START PRODUCT TAG SUCCESS...');
+  const productData = []
+  for (let i = 0; i < 32; i++) {
+    let product = new Product();
+    product.name = "測資" + i.toString();
+    product.price = 50;
+    product.category = i % 4;
+    product.storeId = store.identifiers[0].id;
+    product.status = 0
+    productData.push(product);
+  }
+  const product = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('product')
-    .values([
-      {
-        name: "鹽酥雞",
-        money: 50,
-        category: 0,
-        storeId: store.identifiers[0].id,
-        status: 0
-      },
-      {
-        name: "雞排",
-        money: 60,
-        category: 0,
-        storeId: store.identifiers[0].id,
-        status: 0
-      },
-      {
-        name: "薯條",
-        money: 30,
-        category: 1,
-        storeId: store.identifiers[0].id,
-        status: 0
-      },
-      {
-        name: "甜不辣",
-        money: 30,
-        category: 1,
-        storeId: store.identifiers[0].id,
-        status: 0
-      },
-      {
-        name: "四季豆",
-        money: 30,
-        category: 2,
-        storeId: store.identifiers[0].id,
-        status: 0
-      },
-      {
-        name: "青椒",
-        money: 30,
-        category: 2,
-        storeId: store.identifiers[0].id,
-        status: 0
-      },
-      {
-        name: "香菇",
-        money: 50,
-        category: 3,
-        storeId: store.identifiers[0].id,
-        status: 0
-      },
-      {
-        name: "地瓜",
-        money: 30,
-        category: 3,
-        storeId: store.identifiers[0].id,
-        status: 0
-      }
-    ]).execute();
+    .values(productData)
+    .execute();
   console.log('CREATE PRODUCT SUCCESS...');
 
   console.log('START CREATE HANDOVER SUCCESS...');
@@ -164,6 +130,14 @@ const genData = async () => {
 
 
 
+  let productIds = product.identifiers.map(a => a.id);
+  let values = '';
+  for (let i = 0; i < productIds.length; i++) {
+      values += "(\'" + productIds[i] + "\',\'" + tagId[0] + "\'),"
+  }
+  values += "(\'" + productIds[0] + "\',\'" + tagId[1] + "\'),"
+  const quertString = "INSERT INTO product_tag (prodcut_id,tag_id) VALUES " + values.slice(0, -1);
+  await defaultConnection.query(quertString)
 
   await defaultConnection.close();
 };

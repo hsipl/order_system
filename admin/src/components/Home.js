@@ -1,29 +1,96 @@
 import React from "react";
-import styledC from "styled-components";
 import { styled } from "@mui/material/styles";
 import Navbar from "./Navbar";
 import { Paper } from "@mui/material";
 
 
-const HomeCon = styled(Paper)({
-  position: "fixed",
+import {useContext,useEffect,useState} from "react";
+import Breadcrumbs from "@mui/material/Breadcrumbs";
+import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
+import axios from "axios";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+
+
+const HomeContainer = styled(Box)({
+  position:"absolute",
   top: "6rem",
   left: "10rem",
-  right:'0px',
-  bottom:'0px',
-  fontSize:"20px",
-  backgroundColor:'#efebe9',
-  borderRadius: '2px',
+  right: "0px",
+  borderRadius: "2px",
+  padding:"3rem",
+  fontSize: "20px",
 });
 
+const breadcrumbs = [
+
+  <Typography underline="hover" key="2" color="text.primary" style={{fontWeight:"bold"}}>
+    首頁
+  </Typography>,
+];
+
+
 const Home = () => {
-  return(
+
+  var [label,setLabel] = useState(null);
+  const headers = {
+    "Content-Type": "application/json",
+
+  };
+
+  function login() {
+    axios
+      .post(
+        "http://localhost:8000/api/user/login",
+        { username: "hsipl206", password: "hsipl206" },
+        {
+          headers: {
+            'Accept' : 'application/json',
+            'Content-Type': 'application/json'
+          },
+          withCredentials: true
+        }
+      )
+      .then((response) => setLabel(response.data['msg'].toString()));
+  }
+
+  function store() {
+    axios.get("http://localhost:8000/api/store",{
+      headers: {
+        'Accept' : 'application/json',
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
+    }).then((res) => {
+            console.log(res.data)
+      setLabel(res.data[0]['name'].toString());
+    });
+  }
+
+  
+  return (
     <>
-    <Navbar />
-    <HomeCon id="home">
+    <Navbar/>
+      <HomeContainer id="home">
+        <Stack spacing={1}>
+          <Breadcrumbs
+            separator={<NavigateNextIcon fontSize="small" />}
+            aria-label="breadcrumb"
+          >
+            {breadcrumbs}
+          </Breadcrumbs>
+        </Stack>
+        <Button variant="text" onClick={() => login()}>
+        login
+      </Button>
+      <Button variant="text" onClick={() => store()}>
+        store
+      </Button>
+      <p>  {label} </p>
 
-    </HomeCon>
-
+      </HomeContainer>
     </>
   );
 };
