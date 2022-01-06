@@ -2,21 +2,27 @@ import {
     Entity,
     Column,
     JoinColumn,
-    ManyToOne
+    ManyToOne,
+    BaseEntity,
+    PrimaryGeneratedColumn
 } from "typeorm";
 import { Order } from "./order";
-import { Product } from "./product";
 
 @Entity('order_product')
-export class OrderProduct {
+export class OrderProduct extends BaseEntity {
+    @PrimaryGeneratedColumn()
+    id: number;
+
     @Column({ length: 128, nullable: true })
     description: string;
 
-    @ManyToOne(() => Order, order => order.orderProducts, { primary: true })
+    @ManyToOne(() => Order, order => order.orderProducts, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
     @JoinColumn({ name: 'order_id' })
     orderId: Order;
 
-    @ManyToOne(() => Product, product => product.orderProducts, { primary: true })
-    @JoinColumn({ name: 'prodcut_id' })
-    prodcutId: Product;
+    @Column({ length: 64 })
+    name: string;
+
+    @Column({ type: "int", default: 0, })
+    price: number;
 }

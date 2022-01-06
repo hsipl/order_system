@@ -28,11 +28,16 @@ export class OrderService {
         return isExist ? true : false;
     }
 
-    public async create(params: IOrderCreateParams, productData: OrderProduct[]): Promise<Order> {
+    public async create(params: IOrderCreateParams): Promise<Order> {
         const order = new Order();
         Object.assign(order, params)
-        order.orderProducts = productData
         return await this.repository.create(order);
+    }
+
+    public async update(params: IOrderCreateParams): Promise<UpdateResult | undefined> {
+        const order = new Order();
+        Object.assign(order, params);
+        return await this.repository.update(order);
     }
 
     public async delete(params: IOrderDeleteParams): Promise<UpdateResult | undefined> {

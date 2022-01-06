@@ -8,8 +8,6 @@ import {
     JoinColumn,
     BaseEntity,
     ManyToOne,
-    ManyToMany,
-    JoinTable,
     OneToMany
 } from "typeorm";
 import { OrderProduct } from "./orderProuct";
@@ -25,24 +23,7 @@ export class Order extends BaseEntity {
     @JoinColumn({ name: "store_id" })
     storeId: number;
 
-    // @Column({ length: 128 })
-    // description: string;
-
-
-    // @ManyToMany(() => Product)
-    // @JoinTable({
-    //     name: "order_product",
-    //     joinColumn: {
-    //         name: "order_id",
-    //         referencedColumnName: "id"
-    //     },
-    //     inverseJoinColumn: {
-    //         name: "product_id",
-    //         referencedColumnName: "id"
-    //     }
-
-    // })
-    @OneToMany(() => OrderProduct, orderProduct => orderProduct.prodcutId)
+    @OneToMany(() => OrderProduct, orderProduct => orderProduct.orderId)
     orderProducts: OrderProduct[];
 
     @Column({

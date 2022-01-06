@@ -54,10 +54,7 @@ export class Product extends BaseEntity {
         }
     })
     tags: Tag[];
-
-    @OneToMany(() => OrderProduct, orderProduct => orderProduct.prodcutId)
-    orderProducts: OrderProduct[];
-
+    
     @Column({
         type: "tinyint",
         unsigned: true,

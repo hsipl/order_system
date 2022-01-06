@@ -1,7 +1,7 @@
 import { UpdateResult, Not } from "typeorm";
 import { Order } from "../entity/order";
 
-const field: (keyof Order)[] = ["id", "storeId", "status"];
+const field: (keyof Order)[] = ["id", "storeId", "status", "pay"];
 
 export class OrderRepository {
     async getAll(): Promise<Order[]> {
@@ -15,7 +15,7 @@ export class OrderRepository {
     async getById(id: number): Promise<Order | undefined> {
         return await Order.findOne({
             relations: ["orderProducts"],
-            where: { status: 0 },
+            where: { status: 0, id: id },
             select: field
         })
     }
@@ -29,10 +29,6 @@ export class OrderRepository {
     }
 
     async create(o: Order): Promise<Order> {
-        return await Order.save(o);
-    }
-
-    async updateRelation(o: Order): Promise<Order> {
         return await Order.save(o);
     }
 
