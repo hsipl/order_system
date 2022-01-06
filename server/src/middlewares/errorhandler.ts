@@ -1,7 +1,6 @@
 import { Errback, NextFunction, Request, Response } from "express";
 import ErrorHandler from "../controller/error.controller";
 
-
 export default (
   err: ErrorHandler,
   req: Request,

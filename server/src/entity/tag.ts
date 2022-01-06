@@ -13,7 +13,7 @@ export class Tag extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ length: 70, unique: true })
+    @Column({ length: 70})
     tag: string;
 
     @Column({

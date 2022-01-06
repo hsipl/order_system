@@ -12,6 +12,7 @@ export default class Auth {
 
   public async authUser(req: Request, res: Response, next: NextFunction) {
     const { sessionID } = req;
+
     if (!sessionID) {
       return next(new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed));
     }
@@ -33,4 +34,7 @@ export default class Auth {
     }
     return next(new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed));
   }
+
+
+
 }
