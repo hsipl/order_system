@@ -16,6 +16,7 @@ interface orderProduct {
     description?: string;
 }
 interface IOrderProductParam {
+    id?: number;
     orderId?: number;
     productId?: number;
     description?: string;

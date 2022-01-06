@@ -61,8 +61,11 @@ class OrederController {
     async create(req: Request, res: Response, next: NextFunction) {
         const image = req.file ? req.file.filename : '';
         let { status, storeId, pay, products }: IOrderCreateParams = req.body;
-        const productID = products.map(item => Object.keys(item));
-        console.log(productID)
+        const productID = products.map(item => item['id']);
+        const descriptions = products.map(item => item["description"]);
+        console.log(products);
+        console.log(productID);
+        console.log(descriptions);
 
         // let productData: Product[] | undefined;
         // productData = await this.productService.getByIds(<number[]>products);
