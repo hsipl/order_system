@@ -5,24 +5,115 @@ import { encrypt } from '../utils/md5';
 import { Tag } from '../entity/tag';
 import { Product } from '../entity/product';
 import { Handover } from '../entity/handover';
+
 const genData = async () => {
+  const tagJson = [
+    {
+      "tag": "小辣",
+      "status": 0
+    },
+    {
+      "tag": "中辣",
+      "status": 0
+    },
+    {
+      "tag": "大辣",
+      "status": 0
+    },
+    {
+      "tag": "梅粉",
+      "status": 0
+    },
+    {
+      "tag": "海苔粉",
+      "status": 0
+    },
+    {
+      "tag": "胡椒",
+      "status": 0
+    },
+    {
+      "tag": "不加胡椒",
+      "status": 0
+    },
+    {
+      "tag": "七味粉",
+      "status": 0
+    }
+  ];
+  const productJson = [
+    {
+      "name": "鹽酥雞",
+      "price": 50,
+      "category": 0,
+      "status": 0
+    },
+    {
+      "name": "雞排",
+      "price": 60,
+      "category": 0,
+      "status": 0
+    },
+    {
+      "name": "薯條",
+      "price": 30,
+      "category": 1,
+      "status": 0
+    },
+    {
+      "name": "甜不辣",
+      "price": 30,
+      "category": 1,
+      "status": 0
+    },
+    {
+      "name": "米血",
+      "price": 30,
+      "category": 1,
+      "status": 0
+    },
+    {
+      "name": "百頁豆腐",
+      "price": 30,
+      "category": 1,
+      "status": 0
+    },
+    {
+      "name": "章魚足",
+      "price": 50,
+      "category": 3,
+      "status": 0
+    },
+    {
+      "name": "魷魚絲",
+      "price": 50,
+      "category": 3,
+      "status": 0
+    },
+    {
+      "name": "四季豆",
+      "price": 30,
+      "category": 2,
+      "status": 0
+    },
+    {
+      "name": "青椒",
+      "price": 30,
+      "category": 2,
+      "status": 0
+    }
+  ];
   const mode = process.env.MODE ? process.env.MODE : 'default';
-  const productDeleteName = [];
-  for (let i = 0; i < 32; i++) {
-    productDeleteName.push("測資" + i.toString())
-  }
-  const tagDelete = [];
-  for (let i = 0; i < 13; i++) {
-    tagDelete.push("測資" + i.toString())
-  }
+  const productDeleteName = productJson.map(p => p.name);
+  const tagDelete = tagJson.map(t => t.tag);
   const defaultConnection = await createConnection(mode);
   await defaultConnection
-  .createQueryBuilder()
-  .delete()
-  .from(Handover)
-  .where('sysmoney=:sysmoney', { sysmoney: 30 })
-  .execute();
-  
+    .createQueryBuilder()
+    .delete()
+    .from(Handover)
+    .where('sysmoney=:sysmoney', { sysmoney: 30 })
+    .execute();
+
   await defaultConnection
     .createQueryBuilder()
     .delete()
@@ -51,11 +142,11 @@ const genData = async () => {
     .from(Store)
     .where('name=:name', { name: 'kcy main store' })
     .execute();
-  
+
   console.log('START CREATEING MAIN STORE...');
 
   const store = await defaultConnection
- 
+
     .createQueryBuilder()
     .insert()
     .into('store')
@@ -69,9 +160,9 @@ const genData = async () => {
     ])
     .execute();
   console.log('CREATE MAIN STORE SUCCESS...');
-  console.log('START CREATEING SUPERUSER...'); 
+  console.log('START CREATEING SUPERUSER...');
 
- const users = await defaultConnection
+  const users = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('user')
@@ -90,13 +181,8 @@ const genData = async () => {
 
   console.log('CREATE SUPER USER SUCCESS...');
   console.log('START CREATE TAG SUCCESS...');
-  const tagData = [];
-  for (let i = 0; i < 13; i++) {
-    let data = new Tag();
-    data.tag = "測資" + i.toString();
-    data.status = 0;
-    tagData.push(data);
-  }
+  const tagData = tagJson;
+
   const tag = await defaultConnection
     .createQueryBuilder()
     .insert()
@@ -105,16 +191,14 @@ const genData = async () => {
   const tagId = [tag.identifiers[0].id, tag.identifiers[1].id]
   console.log('CREATE TAG SUCCESS...');
   console.log('START PRODUCT TAG SUCCESS...');
-  const productData = []
-  for (let i = 0; i < 32; i++) {
+  const productData: Product[] = []
+  productJson.forEach(p => {
     let product = new Product();
-    product.name = "測資" + i.toString();
-    product.price = 50;
-    product.category = i % 4;
+    Object.assign(product, p);
     product.storeId = store.identifiers[0].id;
-    product.status = 0
     productData.push(product);
-  }
+  })
+
   const product = await defaultConnection
     .createQueryBuilder()
     .insert()

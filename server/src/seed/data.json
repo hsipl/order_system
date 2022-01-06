@@ -1,0 +1,98 @@
+{
+    "Tag": [
+        {
+            "tag": "小辣",
+            "status": 0
+        },
+        {
+            "tag": "中辣",
+            "status": 0
+        },
+        {
+            "tag": "大辣",
+            "status": 0
+        },
+        {
+            "tag": "梅粉",
+            "status": 0
+        },
+        {
+            "tag": "海苔粉",
+            "status": 0
+        },
+        {
+            "tag": "胡椒",
+            "status": 0
+        },
+        {
+            "tag": "不加胡椒",
+            "status": 0
+        },
+        {
+            "tag": "七味粉",
+            "status": 0
+        }
+    ],
+    "Product": [
+        {
+            "name": "鹽酥雞",
+            "price": 50,
+            "category": 0,
+            "status": 0
+        },
+        {
+            "name": "雞排",
+            "price": 60,
+            "category": 0,
+            "status": 0
+        },
+        {
+            "name": "薯條",
+            "price": 30,
+            "category": 1,
+            "status": 0
+        },
+        {
+            "name": "甜不辣",
+            "price": 30,
+            "category": 1,
+            "status": 0
+        },
+        {
+            "name": "米血",
+            "price": 30,
+            "category": 1,
+            "status": 0
+        },
+        {
+            "name": "百頁豆腐",
+            "price": 30,
+            "category": 1,
+            "status": 0
+        },
+        {
+            "name": "章魚足",
+            "price": 50,
+            "category": 3,
+            "status": 0
+        },
+        {
+            "name": "魷魚絲",
+            "price": 50,
+            "category": 3,
+            "status": 0
+        },
+        {
+            "name": "四季豆",
+            "price": 30,
+            "category": 2,
+            "status": 0
+        },
+        {
+            "name": "青椒",
+            "price": 30,
+            "category": 2,
+            "status": 0
+        }
+    ]
+}
