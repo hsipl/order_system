@@ -6,6 +6,7 @@ const field: (keyof Handover)[] = ["id", "userId", "sysmoney", "realcash","statu
 export class HandoverRepository {
   async getAll(): Promise<Handover[]> {
     return await Handover.find({
+      relations: ['userId'],
       where: {
         status: 0,
       },
@@ -23,6 +24,14 @@ export class HandoverRepository {
     });
   }
 
+  async getByUserId(userId: number): Promise<Handover | undefined> {
+    return await Handover.findOne({
+      where: {
+        userId,
+      },
+      select: field,
+    });
+  }
   
   async create(h: Handover): Promise<Handover> {
     return await Handover.save(h);

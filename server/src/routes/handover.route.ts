@@ -25,10 +25,10 @@ export default class HandoverRoute extends BasicRoute {
     this.router.get("/:id", auth.authUser.bind(auth),(req, res, next) =>
     controller.getById(req, res, next)
     );
-    this.router.post("/",  auth.authUser.bind(auth), upload.none(),(req, res, next) =>
+    this.router.post("/",  auth.authUser.bind(auth),(req, res, next) =>
     controller.create(req, res, next)
     );
-    this.router.put("/:id", auth.authAdmin.bind(auth), upload.none(), (req, res, next) =>
+    this.router.put("/:id", auth.authAdmin.bind(auth), (req, res, next) =>
     controller.update(req, res, next)
     );
     this.router.delete("/:id",  auth.authAdmin.bind(auth),(req, res, next) =>

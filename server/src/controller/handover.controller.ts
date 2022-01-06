@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { validationResult } from 'express-validator';
 import { Handover } from "../entity/handover";
 import { HandoverRepository } from "../repository/handover.repository";
 import { HandoverService } from "../services/handover.service";
@@ -23,14 +24,11 @@ class HandoverController {
   }
 
   async getById(req: Request, res: Response, next: NextFunction) {
-    const id: number = parseInt(req.params.id);
-
-    if (!id) {
-      return next(
-        new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
-      );
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
     }
-
+    const id: number = parseInt(req.params.id);
     try {
       const handover = await this.service.getById(id);
       if (!handover) {
@@ -51,30 +49,46 @@ class HandoverController {
   }
 
   async create(req: Request, res: Response, next: NextFunction) {
-
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+    }
     const {
       userId,
       sysmoney,
       realcash,
       status
     }: { userId: number; sysmoney: number; realcash: number; status: number } = req.body;
+
+    try {
+      const handoverExist = await this.service.checkExistByUserId(userId);
+      if (!handoverExist || !sysmoney) {
+        return next(new ErrorHandler(errorStatusCode.Forbidden, errorMsg.DataAlreadyExist));
+      }
     const params: IHandoverCreateParams = {
       userId,
       sysmoney,
       realcash,
       status
     };
-    if (!userId || !sysmoney) {
-      return next(
-        new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
-      );
-    }
+
     const newHandover = await this.service.create(req, params);
     res.status(200).send({ result: true });
 
-
+  } catch (error) {
+    console.log('create db error: ', error);
+    return next(
+      new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
+    );
   }
+}
+
   async update(req: Request, res: Response, next: NextFunction) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+    }
+
     const id: number = parseInt(req.params.id);
 
     const {
@@ -84,6 +98,12 @@ class HandoverController {
       status
     }: { userId: number; sysmoney: number; realcash: number; status: number } = req.body;
 
+    try {
+      const checkIsExist = await this.service.getById(id);
+      if (!checkIsExist) {
+
+        return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
+      }
     const params: IHandoverUpdateParams = {
       id,
       userId,
@@ -91,23 +111,35 @@ class HandoverController {
       realcash,
       status
     };
-
     const updateHandover = await this.service.update(params);
-
-    if (!userId || !sysmoney) {
+    if (!updateHandover ) {
       return next(
-
         new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError),
       );
     }
     res.status(200).send({ result: true });
+  } catch (error) {
+    console.log('create db error: ', error);
+    return next(
+      new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
+    );
+  }
   }
 
   async delete(req: Request, res: Response, next: NextFunction) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+    }
     const id: number = parseInt(req.params.id);
+    try {
+    const checkIsExist = await this.service.getById(id);    
+    if (!checkIsExist) {
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+    }
     const params: IHandoverDeleteParams = { id };
     const deletedRes = await this.service.delete(params);
-    if (!id) {
+    if (!deletedRes) {
       return next(
         new ErrorHandler(
           errorStatusCode.InternalServerError,
@@ -116,7 +148,12 @@ class HandoverController {
       );
     }
     res.status(200).send({ result: true });
+  } catch (error) {
+    return next(
+      new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
+    );
   }
+}
 }
 
 export default HandoverController;

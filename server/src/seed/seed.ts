@@ -146,6 +146,25 @@ const genData = async () => {
       }
     ]).execute();
   console.log('CREATE PRODUCT SUCCESS...');
+
+  console.log('START CREATE HANDOVER SUCCESS...');
+  const handover = await defaultConnection
+    .createQueryBuilder()
+    .insert()
+    .into('handover')
+    .values([
+      {
+        userId: 1,
+        sysmoney: 30,
+        realcash:30,
+        status:0
+      }
+    ]).execute();
+  console.log('CREATE HANDOVER SUCCESS...');
+
+
+
+
   await defaultConnection.close();
 };
 

@@ -22,12 +22,12 @@ export class HandoverService {
     return handover;
   }
 
+  async checkExistByUserId(userid: number): Promise<boolean> {
+    const isExist = await this.repository.getByUserId(userid);
+    return !!isExist;
+  }
 
   async create(req: Request,params:IHandoverCreateParams): Promise<Handover> {
-    const { sessionID } = req;
-    const sessionData = await this.cacheService.get(`sess:${sessionID}`);
-    const { user_id, sysmoney, realcash,status } = JSON.parse(sessionData).user;
-
     const newHandover = new Handover();
     Object.assign(newHandover, params);
     return await this.repository.create(newHandover);
@@ -35,7 +35,6 @@ export class HandoverService {
 
   async update( params:IHandoverUpdateParams ): Promise<UpdateResult | undefined> {
     const handover = new Handover();
-
     Object.assign(handover, params);
     return await this.repository.update(handover);
 }
