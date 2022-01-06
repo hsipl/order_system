@@ -17,6 +17,13 @@ const genData = async () => {
   }
   const defaultConnection = await createConnection(mode);
   await defaultConnection
+  .createQueryBuilder()
+  .delete()
+  .from(Handover)
+  .where('sysmoney=:sysmoney', { sysmoney: 30 })
+  .execute();
+  
+  await defaultConnection
     .createQueryBuilder()
     .delete()
     .from(User)
@@ -45,12 +52,6 @@ const genData = async () => {
     .where('name=:name', { name: 'kcy main store' })
     .execute();
   
-    await defaultConnection
-    .createQueryBuilder()
-    .delete()
-    .from(Handover)
-    .where('sysmoney=:sysmoney', { sysmoney: 30 })
-    .execute();
   console.log('START CREATEING MAIN STORE...');
 
   const store = await defaultConnection
