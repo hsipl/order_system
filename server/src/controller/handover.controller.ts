@@ -119,7 +119,7 @@ class HandoverController {
     }
     res.status(200).send({ result: true });
   } catch (error) {
-    console.log('create db error: ', error);
+    console.log('update db error: ', error);
     return next(
       new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
     );
