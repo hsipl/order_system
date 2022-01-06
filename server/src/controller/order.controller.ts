@@ -5,12 +5,7 @@ import { StoreService } from "../services/store.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
 import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams } from "../interafaces/order.interface";
-import { Product } from "../entity/product";
-import { deleteFile } from "../utils/fileUpload";
-import { OrderProduct } from "../entity/orderProuct";
-import { OrderProductService } from "../services/orderProduct.service";
 import { IOrderProductCreateParams } from "../interafaces/orderProduct.interafaces";
-import { Order } from "../entity/order";
 import OrderProductController from "./orderProduct.controller";
 
 class OrederController {
@@ -79,16 +74,14 @@ class OrederController {
             // 確保 product 是否存在
             const productData = await this.productService.getByIds(productsId);
             if (!productData) {
-                // 修改回傳訊息
-                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
             }
             /** order 新增的 param */
             const param: IOrderCreateParams = { status, storeId, pay };
             const newOrder = await this.service.create(param);
             let orderProductData: IOrderProductCreateParams[] = [];
             if (!newOrder) {
-                // 修改回傳訊息
-                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError));
             }
             const newOrderProduct = await this.orderProductController.create(products, newOrder, productData);
             res.status(200).json({ result: newOrderProduct });
