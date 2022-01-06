@@ -83,7 +83,7 @@ class ProductController {
         }
         const image = req.file ? req.file.filename : '';
         let { name, storeId, price, category, status, tags }: IProductUpdateParams = req.body;
-        if (!name || !price || !category || status === undefined) {
+        if (!name || !price || category === undefined || status === undefined) {
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }

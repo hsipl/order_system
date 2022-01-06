@@ -136,6 +136,29 @@ const genData = async () => {
       values += "(\'" + productIds[i] + "\',\'" + tagId[0] + "\'),"
   }
   values += "(\'" + productIds[0] + "\',\'" + tagId[1] + "\'),"
+  console.log('START PRODUCT TAG SUCCESS...');
+  const productData = []
+  for (let i = 0; i < 32; i++) {
+    let product = new Product();
+    product.name = "測資" + i.toString();
+    product.price = 50;
+    product.category = i % 4;
+    product.storeId = store.identifiers[0].id;
+    product.status = 0
+    productData.push(product);
+  }
+  const product = await defaultConnection
+    .createQueryBuilder()
+    .insert()
+    .into('product')
+    .values(productData)
+    .execute();
+  console.log('CREATE PRODUCT SUCCESS...');
+  let productIds = product.identifiers.map(a => a.id);
+  let values = '';
+  for (let i = 0; i < productIds.length; i++) {
+    values += "(\'" + productIds[i] + "\',\'" + tag.identifiers[0].id + "\'),"
+  }
   const quertString = "INSERT INTO product_tag (prodcut_id,tag_id) VALUES " + values.slice(0, -1);
   await defaultConnection.query(quertString)
 
