@@ -20,6 +20,9 @@ export default class HandoverRoute extends BasicRoute {
     this.router.get("/",  auth.authAdmin.bind(auth),(req, res, next) =>
     controller.getAll(req, res, next)
     );
+    this.router.get('/delete',  auth.authAdmin.bind(auth),(req, res, next) =>
+    controller.getAll(req, res, next)
+    );
     this.router.get("/:id", auth.authAdmin.bind(auth),(req, res, next) =>
     controller.getById(req, res, next)
     );
@@ -31,9 +34,6 @@ export default class HandoverRoute extends BasicRoute {
     );
     this.router.delete("/:id",  auth.authAdmin.bind(auth),(req, res, next) =>
     controller.delete(req, res, next)
-    );
-    this.router.get("/delete",  auth.authAdmin.bind(auth),(req, res, next) =>
-    controller.getAllDelete(req, res, next)
     );
     this.router.get("/delete/:id", auth.authAdmin.bind(auth),(req, res, next) =>
     controller.getByDeleteId(req, res, next)

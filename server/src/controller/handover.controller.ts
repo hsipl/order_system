@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from 'express-validator';
-import { Handover } from "../entity/handover";
-// import { HandoverRepository } from "../repository/handover.repository";
 import { HandoverService } from "../services/handover.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
@@ -24,7 +22,9 @@ class HandoverController {
   }
 
   async getAllDelete(req: Request, res: Response, next: NextFunction) {
+
     const handovers = await this.service.getAllDelete();
+
     res.status(200).json(handovers);
   }
   async getById(req: Request, res: Response, next: NextFunction) {
