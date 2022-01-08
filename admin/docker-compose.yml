@@ -1,9 +1,10 @@
+version: "3"
 services:
   admin:
     build: .
     restart: always
     ports:
-      - 3003:3003
+      - 3003:3000
     networks:
       - order_net
     volumes:
