@@ -38,7 +38,7 @@ class HandoverController {
       }
       res.status(200).json(handover);
     } catch (error) {
-      console.log("get product by id error: ", error);
+      console.log("get handover by id error: ", error);
       return next(
         new ErrorHandler(
           errorStatusCode.InternalServerError,
@@ -76,7 +76,7 @@ class HandoverController {
     res.status(200).send({ result: true });
 
   } catch (error) {
-    console.log('create db error: ', error);
+    console.log('create handover error: ', error);
     return next(
       new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
     );
@@ -119,7 +119,7 @@ class HandoverController {
     }
     res.status(200).send({ result: true });
   } catch (error) {
-    console.log('update db error: ', error);
+    console.log('update handover error: ', error);
     return next(
       new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
     );

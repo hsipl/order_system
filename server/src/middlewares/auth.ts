@@ -34,7 +34,4 @@ export default class Auth {
     }
     return next(new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed));
   }
-
-
-
 }
