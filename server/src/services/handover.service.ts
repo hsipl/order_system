@@ -16,9 +16,19 @@ export class HandoverService {
     return handover;
   }
 
-  async getById(id: number): Promise<Handover | undefined> {
+  async getAllDelete(): Promise<Handover[]> {
+    const handover = await this.repository.getAllDelete();
+    return handover;
+  }
 
+  async getById(id: number): Promise<Handover | undefined> {
     const handover = await this.repository.getById(id);
+    return handover;
+  }
+
+  
+  async getByDeleteId(id: number): Promise<Handover | undefined> {
+    const handover = await this.repository.getByDeleteId(id);
     return handover;
   }
 
@@ -38,6 +48,12 @@ export class HandoverService {
     Object.assign(handover, params);
     return await this.repository.update(handover);
 }
+
+  async updatedelete( params:IHandoverUpdateParams ): Promise<UpdateResult | undefined> {
+    const handover = new Handover();
+    Object.assign(handover, params);
+    return await this.repository.update(handover);
+  }
 
   async delete(params: IHandoverDeleteParams): Promise<UpdateResult | undefined> {
     const { id } = params;

@@ -14,11 +14,31 @@ export class HandoverRepository {
     });
   }
 
+  async getAllDelete(): Promise<Handover[]> {
+    return await Handover.find({
+      relations: ['userId'],
+      where: {
+        status: 1,
+      },
+      select: field,
+    });
+  }
+
   async getById(id: number): Promise<Handover | undefined> {
     return await Handover.findOne({
       where: {
         id,
         status: 0,
+      },
+      select: field,
+    });
+  }
+
+  async getByDeleteId(id: number): Promise<Handover | undefined> {
+    return await Handover.findOne({
+      where: {
+        id,
+        status: 1,
       },
       select: field,
     });

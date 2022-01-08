@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { validationResult } from 'express-validator';
 import { Handover } from "../entity/handover";
-import { HandoverRepository } from "../repository/handover.repository";
+// import { HandoverRepository } from "../repository/handover.repository";
 import { HandoverService } from "../services/handover.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
@@ -23,6 +23,10 @@ class HandoverController {
     res.status(200).json(handovers);
   }
 
+  async getAllDelete(req: Request, res: Response, next: NextFunction) {
+    const handovers = await this.service.getAllDelete();
+    res.status(200).json(handovers);
+  }
   async getById(req: Request, res: Response, next: NextFunction) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -31,6 +35,31 @@ class HandoverController {
     const id: number = parseInt(req.params.id);
     try {
       const handover = await this.service.getById(id);
+      if (!handover) {
+        return next(
+          new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound)
+        );
+      }
+      res.status(200).json(handover);
+    } catch (error) {
+      console.log("get handover by id error: ", error);
+      return next(
+        new ErrorHandler(
+          errorStatusCode.InternalServerError,
+          errorMsg.InternalServerError
+        )
+      );
+    }
+  }
+
+  async getByDeleteId(req: Request, res: Response, next: NextFunction) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+    }
+    const id: number = parseInt(req.params.id);
+    try {
+      const handover = await this.service.getByDeleteId(id);
       if (!handover) {
         return next(
           new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound)
@@ -100,6 +129,47 @@ class HandoverController {
 
     try {
       const checkIsExist = await this.service.getById(id);
+      if (!checkIsExist) {
+
+        return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
+      }
+    const params: IHandoverUpdateParams = {
+      id,
+      userId,
+      sysmoney,
+      realcash,
+      status
+    };
+    const updateHandover = await this.service.update(params);
+    if (!updateHandover ) {
+      return next(
+        new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError),
+      );
+    }
+    res.status(200).send({ result: true });
+  } catch (error) {
+    console.log('update handover error: ', error);
+    return next(
+      new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
+    );
+  }
+  }
+
+  async updatedelete(req: Request, res: Response, next: NextFunction) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
+    }
+    const id: number = parseInt(req.params.id);
+    const {
+      userId,
+      sysmoney,
+      realcash,
+      status
+    }: { userId: number; sysmoney: number; realcash: number; status: number } = req.body;
+
+    try {
+      const checkIsExist = await this.service.getByDeleteId(id);
       if (!checkIsExist) {
 
         return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));

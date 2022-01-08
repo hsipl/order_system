@@ -1,8 +1,6 @@
-import { NextFunction, Request, Response } from "express";
 import Auth from '../middlewares/auth';
 import { HandoverRepository } from '../repository/handover.repository';
 import { HandoverService } from '../services/handover.service';
-import { upload } from '../utils/fileUpload';
 import BasicRoute from "../bases/route.abstract";
 import HandoverController from "../controller/handover.controller";
 import CacheService from '../services/cache.service';
@@ -33,6 +31,15 @@ export default class HandoverRoute extends BasicRoute {
     );
     this.router.delete("/:id",  auth.authAdmin.bind(auth),(req, res, next) =>
     controller.delete(req, res, next)
+    );
+    this.router.get("/delete",  auth.authAdmin.bind(auth),(req, res, next) =>
+    controller.getAllDelete(req, res, next)
+    );
+    this.router.get("/delete/:id", auth.authAdmin.bind(auth),(req, res, next) =>
+    controller.getByDeleteId(req, res, next)
+    );
+    this.router.put("/delete/:id", auth.authAdmin.bind(auth), (req, res, next) =>
+    controller.updatedelete(req, res, next)
     );
   }
 }
