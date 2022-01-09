@@ -2,10 +2,10 @@ kind: pipeline
 name: drone-CICD for prd
 
 steps:
-- name: unit-test
-  image: python
-  commands:
-  - echo "ok!" 
+# - name: unit-test
+#   image: python
+#   commands:
+#   - echo "ok!" 
 
 - name: ssh commands
   image: appleboy/drone-ssh
@@ -43,10 +43,10 @@ kind: pipeline
 name: drone-CICD for dev
 
 steps:
-- name: unit-test
-  image: python
-  commands:
-  - echo "ok!" 
+# - name: unit-test
+#   image: python
+#   commands:
+#   - echo "ok!" 
 
 - name: ssh commands
   image: appleboy/drone-ssh
