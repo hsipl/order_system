@@ -1,8 +1,9 @@
-import 'dart:convert';
-
+import 'package:client/widget/loading_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:client/services/preference_operation.dart';
+import 'package:client/services/api_connection.dart';
 import 'package:client/widget/login_text_field.dart';
-import 'package:http/http.dart';
+import 'package:client/widget/error_dialog.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -11,64 +12,83 @@ class Login extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
 
-void loginChecker(context) {
-  Navigator.pushNamed(context, '/home');
-}
-
 class _LoginState extends State<Login> {
   LoginTextField usernameField = LoginTextField(
     icon: Icons.person,
     hint: 'username',
-    mask: false,
+    isPasswordField: false,
     title: 'username',
   );
   LoginTextField passwordField = LoginTextField(
-      icon: Icons.lock, hint: 'password', mask: true, title: 'password');
+      icon: Icons.lock,
+      hint: 'password',
+      isPasswordField: true,
+      title: 'password');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Login'),
       ),
       body: Container(
-        padding: const EdgeInsets.all(30),
+        padding: const EdgeInsets.fromLTRB(40, 40, 40, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            usernameField,
-            passwordField,
-            const SizedBox(height: 30),
-            ElevatedButton(
-              onPressed: () async {
-                loginChecker(context);
-                String username = usernameField.getText();
-                String password = passwordField.getText();
-                var map = <String, dynamic>{};
-                map['username'] = username;
-                map['password'] = password;
-
-                final uri = Uri.parse('http://hinininininini.ddns.net:8000/login');
-                final headers = {'Content-Type': 'application/json'};
-                final encoding = Encoding.getByName('utf-8');
-                String jsonBody = json.encode(map);
-                Response response = await post(
-                  uri,
-                  headers: headers,
-                  body: jsonBody,
-                  encoding: encoding,
-                );
-                print(response.body);
-
-              },
-              child: const Text('Login'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(100, 48),
+            Expanded(flex: 4, child: usernameField),
+            Expanded(flex: 4, child: passwordField),
+            Expanded(
+              flex: 2,
+              child: ElevatedButton(
+                onPressed: () async {
+                  // DEBUG
+                  String username = usernameField.getText();
+                  String password = passwordField.getText();
+                  var loginData = <String, String>{
+                    'username': 'hsipl206',
+                    'password': 'hsipl206'
+                  };
+                  showLoaderDialog(context);
+                  await Future.delayed(const Duration(seconds: 1));
+                  Api().login(loginData).then(
+                    (status) {
+                      if (status == '200') {
+                        Api().product().then(
+                          (status) {
+                            loginChecker(context, status);
+                          },
+                        );
+                      } else {
+                        loginChecker(context, status);
+                      }
+                    },
+                  );
+                },
+                child: const Text('Login'),
               ),
             ),
+            const Expanded(flex: 15, child: SizedBox(height: 0)),
           ],
         ),
       ),
+    );
+  }
+}
+
+void loginChecker(context, String status) {
+  if (status == '200') {
+    setLoginSharedPrefs(true);
+    Navigator.pushNamedAndRemoveUntil(
+        context, '/home_activate', (Route<dynamic> route) => false);
+  } else {
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return ErrorDialog(status: status);
+      },
     );
   }
 }
