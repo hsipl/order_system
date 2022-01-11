@@ -4,25 +4,13 @@ import { Store } from '../entity/store';
 import { encrypt } from '../utils/md5';
 import { Tag } from '../entity/tag';
 import { Product } from '../entity/product';
-import { Handover } from '../entity/handover';
 const genData = async () => {
   const mode = process.env.MODE ? process.env.MODE : 'default';
   const productDeleteName = [];
   for (let i = 0; i < 32; i++) {
     productDeleteName.push("測資" + i.toString())
   }
-  const tagDelete = [];
-  for (let i = 0; i < 13; i++) {
-    tagDelete.push("測資" + i.toString())
-  }
   const defaultConnection = await createConnection(mode);
-  await defaultConnection
-  .createQueryBuilder()
-  .delete()
-  .from(Handover)
-  .where('sysmoney=:sysmoney', { sysmoney: 30 })
-  .execute();
-  
   await defaultConnection
     .createQueryBuilder()
     .delete()
@@ -36,7 +24,7 @@ const genData = async () => {
     .createQueryBuilder()
     .delete()
     .from(Tag)
-    .where('tag IN (:tag)', { tag: tagDelete })
+    .where('tag=:tag', { tag: '胡椒粉' })
     .execute();
   await defaultConnection
     .createQueryBuilder()
@@ -51,11 +39,9 @@ const genData = async () => {
     .from(Store)
     .where('name=:name', { name: 'kcy main store' })
     .execute();
-  
   console.log('START CREATEING MAIN STORE...');
 
   const store = await defaultConnection
- 
     .createQueryBuilder()
     .insert()
     .into('store')
@@ -69,9 +55,9 @@ const genData = async () => {
     ])
     .execute();
   console.log('CREATE MAIN STORE SUCCESS...');
-  console.log('START CREATEING SUPERUSER...'); 
+  console.log('START CREATEING SUPERUSER...');
 
- const users = await defaultConnection
+  await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('user')
@@ -90,19 +76,16 @@ const genData = async () => {
 
   console.log('CREATE SUPER USER SUCCESS...');
   console.log('START CREATE TAG SUCCESS...');
-  const tagData = [];
-  for (let i = 0; i < 13; i++) {
-    let data = new Tag();
-    data.tag = "測資" + i.toString();
-    data.status = 0;
-    tagData.push(data);
-  }
   const tag = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('tag')
-    .values(tagData).execute();
-  const tagId = [tag.identifiers[0].id, tag.identifiers[1].id]
+    .values([
+      {
+        tag: '胡椒粉',
+        status: 0
+      }
+    ]).execute();
   console.log('CREATE TAG SUCCESS...');
   console.log('START PRODUCT TAG SUCCESS...');
   const productData = []
@@ -125,27 +108,11 @@ const genData = async () => {
   let productIds = product.identifiers.map(a => a.id);
   let values = '';
   for (let i = 0; i < productIds.length; i++) {
-    values += "(\'" + productIds[i] + "\',\'" + tagId[0] + "\'),"
+    values += "(\'" + productIds[i] + "\',\'" + tag.identifiers[0].id + "\'),"
   }
-  values += "(\'" + productIds[0] + "\',\'" + tagId[1] + "\'),"
   const quertString = "INSERT INTO product_tag (prodcut_id,tag_id) VALUES " + values.slice(0, -1);
   await defaultConnection.query(quertString)
 
-  console.log('START CREATE HANDOVER SUCCESS...');
-
-  await defaultConnection
-    .createQueryBuilder()
-    .insert()
-    .into('handover')
-    .values([
-      {
-        userId: users.identifiers[0].id,
-        sysmoney: 30,
-        realcash: 30,
-        status: 0
-      }
-    ]).execute();
-  console.log('CREATE HANDOVER SUCCESS...');
   await defaultConnection.close();
 };
 

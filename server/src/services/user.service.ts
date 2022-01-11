@@ -65,7 +65,6 @@ export class UserService {
       throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
     }
     // console.log(storeId);
-
     const employees = await this.repository.getAllEmployee({ storeId });
     return employees;
   }
