@@ -43,8 +43,6 @@ class _ProductCardState extends State<ProductCard> {
     return SizedBox(
       height: 120,
       child: Card(
-        semanticContainer: true,
-        clipBehavior: Clip.antiAliasWithSaveLayer,
         elevation: 5,
         child: InkWell(
           onTapDown: (TapDownDetails details) {
@@ -81,6 +79,7 @@ class _ProductCardState extends State<ProductCard> {
           },
           child: Center(
             child: ListTile(
+              enabled: true,
               leading: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

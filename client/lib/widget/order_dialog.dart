@@ -32,6 +32,15 @@ class _OrderDialogState extends State<OrderDialog> {
   List<Widget> numButtons = [];
   List<Widget> tagButtons = [];
   List<Widget> editButtons = [];
+  List<String> customLabels = [''];
+  List<String> customLabelsNum = [''];
+  int onTapLabel = 0;
+
+  void onTapIndex(int index) {
+    setState(() {
+      onTapLabel = index;
+    });
+  }
 
   @override
   void initState() {
@@ -41,35 +50,48 @@ class _OrderDialogState extends State<OrderDialog> {
           color: kConfirmButtonColor,
           action: '輸入下列',
           onPress: () {
-            setState(() {
-              if (labels.last.contains(RegExp(r'([*][0-9])'))) {
-                labels.add('');
-              } else {
-                labels.last = '';
-                const snackBar = SnackBar(
-                  content: Text('不符合規範，因此刪除'),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            });
+            setState(
+              () {
+                if (customLabels.last != '' && customLabelsNum.last != '') {
+                  customLabels.add('');
+                  customLabelsNum.add('');
+                } else {
+                  customLabels.last = '';
+                  customLabelsNum.last = '';
+                  const snackBar = SnackBar(
+                    content: Text('不符合規範，因此刪除'),
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                }
+                onTapLabel = customLabels.length - 1;
+              },
+            );
           }),
       ActionButton(
           color: kCancelButtonColor,
-          action: '清除單行',
+          action: '清除單列',
           onPress: () {
             setState(() {
-              (labels.length == 1)
-                  ? labels = ['']
-                  : labels.removeAt(labels.length - 1);
+              (customLabels.length == 1)
+                  ? customLabels = ['']
+                  : customLabels.removeAt(onTapLabel);
+              (customLabelsNum.length == 1)
+                  ? customLabelsNum = ['']
+                  : customLabelsNum.removeAt(onTapLabel);
+              onTapLabel = customLabels.length - 1;
             });
           }),
-      const SizedBox(height: 48),
+      const SizedBox(
+        height: 48,
+      ),
       ActionButton(
           color: kCancelButtonColor,
           action: '清空所有',
           onPress: () {
             setState(() {
-              labels = [''];
+              customLabels = [''];
+              customLabelsNum = [''];
+              onTapLabel = 0;
             });
           }),
     ];
@@ -81,7 +103,8 @@ class _OrderDialogState extends State<OrderDialog> {
         color: primaryTextColor,
         onPress: () {
           setState(() {
-            labels[labels.length - 1] = labels[labels.length - 1] + "$i";
+            customLabelsNum[customLabelsNum.length - 1] =
+                customLabelsNum[customLabelsNum.length - 1] + "$i";
           });
         },
       ),
@@ -94,15 +117,18 @@ class _OrderDialogState extends State<OrderDialog> {
         color: primaryTextColor,
         onPress: () {
           setState(() {
-            labels[labels.length - 1] = widget.info[i] + '*';
+            List<String> checkList =
+                customLabels[customLabels.length - 1].split(',');
+            if (!checkList.contains(widget.info[i])) {
+              customLabels[customLabels.length - 1] =
+                  customLabels[customLabels.length - 1] + widget.info[i] + ',';
+            }
           });
         },
       ),
     );
     super.initState();
   }
-
-  List<String> labels = [''];
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +156,12 @@ class _OrderDialogState extends State<OrderDialog> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    LabelTextContainer(labels: labels),
+                    LabelTextContainer(
+                      labels: customLabels,
+                      num: customLabelsNum,
+                      onTapIndex: onTapIndex,
+                      onTapLabel: onTapLabel,
+                    ),
                     TagsInput(tagButtons: tagButtons),
                     NumInput(numButtons: numButtons),
                     EditButtonsForTextContainer(buttons: editButtons),
@@ -146,5 +177,3 @@ class _OrderDialogState extends State<OrderDialog> {
     );
   }
 }
-
-
