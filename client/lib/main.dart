@@ -62,20 +62,20 @@ class OrderSystem extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: appTheme,
-      home: (login == true) ? const HomePage() : const DeactivateHomePage(),
+      home: (login == true) ? const Home() : const HomeDeactivate(),
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/home_deactivate':
             return PageTransition(
-                child: const DeactivateHomePage(),
+                child: const HomeDeactivate(),
                 type: PageTransitionType.scale,
                 duration: const Duration(milliseconds: 200),
                 alignment: Alignment.center);
           case '/home_activate':
             return PageTransition(
-                child: const HomePage(),
+                child: const Home(),
                 type: PageTransitionType.scale,
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 200),
                 alignment: Alignment.center);
           case '/login':
             return PageTransition(

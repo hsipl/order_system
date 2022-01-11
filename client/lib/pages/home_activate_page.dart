@@ -1,27 +1,19 @@
-import 'package:client/services/preference_operation.dart';
 import 'package:client/widget/checkout_column.dart';
 import 'package:client/widget/home_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widget/navigation_drawer.dart';
 import 'package:client/widget/cards_column.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Home> createState() => _HomeState();
 }
 
-class _HomePageState extends State<HomePage> {
-  String title = '';
-
+class _HomeState extends State<Home> {
   @override
   void initState() {
-    getStoreInfoSharedPrefs().then((value) {
-      setState(() {
-        title = value!['name'];
-      });
-    });
     super.initState();
   }
 
@@ -29,17 +21,17 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
+        title: const Text('Home'),
         actions: homeActions(),
       ),
       drawer: const ActivateDrawer(),
-      body: const ActivateHomePage(),
+      body: const ActivateHome(),
     );
   }
 }
 
-class ActivateHomePage extends StatelessWidget {
-  const ActivateHomePage({
+class ActivateHome extends StatelessWidget {
+  const ActivateHome({
     Key? key,
   }) : super(key: key);
 
@@ -49,19 +41,15 @@ class ActivateHomePage extends StatelessWidget {
       children: const [
         CardsColumn(
           type: '雞肉類',
-          category: 0,
         ),
         CardsColumn(
           type: '加工類',
-          category: 1,
         ),
         CardsColumn(
           type: '蔬菜類',
-          category: 2,
         ),
         CardsColumn(
           type: '其他',
-          category: 3,
         ),
         Padding(
           padding: EdgeInsets.fromLTRB(0, 2, 0, 2),

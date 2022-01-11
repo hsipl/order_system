@@ -1,54 +1,29 @@
-import 'package:client/services/preference_operation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:client/services/decorations.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'product_card.dart';
 
 class CardsColumn extends StatefulWidget {
-  const CardsColumn({Key? key, required this.type, required this.category})
-      : super(key: key);
+  const CardsColumn({Key? key, required this.type}) : super(key: key);
   final String type;
-  final int category;
 
   @override
   _CardsColumnState createState() => _CardsColumnState();
 }
 
 class _CardsColumnState extends State<CardsColumn> {
-  List<dynamic>? product;
-  List<Widget> cards = [];
-
-  @override
-  void initState() {
-    getProductSharedPrefs().then((value) {
-      product = value!;
-
-      setState(() {
-        cards = List.generate(product!.length, (i) {
-          if (product![i]['category'] == widget.category) {
-            List<String> tags = [];
-            for (final tag in product![i]['tags']) {
-              tags.add(tag['tag']);
-            }
-            return ProductCard(
-                img:
-                    'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a',
-                info: tags,
-                product: product![i]['name'].toString(),
-                price: product![i]['price'].toString() + '元');
-          } else {
-            return Container();
-          }
-        });
-      });
-    });
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final _controller = ScrollController();
+
+    List<Widget> cards = List.generate(
+        20,
+        (i) => ProductCard(
+            img: Icons.ac_unit,
+            info: 'info',
+            product: widget.type + " $i",
+            price: 'price'));
 
     return Expanded(
       child: Ink(

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 const kConfirmButtonColor = Color(0xFF0E4DA4);
 const kCancelButtonColor = Color(0xFFE74C3C);
-const kInkColor = Color(0xFFEAEAEA);
+const fieldColor = Color(0xFFEAEAEA);
 
 const kBoxDecorationStyle = BoxDecoration(
-  color: kInkColor,
+  color: fieldColor,
   boxShadow: [
     BoxShadow(
       color: Colors.black12,
