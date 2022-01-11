@@ -1,15 +1,8 @@
 import 'package:client/services/decorations.dart';
-import 'package:client/widget/styled_buttons.dart';
-import 'package:client/widget/widget_for_order_dialog/action_row.dart';
-import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
-import 'package:client/widget/widget_for_order_dialog/num_input.dart';
-import 'package:client/widget/widget_for_order_dialog/tag_input.dart';
+import 'package:client/widget/styling_buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'widget_for_order_dialog/label_text_container.dart';
-import 'widget_for_order_dialog/amount_row.dart';
-import 'widget_for_order_dialog/filter_image.dart';
-import 'widget_for_order_dialog/product_info.dart';
+import 'package:flutter/services.dart';
 
 class OrderDialog extends StatefulWidget {
   const OrderDialog(
@@ -20,89 +13,39 @@ class OrderDialog extends StatefulWidget {
       required this.info})
       : super(key: key);
   final String product;
-  final List<String> info;
+  final String info;
   final String price;
-  final String img;
+  final IconData img;
 
   @override
   _OrderDialogState createState() => _OrderDialogState();
 }
 
 class _OrderDialogState extends State<OrderDialog> {
-  List<Widget> numButtons = [];
-  List<Widget> tagButtons = [];
-  List<Widget> editButtons = [];
-
-  @override
-  void initState() {
-    //TODO Refactor those ugly code
-    editButtons = [
-      ActionButton(
-          color: kConfirmButtonColor,
-          action: '輸入下列',
-          onPress: () {
-            setState(() {
-              if (labels.last.contains(RegExp(r'([*][0-9])'))) {
-                labels.add('');
-              } else {
-                labels.last = '';
-                const snackBar = SnackBar(
-                  content: Text('不符合規範，因此刪除'),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-            });
-          }),
-      ActionButton(
-          color: kCancelButtonColor,
-          action: '清除單行',
-          onPress: () {
-            setState(() {
-              (labels.length == 1)
-                  ? labels = ['']
-                  : labels.removeAt(labels.length - 1);
-            });
-          }),
-      const SizedBox(height: 48),
-      ActionButton(
-          color: kCancelButtonColor,
-          action: '清空所有',
-          onPress: () {
-            setState(() {
-              labels = [''];
-            });
-          }),
-    ];
-
-    numButtons = List.generate(
+  List<Widget> numButtons = List.generate(
       10,
-      (i) => ActionButton(
-        action: " $i",
-        color: primaryTextColor,
-        onPress: () {
-          setState(() {
-            labels[labels.length - 1] = labels[labels.length - 1] + "$i";
-          });
-        },
-      ),
-    );
-
-    tagButtons = List.generate(
-      widget.info.length,
-      (i) => ActionButton(
-        action: widget.info[i],
-        color: primaryTextColor,
-        onPress: () {
-          setState(() {
-            labels[labels.length - 1] = widget.info[i] + '*';
-          });
-        },
-      ),
-    );
-    super.initState();
-  }
-
-  List<String> labels = [''];
+      (i) => Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: ActionButton(
+              action: " $i",
+              color: primaryTextColor,
+              onPress: () {
+                print("num:$i");
+              },
+            ),
+          ));
+  List<Widget> tagButtons = List.generate(
+      10,
+      (i) => Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: ActionButton(
+              action: " tag $i",
+              color: primaryTextColor,
+              onPress: () {
+                print("tag:$i");
+              },
+            ),
+          ));
 
   @override
   Widget build(BuildContext context) {
@@ -114,30 +57,22 @@ class _OrderDialogState extends State<OrderDialog> {
           width: 900.0,
           child: Column(
             children: <Widget>[
-              Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    FilteredImage(
-                      image: widget.img,
-                    ),
-                    ProductInfo(widget: widget),
-                  ]),
+              Stack(children: [
+                const FilteredImage(
+                    image: AssetImage("assets/img/test_img.jpg")),
+                ProductInfo(widget: widget),
+              ]),
               const AmountRow(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    LabelTextContainer(labels: labels),
-                    TagsInput(tagButtons: tagButtons),
-                    NumInput(numButtons: numButtons),
-                    EditButtonsForTextContainer(buttons: editButtons),
-                  ],
-                ),
+              Row(
+                children: [
+                  const LabelTextContainer(),
+                  NumInput(numButtons: numButtons),
+                  SizedBox(
+                    width: 25,
+                  ),
+                  NumInput(numButtons: tagButtons),
+                ],
               ),
-              //TODO send values to ActionRow()
               const ActionRow(),
             ],
           ),
@@ -147,4 +82,212 @@ class _OrderDialogState extends State<OrderDialog> {
   }
 }
 
+class NumInput extends StatelessWidget {
+  const NumInput({
+    Key? key,
+    required this.numButtons,
+  }) : super(key: key);
 
+  final List<Widget> numButtons;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: numButtons.sublist(7),
+        ),
+        Row(
+          children: numButtons.sublist(4, 7),
+        ),
+        Row(
+          children: numButtons.sublist(1, 4),
+        ),
+        Row(
+          children: [numButtons[0]],
+        ),
+      ],
+    );
+  }
+}
+
+class ActionRow extends StatelessWidget {
+  const ActionRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+      child: Row(
+        children: [
+          ActionButton(
+            action: '確定',
+            color: kConfirmButtonColor,
+            onPress: () => Navigator.pop(context),
+          ),
+          Spacer(),
+          ActionButton(
+            action: '取消',
+            color: kCancelButtonColor,
+            onPress: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class AmountRow extends StatelessWidget {
+  const AmountRow({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ActionButton(
+            color: primaryTextColor,
+            action: '+',
+            onPress: () {},
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: primaryTextColor),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            width: 180,
+            height: 50,
+            child: TextField(
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+                hintText: "0",
+              ),
+              textAlign: TextAlign.center,
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+            ),
+          ),
+          const SizedBox(
+            width: 20,
+          ),
+          ActionButton(
+            color: primaryTextColor,
+            action: '-',
+            onPress: () {},
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class FilteredImage extends StatelessWidget {
+  const FilteredImage({
+    Key? key,
+    required this.image,
+  }) : super(key: key);
+
+  final AssetImage image;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColorFiltered(
+      colorFilter: const ColorFilter.mode(
+        Colors.grey,
+        BlendMode.modulate,
+      ),
+      child: Container(
+        height: 200,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+          image: DecorationImage(
+            image: image,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProductInfo extends StatelessWidget {
+  const ProductInfo({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final OrderDialog widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(30, 30, 0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                widget.product,
+                style: const TextStyle(color: Colors.white, fontSize: 30),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                widget.price,
+                style: const TextStyle(color: Colors.white, fontSize: 30),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                widget.info,
+                style: const TextStyle(color: Colors.white, fontSize: 30),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class LabelTextContainer extends StatelessWidget {
+  const LabelTextContainer({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: SizedBox(
+        height: 200,
+        width: 350,
+        child: InputDecorator(
+          expands: true,
+          decoration: InputDecoration(
+            labelText: '客製化選項',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+          ),
+          child: const Text('沙小拉'),
+        ),
+      ),
+    );
+  }
+}

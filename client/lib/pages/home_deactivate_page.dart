@@ -2,8 +2,8 @@ import 'package:client/widget/home_actions.dart';
 import 'package:client/widget/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 
-class DeactivateHomePage extends StatelessWidget {
-  const DeactivateHomePage({Key? key}) : super(key: key);
+class HomeDeactivate extends StatelessWidget {
+  const HomeDeactivate({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
