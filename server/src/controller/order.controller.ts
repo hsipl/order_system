@@ -76,15 +76,12 @@ class OrederController {
             if (!productData) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
             }
+            /** 新增orderProduct */
+            const newOrderProduct = await this.orderProductController.create(products, productData);
             /** order 新增的 param */
-            const param: IOrderCreateParams = { status, storeId, pay };
+            const param: IOrderCreateParams = { status, storeId, pay, orderProducts: newOrderProduct };
             const newOrder = await this.service.create(param);
-            let orderProductData: IOrderProductCreateParams[] = [];
-            if (!newOrder) {
-                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError));
-            }
-            const newOrderProduct = await this.orderProductController.create(products, newOrder, productData);
-            res.status(200).json({ result: newOrderProduct });
+            res.status(200).json({ result: true });
         } catch (e) {
             console.log("create order db error: ", e);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError))
@@ -98,12 +95,14 @@ class OrederController {
         if (!checkforeignKeyExit) {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
         }
-
-
-        // const order = await this.service.getById(id);
-        // if (!order) {
-        //     return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
-        // }
+        const order = await this.service.getById(id);
+        if (!order) {
+            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
+        }
+        order.pay = pay;
+        order.status = status;
+        order.storeId = storeId;
+        // console.log(order);
         // const orderProducts = await this.orderProductController.getByIds(order.id);
         // console.log(orderProducts);
         // console.log('---------');

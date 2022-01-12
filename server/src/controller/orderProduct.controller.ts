@@ -20,25 +20,25 @@ class OrderProductController {
      * @param order 新增 order 成功的回傳數值
      * @param productData products 關聯的 product 資料
      */
-    async create(products: IOrderProductParam[], order: Order, productData: Product[]): Promise<boolean> {
+    async create(products: IOrderProductParam[],  productData: Product[]): Promise<OrderProduct[] | undefined> {
         try {
             const params: IOrderProductCreateParams[] = [];
             await products.forEach(p => {
                 const product = productData.find(pd => pd.id == p.id);
                 if (product) {
                     const description: string = p.description;
-                    const orderId: Order = order;
+                    // const orderId: Order = order;
                     const price: number = product.price;
                     const name: string = product.name;
-                    const orderProduct: IOrderProductCreateParams = { description, orderId, price, name };
+                    const orderProduct: IOrderProductCreateParams = { description,  price, name };
                     params.push(orderProduct)
                 }
             });
             const newOrderProduct = await this.service.create(params);
-            return true;
+            return newOrderProduct;
         } catch (e) {
             console.log('create order product db error.')
-            return false;
+            return undefined;
         }
 
 

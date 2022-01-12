@@ -8,7 +8,7 @@ interface IOrderProductParams {
 }
 
 export interface IOrderProductCreateParams extends IOrderProductParams {
-    orderId: Order;
+    // orderId: Order;
     description: string;
     name: string;
     price: number;

@@ -23,7 +23,7 @@ export class Order extends BaseEntity {
     @JoinColumn({ name: "store_id" })
     storeId: number;
 
-    @OneToMany(() => OrderProduct, orderProduct => orderProduct.orderId)
+    @OneToMany(() => OrderProduct, orderProduct => orderProduct.orderId, { cascade: true })
     orderProducts: OrderProduct[];
 
     @Column({

@@ -18,6 +18,7 @@ export class OrderProductService {
             Object.assign(orderProduct, p);
             paramsData.push(orderProduct);
         })
-        return await this.repository.create(paramsData);
+        // return await this.repository.create(paramsData);
+        return paramsData;
     }
 }

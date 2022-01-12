@@ -37,6 +37,7 @@ export class OrderService {
     public async update(params: IOrderCreateParams): Promise<UpdateResult | undefined> {
         const order = new Order();
         Object.assign(order, params);
+        console.log(order);
         return await this.repository.update(order);
     }
 
