@@ -11,7 +11,19 @@ export class OrderProductRepository {
         });
     }
 
+    async getRelation(order: Order): Promise<OrderProduct[]> {
+        return await OrderProduct.find({
+            orderId: order
+        });
+    }
+
     async create(o: OrderProduct[]): Promise<OrderProduct[]> {
         return await OrderProduct.save(o);
+    }
+
+    async delete(id: number[]): Promise<Boolean> {
+        const deleteRes = await OrderProduct.delete(id);
+        return deleteRes ? true : false;
+
     }
 }

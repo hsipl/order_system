@@ -4,7 +4,7 @@ import { ProductService } from "../services/product.service";
 import { StoreService } from "../services/store.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
-import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams } from "../interafaces/order.interface";
+import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderUpdateParams } from "../interafaces/order.interface";
 import { IOrderProductCreateParams } from "../interafaces/orderProduct.interafaces";
 import OrderProductController from "./orderProduct.controller";
 
@@ -69,7 +69,7 @@ class OrederController {
             if (!checkforeignKeyExit) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
             }
-            const productsId = products.map(item => item['id']);
+            const productsId = products.map(item => item['productId']);
             const descriptions = products.map(item => item["description"]);
             // 確保 product 是否存在
             const productData = await this.productService.getByIds(productsId);
@@ -99,10 +99,35 @@ class OrederController {
         if (!order) {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
         }
+        const oldOrderProduct = await this.orderProductController.getRelation(order);
+
         order.pay = pay;
         order.status = status;
         order.storeId = storeId;
-        // console.log(order);
+        const productsId = products.map(item => item['productId']);
+        const productData = await this.productService.getByIds(productsId);
+        if (!productData) {
+            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
+        }
+        await this.orderProductController.update(oldOrderProduct, products, productData)
+        // 交集
+        console.log()
+        // console.log(oldOrderProduct);
+        // if (oldOrderProduct.length >= 1) {
+        //     for (let i = 0; i < oldOrderProduct.length; i++) {
+        //         const exist = productData.find(p => p.id === oldOrderProduct[i].id);
+        //         if (!exist) {
+        //             await this.orderProductController.delete(oldOrderProduct[i].id);
+        //         }
+        //     }
+        // }
+
+        // const newOrderProduct = await this.orderProductController.create(products, productData);
+        // // console.log(newOrderProduct);
+        // const param: IOrderUpdateParams = { id, status, storeId, pay, orderProducts: newOrderProduct };
+        // const newOrder = await this.service.update(param);
+
+
         // const orderProducts = await this.orderProductController.getByIds(order.id);
         // console.log(orderProducts);
         // console.log('---------');

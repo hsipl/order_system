@@ -16,11 +16,11 @@ interface orderProduct {
     description?: string;
 }
 export interface IOrderProductParam {
-    id: number;
+    productId: number;
     description: string;
 }
 
-export interface IOrderRequestParams extends IOrderParams{
+export interface IOrderRequestParams extends IOrderParams {
     status: number;
     storeId: number;
     pay: number;
@@ -28,6 +28,12 @@ export interface IOrderRequestParams extends IOrderParams{
 }
 
 export interface IOrderCreateParams extends IOrderParams {
+    storeId: number;
+    pay: number;
+    status: number;
+}
+export interface IOrderUpdateParams extends IOrderParams {
+    id: number;
     storeId: number;
     pay: number;
     status: number;

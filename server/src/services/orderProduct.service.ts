@@ -11,6 +11,10 @@ export class OrderProductService {
         return await this.repository.getById(id);
     }
 
+    public async getRelation(order: Order): Promise<OrderProduct[]> {
+        return await this.repository.getRelation(order);
+    }
+
     public async create(params: IOrderProductCreateParams[]): Promise<OrderProduct[]> {
         const paramsData: OrderProduct[] = [];
         params.forEach(p => {
@@ -20,5 +24,9 @@ export class OrderProductService {
         })
         // return await this.repository.create(paramsData);
         return paramsData;
+    }
+
+    public async delete(id: number[]): Promise<Boolean> {
+        return await this.repository.delete(id);
     }
 }

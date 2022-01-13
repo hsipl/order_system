@@ -2,7 +2,7 @@ import { UpdateResult } from "typeorm";
 import { Order } from "../entity/order";
 import { OrderProduct } from "../entity/orderProuct";
 import { Product } from "../entity/product";
-import { IOrderCreateParams, IOrderDeleteParams } from "../interafaces/order.interface";
+import { IOrderCreateParams, IOrderDeleteParams, IOrderUpdateParams } from "../interafaces/order.interface";
 import { OrderRepository } from "../repository/order.repository";
 
 export class OrderService {
@@ -34,7 +34,7 @@ export class OrderService {
         return await this.repository.create(order);
     }
 
-    public async update(params: IOrderCreateParams): Promise<UpdateResult | undefined> {
+    public async update(params: IOrderUpdateParams): Promise<UpdateResult | undefined> {
         const order = new Order();
         Object.assign(order, params);
         console.log(order);
@@ -46,7 +46,7 @@ export class OrderService {
         const order = await Order.findOne({ id });
         if (order) {
             order.status = 1;
-            return await this.repository.update(order);
+            return await this.repository.delete(order);
         }
     }
 }

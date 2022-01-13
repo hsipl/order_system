@@ -31,8 +31,10 @@ export class OrderRepository {
     async create(o: Order): Promise<Order> {
         return await Order.save(o);
     }
-
     async update(o: Order): Promise<UpdateResult | undefined> {
+        return await Order.update(o.id,o);
+    }
+    async delete(o: Order): Promise<UpdateResult | undefined> {
         return await Order.update(o.id, o);
     }
 }
