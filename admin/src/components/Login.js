@@ -59,7 +59,7 @@ const Login = () => {
     withCredentials: true,
   }
 
-  const url = "http://140.125.45.154:8000/api/user/login"
+  const url = "http://140.125.45.167:8000/api/user/login"
 
   async function handleSubmit(e) {
     e.preventDefault();

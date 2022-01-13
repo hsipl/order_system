@@ -1,37 +1,51 @@
 import React, { useState } from "react";
 import axios from "axios";
-import styledC from "styled-components";
 import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import { CardMedia, Container, Paper, TextField } from "@mui/material";
+import {
+  Breadcrumbs,
+  CardMedia,
+  Container,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+  Link,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+  Tooltip,
+  IconButton,
+} from "@mui/material";
 import { Box } from "@mui/system";
-import IconButton from "@mui/material/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import Home from "@material-ui/icons/Home";
-import ExitToApp from "@material-ui/icons/ExitToApp";
+import {
+  AccountCircle,
+  Home,
+  ExitToApp,
+} from "@material-ui/icons";
+import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 
 const TopNav = styled(Paper)({
-  position: "fixed",
-  top: "0px",
-  backgroundColor: "rgb(208, 216, 229, 0.83)",
-  display: "flex",
-  justifyContent: "space-between",
+  backgroundColor: "rgb(208, 216, 229)",
+  display: "grid",
+  gridTemplateColumns: " 10rem auto 15rem",
+  gridTemplateRows: "6rem",
   width: "100%",
+  position: "fixed",
+});
+
+const LogoButton = styled(CardMedia)({
+  position: "relative",
   height: "6rem",
-  left: "0px",
-  paddingLeft: "1rem",
 });
 
 const TopList = styled(Box)({
+  gridColumn: "3 / auto",
   padding: "0.5rem 2rem",
   alignSelf: "center",
-  minWidth:'12rem',
+  minWidth: "12rem",
 });
 
 const FormContent = styled(DialogContent)({
@@ -48,53 +62,91 @@ const DialogText = styled(DialogContentText)({
   margin: "1rem 0 0 1.5rem",
 });
 
-const UploadImg = styledC.input`
-  ::-webkit-file-upload-button {
-    margin:1rem 1rem 0 0;
-    border: 0px;
-    line-height: 1.75;
-    padding: 6px 16px;
-    border-radius: 4px;
-    color: white;
-    background-color: rgb(25, 118, 210);
-  }
-`;
+export const UploadImg = styled("input")({
+  "::-webkit-file-upload-button": {
+    margin: "1rem 1rem 0 0",
+    border: "0px",
+    lineHeight: "1.75",
+    padding: "6px 16px",
+    borderRadius: "4px",
+    color: "white",
+    backgroundColor: "rgb(25, 118, 210)",
+  },
+});
 
 const LeftNav = styled(Paper)({
   position: "fixed",
+  display: "grid",
+  gridTemplateRows: "5rem 5rem 5rem 5rem 5rem auto",
   top: "6rem",
-
   width: "10rem",
   height: "100%",
-  overflow: "auto",
-  backgroundColor: "rgb(208, 216, 229, 0.83)",
-});
-
-const LeftList = styled(Box)({
-  display: "grid",
-  margin: "2rem",
-  justifyContent:'center',
-  minWidth:'5rem'
+  backgroundColor: "rgb(208, 216, 229)",
 });
 
 const LeftButton = styled(Button)({
-  marginBottom: "1.5rem",
+  margin: "1.25rem 1.5rem",
   color: "black",
   fontSize: 16,
-  padding: "6px 12px",
   border: "1px solid",
-  lineHeight: 1.5,
   backgroundColor: "#FFFFFF",
   borderColor: "#7B7B7B",
-  textAlign:'center',
-  borderRadius: '10px',
+  textAlign: "center",
+  borderRadius: "10px",
   "&:hover": {
     backgroundColor: "#9fa8da",
     borderColor: "#7986cb",
   },
 });
 
-const Navbar = (props) => {
+export const Buttons = [
+  { name: "商品管理", id: "BtnProduct", url: "/product" },
+  { name: "員工管理", id: "BtnEmployee", url: "/employee" },
+  { name: "店鋪管理", id: "BtnShop", url: "/shop" },
+  { name: "財務報表", id: "BtnReport", url: "/report" },
+  { name: "交班紀錄", id: "BtnHandover", url: "/handover" },
+];
+
+
+export const BodyContainer = styled(Paper)({
+  display: "grid",
+  gridTemplateRows: "6rem auto",
+  gridTemplateColumns: "10rem auto",
+  height: "100vh",
+  fontSize: "20px",
+});
+
+export const Content = styled(Paper)({
+  fontSize: "20px",
+  backgroundColor: "#efebe9",
+  gridColumn: "2 / auto",
+  gridRow: "2 / auto",
+  padding: "3rem",
+  display: "grid",
+  gridTemplateRows: "2rem 10rem auto",
+  gridRowGap: "1rem",
+});
+
+export const Breadcrumb = (props) => {
+  return (
+    <Stack direction="row" alignItems="center" spacing={2}>
+      <Breadcrumbs
+        separator={<NavigateNextIcon fontSize="small" />}
+        aria-label="breadcrumb"
+      >
+        <Link underline="hover" key="1" color="inherit" href="/">
+          首頁
+        </Link>
+        <Typography underline="hover" key="2" color="text.primary">
+          {props.name}
+        </Typography>
+      </Breadcrumbs>
+    </Stack>
+  );
+};
+
+
+export const Navbar = (props) => {
   const [open, setOpen] = React.useState(false);
   const [image, setImage] = useState(null);
 
@@ -120,14 +172,14 @@ const Navbar = (props) => {
       "Content-Type": "application/json",
     },
     withCredentials: true,
-  }
+  };
 
-  const url ="http://140.125.45.167:8000/api/user/logout"
+  const url = "http://140.125.45.167:8000/api/user/logout";
 
   const handleLogOut = () => {
     localStorage.clear();
     axios
-      .get(url,config )
+      .get(url, config)
       .then((result) => {
         console.log(result.data.msg);
       })
@@ -139,15 +191,17 @@ const Navbar = (props) => {
   return (
     <>
       <TopNav square elevation={3}>
-        <CardMedia
-          component="img"
-          sx={{ width: "10rem" }}
-          image="https://www.moedict.tw/%E9%B9%BD%E9%85%A5%E9%9B%9E.png?font=wt064"
-        />
+        <Link href="/">
+          <LogoButton
+            component="img"
+            sx={{ width: "10rem" }}
+            image="https://www.moedict.tw/%E9%B9%BD%E9%85%A5%E9%9B%9E.png?font=wt064"
+          />
+        </Link>
         <TopList>
           <Tooltip title="設定" onClick={handleClickOpen}>
-            <IconButton size="large" color="inherit" >
-              <AccountCircle fontSize="large"/>
+            <IconButton size="large" color="inherit">
+              <AccountCircle fontSize="large" />
             </IconButton>
           </Tooltip>
           <Dialog
@@ -197,41 +251,28 @@ const Navbar = (props) => {
               <Button onClick={handleClose}>確認</Button>
             </DialogActions>
           </Dialog>
-          <Tooltip title="首頁" href='/'>
-            <IconButton size="large" color="inherit" > 
+          <Tooltip title="首頁" href="/">
+            <IconButton size="large" color="inherit">
               <Home fontSize="large" />
             </IconButton>
           </Tooltip>
 
-          <Tooltip title="登出" onClick={handleLogOut} href='/login'>
-            <IconButton size="large" color="inherit" >
+          <Tooltip title="登出" onClick={handleLogOut} href="/login">
+            <IconButton size="large" color="inherit">
               <ExitToApp fontSize="large" />
             </IconButton>
           </Tooltip>
         </TopList>
       </TopNav>
 
-      <LeftNav square elevation={3}>
-        <LeftList>
-          <LeftButton id="BtnProduct"  href="/product">
-            商品管理
+      <LeftNav square elevation={0}>
+        {Buttons.map((btn) => (
+          <LeftButton id={btn.id} href={btn.url}>
+            {btn.name}
           </LeftButton>
-          <LeftButton variant="contained" href="/order">
-            員工管理
-          </LeftButton>
-          <LeftButton variant="contained" href="/shop">
-            分店資訊
-          </LeftButton>
-          <LeftButton variant="contained" href="/report">
-            財務報表
-          </LeftButton>
-          <LeftButton variant="contained" href="/handover">
-            交班紀錄
-          </LeftButton>
-        </LeftList>
+        ))}
       </LeftNav>
     </>
   );
 };
 
-export default Navbar;
