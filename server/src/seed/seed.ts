@@ -3,8 +3,13 @@ import { User } from '../entity/user';
 import { Store } from '../entity/store';
 import { encrypt } from '../utils/md5';
 import { Tag } from '../entity/tag';
+import { Product } from '../entity/product';
 const genData = async () => {
   const mode = process.env.MODE ? process.env.MODE : 'default';
+  const productDeleteName = [];
+  for (let i = 0; i < 32; i++) {
+    productDeleteName.push("測資" + i.toString())
+  }
   const defaultConnection = await createConnection(mode);
   await defaultConnection
     .createQueryBuilder()
@@ -12,19 +17,28 @@ const genData = async () => {
     .from(User)
     .where('name=:name', { name: 'hsipl' })
     .execute();
-  await defaultConnection
-    .createQueryBuilder()
-    .delete()
-    .from(Store)
-    .where('name=:name', { name: 'kcy main store' })
-    .execute();
+  try {
+    await defaultConnection.query("TRUNCATE TABLE product_tag");
+  } catch (e) { console.log(e) }
   await defaultConnection
     .createQueryBuilder()
     .delete()
     .from(Tag)
     .where('tag=:tag', { tag: '胡椒粉' })
     .execute();
+  await defaultConnection
+    .createQueryBuilder()
+    .delete()
+    .from(Product)
+    .where('name IN (:name)', { name: productDeleteName })
+    .execute();
 
+  await defaultConnection
+    .createQueryBuilder()
+    .delete()
+    .from(Store)
+    .where('name=:name', { name: 'kcy main store' })
+    .execute();
   console.log('START CREATEING MAIN STORE...');
 
   const store = await defaultConnection
@@ -40,7 +54,6 @@ const genData = async () => {
       },
     ])
     .execute();
-
   console.log('CREATE MAIN STORE SUCCESS...');
   console.log('START CREATEING SUPERUSER...');
 
@@ -63,7 +76,7 @@ const genData = async () => {
 
   console.log('CREATE SUPER USER SUCCESS...');
   console.log('START CREATE TAG SUCCESS...');
-  await defaultConnection
+  const tag = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('tag')
@@ -74,6 +87,31 @@ const genData = async () => {
       }
     ]).execute();
   console.log('CREATE TAG SUCCESS...');
+  console.log('START PRODUCT TAG SUCCESS...');
+  const productData = []
+  for (let i = 0; i < 32; i++) {
+    let product = new Product();
+    product.name = "測資" + i.toString();
+    product.price = 50;
+    product.category = i % 4;
+    product.storeId = store.identifiers[0].id;
+    product.status = 0
+    productData.push(product);
+  }
+  const product = await defaultConnection
+    .createQueryBuilder()
+    .insert()
+    .into('product')
+    .values(productData)
+    .execute();
+  console.log('CREATE PRODUCT SUCCESS...');
+  let productIds = product.identifiers.map(a => a.id);
+  let values = '';
+  for (let i = 0; i < productIds.length; i++) {
+    values += "(\'" + productIds[i] + "\',\'" + tag.identifiers[0].id + "\'),"
+  }
+  const quertString = "INSERT INTO product_tag (prodcut_id,tag_id) VALUES " + values.slice(0, -1);
+  await defaultConnection.query(quertString)
 
   await defaultConnection.close();
 };

@@ -15,6 +15,11 @@ export class TagService {
         return tag;
     }
 
+    async getByIds(id: number[]): Promise<Tag[] | undefined> {
+        const tag = await this.repository.getByIds(id);
+        return tag;
+    }
+
     async checkExistByTag(name: string): Promise<boolean> {
         const isExist = await this.repository.getByTag(name);
         return isExist ? true : false;
