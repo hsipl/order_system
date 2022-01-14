@@ -1,6 +1,9 @@
+import { styled } from "@mui/material/styles";
+import { Paper } from "@mui/material";
+
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
+import styledC from "styled-components";
 
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
@@ -13,7 +16,6 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -29,15 +31,17 @@ import Box from "@mui/material/Box";
 import SearchIcon from "@material-ui/icons/Search";
 import Navbar from "../components/Navbar";
 
-const Shopcon = styled.div`
-  position: relative;
-  top: 8rem;
-  left: 13rem;
-  max-width: 87%;
-  font-size: 20px;
-`;
+const ShopContainer = styled(Box)({
+  position: "absolute",
+  top: "6rem",
+  left: "10rem",
+  right: "0px",
+  borderRadius: "2px",
+  padding: "3rem",
+  fontSize: "20px",
+});
 
-const AddForm = styled.form`
+const AddForm = styledC.form`
   height: 400px;
 `;
 
@@ -45,7 +49,12 @@ const breadcrumbs = [
   <Link underline="hover" key="1" color="inherit" href="/">
     首頁
   </Link>,
-  <Typography underline="hover" key="2" color="text.primary" href="/handover">
+  <Typography
+    underline="hover"
+    key="2"
+    color="text.primary"
+    style={{ fontWeight: "bold" }}
+  >
     分店管理
   </Typography>,
 ];
@@ -95,7 +104,7 @@ const Shop = () => {
   const handleEditClose = () => {
     setOpenEdit(false);
   };
-  const url = "http://localhost:8000/api/store";
+  const url = "http://140.125.45.167:8000/api/store";
 
   let config = {
     headers: {
@@ -146,53 +155,48 @@ const Shop = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("name", shopInfo.name);
     formData.append("type", shopInfo.type);
     formData.append("status", shopInfo.status);
     formData.append("image", shopInfo.image);
 
-    axios
-      .post(url, formData, config)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-    window.location.reload();
+    try {
+      await axios.post(url, formData, config);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleEditSubmit = () => {
+  const handleEditSubmit = async () => {
     const formData = new FormData();
     formData.append("name", shopInfo.name);
     formData.append("type", shopInfo.type);
     formData.append("status", shopInfo.status);
     formData.append("image", shopInfo.image);
-
-    axios
-      .put(url + "/" + currentId, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        withCredentials: true,
-      })
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-    window.location.reload();
+    try {
+      await axios.put(url + "/" + currentId, formData, config);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  function handleDelete() {
-    axios
-      .delete(url + "/" + currentId, config)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-    window.location.reload();
-  }
+  const handleDelete = async () => {
+    try {
+      await axios.delete(url + "/" + currentId, config);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
       <Navbar />
-      <Shopcon id="shop">
+      <ShopContainer id="shop">
         <Stack spacing={2}>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
@@ -201,7 +205,6 @@ const Shop = () => {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
-        {/* Dialog1*/}
         <Dialog
           open={open}
           onClose={handleClose}
@@ -211,7 +214,9 @@ const Shop = () => {
           fullWidth="true"
           maxWidth="xs"
         >
-          <DialogTitle id="alert-dialog-title" style={{ textAlign: "center" }}>{"新增店鋪資訊"}</DialogTitle>
+          <DialogTitle id="alert-dialog-title" style={{ textAlign: "center" }}>
+            {"新增店鋪資訊"}
+          </DialogTitle>
 
           <AddForm onSubmit={handleSubmit}>
             <DialogContent>
@@ -414,7 +419,9 @@ const Shop = () => {
                     fullWidth="true"
                     maxWidth="xs"
                   >
-                    <DialogTitle id="edit" style={{ textAlign: "center" }}>{"修改店鋪資訊"}</DialogTitle>
+                    <DialogTitle id="edit" style={{ textAlign: "center" }}>
+                      {"修改店鋪資訊"}
+                    </DialogTitle>
 
                     <AddForm>
                       <DialogContent>
@@ -469,7 +476,7 @@ const Shop = () => {
             })}
           </Table>
         </TableContainer>
-      </Shopcon>
+      </ShopContainer>
     </>
   );
 };

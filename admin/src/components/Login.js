@@ -46,8 +46,6 @@ const Login = () => {
   const [userLogin, setUserLogin] = useState(false);
   const [errMes, setErrMes] = useState(false);
 
-
-
   useEffect(() => {
     if (localStorage.getItem("user-info")) {
       history.push("/");
@@ -63,53 +61,35 @@ const Login = () => {
     setPassword(e.target.value);
     console.log(e);
   }
+  const url = "http://140.125.45.167:8000/api/user/login";
 
-  async function login() {
-    console.warn(username, password);
-    let item = { username, password };
-    // history.push("/");
-  }
-
-  const url = "http://localhost:8000/api/user/login"
-
-  let config ={
-    
-    headers:{
-      'Accept' : 'application/json',
-      'Content-Type': "application/json" ,
+  let config = {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
     },
-    withCredentials: true
-  }
-
+    withCredentials: true,
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-   
     axios
-      .post(
-        url,
-        {username,password},
-        config
-      )
+      .post(url, { username, password }, config)
       .then((result) => {
         console.log(result.data.msg);
-       
         setUserLogin(true);
-        history.push("/")
-        // console.log(result.headers['set-cookie']);
+        history.push("/");
         console.log(result.headers);
       })
       .catch((err) => {
         console.log(err);
         setUserLogin(false);
         setErrMes(true);
-        // history.push("/")//temporary
       });
 
     localStorage.setItem("name", JSON.stringify(username));
     localStorage.setItem("password", JSON.stringify(password));
-
   }
 
   return (
@@ -132,10 +112,9 @@ const Login = () => {
           required
         ></Textbox>
         <br />
-        <Textbox type="submit" value="登錄" onClick={login}></Textbox>
+        <Textbox type="submit" value="登錄"></Textbox>
         {errMes == true && <Wrong>帳號或密碼錯誤</Wrong>}
         <br />
-        <Register href="/">Don't have an account? Sign Up</Register>
       </Form>
     </Loginform>
   );
