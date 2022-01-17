@@ -4,8 +4,7 @@ import { ProductService } from "../services/product.service";
 import { StoreService } from "../services/store.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
-import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderRespone, IOrderUpdateParams } from "../interafaces/order.interface";
-import { IOrderProductCreateParams } from "../interafaces/orderProduct.interafaces";
+import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderRespone} from "../interafaces/order.interface";
 import OrderProductController from "./orderProduct.controller";
 
 class OrederController {
@@ -95,7 +94,7 @@ class OrederController {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
             }
 
-            /** order 新增的 param */
+            /** order 新增*/
             const param: IOrderCreateParams = { status, storeId, pay };
             const newOrder = await this.service.create(param);
             /** 新增orderProduct */
@@ -129,7 +128,6 @@ class OrederController {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
         }
         const orderProductRes = await this.orderProductController.update(oldOrderProduct, products, productData, order.id)
-        // 交集
         const orderRes = await this.service.update(order);
         if (orderRes === undefined) {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError));

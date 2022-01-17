@@ -25,7 +25,6 @@ export class OrderProductRepository {
     }
 
     async create(o: OrderProduct[]): Promise<OrderProduct[]> {
-        console.log(o);
         return await OrderProduct.save(o);
     }
 

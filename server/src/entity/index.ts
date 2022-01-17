@@ -13,6 +13,6 @@ export default function getConn(c: Connection) {
   Tag.useConnection(c);
   Handover.useConnection(c);
   Product.useConnection(c);
-  Order.useConnection(c)
-  OrderProduct.useConnection(c);
+  Order.useConnection(c);
+  OrderProduct.useConnection(c)
 }

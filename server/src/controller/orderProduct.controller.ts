@@ -61,46 +61,6 @@ class OrderProductController {
             const deleteRes = await this.delete(deleteId);
         }
         return await this.create(products, productData, orderId);
-        // const newOrderProduct = await this.create(products, productData);
-        // if (newOrderProduct) {
-        //     // 原本有的資料，要保存的
-        //     const deleteData = oldOrderProduct.filter(o => {
-        //         return newOrderProduct.some(n => {
-        //             return n.name !== o.name && n.price !== o.price && n.description !== o.description;
-        //         })
-        //     });
-        //     const deleteDataId = deleteData.map(item => item['id']);
-
-        //     console.log(deleteDataId);
-        //     const deleteRes = await this.delete([8]);
-        //     if (deleteRes) {
-        //         console.log('-------');
-        //         console.log(deleteRes);
-        //     }
-        //     // 原本有的資料，要保存的
-        //     const mixData = oldOrderProduct.filter(o => {
-        //         return newOrderProduct.some(n => {
-        //             return n.name === o.name && n.price === o.price && n.description === o.description;
-        //         })
-        //     });
-        //     //要新增的資料
-        //     const createData = newOrderProduct.filter(n => {
-        //         return oldOrderProduct.some(o => {
-        //             return n.name !== o.name && n.price !== o.price && n.description !== o.description;
-        //         })
-        //     })
-        //     const updateData = createData.concat(mixData);
-        //     // if (updateData.length < products.length) {
-        //     //     const upDataIndex = [];
-        //     //     products.forEach(p => {
-
-        //     //     });
-        //     // }
-        //     // console.log(updateData);
-
-        //     return updateData;
-        // }
-
     }
 
     async delete(id: number[]) {

@@ -21,10 +21,7 @@ export class Order extends BaseEntity {
     @ManyToOne(() => Store)
     @JoinColumn({ name: "store_id" })
     storeId: number;
-
-    // @OneToMany(() => OrderProduct, orderProduct => orderProduct.orderId, { cascade: true })
-    // orderProducts: OrderProduct[];
-
+    
     @Column({
         unsigned: true,
         type: "tinyint",
