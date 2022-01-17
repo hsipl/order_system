@@ -41,7 +41,13 @@ class OrederController {
             if (!order) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
             }
-            res.status(200).json(order);
+            const orderProduct = await this.orderProductController.getByIds(order.id);
+            const orders: IOrderRespone = { id: order.id, pay: order.pay, status: order.pay, orderProducts: [] };
+            if (orderProduct) {
+                const orderProducts = orderProduct.filter(op => op.orderId === order.id);
+                orders.orderProducts = orderProducts;
+            }
+            res.status(200).json(orders);
         } catch (e) {
             console.log("get db by order id error", e);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
