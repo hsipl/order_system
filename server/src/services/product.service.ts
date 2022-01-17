@@ -51,7 +51,6 @@ export class ProductService {
     public async update(params: IProductUpdateParams): Promise<UpdateResult | undefined> {
         const product = new Product();
         Object.assign(product, params);
-        // console.log(product);
         return await this.repository.update(product);
     }
 

@@ -12,7 +12,6 @@ import {
     OneToMany,
     JoinTable
 } from "typeorm";
-import { OrderProduct } from "./orderProuct";
 import { Store } from "./store";
 import { Tag } from "./tag";
 

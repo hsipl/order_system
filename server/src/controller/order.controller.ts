@@ -4,8 +4,7 @@ import { ProductService } from "../services/product.service";
 import { StoreService } from "../services/store.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
-import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderRespone, IOrderUpdateParams } from "../interafaces/order.interface";
-import { IOrderProductCreateParams } from "../interafaces/orderProduct.interafaces";
+import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderRespone} from "../interafaces/order.interface";
 import OrderProductController from "./orderProduct.controller";
 
 class OrederController {
