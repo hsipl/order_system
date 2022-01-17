@@ -95,7 +95,7 @@ class OrederController {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
             }
 
-            /** order 新增的 param */
+            /** order 新增*/
             const param: IOrderCreateParams = { status, storeId, pay };
             const newOrder = await this.service.create(param);
             /** 新增orderProduct */
@@ -129,7 +129,6 @@ class OrederController {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
         }
         const orderProductRes = await this.orderProductController.update(oldOrderProduct, products, productData, order.id)
-        // 交集
         const orderRes = await this.service.update(order);
         if (orderRes === undefined) {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError));
