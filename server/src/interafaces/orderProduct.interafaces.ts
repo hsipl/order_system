@@ -1,14 +1,14 @@
 import { Order } from "../entity/order";
 
 interface IOrderProductParams {
-    orderId?: Order;
+    orderId?: number;
     description?: string;
     name?: string;
     price?: number;
 }
 
 export interface IOrderProductCreateParams extends IOrderProductParams {
-    // orderId: Order;
+    orderId: number;
     description: string;
     name: string;
     price: number;

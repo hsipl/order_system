@@ -2,22 +2,30 @@ import { UpdateResult, Not, In } from "typeorm";
 import { Order } from "../entity/order";
 import { OrderProduct } from "../entity/orderProuct";
 
+const field: (keyof OrderProduct)[] = ["id", "name", "price", "description", "orderId"];
+
 export class OrderProductRepository {
+    async getAll(): Promise<OrderProduct[]> {
+        return await OrderProduct.find({ select: field });
+    }
+
     async getById(id: number): Promise<OrderProduct[]> {
         return await OrderProduct.find({
             where: {
                 orderId: id
-            }
+            },
+            select: field
         });
     }
 
-    async getRelation(order: Order): Promise<OrderProduct[]> {
+    async getRelation(orderId: number): Promise<OrderProduct[]> {
         return await OrderProduct.find({
-            orderId: order
+            orderId: orderId
         });
     }
 
     async create(o: OrderProduct[]): Promise<OrderProduct[]> {
+        console.log(o);
         return await OrderProduct.save(o);
     }
 

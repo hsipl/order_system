@@ -34,10 +34,7 @@ export class OrderService {
         return await this.repository.create(order);
     }
 
-    public async update(params: IOrderUpdateParams): Promise<UpdateResult | undefined> {
-        const order = new Order();
-        Object.assign(order, params);
-        console.log(order);
+    public async update(order: Order): Promise<UpdateResult | undefined> {
         return await this.repository.update(order);
     }
 

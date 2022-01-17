@@ -7,12 +7,16 @@ import { IOrderProductCreateParams } from "../interafaces/orderProduct.interafac
 export class OrderProductService {
     constructor(private readonly repository: OrderProductRepository) { }
 
+    public async getAll(): Promise<OrderProduct[]> {
+        return await this.repository.getAll();
+    }
+
     public async getById(id: number): Promise<OrderProduct[]> {
         return await this.repository.getById(id);
     }
 
-    public async getRelation(order: Order): Promise<OrderProduct[]> {
-        return await this.repository.getRelation(order);
+    public async getRelation(orderId: number): Promise<OrderProduct[]> {
+        return await this.repository.getRelation(orderId);
     }
 
     public async create(params: IOrderProductCreateParams[]): Promise<OrderProduct[]> {
@@ -22,8 +26,8 @@ export class OrderProductService {
             Object.assign(orderProduct, p);
             paramsData.push(orderProduct);
         })
-        // return await this.repository.create(paramsData);
-        return paramsData;
+        return await this.repository.create(paramsData);
+        // return paramsData;
     }
 
     public async delete(id: number[]): Promise<Boolean> {

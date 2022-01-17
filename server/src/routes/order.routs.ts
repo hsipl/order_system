@@ -29,8 +29,8 @@ export default class OrderRoute extends BasicRoute {
             new OrderProductController(new OrderProductService(new OrderProductRepository()))
         );
         this.router.get("/", auth.authUser.bind(auth), controller.getAll.bind(controller));
-        this.router.get("/:id", auth.authUser.bind(auth), controller.getById.bind(controller));
-        this.router.get("/:storeId", auth.authUser.bind(auth), controller.getByStoreId.bind(controller));
+        this.router.get("/store/:storeId", auth.authUser.bind(auth), controller.getByStoreId.bind(controller));
+        this.router.get("/:id", auth.authUser.bind(auth), controller.getById.bind(controller));        
         this.router.post("/", auth.authUser.bind(auth), validator.create(), controller.create.bind(controller));
         this.router.put("/:id", auth.authUser.bind(auth), validator.create(), controller.update.bind(controller));
         this.router.delete("/:id", auth.authUser.bind(auth), validator.delete(), controller.delete.bind(controller));

@@ -4,7 +4,7 @@ import { ProductService } from "../services/product.service";
 import { StoreService } from "../services/store.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
-import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderUpdateParams } from "../interafaces/order.interface";
+import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderRespone, IOrderUpdateParams } from "../interafaces/order.interface";
 import { IOrderProductCreateParams } from "../interafaces/orderProduct.interafaces";
 import OrderProductController from "./orderProduct.controller";
 
@@ -22,7 +22,13 @@ class OrederController {
 
     async getAll(req: Request, res: Response, next: NextFunction) {
         const order = await this.service.getAll();
-        res.status(200).json(order);
+        const orderProduct = await this.orderProductController.getAll();
+        const orders: IOrderRespone[] = [];
+        order.forEach(o => {
+            const orderProducts = orderProduct.filter(op => op.orderId === o.id);
+            orders.push({ id: o.id, pay: o.pay, status: o.pay, orderProducts: orderProducts })
+        });
+        res.status(200).json(orders);
     }
 
     async getById(req: Request, res: Response, next: NextFunction) {
@@ -43,16 +49,22 @@ class OrederController {
     }
 
     async getByStoreId(req: Request, res: Response, next: NextFunction) {
-        const storeId: number = parseInt(req.body.storeId);
+        const storeId: number = parseInt(req.params.storeId);
         if (!storeId) {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
         try {
             const order = await this.service.getByStoreId(storeId);
-            if (!order) {
+            const orderProduct = await this.orderProductController.getAll();
+            const orders: IOrderRespone[] = [];
+            order.forEach(o => {
+                const orderProducts = orderProduct.filter(op => op.orderId === o.id);
+                orders.push({ id: o.id, pay: o.pay, status: o.pay, orderProducts: orderProducts })
+            });
+            if (!orders) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
             }
-            res.status(200).json(order);
+            res.status(200).json(orders);
         } catch (e) {
             console.log("get db by store id error", e);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
@@ -76,11 +88,12 @@ class OrederController {
             if (!productData) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
             }
-            /** 新增orderProduct */
-            const newOrderProduct = await this.orderProductController.create(products, productData);
+
             /** order 新增的 param */
-            const param: IOrderCreateParams = { status, storeId, pay, orderProducts: newOrderProduct };
+            const param: IOrderCreateParams = { status, storeId, pay };
             const newOrder = await this.service.create(param);
+            /** 新增orderProduct */
+            const newOrderProduct = await this.orderProductController.create(products, productData, newOrder.id);
             res.status(200).json({ result: true });
         } catch (e) {
             console.log("create order db error: ", e);
@@ -100,45 +113,22 @@ class OrederController {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
         }
         const oldOrderProduct = await this.orderProductController.getRelation(order);
-
         order.pay = pay;
         order.status = status;
         order.storeId = storeId;
         const productsId = products.map(item => item['productId']);
         const productData = await this.productService.getByIds(productsId);
+
         if (!productData) {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
         }
-        await this.orderProductController.update(oldOrderProduct, products, productData)
+        const orderProductRes = await this.orderProductController.update(oldOrderProduct, products, productData, order.id)
         // 交集
-        console.log()
-        // console.log(oldOrderProduct);
-        // if (oldOrderProduct.length >= 1) {
-        //     for (let i = 0; i < oldOrderProduct.length; i++) {
-        //         const exist = productData.find(p => p.id === oldOrderProduct[i].id);
-        //         if (!exist) {
-        //             await this.orderProductController.delete(oldOrderProduct[i].id);
-        //         }
-        //     }
-        // }
-
-        // const newOrderProduct = await this.orderProductController.create(products, productData);
-        // // console.log(newOrderProduct);
-        // const param: IOrderUpdateParams = { id, status, storeId, pay, orderProducts: newOrderProduct };
-        // const newOrder = await this.service.update(param);
-
-
-        // const orderProducts = await this.orderProductController.getByIds(order.id);
-        // console.log(orderProducts);
-        // console.log('---------');
-        // const param = { status, storeId, pay, orderProducts };
-        // Object.assign(order, param);
-        // console.log(order);
-        // const updatedRes = await this.service.update(order);
-        // if (updatedRes === undefined) {
-        //     return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError));
-        // }
-        res.status(200).json({ result: false });
+        const orderRes = await this.service.update(order);
+        if (orderRes === undefined) {
+            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError));
+        }
+        res.status(200).json({ result: true });
     }
 
     async delete(req: Request, res: Response, next: NextFunction) {

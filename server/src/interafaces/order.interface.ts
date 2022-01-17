@@ -1,10 +1,11 @@
 import { OrderProduct } from "../entity/orderProuct";
 import { Product } from "../entity/product";
+import { IOrderProductCreateParams } from "./orderProduct.interafaces";
 
 interface IOrderParams {
     id?: number;
     storeId?: number;
-    orderProducts?: number[] | OrderProduct[];
+    // orderProducts?: number[] | OrderProduct[];
     pay?: number;
     status?: number;
     createdAt?: Date;
@@ -25,6 +26,13 @@ export interface IOrderRequestParams extends IOrderParams {
     storeId: number;
     pay: number;
     products: IOrderProductParam[];
+}
+
+export interface IOrderRespone extends IOrderParams {
+    id: number;
+    pay: number;
+    status: number;
+    orderProducts: OrderProduct[];
 }
 
 export interface IOrderCreateParams extends IOrderParams {
