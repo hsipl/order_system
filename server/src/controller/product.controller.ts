@@ -44,12 +44,11 @@ class ProductController {
     async create(req: Request, res: Response, next: NextFunction) {
         const image = req.file ? req.file.filename : '';
         let { name, price, category, status, tags, storeId }: IProductCreateParams = req.body;
-        if (!name || !price || category===undefined || status === undefined) {
+        if (!name || !price || category === undefined || status === undefined) {
             if (image !== '') await deleteFile(image);
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
         try {
-
             const checkforeignKeyExit = await this.storeService.getById(storeId);
             if (!checkforeignKeyExit) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));

@@ -13,6 +13,7 @@ services:
       MYSQL_PASSWORD: hsipl211
       MYSQL_ROOT_PASSWORD: hsipl211
       MYSQL_DATABASE: dev_db
+      TZ: Asia/Taipei
     volumes:
       - mysql_data:/var/lib/mysql
     ports:

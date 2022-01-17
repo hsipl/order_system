@@ -21,6 +21,11 @@ export class ProductService {
         return product;
     }
 
+    public async getByIds(id: number[]): Promise<Product[] | undefined> {
+        const product = await this.repository.getByIds(id);
+        return product;
+    }
+    
     public async checkExistByName(name: string, storeId: number): Promise<boolean> {
         const isExist = await this.repository.getByName(name, storeId)
         return isExist ? true : false;

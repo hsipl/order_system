@@ -7,8 +7,10 @@ import {
     DeleteDateColumn,
     JoinColumn,
     BaseEntity,
-    ManyToOne
+    ManyToOne,
+    OneToMany
 } from "typeorm";
+import { OrderProduct } from "./orderProuct";
 import { Store } from "./store";
 
 @Entity()
@@ -20,13 +22,21 @@ export class Order extends BaseEntity {
     @JoinColumn({ name: "store_id" })
     storeId: number;
 
-    @Column({ length: 128, unique: true })
-    description: string;
+    // @OneToMany(() => OrderProduct, orderProduct => orderProduct.orderId, { cascade: true })
+    // orderProducts: OrderProduct[];
 
     @Column({
         unsigned: true,
         type: "tinyint",
         comment: "0: Unpaid 1:Pay",
+        default: 0,
+    })
+    pay: number;
+
+    @Column({
+        unsigned: true,
+        type: "tinyint",
+        comment: "0: Not Delete 1:Delete",
         default: 0,
     })
     status: number;

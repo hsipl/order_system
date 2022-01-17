@@ -1,8 +1,9 @@
 import 'package:client/services/api_connection.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/preference_operation.dart';
-import 'package:client/widget/styling_buttons.dart';
+import 'package:client/widget/styled_buttons.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ActivateDrawer extends StatefulWidget {
   const ActivateDrawer({Key? key}) : super(key: key);
@@ -12,27 +13,39 @@ class ActivateDrawer extends StatefulWidget {
 }
 
 class _ActivateDrawerState extends State<ActivateDrawer> {
+  String storeName = '';
+
+  @override
+  void initState() {
+    getStoreInfoSharedPrefs().then((value) {
+      setState(() {
+        storeName = value!['name'];
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
       child: ListView(
         children: [
           Column(
-            children: const [
-              SizedBox(height: 10),
-              Text(
-                "大雞雞",
+            children: [
+              const SizedBox(height: 10),
+              const Text(
+                "好客雞排",
                 style: TextStyle(fontSize: 30),
               ),
-              SizedBox(height: 10),
-              Text("hsipl分店"),
-              SizedBox(height: 10),
-              CircleAvatar(
+              const SizedBox(height: 10),
+              Text(storeName),
+              const SizedBox(height: 10),
+              const CircleAvatar(
                 child: Icon(Icons.person, size: 50),
                 backgroundColor: Colors.grey,
                 radius: 50,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
             ],
           ),
           const Divider(height: 2),
@@ -99,11 +112,14 @@ class DeactivateDrawer extends StatelessWidget {
           ),
           const Divider(height: 2),
           const Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 0, 0), child: Text('登入')),
+            padding: EdgeInsets.fromLTRB(20, 10, 0, 0),
+            child: Text('登入'),
+          ),
           buildMenuItem(
-              text: "登入",
-              icon: Icons.login,
-              onClicked: () => selectedItem(context, 6)),
+            text: "登入",
+            icon: Icons.login,
+            onClicked: () => selectedItem(context, 6),
+          ),
         ],
       ),
     );
@@ -146,17 +162,22 @@ void selectedItem(BuildContext context, int index) {
       break;
     case 5:
       AlertDialog dialog = AlertDialog(
-        title: const Text('確定要登出嗎',textAlign: TextAlign.center,),
-        content:  Row(
+        title: const Text(
+          '確定要登出嗎',
+          textAlign: TextAlign.center,
+        ),
+        content: Row(
           children: [
             ActionButton(
                 color: kConfirmButtonColor,
                 action: '確定',
-                onPress: () {
+                onPress: () async {
                   Api().logout();
-                  setLoginSharedPrefs(false);
-                  Navigator.pushNamedAndRemoveUntil(context,
-                      '/home_deactivate', (Route<dynamic> route) => false);
+                  SharedPreferences preferences =
+                      await SharedPreferences.getInstance();
+                  await preferences.clear();
+                  Navigator.pushNamedAndRemoveUntil(context, '/home_deactivate',
+                      (Route<dynamic> route) => false);
                 }),
             const Spacer(),
             ActionButton(
@@ -167,7 +188,10 @@ void selectedItem(BuildContext context, int index) {
           ],
         ),
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(32.0))),
+          borderRadius: BorderRadius.all(
+            Radius.circular(32.0),
+          ),
+        ),
       );
       showDialog(context: context, builder: (context) => dialog);
       break;
