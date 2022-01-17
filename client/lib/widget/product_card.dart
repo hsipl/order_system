@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 import 'order_dialog.dart';
 
 class ProductCard extends StatefulWidget {
-  const ProductCard(
-      {Key? key,
-      required this.img,
-      required this.info,
-      required this.product,
-      required this.price})
-      : super(key: key);
+  const ProductCard({
+    Key? key,
+    required this.img,
+    required this.info,
+    required this.product,
+    required this.price,
+  }) : super(key: key);
   final String product;
-  final String info;
+  final List<String> info;
   final String price;
-  final IconData img;
+  final String img;
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -32,7 +32,6 @@ class _ProductCardState extends State<ProductCard> {
     dy = (dy - yHalf) / yHalf;
     dx = double.parse(dx.toStringAsFixed(2));
     dy = double.parse(dy.toStringAsFixed(2));
-    print(dx.toString() + '    ' + dy.toString());
     return [dx, dy];
   }
 
@@ -44,60 +43,61 @@ class _ProductCardState extends State<ProductCard> {
     return SizedBox(
       height: 120,
       child: Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          elevation: 5,
-          child: InkWell(
-            onTapDown: (TapDownDetails details) {
-              setState(() {
-                position = getTapPosition(details, width, height);
-              });
-            },
-            onTap: () {
-              showGeneralDialog(
-                barrierColor: Colors.black.withOpacity(0.5),
-                transitionBuilder: (context, a1, a2, widget) {
-                  return Transform.scale(
-                    scale: a1.value,
-                    alignment: Alignment(position[0], position[1]),
-                    child: Opacity(
-                      opacity: a1.value,
-                      child: OrderDialog(
-                        img: super.widget.img,
-                        info: super.widget.info,
-                        product: super.widget.product,
-                        price: super.widget.price,
-                      ),
+        elevation: 5,
+        child: InkWell(
+          onTapDown: (TapDownDetails details) {
+            setState(() {
+              position = getTapPosition(details, width, height);
+            });
+          },
+          onTap: () {
+            showGeneralDialog(
+              barrierColor: Colors.black.withOpacity(0.5),
+              transitionBuilder: (context, a1, a2, widget) {
+                return Transform.scale(
+                  scale: a1.value,
+                  alignment: Alignment(position[0], position[1]),
+                  child: Opacity(
+                    opacity: a1.value,
+                    child: OrderDialog(
+                      img: super.widget.img,
+                      info: super.widget.info,
+                      product: super.widget.product,
+                      price: super.widget.price,
                     ),
-                  );
-                },
-                transitionDuration: const Duration(milliseconds: 200),
-                barrierDismissible: true,
-                barrierLabel: '',
-                context: context,
-                pageBuilder: (context, animation1, animation2) {
-                  return Container();
-                },
-              );
-            },
-            child: Center(
-              child: ListTile(
-                leading: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      widget.img,
-                      color: Colors.blueGrey,
-                    ),
-                  ],
-                ),
-                title: Text(widget.product),
-                subtitle: Text(widget.info),
-                trailing: Text(widget.price),
-                isThreeLine: true,
+                  ),
+                );
+              },
+              transitionDuration: const Duration(milliseconds: 200),
+              barrierDismissible: true,
+              barrierLabel: '',
+              context: context,
+              pageBuilder: (context, animation1, animation2) {
+                return Container();
+              },
+            );
+          },
+          child: Center(
+            child: ListTile(
+              enabled: true,
+              leading: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: Image(image: NetworkImage(widget.img)),
+                  )
+                ],
               ),
+              title: Text(widget.product),
+              subtitle: Text(widget.info.toString()),
+              trailing: Text(widget.price),
+              isThreeLine: true,
             ),
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
