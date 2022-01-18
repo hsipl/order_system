@@ -1,11 +1,14 @@
 import React, { useState, useRef } from "react";
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
+import { Paper } from "@mui/material";
+import Navbar from "../components/Navbar";
+
+import styledC from "styled-components";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Navbar from "../components/Navbar";
 import Button from "@mui/material/Button";
 
 import Table from "@mui/material/Table";
@@ -13,9 +16,7 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import TextField from "@mui/material/TextField";
-import Box from "@mui/material/Box";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
@@ -25,58 +26,57 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContentText from "@mui/material/DialogContentText";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import Box from "@mui/material/Box";
 
-const OrderCon = styled.div`
-position: relative;
-top: 8rem;
-left: 13rem;
-max-width: 87%;
-font-size: 20px;
-`;
-const AddForm = styled.form`
+
+const OrderContainer = styled(Box)({
+  position:"absolute",
+  top: "6rem",
+  left: "10rem",
+  right: "0px",
+  borderRadius: "2px",
+  padding:"3rem",
+  fontSize: "20px",
+});
+const AddForm = styledC.form`
   height: 400px;
 `;
-const UploadImg = styled.input``;
+const UploadImg = styledC.input``;
 
 const Order = () => {
-  const [lis, setLi] = useState([]);
+  
 
-  const [value, setValue] = useState("");
-
-  const [open, setOpen] = React.useState(false);
-
-  const [image, setImage] = useState(null);
-
-  const onImageChange = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
-  };
-
-  const id = useRef(2);
-
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="inherit" href="/">
-      首頁
-    </Link>,
-    <Typography underline="hover" key="2" color="text.primary" href="/handover">
-      員工管理
-    </Typography>,
-  ];
-
-  const handleRegisterClick = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+    const [open, setOpen] = React.useState(false);
+  
+    const [image, setImage] = useState(null);
+  
+    const onImageChange = (e) => {
+      setImage(URL.createObjectURL(e.target.files[0]));
+    };
+  
+    const id = useRef(2);
+  
+    const breadcrumbs = [
+      <Link underline="hover" key="1" color="inherit" href="/">
+        首頁
+      </Link>,
+      <Typography underline="hover" key="2" color="text.primary" style={{fontWeight:"bold"}}>
+        員工管理
+      </Typography>,
+    ];
+  
+    const handleRegisterClick = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
+  
   return (
     <>
       <Navbar />
-      <OrderCon>
+      <OrderContainer>
         <Stack spacing={2}>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
@@ -95,11 +95,7 @@ const Order = () => {
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
-          // onBackdropClick="false"
-          // fullWidth="true"
-          // maxWidth="xs"
-        
-    
+          
         >
           <DialogTitle id="alert-dialog-title">{"新增員工資訊"}</DialogTitle>
 
@@ -219,7 +215,7 @@ const Order = () => {
             </TableRow>
           </Table>
         </TableContainer>
-      </OrderCon>
+      </OrderContainer>
     </>
   );
 };

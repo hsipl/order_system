@@ -1,18 +1,19 @@
 import React from "react";
-import styled from "styled-components";
+import { styled } from "@mui/material/styles";
+import { Paper } from "@mui/material";
+import Navbar from "../components/Navbar";
+
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Navbar from "../components/Navbar";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
@@ -20,19 +21,22 @@ import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import Box from "@mui/material/Box";
 
-const HandoverCon = styled.div`
-position: relative;
-top: 8rem;
-left: 13rem;
-max-width: 87%;
-font-size: 20px;
-`;
+
+const HandoverContainer = styled(Box)({
+  position:"absolute",
+  top: "6rem",
+  left: "10rem",
+  right: "0px",
+  borderRadius: "2px",
+  padding:"3rem",
+  fontSize: "20px",
+});
 
 const breadcrumbs = [
   <Link underline="hover" key="1" color="inherit" href="/">
     首頁
   </Link>,
-  <Typography underline="hover" key="2" color="text.primary" href="/handover">
+  <Typography underline="hover" key="2" color="text.primary" style={{fontWeight:"bold"}}>
     交班紀錄
   </Typography>,
 ];
@@ -42,7 +46,7 @@ const Handover = () => {
   return (
     <>
       <Navbar />
-      <HandoverCon id="handover">
+      <HandoverContainer id="handover">
         <Stack spacing={2}>
           <Breadcrumbs
             separator={<NavigateNextIcon fontSize="small" />}
@@ -62,7 +66,7 @@ const Handover = () => {
             renderInput={(params) => <TextField {...params} />}
           />
         </LocalizationProvider>
-        <br /> 
+        <br />
 
         <br />
         <TableContainer component={Paper}>
@@ -127,7 +131,7 @@ const Handover = () => {
             </TableCell>
           </Table>
         </TableContainer>
-      </HandoverCon>
+      </HandoverContainer>
     </>
   );
 };

@@ -1,43 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import styled from "styled-components";
-
+import { styled } from "@mui/material/styles";
 import { useHistory } from "react-router";
+import {
+  Dialog,
+  DialogTitle,
+  TextField,
+  Button,
+  Alert,
+  Stack,
+} from "@mui/material";
 
-const Loginform = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 500px;
-`;
-const Title = styled.h1`
-  font-weight: normal;
-`;
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
+const LoginContainer = styled(Dialog)({
+  ".MuiBackdrop-root": {
+    backgroundColor: "#F3F3FA",
+  },
+});
 
-  padding: 50px;
-`;
 
-const Textbox = styled.input`
-  margin: 10px 0;
-  padding: 10px;
-  font-size: 20px;
-`;
-const Register = styled.a`
-  margin: 10px;
-  text-align: center;
-`;
+const Input = styled(TextField)({
+  margin: "1rem 5rem",
+  width: "40vh",
+});
 
-const Wrong = styled.span`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  color: red;
-`;
+const Submit = styled(Button)({
+  margin: "2rem 5rem 3rem 5rem",
+});
+
+const Wrong = styled(Alert)({
+  margin: "1rem 5rem",
+});
+
 
 const Login = () => {
   const [username, setUserName] = useState("");
@@ -54,69 +47,89 @@ const Login = () => {
 
   function handleUsername(e) {
     setUserName(e.target.value);
-    console.log(e);
   }
 
   function handlePassWord(e) {
     setPassword(e.target.value);
-    console.log(e);
   }
-  const url = "http://140.125.45.167:8000/api/user/login";
 
-  let config = {
+  const config = {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
     withCredentials: true,
-  };
+  }
+
+  const url = "http://localhost:8000/api/user/login"
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     axios
-      .post(url, { username, password }, config)
+      .post(
+        url,
+        { username, password },
+          config
+      )
       .then((result) => {
         console.log(result.data.msg);
         setUserLogin(true);
+        localStorage.setItem("StoreId", JSON.stringify(result.data.data.storeId.id));
         history.push("/");
-        console.log(result.headers);
       })
       .catch((err) => {
         console.log(err);
         setUserLogin(false);
         setErrMes(true);
       });
-
-    localStorage.setItem("name", JSON.stringify(username));
-    localStorage.setItem("password", JSON.stringify(password));
+      localStorage.setItem("name", JSON.stringify(username));
+      localStorage.setItem("password", JSON.stringify(password));
   }
 
-  return (
-    <Loginform id="login">
-      <Title>Login</Title>
-      <Form onSubmit={handleSubmit}>
-        <Textbox
-          autoFocus
-          placeholder="User name"
-          value={username}
-          onChange={handleUsername}
-          required
-        ></Textbox>
+  const handleKeypress = (e) => {
+    if (e.keyCode === 13) {
+      handleSubmit();
+    }
+  };
 
-        <Textbox
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={handlePassWord}
-          required
-        ></Textbox>
-        <br />
-        <Textbox type="submit" value="登錄"></Textbox>
-        {errMes == true && <Wrong>帳號或密碼錯誤</Wrong>}
-        <br />
-      </Form>
-    </Loginform>
+  return (
+    <>
+      <LoginContainer open="true" maxWidth="xl">
+        <DialogTitle sx={{ fontWeight: "bold", textAlign: "center" }}>
+          登入
+        </DialogTitle>
+        <form onSubmit={handleSubmit}>
+          <Stack m={2}>
+            <Input
+              autoFocus
+              placeholder="帳號"
+              value={username}
+              onChange={handleUsername}
+              required
+              label="帳號"
+            />
+            <Input
+              id="InputPassword"
+              type="password"
+              placeholder="密碼"
+              value={password}
+              onChange={handlePassWord}
+              required
+              label="密碼"
+              onKeyPress={handleKeypress}
+            />
+            {errMes == true && <Wrong severity="warning">帳號或密碼錯誤</Wrong>}
+            <Submit
+              id="ButtonSubmit"
+              variant="contained"
+              type="submit"
+            >
+              登入
+            </Submit>
+          </Stack>
+        </form>
+      </LoginContainer>
+    </>
   );
 };
 

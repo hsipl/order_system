@@ -104,7 +104,7 @@ const Shop = () => {
   const handleEditClose = () => {
     setOpenEdit(false);
   };
-  const url = "http://140.125.45.167:8000/api/store";
+  const url = "http://localhost:8000/api/store";
 
   let config = {
     headers: {
@@ -172,7 +172,7 @@ const Shop = () => {
 
   const handleEditSubmit = async () => {
     const formData = new FormData();
-    formData.append("name", shopInfo.name);
+    formData.append("name", currentShopInfo);
     formData.append("type", shopInfo.type);
     formData.append("status", shopInfo.status);
     formData.append("image", shopInfo.image);
@@ -205,6 +205,7 @@ const Shop = () => {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
+        {/* Dialog1*/}
         <Dialog
           open={open}
           onClose={handleClose}
@@ -427,11 +428,12 @@ const Shop = () => {
                       <DialogContent>
                         <TextField
                           defaultValue={currentShopInfo}
-                          onChange={handleShopInfo}
+                          value={currentShopInfo}
                           name="name"
                           label="店家名稱"
                           variant="outlined"
                           sx={{ width: 250 }}
+                          disabled
                         />
                         <br /> <br />
                         <InputLabel id="edit">類型</InputLabel>
