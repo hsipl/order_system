@@ -18,9 +18,11 @@ export class OrderProductRepository {
         });
     }
 
-    async getRelation(orderId: number): Promise<OrderProduct[]> {
+    async getRelation(orderId: Order): Promise<OrderProduct[]> {
         return await OrderProduct.find({
-            orderId: orderId
+            where: {
+                orderId
+            }
         });
     }
 

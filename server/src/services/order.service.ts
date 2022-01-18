@@ -34,7 +34,7 @@ export class OrderService {
         return await this.repository.create(order);
     }
 
-    public async update(order: Order): Promise<UpdateResult | undefined> {
+    public async update(order: Order): Promise<Order> {
         return await this.repository.update(order);
     }
 

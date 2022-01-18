@@ -22,7 +22,7 @@ export class Order extends BaseEntity {
     @ManyToOne(() => Store)
     @JoinColumn({ name: "store_id" })
     storeId: number;
-    
+
     @Column({
         unsigned: true,
         type: "tinyint",
@@ -38,6 +38,9 @@ export class Order extends BaseEntity {
         default: 0,
     })
     status: number;
+
+    @OneToMany(() => OrderProduct, orderProduct => orderProduct.orderId)
+    orderProducts: OrderProduct[];
 
     @CreateDateColumn({ name: "createdAt" })
     createdAt: Date;

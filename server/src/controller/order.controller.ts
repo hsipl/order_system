@@ -4,7 +4,7 @@ import { ProductService } from "../services/product.service";
 import { StoreService } from "../services/store.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
-import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderRespone} from "../interafaces/order.interface";
+import { IOrderCreateParams, IOrderDeleteParams, IOrderRequestParams, IOrderRespone } from "../interafaces/order.interface";
 import OrderProductController from "./orderProduct.controller";
 
 class OrederController {
@@ -21,13 +21,7 @@ class OrederController {
 
     async getAll(req: Request, res: Response, next: NextFunction) {
         const order = await this.service.getAll();
-        const orderProduct = await this.orderProductController.getAll();
-        const orders: IOrderRespone[] = [];
-        order.forEach(o => {
-            const orderProducts = orderProduct.filter(op => op.orderId === o.id);
-            orders.push({ id: o.id, pay: o.pay, status: o.pay, orderProducts: orderProducts })
-        });
-        res.status(200).json(orders);
+        res.status(200).json(order);
     }
 
     async getById(req: Request, res: Response, next: NextFunction) {
@@ -40,13 +34,7 @@ class OrederController {
             if (!order) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
             }
-            const orderProduct = await this.orderProductController.getByIds(order.id);
-            const orders: IOrderRespone = { id: order.id, pay: order.pay, status: order.pay, orderProducts: [] };
-            if (orderProduct) {
-                const orderProducts = orderProduct.filter(op => op.orderId === order.id);
-                orders.orderProducts = orderProducts;
-            }
-            res.status(200).json(orders);
+            res.status(200).json(order);
         } catch (e) {
             console.log("get db by order id error", e);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
@@ -60,16 +48,7 @@ class OrederController {
         }
         try {
             const order = await this.service.getByStoreId(storeId);
-            const orderProduct = await this.orderProductController.getAll();
-            const orders: IOrderRespone[] = [];
-            order.forEach(o => {
-                const orderProducts = orderProduct.filter(op => op.orderId === o.id);
-                orders.push({ id: o.id, pay: o.pay, status: o.pay, orderProducts: orderProducts })
-            });
-            if (!orders) {
-                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
-            }
-            res.status(200).json(orders);
+            res.status(200).json(order);
         } catch (e) {
             console.log("get db by store id error", e);
             return next(new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError));
@@ -89,10 +68,14 @@ class OrederController {
             const productsId = products.map(item => item['productId']);
             const descriptions = products.map(item => item["description"]);
             // 確保 product 是否存在
-            const productData = await this.productService.getByIds(productsId);
+            if (!productsId) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
+            }
+            const productData = await this.productService.getByIds(<number[]>productsId);
             if (!productData) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
             }
+
 
             /** order 新增*/
             const param: IOrderCreateParams = { status, storeId, pay };
@@ -109,30 +92,29 @@ class OrederController {
     async update(req: Request, res: Response, next: NextFunction) {
         const id = parseInt(req.params.id);
         let { status, storeId, pay, products }: IOrderRequestParams = req.body;
-        const checkforeignKeyExit = await this.storeService.getById(storeId);
-        if (!checkforeignKeyExit) {
-            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
-        }
-        const order = await this.service.getById(id);
-        if (!order) {
-            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
-        }
-        const oldOrderProduct = await this.orderProductController.getRelation(order);
-        order.pay = pay;
-        order.status = status;
-        order.storeId = storeId;
-        const productsId = products.map(item => item['productId']);
-        const productData = await this.productService.getByIds(productsId);
+        try {
+            const checkforeignKeyExit = await this.storeService.getById(storeId);
+            if (!checkforeignKeyExit) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
+            }
+            const order = await this.service.getById(id);
+            if (!order) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
+            }
+            Object.assign(order, { pay, storeId, status });
+            const oldOrderProduct = await this.orderProductController.getRelation(order);
+            const productsId = products.map(item => item['productId']);
+            const productData = await this.productService.getByIds(<number[]>productsId);
 
-        if (!productData) {
-            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
+            if (!productData) {
+                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
+            }
+            const orderProductRes = await this.orderProductController.update(order, products, productData)
+            res.status(200).json({ result: true });
+        } catch (e) {
+            console.log("update order db error: ", e);
+            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError))
         }
-        const orderProductRes = await this.orderProductController.update(oldOrderProduct, products, productData, order.id)
-        const orderRes = await this.service.update(order);
-        if (orderRes === undefined) {
-            return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError));
-        }
-        res.status(200).json({ result: true });
     }
 
     async delete(req: Request, res: Response, next: NextFunction) {

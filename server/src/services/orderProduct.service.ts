@@ -15,7 +15,7 @@ export class OrderProductService {
         return await this.repository.getById(id);
     }
 
-    public async getRelation(orderId: number): Promise<OrderProduct[]> {
+    public async getRelation(orderId: Order): Promise<OrderProduct[]> {
         return await this.repository.getRelation(orderId);
     }
 

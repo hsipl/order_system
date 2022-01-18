@@ -17,7 +17,10 @@ interface orderProduct {
     description?: string;
 }
 export interface IOrderProductParam {
-    productId: number;
+    id?: number;
+    price?: number;
+    name?: string;
+    productId?: number;
     description: string;
 }
 

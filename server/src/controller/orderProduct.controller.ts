@@ -22,7 +22,7 @@ class OrderProductController {
     }
 
     async getRelation(order: Order): Promise<OrderProduct[]> {
-        const orderProduct = await this.service.getRelation(order.id);
+        const orderProduct = await this.service.getRelation(order);
         return orderProduct;
     }
 
@@ -55,12 +55,16 @@ class OrderProductController {
 
     }
 
-    async update(oldOrderProduct: OrderProduct[], products: IOrderProductParam[], productData: Product[], orderId: number) {
-        const deleteId = oldOrderProduct.map(o => o['id']);
-        if (deleteId.length > 0) {
-            const deleteRes = await this.delete(deleteId);
+    async update(order: Order, products: IOrderProductParam[], productData: Product[]) {
+        // 找尋舊的 relation id
+        const oldDataId = await (await this.getRelation(order)).map(o => o['id']);
+        // 判斷有繼續留著個id
+        const keepDataId = products.map(p => p['id']).filter(Boolean);
+        const deleteDataId = <number[]>oldDataId.filter(t => { return keepDataId.indexOf(<number>t) == -1 })
+        if (deleteDataId.length > 0) {
+            const deleteRes = await this.delete(deleteDataId);
         }
-        return await this.create(products, productData, orderId);
+        return await this.create(products, productData, order.id);
     }
 
     async delete(id: number[]) {
