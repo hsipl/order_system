@@ -76,12 +76,13 @@ class OrederController {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
             }
 
-
             /** order 新增*/
             const param: IOrderCreateParams = { status, storeId, pay };
             const newOrder = await this.service.create(param);
+
             /** 新增orderProduct */
             const newOrderProduct = await this.orderProductController.create(products, productData, newOrder.id);
+
             res.status(200).json({ result: true });
         } catch (e) {
             console.log("create order db error: ", e);
@@ -102,6 +103,7 @@ class OrederController {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
             }
             Object.assign(order, { pay, storeId, status });
+
             const oldOrderProduct = await this.orderProductController.getRelation(order);
             const productsId = products.map(item => item['productId']);
             const productData = await this.productService.getByIds(<number[]>productsId);
@@ -109,7 +111,9 @@ class OrederController {
             if (!productData) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ProductAssociationError));
             }
-            const orderProductRes = await this.orderProductController.update(order, products, productData)
+            const orderUpRes = await this.service.update(order);
+            const orderProductRes = await this.orderProductController.update(order, products, productData);
+
             res.status(200).json({ result: true });
         } catch (e) {
             console.log("update order db error: ", e);

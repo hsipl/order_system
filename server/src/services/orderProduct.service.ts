@@ -27,7 +27,6 @@ export class OrderProductService {
             paramsData.push(orderProduct);
         })
         return await this.repository.create(paramsData);
-        // return paramsData;
     }
 
     public async delete(id: number[]): Promise<Boolean> {
