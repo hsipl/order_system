@@ -2,6 +2,12 @@ kind: pipeline
 name: drone-CICD
 
 steps:
+- name: Build Docker Environment
+    image: docker/compose
+    commands:
+      - cd ./server
+      - docker-compose up -d db redis
+
 - name: unit-test
   image: node:latest
   commands:

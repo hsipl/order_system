@@ -9,4 +9,7 @@ fi
 echo "start install node package"
 cd ./server
 yarn install
+
+echo "install package done"
+echo "start running test"
 yarn test
