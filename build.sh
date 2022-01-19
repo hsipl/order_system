@@ -1,4 +1,3 @@
-cd server
 if npm list -g | grep yarn
 then 
    echo "yarn already install";
@@ -8,6 +7,6 @@ else
 fi
 
 echo "start install node package"
-cd server
+cd ./server
 yarn install
 yarn test
