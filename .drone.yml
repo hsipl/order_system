@@ -3,12 +3,12 @@ name: drone-CICD
 image: docker
 steps:
 - name: Build Docker Environment
-  image: docker/compose:1.25.0-rc2-alpine
+  image: tmaier/docker-compose:latest
   commands:
-    - docker-compose -f docker-compose.prod.yml up -d
+    - cd ./server
+    - docker-compose up -d db redis
   volumes:
-    - name: dockersock
-      path: /var/run/docker.sock
+    - /var/run/docker.sock:/var/run/docker.sock
   commands:
     - cd ./server
     - docker-compose up -d db redis
