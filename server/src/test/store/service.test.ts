@@ -7,8 +7,8 @@ import { getConnection } from './connect';
 
 let connection: any
 const repo = new StoreRepository()
-const cache = new CacheService()
-const srv = new StoreService(repo,cache)
+// const cache = new CacheService()
+// const srv = new StoreService(repo,cache)
 
 
 beforeAll(async () => {

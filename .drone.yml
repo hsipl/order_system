@@ -5,10 +5,7 @@ steps:
 - name: unit-test
   image: node:latest
   commands:
-  - cd server
-  - npm install -g yarn
-  - yarn install
-  - npm run test
+  - bash ./build.sh
 
 - name: ssh commands
   image: appleboy/drone-ssh
