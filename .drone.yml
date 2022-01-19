@@ -9,9 +9,6 @@ steps:
     - docker-compose up -d db redis
   volumes:
     - /var/run/docker.sock:/var/run/docker.sock
-  commands:
-    - cd ./server
-    - docker-compose up -d db redis
 
 - name: unit-test
   image: node:latest
