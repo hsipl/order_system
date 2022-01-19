@@ -5,7 +5,8 @@ steps:
 - name: unit-test
   image: python
   commands:
-  - echo "ok!" 
+  - cd server
+  - npm run test
 
 - name: ssh commands
   image: appleboy/drone-ssh
@@ -24,5 +25,6 @@ steps:
 trigger:
   branch: 
     - main
+    - Backend/add-store-test
   event: 
     - pull_request

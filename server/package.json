@@ -4,7 +4,7 @@
   "description": "Order_system for custom user case",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest --detectOpenHandles",
     "dev": "nodemon --exec  ts-node ./src/index.ts",
     "build": "tsc",
     "start": "npm run build && node ./src/dist/src/index.js",
@@ -15,7 +15,7 @@
   "author": "GaryHsu",
   "license": "ISC",
   "devDependencies": {
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^27.4.0",
     "@types/node": "^16.11.1",
     "@types/validator": "^13.6.3",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
@@ -23,7 +23,7 @@
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.25.2",
-    "jest": "^27.3.1",
+    "jest": "^27.4.7",
     "nodemon": "^2.0.13",
     "prettier": "^2.5.1",
     "swagger-jsdoc": "^6.1.0",
