@@ -5,8 +5,8 @@ steps:
 - name: Build Docker Environment
   image: docker/compose:1.25.0-rc2-alpine
   volumes:
-    - name: dockersock
-      path: /var/run/docker.sock
+  - name: docker_sock
+    path: /var/run/docker.sock
   commands:
     - cd ./server
     - docker-compose up -d db redis
