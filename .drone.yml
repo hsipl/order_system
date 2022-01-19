@@ -2,16 +2,13 @@ kind: pipeline
 name: drone-CICD
 image: docker
 steps:
-- name: Build Docker Environment
-  image: tmaier/docker-compose:latest
-  commands:
-    - cd ./server
-    - docker-compose up -d db redis
-  volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-
 - name: unit-test
   image: node:latest
+  environment:
+    MYSQL_USER: hsipl
+    MYSQL_PASSWORD: hsipl211
+    MYSQL_ROOT_PASSWORD: hsipl211
+    MYSQL_DATABASE: dev_db
   commands:
     - bash ./build.sh
 
