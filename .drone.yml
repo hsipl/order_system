@@ -1,6 +1,6 @@
 kind: pipeline
 name: drone-CICD
-image: docker
+type: docker
 steps:
 - name: unit-test
   image: node:latest
