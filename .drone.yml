@@ -3,7 +3,7 @@ name: drone-CICD
 
 steps:
 - name: Build Docker Environment
-  image: docker/compose
+  image: docker
   commands:
     - cd ./server
     - docker-compose up -d db redis
