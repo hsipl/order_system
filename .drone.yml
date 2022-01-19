@@ -3,7 +3,10 @@ name: drone-CICD
 
 steps:
 - name: Build Docker Environment
-  image: docker
+  image: docker/compose:1.25.0-rc2-alpine
+  volumes:
+    - name: dockersock
+      path: /var/run/docker.sock
   commands:
     - cd ./server
     - docker-compose up -d db redis
@@ -33,3 +36,8 @@ trigger:
     - Backend/add-store-test
   event: 
     - pull_request
+
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
