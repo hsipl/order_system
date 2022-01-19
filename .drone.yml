@@ -3,7 +3,7 @@ name: drone-CICD
 type: docker
 steps:
 - name: unit-test
-  image: node:latest
+  image: docker
   environment:
     MYSQL_USER: hsipl
     MYSQL_PASSWORD: hsipl211
