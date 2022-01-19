@@ -3,15 +3,15 @@ name: drone-CICD
 
 steps:
 - name: Build Docker Environment
-    image: docker/compose
-    commands:
-      - cd ./server
-      - docker-compose up -d db redis
+  image: docker/compose
+  commands:
+    - cd ./server
+    - docker-compose up -d db redis
 
 - name: unit-test
   image: node:latest
   commands:
-  - bash ./build.sh
+    - bash ./build.sh
 
 - name: ssh commands
   image: appleboy/drone-ssh
