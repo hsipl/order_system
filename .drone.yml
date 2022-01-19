@@ -1,6 +1,6 @@
 kind: pipeline
 name: drone-CICD
-
+image: docker
 steps:
 - name: Build Docker Environment
   image: docker/compose:1.25.0-rc2-alpine
