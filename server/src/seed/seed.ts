@@ -12,12 +12,7 @@ const genData = async () => {
     productDeleteName.push("測資" + i.toString())
   }
   const defaultConnection = await createConnection(mode);
-  await defaultConnection
-  .createQueryBuilder()
-  .delete()
-  .from(Handover)
-  .where('sysmoney=:sysmoney', { sysmoney: 30 })
-  .execute();
+  // userId: users.identifiers[0].id,
   await defaultConnection
     .createQueryBuilder()
     .delete()
@@ -27,6 +22,11 @@ const genData = async () => {
   try {
     await defaultConnection.query("TRUNCATE TABLE product_tag");
   } catch (e) { console.log(e) }
+
+  try {
+    await defaultConnection.query("TRUNCATE TABLE handover");
+  } catch (e) { console.log(e) }
+  
   await defaultConnection
     .createQueryBuilder()
     .delete()

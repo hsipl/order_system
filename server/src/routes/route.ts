@@ -5,6 +5,7 @@ import UserRoute from './user.route';
 import TagRoute from "./tag.route";
 import HandoverRoute from './handover.route';
 import ProductRoute from "./product.route";
+//import WinstonRoute from "./winston.roure";
 
 // collect all the routes
 const router: Array<MainRoute> = [
@@ -13,7 +14,10 @@ const router: Array<MainRoute> = [
     new UserRoute(),
     new TagRoute(),
     new HandoverRoute(),
-    new ProductRoute()
+    new ProductRoute(),
+    //new WinstonRoute()
+
+
 ];
 
 export default router;

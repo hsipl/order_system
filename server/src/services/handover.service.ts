@@ -11,24 +11,13 @@ export class HandoverService {
     private readonly cacheService: CacheService,
     ) {}
 
-  async getAll(): Promise<Handover[]> {
-    const handover = await this.repository.getAll();
+  async getAll(status:number,id: number): Promise<Handover[]> {
+    const handover = await this.repository.getAll(status);
     return handover;
   }
 
-  async getAllDelete(): Promise<Handover[]> {
-    const handover = await this.repository.getAllDelete();
-    return handover;
-  }
-
-  async getById(id: number): Promise<Handover | undefined> {
-    const handover = await this.repository.getById(id);
-    return handover;
-  }
-
-  
-  async getByDeleteId(id: number): Promise<Handover | undefined> {
-    const handover = await this.repository.getByDeleteId(id);
+  async getById(status:number,id: number): Promise<Handover | undefined> {
+    const handover = await this.repository.getById(status,id);
     return handover;
   }
 

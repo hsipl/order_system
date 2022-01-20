@@ -4,44 +4,48 @@ import { Handover } from "../entity/handover";
 const field: (keyof Handover)[] = ["id", "userId", "sysmoney", "realcash","status", "createdAt"];
 
 export class HandoverRepository {
-  async getAll(): Promise<Handover[]> {
+
+  async getAll(status:number): Promise<Handover[]> {
+    if(status){
     return await Handover.find({
       relations: ['userId'],
       where: {
-        status: 0,
+        status:status,
       },
       select: field,
-    });
-  }
+    });}
 
-  async getAllDelete(): Promise<Handover[]> {
-    return await Handover.find({
+    else{    
+      return await Handover.find({
       relations: ['userId'],
       where: {
-        status: 1,
+        status:0,
       },
       select: field,
-    });
+    });}
   }
 
-  async getById(id: number): Promise<Handover | undefined> {
-    return await Handover.findOne({
-      where: {
-        id,
-        status: 0,
-      },
-      select: field,
-    });
+  async getById(status:number,handoverid: number): Promise<Handover | undefined> {
+    if(status){
+      return await Handover.findOne({
+        relations: ['userId'],
+        where: {
+          id:handoverid,
+          status: status,
+        },
+        select: field,
+      });
   }
-
-  async getByDeleteId(id: number): Promise<Handover | undefined> {
-    return await Handover.findOne({
-      where: {
-        id,
-        status: 1,
-      },
-      select: field,
-    });
+    else{
+      return await Handover.findOne({
+        relations: ['userId'],
+        where: {
+          id:handoverid,
+          status: 0,
+        },
+        select: field,
+      });
+    }
   }
 
   async getByUserId(userId: number): Promise<Handover | undefined> {
