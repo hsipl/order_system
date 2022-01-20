@@ -21,7 +21,9 @@ class StoreController {
   }
 
   async getAll(req: Request, res: Response, next: NextFunction) {
-    const stores = await this.service.getAll();
+    const query = new Store();
+    Object.assign(query, req.query)
+    const stores = await this.service.get(query);
     res.status(200).json(stores);
   }
 
