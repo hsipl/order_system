@@ -41,12 +41,3 @@ steps:
     script:
       - cd /home/hsipl/feng/Order_System/prd/order_system
       - git pull 
-
-volumes:
-  mysql_data:
-  backend_data:
-  redis_data:
-
-networks:
-  order_net:
-    driver: bridge
