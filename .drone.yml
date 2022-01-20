@@ -27,7 +27,6 @@ steps:
     - db
     - redis
   commands:
-    - sleep 10
     - echo "start running test..."
     - bash ./build.sh
 - name: ssh commands
