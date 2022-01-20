@@ -24,8 +24,8 @@ services:
 steps:
 - name: Run Test
   image: node:latest
-  script:
-    - echo helloworld
+  commands:
+    - echo "start running test..."
     - bash ./build.sh
 
 - name: ssh commands
