@@ -50,6 +50,14 @@ steps:
         - main
       event:
         - push
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: slack_webhook
+    channel: order_system
+  when:
+    status: [ success, failure ]
 ---
 
 kind: pipeline
@@ -97,3 +105,12 @@ steps:
         - development
       event:
         - push
+
+- name: slack
+  image: plugins/slack
+  settings:
+    webhook:
+      from_secret: slack_webhook
+    channel: order_system
+  when:
+    status: [ success, failure ]
