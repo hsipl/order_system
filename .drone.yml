@@ -1,11 +1,10 @@
 kind: pipeline
-name: Build services
+name: Build for production
 type: docker
 
 trigger:
   branch: 
     - main
-    - Backend/add-store-test
   event: 
     - pull_request
 
@@ -17,10 +16,10 @@ services:
     MYSQL_PASSWORD: hsipl211
     MYSQL_ROOT_PASSWORD: hsipl211
     MYSQL_DATABASE: dev_db
-
 - name: redis
   image: redis:alpine
 
+  
 steps:
 - name: Run Test
   image: node:latest
@@ -31,7 +30,6 @@ steps:
     - sleep 10
     - echo "start running test..."
     - bash ./build.sh
-
 - name: ssh commands
   image: appleboy/drone-ssh
   settings:
@@ -48,7 +46,38 @@ steps:
     when:
       branch:
         - main
+      event:
+        - push
+---
+kind: pipeline
+type: docker
+name: drone-CICD for dev
+
+steps:
+- name: Run Test
+  image: node:latest
+  depends_on:
+    - db
+    - redis
+  commands:
+    - sleep 5
+    - echo "start running test..."
+    - bash ./build.sh
+- name: ssh commands
+  image: appleboy/drone-ssh
+  settings:
+    host: 
+      from_secret: host 
+    username: 
+      from_secret: user 
+    password: 
+      from_secret: password 
+    port: 22
+    script:
+      - cd /home/hsipl/feng/Order_System/dev/order_system
+      - git pull 
+    when:
+      branch:
         - dev
       event:
-        - pull_request
         - push
