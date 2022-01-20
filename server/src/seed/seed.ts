@@ -5,8 +5,10 @@ import { encrypt } from '../utils/md5';
 import { Tag } from '../entity/tag';
 import { Product } from '../entity/product';
 import { Handover } from '../entity/handover';
+
 const genData = async () => {
   const mode = process.env.MODE ? process.env.MODE : 'default';
+  console.log(`running seed on ${mode}`)
   const productDeleteName = [];
   for (let i = 0; i < 32; i++) {
     productDeleteName.push("測資" + i.toString())

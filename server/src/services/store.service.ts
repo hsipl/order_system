@@ -41,7 +41,6 @@ export class StoreService {
     const { sessionID } = req;
     const sessionData = await this.cacheService.get(`sess:${sessionID}`);
     const { username, role, store } = JSON.parse(sessionData).user;
-    console.log('1');
     if (role !== 1 || store.type !== 1) {
       throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
     }
