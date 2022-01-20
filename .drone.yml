@@ -25,6 +25,7 @@ steps:
 - name: Run Test
   image: node:latest
   commands:
+    - sleep 10
     - echo "start running test..."
     - bash ./build.sh
 
