@@ -10,15 +10,15 @@ trigger:
     - pull_request
 
 services:
-  name: db
-  image: mysql:5.7
+- name: db
+  image: mysql
   environment:
     MYSQL_USER: hsipl
     MYSQL_PASSWORD: hsipl211
     MYSQL_ROOT_PASSWORD: hsipl211
     MYSQL_DATABASE: dev_db
 
-  name: redis
+- name: redis
   image: redis:alpine
 
 steps:
