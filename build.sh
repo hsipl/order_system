@@ -1,4 +1,14 @@
-export MODE="dev"
+branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
+
+if [ $branch = main ]
+then
+   MODE=main
+else
+   MODE=dev
+fi
+
+echo "local mode = ${MODE}"
+
 if npm list -g | grep yarn
 then 
    echo "yarn already install";
