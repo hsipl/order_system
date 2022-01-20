@@ -31,6 +31,8 @@ steps:
     - bash ./build.sh
 - name: ssh commands
   image: appleboy/drone-ssh
+  depends_on:
+      - Run Test
   settings:
     host: 
       from_secret: host 
@@ -39,8 +41,7 @@ steps:
     password: 
       from_secret: password 
     port: 22
-    depends_on:
-      - Run Test
+    
     script:
       - cd /home/hsipl/feng/Order_System/prd/order_system
       - git pull 
@@ -51,6 +52,8 @@ steps:
         - push
 - name: slack
   image: plugins/slack
+  depends_on:
+      - ssh commands
   settings:
     webhook:
       from_secret: slack_webhook
@@ -85,6 +88,8 @@ steps:
     - bash ./build.sh
 - name: ssh commands
   image: appleboy/drone-ssh
+  depends_on:
+      - Run Test
   settings:
     host: 
       from_secret: host 
@@ -93,8 +98,6 @@ steps:
     password: 
       from_secret: password 
     port: 22
-    depends_on:
-      - Run Test
     script:
       - cd /home/hsipl/feng/Order_System/dev/order_system
       - git pull 
@@ -106,6 +109,8 @@ steps:
 
 - name: slack
   image: plugins/slack
+  depends_on:
+      - ssh commands
   settings:
     webhook:
       from_secret: slack_webhook
