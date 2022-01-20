@@ -7,7 +7,6 @@ trigger:
     - main
   event: 
     - pull_request
-
 services:
 - name: db
   image: mysql
@@ -78,6 +77,6 @@ steps:
       - git pull 
     when:
       branch:
-        - dev
+        - development
       event:
         - push
