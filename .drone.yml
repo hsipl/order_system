@@ -1,14 +1,3 @@
-services:
-- name: db
-  image: mysql
-  environment:
-    MYSQL_USER: hsipl
-    MYSQL_PASSWORD: hsipl211
-    MYSQL_ROOT_PASSWORD: hsipl211
-    MYSQL_DATABASE: dev_db
-- name: redis
-  image: redis:alpine
-
 kind: pipeline
 name: Build for production
 type: docker
@@ -19,7 +8,16 @@ trigger:
   event: 
     - pull_request
 
-
+services:
+- name: db
+  image: mysql
+  environment:
+    MYSQL_USER: hsipl
+    MYSQL_PASSWORD: hsipl211
+    MYSQL_ROOT_PASSWORD: hsipl211
+    MYSQL_DATABASE: dev_db
+- name: redis
+  image: redis:alpine
 
   
 steps:
@@ -55,6 +53,17 @@ steps:
 kind: pipeline
 type: docker
 name: drone-CICD for dev
+
+services:
+- name: db
+  image: mysql
+  environment:
+    MYSQL_USER: hsipl
+    MYSQL_PASSWORD: hsipl211
+    MYSQL_ROOT_PASSWORD: hsipl211
+    MYSQL_DATABASE: dev_db
+- name: redis
+  image: redis:alpine
 
 steps:
 - name: Run Test
