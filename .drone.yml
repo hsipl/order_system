@@ -1,6 +1,14 @@
 kind: pipeline
 name: drone-CICD
 type: docker
+
+trigger:
+  branch: 
+    - main
+    - Backend/add-store-test
+  event: 
+    - pull_request
+
 steps:
 - name: mysql
   image: mysql
@@ -14,7 +22,7 @@ steps:
       - 3306:3306
     networks:
       - order_net
-      
+
 - name: redis
     restart: always
     image: redis:alpine
@@ -51,10 +59,3 @@ steps:
     script:
       - cd /home/hsipl/feng/Order_System/prd/order_system
       - git pull 
-
-trigger:
-  branch: 
-    - main
-    - Backend/add-store-test
-  event: 
-    - pull_request
