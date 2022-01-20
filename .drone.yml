@@ -12,6 +12,7 @@ trigger:
 steps:
 - name: db
   image: mysql:5.7
+  detach: true
   environment:
     MYSQL_USER: hsipl
     MYSQL_PASSWORD: hsipl211
@@ -20,6 +21,7 @@ steps:
 
 - name: redis
   image: redis:alpine
+  detach: true
 
 - name: Run Test
   image: node:latest
