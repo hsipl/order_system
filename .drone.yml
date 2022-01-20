@@ -9,20 +9,19 @@ trigger:
   event: 
     - pull_request
 
-steps:
-- name: db
+services:
+  name: db
   image: mysql:5.7
-  detach: true
   environment:
     MYSQL_USER: hsipl
     MYSQL_PASSWORD: hsipl211
     MYSQL_ROOT_PASSWORD: hsipl211
     MYSQL_DATABASE: dev_db
 
-- name: redis
+  name: redis
   image: redis:alpine
-  detach: true
 
+steps:
 - name: Run Test
   image: node:latest
   script:
@@ -41,3 +40,14 @@ steps:
     script:
       - cd /home/hsipl/feng/Order_System/prd/order_system
       - git pull 
+    when:
+      branch:
+        - main
+      event:
+        - pull_request
+        - push
+    when:
+      branch:
+        - dev
+      event:
+        - push
