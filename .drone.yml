@@ -40,6 +40,8 @@ steps:
     password: 
       from_secret: password 
     port: 22
+    depends_on:
+      - Run Test
     script:
       - cd /home/hsipl/feng/Order_System/prd/order_system
       - git pull 
@@ -85,6 +87,8 @@ steps:
     password: 
       from_secret: password 
     port: 22
+    depends_on:
+      - Run Test
     script:
       - cd /home/hsipl/feng/Order_System/dev/order_system
       - git pull 
