@@ -22,5 +22,7 @@ cd ./server
 yarn install
 
 echo "install package done"
+echo "run seed to mysql..."
+yarn migrate
 echo "start running test"
 yarn test
