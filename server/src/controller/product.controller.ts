@@ -49,7 +49,6 @@ class ProductController {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
         try {
-
             const checkforeignKeyExit = await this.storeService.getById(storeId);
             if (!checkforeignKeyExit) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
