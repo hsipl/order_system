@@ -25,6 +25,7 @@ steps:
 - name: Run Test
   image: node:latest
   script:
+    - echo helloworld
     - bash ./build.sh
 
 - name: ssh commands
