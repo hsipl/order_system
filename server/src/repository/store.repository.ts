@@ -8,6 +8,10 @@ export class StoreRepository {
     return await Store.find({
       where: query,
       select: field,
+      order: {
+        status: "ASC",
+        createdAt: "ASC"
+      }
     });
   }
 
