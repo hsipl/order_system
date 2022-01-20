@@ -9,21 +9,22 @@ trigger:
   event: 
     - pull_request
 
-steps:
-- name: mysql
-  image: mysql
-  container_name: mysql
-  environment:
+services:
+  - name: mysql-server
+    image: mysql:5.7
+    environment:
       MYSQL_USER: hsipl
       MYSQL_PASSWORD: hsipl211
       MYSQL_ROOT_PASSWORD: hsipl211
       MYSQL_DATABASE: dev_db
-  ports:
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
       - 3306:3306
     networks:
       - order_net
 
-- name: redis
+  - name: redis
     restart: always
     image: redis:alpine
     ports:
@@ -33,19 +34,13 @@ steps:
     networks:
       - order_net
 
-- name: unit-test
+
+steps:
+- name: Run Test
   image: node:latest
-  environment:
-    MODE: dev
-    PORT: 8000
-    DEV_USERNAME: hsipl
-    DEV_PASSWORD: hsipl211
-    DEV_HOST: db
-    DEV_PORT: 3306
-    DEV_DB: dev_db
-  commands:
+  script:
     - bash ./build.sh
-    
+
 - name: ssh commands
   image: appleboy/drone-ssh
   settings:
@@ -59,3 +54,12 @@ steps:
     script:
       - cd /home/hsipl/feng/Order_System/prd/order_system
       - git pull 
+
+volumes:
+  mysql_data:
+  backend_data:
+  redis_data:
+
+networks:
+  order_net:
+    driver: bridge
