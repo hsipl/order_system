@@ -2,16 +2,42 @@ kind: pipeline
 name: drone-CICD
 type: docker
 steps:
-- name: unit-test
-  image: docker
+- name: mysql
+  image: mysql
+  container_name: mysql
   environment:
-    MYSQL_USER: hsipl
-    MYSQL_PASSWORD: hsipl211
-    MYSQL_ROOT_PASSWORD: hsipl211
-    MYSQL_DATABASE: dev_db
+      MYSQL_USER: hsipl
+      MYSQL_PASSWORD: hsipl211
+      MYSQL_ROOT_PASSWORD: hsipl211
+      MYSQL_DATABASE: dev_db
+  ports:
+      - 3306:3306
+    networks:
+      - order_net
+      
+- name: redis
+    restart: always
+    image: redis:alpine
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/data
+    networks:
+      - order_net
+
+- name: unit-test
+  image: node:latest
+  environment:
+    MODE: dev
+    PORT: 8000
+    DEV_USERNAME: hsipl
+    DEV_PASSWORD: hsipl211
+    DEV_HOST: db
+    DEV_PORT: 3306
+    DEV_DB: dev_db
   commands:
     - bash ./build.sh
-
+    
 - name: ssh commands
   image: appleboy/drone-ssh
   settings:
