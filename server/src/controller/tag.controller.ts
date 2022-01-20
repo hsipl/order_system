@@ -3,6 +3,7 @@ import { TagRepository } from "../repository/tag.respository";
 import { TagService } from "../services/tag.service";
 import ErrorHandler from "./error.controller";
 import { errorMsg, errorStatusCode } from "../bases/errorTypes";
+import { Tag } from "../entity/tag";
 
 class TagController {
     public readonly service: TagService;
@@ -10,8 +11,11 @@ class TagController {
         this.service = service;
     }
 
-    async getAll(req: Request, res: Response, next: NextFunction) {
-        const tags = await this.service.getAll();
+    async get(req: Request, res: Response, next: NextFunction) {
+        const query = new Tag();
+        Object.assign(query, req.query)
+        query.status = 0;
+        const tags = await this.service.get(query);
         res.status(200).json(tags);
     }
 

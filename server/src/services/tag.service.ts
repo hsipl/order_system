@@ -1,12 +1,15 @@
-import { UpdateResult } from "typeorm";
+import { FindConditions, UpdateResult } from "typeorm";
 import { Tag } from "../entity/tag";
 import { TagRepository } from "../repository/tag.respository";
-
+import { Like } from "typeorm";
 export class TagService {
     constructor(private readonly repository: TagRepository) { }
 
-    async getAll(): Promise<Tag[]> {
-        const tag = await this.repository.getAll();
+    async get(query: FindConditions<Tag>): Promise<Tag[]> {
+        if (Object.keys(query).includes('tag')) {
+            query.tag = Like('%' + query.tag + '%');
+        }
+        const tag = await this.repository.get(query);
         return tag;
     }
 

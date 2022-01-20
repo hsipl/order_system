@@ -1,15 +1,13 @@
-import { Not, UpdateResult, In } from "typeorm";
+import { Not, UpdateResult, In, Like, FindConditions } from "typeorm";
 import { Tag } from "../entity/tag";
 
 const field: (keyof Tag)[] = ["id", "tag", "status"];
 
 export class TagRepository {
-    async getAll(): Promise<Tag[]> {
+    async get(query: FindConditions<Tag>): Promise<Tag[]> {
         return await Tag.find({
-            where: {
-                status: 0,
-            },
-            select: field,
+            where: query,
+            select: field
         });
     }
     /** Select Ids from Tag */
