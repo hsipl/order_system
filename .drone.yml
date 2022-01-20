@@ -1,14 +1,95 @@
 kind: pipeline
-name: drone-CICD
+name: Build for production
+type: docker
 
+trigger:
+  branch: 
+    - main
+  event: 
+    - pull_request
+
+services:
+- name: db
+  image: mysql
+  environment:
+    MYSQL_USER: hsipl
+    MYSQL_PASSWORD: hsipl211
+    MYSQL_ROOT_PASSWORD: hsipl211
+    MYSQL_DATABASE: dev_db
+- name: redis
+  image: redis:alpine
+
+  
 steps:
-- name: unit-test
-  image: python
+- name: Run Test
+  image: node:latest
+  depends_on:
+    - db
+    - redis
   commands:
-  - echo "ok!" 
-
+    - echo "start running test..."
+    - bash ./build.sh
 - name: ssh commands
   image: appleboy/drone-ssh
+  depends_on:
+      - Run Test
+  settings:
+    host: 
+      from_secret: host 
+    username: 
+      from_secret: user 
+    password: 
+      from_secret: password 
+    port: 22
+    
+    script:
+      - cd /home/hsipl/feng/Order_System/prd/order_system
+      - git pull 
+    when:
+      branch:
+        - main
+      event:
+        - push
+- name: slack
+  image: plugins/slack
+  depends_on:
+      - ssh commands
+  settings:
+    webhook:
+      from_secret: slack_webhook
+    channel: order_system
+  when:
+    status: [ success, failure ]
+---
+
+kind: pipeline
+type: docker
+name: drone-CICD for dev
+
+services:
+- name: db
+  image: mysql
+  environment:
+    MYSQL_USER: hsipl
+    MYSQL_PASSWORD: hsipl211
+    MYSQL_ROOT_PASSWORD: hsipl211
+    MYSQL_DATABASE: dev_db
+- name: redis
+  image: redis:alpine
+
+steps:
+- name: Run Test
+  image: node:latest
+  depends_on:
+    - db
+    - redis
+  commands:
+    - echo "start running test..."
+    - bash ./build.sh
+- name: ssh commands
+  image: appleboy/drone-ssh
+  depends_on:
+      - Run Test
   settings:
     host: 
       from_secret: host 
@@ -18,11 +99,21 @@ steps:
       from_secret: password 
     port: 22
     script:
-      - cd /home/hsipl/feng/Order_System/prd/order_system
+      - cd /home/hsipl/feng/Order_System/dev/order_system
       - git pull 
+    when:
+      branch:
+        - development
+      event:
+        - push
 
-trigger:
-  branch: 
-    - main
-  event: 
-    - pull_request
+- name: slack
+  image: plugins/slack
+  depends_on:
+      - ssh commands
+  settings:
+    webhook:
+      from_secret: slack_webhook
+    channel: order_system
+  when:
+    status: [ success, failure ]
