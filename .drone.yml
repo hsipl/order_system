@@ -9,20 +9,18 @@ trigger:
   event: 
     - pull_request
 
-services:
-  - name: db
-    image: mysql:5.7
-    environment:
-      MYSQL_USER: hsipl
-      MYSQL_PASSWORD: hsipl211
-      MYSQL_ROOT_PASSWORD: hsipl211
-      MYSQL_DATABASE: dev_db
-
-  - name: redis
-    image: redis:alpine
-
-
 steps:
+- name: db
+  image: mysql:5.7
+  environment:
+    MYSQL_USER: hsipl
+    MYSQL_PASSWORD: hsipl211
+    MYSQL_ROOT_PASSWORD: hsipl211
+    MYSQL_DATABASE: dev_db
+
+- name: redis
+  image: redis:alpine
+
 - name: Run Test
   image: node:latest
   script:
