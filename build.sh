@@ -1,13 +1,13 @@
 branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 
-if [ $branch = main ]
-then
-   MODE=main
+if [ -z $BRANCH ] || [ $BRANCH != "master" ]; then
+   MODE=dev;
 else
-   MODE=dev
+   MODE=main
 fi
 
 echo "local mode = ${MODE}"
+echo "running node on ${MODE}"
 
 if npm list -g | grep yarn
 then 
