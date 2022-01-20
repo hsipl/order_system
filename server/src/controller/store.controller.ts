@@ -36,6 +36,7 @@ class StoreController {
       if (!store) {
         return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
       }
+
       res.status(200).json(store);
     } catch (error) {
       // print to log

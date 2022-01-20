@@ -11,7 +11,7 @@ class BasicRoutes extends BasicRoute {
   protected setRoutes() {
     this.router.get('/', (req: Request, res: Response) => {
       res.json({
-        msg: 'server is running without error.',
+        msg: 'server is running without error',
       });
     });
   }

@@ -4,6 +4,7 @@ import { Store } from '../entity/store';
 import { encrypt } from '../utils/md5';
 import { Tag } from '../entity/tag';
 import { Product } from '../entity/product';
+import { Handover } from '../entity/handover';
 const genData = async () => {
   const mode = process.env.MODE ? process.env.MODE : 'default';
   const productDeleteName = [];
@@ -11,6 +12,7 @@ const genData = async () => {
     productDeleteName.push("測資" + i.toString())
   }
   const defaultConnection = await createConnection(mode);
+  // userId: users.identifiers[0].id,
   await defaultConnection
     .createQueryBuilder()
     .delete()
@@ -20,6 +22,11 @@ const genData = async () => {
   try {
     await defaultConnection.query("TRUNCATE TABLE product_tag");
   } catch (e) { console.log(e) }
+
+  try {
+    await defaultConnection.query("TRUNCATE TABLE handover");
+  } catch (e) { console.log(e) }
+  
   await defaultConnection
     .createQueryBuilder()
     .delete()
@@ -39,9 +46,11 @@ const genData = async () => {
     .from(Store)
     .where('name=:name', { name: 'kcy main store' })
     .execute();
+
   console.log('START CREATEING MAIN STORE...');
 
   const store = await defaultConnection
+ 
     .createQueryBuilder()
     .insert()
     .into('store')
@@ -55,9 +64,9 @@ const genData = async () => {
     ])
     .execute();
   console.log('CREATE MAIN STORE SUCCESS...');
-  console.log('START CREATEING SUPERUSER...');
+  console.log('START CREATEING SUPERUSER...'); 
 
-  await defaultConnection
+ const users = await defaultConnection
     .createQueryBuilder()
     .insert()
     .into('user')
@@ -87,6 +96,89 @@ const genData = async () => {
       }
     ]).execute();
   console.log('CREATE TAG SUCCESS...');
+  console.log('START PRODUCT SUCCESS...');
+  await defaultConnection
+    .createQueryBuilder()
+    .insert()
+    .into('product')
+    .values([
+      {
+        name: "鹽酥雞",
+        money: 50,
+        category: 0,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "雞排",
+        money: 60,
+        category: 0,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "薯條",
+        money: 30,
+        category: 1,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "甜不辣",
+        money: 30,
+        category: 1,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "四季豆",
+        money: 30,
+        category: 2,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "青椒",
+        money: 30,
+        category: 2,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "香菇",
+        money: 50,
+        category: 3,
+        storeId: store.identifiers[0].id,
+        status: 0
+      },
+      {
+        name: "地瓜",
+        money: 30,
+        category: 3,
+        storeId: store.identifiers[0].id,
+        status: 0
+      }
+    ]).execute();
+  console.log('CREATE PRODUCT SUCCESS...');
+
+  console.log('START CREATE HANDOVER SUCCESS...');
+
+  await defaultConnection
+    .createQueryBuilder()
+    .insert()
+    .into('handover')
+    .values([
+      {
+        userId: users.identifiers[0].id,
+        sysmoney: 30,
+        realcash:30,
+        status:0
+      }
+    ]).execute();
+  console.log('CREATE HANDOVER SUCCESS...');
+
+
+
   console.log('START PRODUCT TAG SUCCESS...');
   const productData = []
   for (let i = 0; i < 32; i++) {
