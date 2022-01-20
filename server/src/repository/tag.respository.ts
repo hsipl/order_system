@@ -7,7 +7,11 @@ export class TagRepository {
     async get(query: FindConditions<Tag>): Promise<Tag[]> {
         return await Tag.find({
             where: query,
-            select: field
+            select: field,
+            order: {
+                status: "ASC",
+                createdAt: "DESC"
+            }
         });
     }
     /** Select Ids from Tag */
