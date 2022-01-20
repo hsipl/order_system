@@ -2,8 +2,10 @@ branch=$(git branch | sed -n -e 's/^\* \(.*\)/\1/p')
 
 if [ -z $BRANCH ] || [ $BRANCH != "master" ]; then
    MODE=dev;
+   export MODE=dev
 else
    MODE=main
+   export MODE=main
 fi
 
 echo "local mode = ${MODE}"
