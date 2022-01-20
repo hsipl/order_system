@@ -1,5 +1,5 @@
 kind: pipeline
-name: drone-CICD
+name: Build services
 type: docker
 
 trigger:
@@ -28,6 +28,7 @@ steps:
     - db
     - redis
   commands:
+    - sleep 10
     - echo "start running test..."
     - bash ./build.sh
 
@@ -47,11 +48,7 @@ steps:
     when:
       branch:
         - main
-      event:
-        - pull_request
-        - push
-    when:
-      branch:
         - dev
       event:
+        - pull_request
         - push
