@@ -10,29 +10,16 @@ trigger:
     - pull_request
 
 services:
-  - name: mysql-server
+  - name: db
     image: mysql:5.7
     environment:
       MYSQL_USER: hsipl
       MYSQL_PASSWORD: hsipl211
       MYSQL_ROOT_PASSWORD: hsipl211
       MYSQL_DATABASE: dev_db
-    volumes:
-      - mysql_data:/var/lib/mysql
-    ports:
-      - 3306:3306
-    networks:
-      - order_net
 
   - name: redis
-    restart: always
     image: redis:alpine
-    ports:
-      - 6379:6379
-    volumes:
-      - redis_data:/data
-    networks:
-      - order_net
 
 
 steps:
