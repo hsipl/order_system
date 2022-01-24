@@ -17,6 +17,14 @@ export class OrderProductRepository {
             select: field
         });
     }
+    async getByIds(ids: number[]): Promise<OrderProduct[]> {
+        return await OrderProduct.find({
+            where: {
+                id: In(ids)
+            },
+            select: field
+        });
+    }
 
     async getRelation(orderId: Order): Promise<OrderProduct[]> {
         return await OrderProduct.find({
