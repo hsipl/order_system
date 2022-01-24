@@ -7,6 +7,7 @@ import {
   validateStoreID,
   validateUsername,
   validatePassword,
+  validateImage
 } from './base';
 
 export class UserValidator {
@@ -17,6 +18,7 @@ export class UserValidator {
       validateType(),
       validateName(),
       validateStoreID(),
+      validateImage(),
     ];
   }
 
