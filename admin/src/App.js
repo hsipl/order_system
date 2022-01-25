@@ -45,7 +45,7 @@ function App() {
           {PreivateContain.map((item) => (
             <PrivateRoute path={item.path} component={item.component} />
           ))}
-          <Route path="/login" render={() => <login />}></Route>
+          <Route path="/login"></Route>
         </Switch>
       </Router>
     </div>

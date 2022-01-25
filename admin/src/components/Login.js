@@ -64,8 +64,6 @@ const Login = () => {
 
   async function login() {
     console.warn(username, password);
-    let item = { username, password };
-    // history.push("/");
   }
 
   async function handleSubmit(e) {
@@ -88,7 +86,6 @@ const Login = () => {
 
         setUserLogin(true);
         history.push("/");
-        // console.log(result.headers['set-cookie']);
         console.log(result.headers);
       })
       .catch((err) => {
