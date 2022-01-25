@@ -1,6 +1,5 @@
 import "./App.css";
 import Login from "./components/Login";
-import Navbar from "./components/Navbar";
 import Product from "./components/Product";
 import Order from "./components/Order";
 import Shop from "./components/Shop";
@@ -14,9 +13,8 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  Redirect,
 } from "react-router-dom";
-import Cookies from "js-cookie";
+
 
 import styled from "styled-components";
 const LogoutBtn = styled.button`

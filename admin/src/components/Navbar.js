@@ -26,7 +26,6 @@ const Topnav = styled(Paper)({
   height: "6rem",
   left: "0px",
   paddingLeft: "1rem",
-  zIndex:"100"
 });
 
 const TopList = styled(Box)({
@@ -122,7 +121,7 @@ const Navbar = (props) => {
     localStorage.clear();
 
     axios
-      .get("http://localhost:8000/api/user/logout", {
+      .get("http://140.125.45.167:8000/api/user/logout", {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
