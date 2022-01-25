@@ -11,6 +11,7 @@ import {
   Stack,
 } from "@mui/material";
 
+
 const LoginContainer = styled(Dialog)({
   ".MuiBackdrop-root": {
     backgroundColor: "#F3F3FA",
@@ -35,7 +36,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const history = useHistory();
   const [userLogin, setUserLogin] = useState(false);
-  const [errMes, setErrMes] = useState(false);
+  const [errMes, setErrMes] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("user-info")) {
@@ -57,28 +58,54 @@ const Login = () => {
       "Content-Type": "application/json",
     },
     withCredentials: true,
-  }
+  };
 
-  const url = "http://140.125.45.167:8000/api/user/login"
+  const url = "http://140.125.45.151:8000/api/user/login";
 
   async function handleSubmit(e) {
     e.preventDefault();
     axios
-      .post(
-        url,
-        { username, password },
-          config
-      )
+      .post(url, { username, password }, config)
       .then((result) => {
-        console.log(result.data.msg);
+        let UserInfo = result.data.data;
 
-        setUserLogin(true);
-        history.push("/");
+        if (UserInfo.type === 1) {
+          console.log(result.data.msg);
+          setUserLogin(true);
+
+          localStorage.setItem("Name", JSON.stringify(UserInfo.name));
+
+          localStorage.setItem(
+            "StoreName",
+            JSON.stringify(UserInfo.storeId.name)
+          );
+          localStorage.setItem(
+            "StoreStatus",
+            JSON.stringify(UserInfo.storeId.status)
+          );
+          localStorage.setItem("UserName", JSON.stringify(UserInfo.name));
+          localStorage.setItem(
+            "UserAccount",
+            JSON.stringify(UserInfo.username)
+          );
+          localStorage.setItem(
+            "StoreLogo",
+            JSON.stringify(UserInfo.storeId.image)
+          );
+          localStorage.setItem(
+            "StoreType",
+            JSON.stringify(UserInfo.storeId.type)
+          );
+          history.push("/");
+        } else {
+          setUserLogin(false);
+          setErrMes(1);
+        }
       })
       .catch((err) => {
         console.log(err);
         setUserLogin(false);
-        setErrMes(true);
+        setErrMes(0);
       });
   }
 
@@ -87,7 +114,6 @@ const Login = () => {
       handleSubmit();
     }
   };
-
   return (
     <>
       <LoginContainer open="true" maxWidth="xl">
@@ -114,12 +140,9 @@ const Login = () => {
               label="密碼"
               onKeyPress={handleKeypress}
             />
-            {errMes == true && <Wrong severity="warning">帳號或密碼錯誤</Wrong>}
-            <Submit
-              id="ButtonSubmit"
-              variant="contained"
-              type="submit"
-            >
+            {errMes === 0 && <Wrong severity="warning">帳號或密碼錯誤</Wrong>}
+            {errMes === 1 && <Wrong severity="warning">權限不足</Wrong>}
+            <Submit id="ButtonSubmit" variant="contained" type="submit">
               登入
             </Submit>
           </Stack>
