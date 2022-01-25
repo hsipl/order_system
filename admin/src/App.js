@@ -1,5 +1,6 @@
 import "./App.css";
 import Login from "./components/Login";
+import Navbar from "./components/Navbar";
 import Product from "./components/Product";
 import Order from "./components/Order";
 import Shop from "./components/Shop";
@@ -13,10 +14,12 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  Redirect,
 } from "react-router-dom";
-
+import Cookies from "js-cookie";
 
 import styled from "styled-components";
+import { ListItem } from "@mui/material";
 const LogoutBtn = styled.button`
   position: relative;
   top: 6rem;
@@ -36,16 +39,15 @@ function App() {
   return (
     <div>
       <Router>
-        <Route path="/login">
-          <Login />
-        </Route>
+        <Route path="/login" component={Login}/>
+
 
         <Switch>
           <Route path="/" exact component={Home} />
           {PreivateContain.map((item) => (
             <PrivateRoute path={item.path} component={item.component} />
           ))}
-          <Route path="/login"></Route>
+          <Route path="/login" component={Login}></Route>
         </Switch>
       </Router>
     </div>
