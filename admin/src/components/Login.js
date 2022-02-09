@@ -60,7 +60,7 @@ const Login = () => {
     withCredentials: true,
   };
 
-  const url = "http://140.125.45.151:8000/api/user/login";
+  const url = "http://localhost:8000/api/user/login";
 
   async function handleSubmit(e) {
     e.preventDefault();

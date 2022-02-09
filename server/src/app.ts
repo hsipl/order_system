@@ -14,6 +14,7 @@ import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity/index";
+
 // create app class for server
 export class App {
   private app: express.Application = express();
@@ -60,6 +61,7 @@ export class App {
 
   private async setDBConnection() {
     try {
+      console.log(`connect to mysql db on ${this.mode}`)
       const connection = await createConnection(this.mode);
       if (connection.isConnected) {
         console.log("MySQL db already connect.");
