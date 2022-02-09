@@ -84,7 +84,7 @@ export const NavDialog = (props) => {
   function Logo(props) {
     const LogoUrl = props.url;
     if (LogoUrl !== "") {
-      return <DialogImg image={"http://localhost:8000/" + JSON.parse(LogoUrl)} />;
+      return <DialogImg image={"http://localhost:8000/" + LogoUrl} />;
     } else {
       return <DialogImg><NoImg fontSize="large" /></DialogImg>;
     }
