@@ -30,6 +30,7 @@ class _CardsColumnState extends State<CardsColumn> {
             for (final tag in product![i]['tags']) {
               tags.add(tag['tag']);
             }
+            tags.insert(0,'原味');
             return ProductCard(
                 img:
                     'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a',

@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'order_dialog.dart';
 
@@ -69,13 +68,16 @@ class _ProductCardState extends State<ProductCard> {
                 );
               },
               transitionDuration: const Duration(milliseconds: 200),
-              barrierDismissible: true,
+              barrierDismissible: false,
               barrierLabel: '',
               context: context,
               pageBuilder: (context, animation1, animation2) {
                 return Container();
               },
-            );
+            ).then((dataFromDialog){
+              // DEBUG
+              print(dataFromDialog);
+            });
           },
           child: Center(
             child: ListTile(
@@ -91,9 +93,7 @@ class _ProductCardState extends State<ProductCard> {
                 ],
               ),
               title: Text(widget.product),
-              subtitle: Text(widget.info.toString()),
               trailing: Text(widget.price),
-              isThreeLine: true,
             ),
           ),
         ),
@@ -101,3 +101,4 @@ class _ProductCardState extends State<ProductCard> {
     );
   }
 }
+

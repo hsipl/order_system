@@ -9,8 +9,22 @@ class EditButtonsForTextContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: buttons,
+    return SizedBox(
+      height: 250,
+      width: 150,
+      child: InputDecorator(
+        expands: true,
+        decoration:InputDecoration(
+          labelText: '操作選項',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ) ,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: buttons,
+        ),
+      ),
     );
   }
 }

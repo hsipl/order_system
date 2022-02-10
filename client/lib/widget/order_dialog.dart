@@ -2,12 +2,10 @@ import 'package:client/services/decorations.dart';
 import 'package:client/widget/styled_buttons.dart';
 import 'package:client/widget/widget_for_order_dialog/action_row.dart';
 import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
-import 'package:client/widget/widget_for_order_dialog/num_input.dart';
 import 'package:client/widget/widget_for_order_dialog/tag_input.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'widget_for_order_dialog/label_text_container.dart';
-import 'widget_for_order_dialog/amount_row.dart';
+import 'widget_for_order_dialog/amount_input.dart';
 import 'widget_for_order_dialog/filter_image.dart';
 import 'widget_for_order_dialog/product_info.dart';
 
@@ -29,16 +27,34 @@ class OrderDialog extends StatefulWidget {
 }
 
 class _OrderDialogState extends State<OrderDialog> {
-  List<Widget> numButtons = [];
   List<Widget> tagButtons = [];
   List<Widget> editButtons = [];
-  List<String> customLabels = [''];
-  List<String> customLabelsNum = [''];
-  int onTapLabel = 0;
 
-  void onTapIndex(int index) {
+  List<String> customLabels = [''];
+  List<String> customLabelsNum = ['1'];
+  int amount = 1;
+
+  void deleteItem(int index) {
+    (customLabels.length == 1)
+        ? customLabels = ['']
+        : customLabels.removeAt(index);
+    (customLabelsNum.length == 1)
+        ? customLabelsNum = ['1']
+        : customLabelsNum.removeAt(index);
+  }
+
+  Map getCustomData() {
+    return {
+      'labels': customLabels,
+      'num': customLabelsNum,
+      'length': customLabelsNum.length
+    };
+  }
+
+  void getAmount(int amount) {
     setState(() {
-      onTapLabel = index;
+      this.amount = amount;
+      customLabelsNum[customLabelsNum.length - 1] = this.amount.toString();
     });
   }
 
@@ -54,61 +70,30 @@ class _OrderDialogState extends State<OrderDialog> {
               () {
                 if (customLabels.last != '' && customLabelsNum.last != '') {
                   customLabels.add('');
-                  customLabelsNum.add('');
+                  customLabelsNum.add('1');
+                  amount = 1;
                 } else {
                   customLabels.last = '';
-                  customLabelsNum.last = '';
+                  customLabelsNum.last = '1';
+                  amount = 1;
                   const snackBar = SnackBar(
                     content: Text('不符合規範，因此刪除'),
                   );
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 }
-                onTapLabel = customLabels.length - 1;
               },
             );
           }),
-      ActionButton(
-          color: kCancelButtonColor,
-          action: '清除單列',
-          onPress: () {
-            setState(() {
-              (customLabels.length == 1)
-                  ? customLabels = ['']
-                  : customLabels.removeAt(onTapLabel);
-              (customLabelsNum.length == 1)
-                  ? customLabelsNum = ['']
-                  : customLabelsNum.removeAt(onTapLabel);
-              onTapLabel = customLabels.length - 1;
-            });
-          }),
-      const SizedBox(
-        height: 48,
-      ),
       ActionButton(
           color: kCancelButtonColor,
           action: '清空所有',
           onPress: () {
             setState(() {
               customLabels = [''];
-              customLabelsNum = [''];
-              onTapLabel = 0;
+              customLabelsNum = ['1'];
             });
           }),
     ];
-
-    numButtons = List.generate(
-      10,
-      (i) => ActionButton(
-        action: " $i",
-        color: primaryTextColor,
-        onPress: () {
-          setState(() {
-            customLabelsNum[customLabelsNum.length - 1] =
-                customLabelsNum[customLabelsNum.length - 1] + "$i";
-          });
-        },
-      ),
-    );
 
     tagButtons = List.generate(
       widget.info.length,
@@ -141,7 +126,7 @@ class _OrderDialogState extends State<OrderDialog> {
           child: Column(
             children: <Widget>[
               Stack(
-                  clipBehavior: Clip.none,
+                  clipBehavior: Clip.antiAlias,
                   alignment: Alignment.center,
                   children: [
                     FilteredImage(
@@ -149,27 +134,33 @@ class _OrderDialogState extends State<OrderDialog> {
                     ),
                     ProductInfo(widget: widget),
                   ]),
-              const AmountRow(),
+
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                padding: const EdgeInsets.fromLTRB(20, 25, 20, 10),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     LabelTextContainer(
-                      labels: customLabels,
-                      num: customLabelsNum,
-                      onTapIndex: onTapIndex,
-                      onTapLabel: onTapLabel,
+                      deleteItem: deleteItem,
+                      getCustomData: getCustomData,
                     ),
                     TagsInput(tagButtons: tagButtons),
-                    NumInput(numButtons: numButtons),
+                    AmountInput(
+                      amount: amount,
+                      returnAmount: getAmount,
+                    ),
                     EditButtonsForTextContainer(buttons: editButtons),
                   ],
                 ),
               ),
               //TODO send values to ActionRow()
-              const ActionRow(),
+              ActionRow(
+                amount: customLabelsNum,
+                price: widget.price,
+                labels: customLabels,
+                product: widget.product,
+              ),
             ],
           ),
         ),

@@ -33,10 +33,6 @@ class ProductInfo extends StatelessWidget {
               const SizedBox(
                 height: 10,
               ),
-              Text(
-                widget.info.toString(),
-                style: const TextStyle(color: Colors.white, fontSize: 20),
-              ),
             ],
           ),
         ),

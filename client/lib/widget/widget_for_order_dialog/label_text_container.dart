@@ -1,19 +1,15 @@
+import 'package:client/services/decorations.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class LabelTextContainer extends StatefulWidget {
   const LabelTextContainer({
-    required this.labels,
-    required this.num,
-    required this.onTapIndex,
-    required this.onTapLabel,
     Key? key,
+    required this.deleteItem,
+    required this.getCustomData,
   }) : super(key: key);
 
-  final List<String> labels;
-  final List<String> num;
-  final Function onTapIndex;
-  final int onTapLabel;
+  final Function deleteItem;
+  final Function getCustomData;
 
   @override
   State<LabelTextContainer> createState() => _LabelTextContainerState();
@@ -23,9 +19,7 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
   final _scrollController = ScrollController();
 
   void _scrollDown() {
-    if (_scrollController.hasClients &&
-        widget.onTapLabel == widget.labels.length - 1) {
-      // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    if (_scrollController.hasClients) {
       _scrollController.animateTo(_scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 250), curve: Curves.ease);
     }
@@ -36,33 +30,18 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       _scrollDown();
     });
+    Map listData = widget.getCustomData();
 
     List<Widget> listWidget = [];
-    for (int i = 0; i < widget.num.length; i++) {
+    for (int i = 0; i < listData['length']; i++) {
       listWidget.add(
-        GestureDetector(
-          onTap: () {
-            widget.onTapIndex(i);
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: (i == widget.onTapLabel) ? Colors.grey : Colors.white,
-              border: const Border(
-                bottom: BorderSide(width: 1.0, color: Colors.black),
-              ),
-            ),
-            child: ListTile(
-              title: Text(widget.labels[i]),
-              trailing: Text(widget.num[i]),
-            ),
-          ),
-        ),
+        ListItem(widget: widget, index: i),
       );
     }
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       child: SizedBox(
-        height: 200,
+        height: 250,
         width: 300,
         child: InputDecorator(
           expands: true,
@@ -76,12 +55,60 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
             context: context,
             removeTop: true,
             child: Scrollbar(
-              child: ListView(
+              child: ListView.builder(
                 controller: _scrollController,
-                children: listWidget,
+                itemCount: listData['length'],
+                itemBuilder: (context, index) {
+                  return ClipRect(
+                    child: Dismissible(
+                      key: UniqueKey(),
+                      onDismissed: (direction) {
+                        setState(() {
+                          widget.deleteItem(index);
+                        });
+                      },
+
+                      background: Container(
+                          color: kCancelButtonColor,
+                          child: const Icon(Icons.delete, color: Colors.white)),
+                      child: listWidget[index],
+                    ),
+                  );
+                },
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ListItem extends StatelessWidget {
+  const ListItem({
+    Key? key,
+    required this.widget,
+    required this.index,
+  }) : super(key: key);
+
+  final LabelTextContainer widget;
+  final int index;
+
+  @override
+  Widget build(BuildContext context) {
+    Map listData = widget.getCustomData();
+    return GestureDetector(
+      child: Container(
+        decoration: BoxDecoration(
+          color:
+              (index == listData['length'] - 1) ? primaryColor : Colors.white,
+          border: const Border(
+            bottom: BorderSide(width: 1.0, color: Colors.black),
+          ),
+        ),
+        child: ListTile(
+          title: Text(listData['labels'][index]),
+          trailing: Text(listData['num'][index]),
         ),
       ),
     );
