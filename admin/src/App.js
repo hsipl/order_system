@@ -16,11 +16,11 @@ function App() {
         <Home />
       </Route>
 
-      <Route exact path="/product" >
-        <Product  />
+      <Route exact path="/product">
+        <Product />
       </Route>
 
-      <Route exact path="/order">
+      <Route exact path="/employee">
         <Order />
       </Route>
 
@@ -39,7 +39,6 @@ function App() {
       <Route exact path="/login">
         <Login />
       </Route>
-
     </Router>
   );
 }
