@@ -5,3 +5,4 @@ yarn-error.log
 server/src/dist
 server/dist
 server/uploads/images/*
+server/app.log

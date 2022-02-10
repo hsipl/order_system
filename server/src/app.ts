@@ -15,6 +15,8 @@ import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity/index";
 
+
+
 // create app class for server
 export class App {
   private app: express.Application = express();
@@ -105,6 +107,26 @@ export class App {
     const port = process.env.PORT || 8000;
     this.app.listen(port, () => {
       console.log(`Server is running on ${port}`);
+    });
+  }
+  public listen(): void {
+
+    const logger= require('./logger');
+    // this.app.route.get('/error', function(req, res, next) {
+    this.app.route('/').get((req, res, next) => {
+      logger.info('get logger');
+      res.send('HI')
+    });
+    logger.error("error");
+    logger.warn("warn");
+    logger.info("info");
+    // logger.verbose("verbose");
+    logger.debug("debug");
+    // logger.silly("silly");
+
+    const port = process.env.PORT || 3000;
+    this.app.listen(port, () => {
+      logger.info(`server running`,process.env.NODE_ENV);
     });
   }
 }
