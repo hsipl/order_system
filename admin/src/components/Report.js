@@ -1,17 +1,11 @@
 import React from "react";
-import styled from "styled-components";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Navbar from "../components/Navbar";
 
 import Box from "@mui/material/Box";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 
 import TextField from "@mui/material/TextField";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -24,24 +18,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Button } from "@mui/material";
 
-const Reportcon = styled.div`
-position: relative;
-top: 8rem;
-left: 13rem;
-max-width: 87%;
-font-size: 20px;
-`;
-
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="inherit" href="/">
-    首頁
-  </Link>,
-  <Typography underline="hover" key="2" color="text.primary" href="/handover">
-    財務報表
-  </Typography>,
-];
 const Report = () => {
   const [branch, setBranch] = React.useState("");
 
@@ -53,18 +30,12 @@ const Report = () => {
   const [value2, setValue2] = React.useState(null);
   return (
     <>
-      <Navbar />
-      <Reportcon id="report">
-        {" "}
-        <Stack spacing={2}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            {breadcrumbs}
-          </Breadcrumbs>
-        </Stack>
-        <Box>
+
+      <BodyContainer>
+        <Navbar />
+        <Content>
+          <Breadcrumb name="財務報表" />
+          <Box>
           <FormControl sx={{ m: 2, minWidth: 200 }}>
             <InputLabel id="demo-simple-select-label">選取分店</InputLabel>
             <Select
@@ -159,41 +130,9 @@ const Report = () => {
             
           </Table>
 
-          {/* <Box>
-            <Box sx={{ display: "flex", mx: 20, my: 1 }}>
-              <TextField
-                id="input-with-sx"
-                label="搜尋產品"
-                variant="standard"
-                type="search"
-              />
-            </Box>
-          </Box>
-                  
-          <Table>
-            <TableCell align="center" style={{ width: "33%" }}>
-              Product
-            </TableCell>
-            <TableCell align="center" style={{ width: "33%" }}>
-              30
-            </TableCell>
-            <TableCell align="center" style={{ width: "33%" }}>
-              1
-            </TableCell>
-          </Table> */}
-          {/* <TableRow>
-              <TableCell align="center">
-            
-                <TextField
-                  id="input-with-sx"
-                  label="搜尋產品"
-                  variant="standard"
-                  type="search"
-                />
-              </TableCell>
-            </TableRow> */}
         </TableContainer>
-      </Reportcon>
+        </Content>
+      </BodyContainer>
     </>
   );
 };

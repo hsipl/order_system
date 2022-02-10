@@ -1,12 +1,6 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Navbar from "../components/Navbar";
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
@@ -30,33 +24,11 @@ import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-
-const Productcon = styled.div`
-  position: relative;
-  top: 8rem;
-  left: 13rem;
-  max-width: 87%;
-  font-size: 20px;
-`;
+import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 
 const AddForm = styled.form`
   height: 400px;
 `;
-const AddFormProduct = styled.form`
-  height: 60vh;
-`;
-
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="inherit" href="/">
-    首頁
-  </Link>,
-  <Typography underline="hover" key="2" color="text.primary" href="/product">
-    商品管理
-  </Typography>,
-];
 
 const Product = () => {
   const [arrayData, setArrayData] = useState([]);
@@ -73,11 +45,6 @@ const Product = () => {
   });
 
   /*Tab*/
-  const [image, setImage] = useState(null);
-
-  const onImageChange = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
-  };
 
   const [value, setValue] = React.useState("1");
 
@@ -193,19 +160,12 @@ const Product = () => {
 
   return (
     <>
-      <Navbar />
-      <Productcon id="product">
-        <Stack spacing={2}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            {breadcrumbs}
-          </Breadcrumbs>
-        </Stack>
-        <br />
 
-        <Box sx={{ width: "100%", typography: "body1" }}>
+      <BodyContainer>
+        <Navbar />
+        <Content>
+          <Breadcrumb name="商品管理" />
+          <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList
@@ -488,7 +448,8 @@ const Product = () => {
             </Box>
           </TabContext>
         </Box>
-      </Productcon>
+        </Content>
+      </BodyContainer>
     </>
   );
 };

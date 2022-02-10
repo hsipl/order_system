@@ -1,15 +1,8 @@
-import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
 
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styledC from "styled-components";
-
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
@@ -29,35 +22,12 @@ import InputLabel from "@mui/material/InputLabel";
 import EditIcon from "@material-ui/icons/Edit";
 import Box from "@mui/material/Box";
 import SearchIcon from "@material-ui/icons/Search";
-import Navbar from "../components/Navbar";
-
-const ShopContainer = styled(Box)({
-  position: "absolute",
-  top: "6rem",
-  left: "10rem",
-  right: "0px",
-  borderRadius: "2px",
-  padding: "3rem",
-  fontSize: "20px",
-});
+import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 
 const AddForm = styledC.form`
   height: 400px;
 `;
 
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="inherit" href="/">
-    首頁
-  </Link>,
-  <Typography
-    underline="hover"
-    key="2"
-    color="text.primary"
-    style={{ fontWeight: "bold" }}
-  >
-    分店管理
-  </Typography>,
-];
 
 const Shop = () => {
   const [arrayData, setArratData] = useState([]);
@@ -195,17 +165,11 @@ const Shop = () => {
 
   return (
     <>
-      <Navbar />
-      <ShopContainer id="shop">
-        <Stack spacing={2}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            {breadcrumbs}
-          </Breadcrumbs>
-        </Stack>
-        <Dialog
+      <BodyContainer>
+        <Navbar />
+        <Content>
+          <Breadcrumb name="店鋪管理" />
+          <Dialog
           open={open}
           onClose={handleClose}
           aria-labelledby="alert-dialog-title"
@@ -476,7 +440,8 @@ const Shop = () => {
             })}
           </Table>
         </TableContainer>
-      </ShopContainer>
+        </Content>
+      </BodyContainer>
     </>
   );
 };

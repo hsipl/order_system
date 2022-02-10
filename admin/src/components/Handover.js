@@ -1,58 +1,26 @@
 import React from "react";
-import styled from "styled-components";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Navbar from "../components/Navbar";
-
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-
 import DatePicker from "@mui/lab/DatePicker";
 import TextField from "@mui/material/TextField";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import Box from "@mui/material/Box";
+import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 
-const HandoverCon = styled.div`
-position: relative;
-top: 8rem;
-left: 13rem;
-max-width: 87%;
-font-size: 20px;
-`;
-
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="inherit" href="/">
-    首頁
-  </Link>,
-  <Typography underline="hover" key="2" color="text.primary" href="/handover">
-    交班紀錄
-  </Typography>,
-];
 
 const Handover = () => {
   const [value, setValue] = React.useState(null);
   return (
     <>
-      <Navbar />
-      <HandoverCon id="handover">
-        <Stack spacing={2}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            {breadcrumbs}
-          </Breadcrumbs>
-        </Stack>
-        <br />
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <BodyContainer>
+        <Navbar />
+        <Content>
+          <Breadcrumb name="交班紀錄" />
+          <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
             label="選擇日期"
             value={value}
@@ -127,7 +95,8 @@ const Handover = () => {
             </TableCell>
           </Table>
         </TableContainer>
-      </HandoverCon>
+        </Content>
+      </BodyContainer>
     </>
   );
 };
