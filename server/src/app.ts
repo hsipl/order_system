@@ -14,6 +14,9 @@ import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity/index";
+import swaggerUi from 'swagger-ui-express';
+import swaggerJsdoc from 'swagger-jsdoc';
+import swaggerDocument from '../swagger.json';
 
 // create app class for server
 export class App {
@@ -25,6 +28,7 @@ export class App {
     this.mode = process.env.MODE ? process.env.MODE : "default";
     this.setDBConnection();
     this.setMiddleWare();
+    this.swaggerDoc();
     this.setRoutes();
     this.app.use(errorHandler);
   }
@@ -50,6 +54,23 @@ export class App {
     };
     this.app.use(cors(corsOptions));
     this.setSession();
+  }
+
+  private swaggerDoc() {
+    const options = {
+      swaggerDefinition: {
+        // 這邊會是你的api文件網頁描述
+        info: {
+          title: "Order System API",
+          version: '1.0.0',
+          description: "Simple RESTful API in Node.js with TypeScript",
+        }
+      },
+      // 這邊會是你想要產生的api文件檔案，我是直接讓swagger去列出所有controllers
+      apis: ['./controller/*.ts']
+    };
+    const specs = swaggerJsdoc(options);
+    this.app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(specs));
   }
 
   private setRoutes(): void {
