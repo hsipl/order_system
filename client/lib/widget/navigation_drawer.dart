@@ -172,7 +172,7 @@ void selectedItem(BuildContext context, int index) {
                 color: kConfirmButtonColor,
                 action: '確定',
                 onPress: () async {
-                  Api().logout();
+                  Api().logout(context);
                   SharedPreferences preferences =
                       await SharedPreferences.getInstance();
                   await preferences.clear();

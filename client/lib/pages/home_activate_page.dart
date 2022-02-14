@@ -1,9 +1,11 @@
+import 'package:client/services/api_connection.dart';
 import 'package:client/services/preference_operation.dart';
 import 'package:client/widget/checkout_column.dart';
 import 'package:client/widget/home_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widget/navigation_drawer.dart';
 import 'package:client/widget/cards_column.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,6 +24,7 @@ class _HomePageState extends State<HomePage> {
         title = value!['name'];
       });
     });
+    Api().product(context);
     super.initState();
   }
 

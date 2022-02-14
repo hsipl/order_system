@@ -1,4 +1,8 @@
 import 'dart:async';
+import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions.dart';
+import 'package:client/services/serializer.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'preference_operation.dart';
@@ -37,7 +41,7 @@ class Api {
     return status;
   }
 
-  Future<String> logout() async {
+  Future<String> logout(context) async {
     String status = '';
     try {
       final uri = Uri.parse(kLogoutPath);
@@ -48,6 +52,7 @@ class Api {
       ).timeout(const Duration(seconds: 2));
       if (response.statusCode == 200) {
         status = response.statusCode.toString();
+        StoreProvider.of<AppState>(context).dispatch(ProductClear());
       } else {
         status = 'logout api: ' + response.statusCode.toString();
       }
@@ -57,7 +62,7 @@ class Api {
     return status;
   }
 
-  Future<String> product() async {
+  Future<String> product(context) async {
     String status = '';
     try {
       final uri = Uri.parse(kProductPath);
@@ -72,7 +77,12 @@ class Api {
       ).timeout(const Duration(seconds: 3));
       if (response.statusCode == 200) {
         updateCookie(response);
-        setProductSharedPrefs(response.body);
+
+        List productList = jsonDecode(response.body.toString());
+        for (int i = 0; i < productList.length; i++) {
+          Product product = Product.fromMap(productList[i]);
+          StoreProvider.of<AppState>(context).dispatch(ProductAdd(product));
+        }
         status = response.statusCode.toString();
       } else {
         status = 'product api : ' + response.statusCode.toString();

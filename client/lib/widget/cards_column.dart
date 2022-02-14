@@ -1,7 +1,8 @@
-import 'package:client/services/preference_operation.dart';
+import 'package:client/model/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:client/services/decorations.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'product_card.dart';
 
 class CardsColumn extends StatefulWidget {
@@ -15,38 +16,6 @@ class CardsColumn extends StatefulWidget {
 }
 
 class _CardsColumnState extends State<CardsColumn> {
-  List<dynamic>? product;
-  List<Widget> cards = [];
-
-  @override
-  void initState() {
-    getProductSharedPrefs().then((value) {
-      product = value!;
-
-      setState(() {
-        cards = List.generate(product!.length, (i) {
-          if (product![i]['category'] == widget.category) {
-            List<String> tags = [];
-            for (final tag in product![i]['tags']) {
-              tags.add(tag['tag']);
-            }
-            tags.insert(0,'原味');
-            return ProductCard(
-                img:
-                    'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a',
-                info: tags,
-                product: product![i]['name'].toString(),
-                price: product![i]['price'].toString() + '元');
-          } else {
-            return Container();
-          }
-        });
-      });
-    });
-
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final _controller = ScrollController();
@@ -94,10 +63,16 @@ class _CardsColumnState extends State<CardsColumn> {
                 thickness: 5,
                 thicknessWhileDragging: 6,
                 controller: _controller,
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                  controller: _controller,
-                  children: cards,
+                child: StoreConnector<AppState, AppState>(
+                  converter: (store) => store.state,
+                  builder: (context, store){
+                    return ListView(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                      controller: _controller,
+                      children: cardGenerate(store,widget.category),
+                    );
+                  },
+
                 ),
               ),
             ),
@@ -106,4 +81,22 @@ class _CardsColumnState extends State<CardsColumn> {
       ),
     );
   }
+}
+
+
+List<Widget> cardGenerate(store,category){
+  List product = store.newProductList;
+  List<Widget> cards = List.generate(product.length, (i) {
+    if (product[i].category == category) {
+      return ProductCard(
+          img:
+          'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a',
+          info: product[i].tags,
+          product: product[i].name.toString(),
+          price: product[i].price.toString() + '元');
+    } else {
+      return Container();
+    }
+  });
+  return cards;
 }
