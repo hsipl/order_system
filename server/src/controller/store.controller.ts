@@ -92,7 +92,8 @@ class StoreController {
     const { name, status, type }: { name: string; status: number; type: number } = req.body;
 
     try {
-      const checkIsExist = await this.service.checkExistByID(id);
+      const checkIsExist = await this.service.checkByID(id);
+      console.log(checkIsExist);
       if (!checkIsExist) {
         if (image !== '') await deleteFile(image);
         return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
@@ -109,7 +110,7 @@ class StoreController {
         await deleteFile(image);
         return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.InternalServerError));
       }
-      res.status(200).json(updatedRes);
+      res.status(200).json({ result: true });
     } catch (error) {
       // print to log
       console.log('create db error: ', error);

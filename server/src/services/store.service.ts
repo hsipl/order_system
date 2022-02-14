@@ -35,6 +35,11 @@ export class StoreService {
     return !!isExist;
   }
 
+  async checkByID(id: number): Promise<boolean> {
+    const isExist = await this.repository.get({ id: id });
+    return !!isExist;
+  }
+
   async checkExistByID(id: number): Promise<boolean> {
     const isExist = await this.repository.getById(id);
     return !!isExist;
