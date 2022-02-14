@@ -11,7 +11,7 @@ export default class TagRoute extends BasicRoute {
 
     protected setRoutes() {
         const auth = new Auth();
-        this.router.get("/", auth.authAdmin.bind(auth), (req, res, next) => TagController.getAll(req, res, next));
+        this.router.get("/", auth.authAdmin.bind(auth), (req, res, next) => TagController.get(req, res, next));
         this.router.get("/:id", auth.authAdmin.bind(auth), (req, res, next) => TagController.getById(req, res, next));
         this.router.post("/", auth.authAdmin.bind(auth), (req, res, next) => TagController.create(req, res, next));
         this.router.put("/:id", auth.authAdmin.bind(auth), (req, res, next) => TagController.update(req, res, next));
