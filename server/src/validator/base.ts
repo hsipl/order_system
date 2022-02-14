@@ -22,3 +22,5 @@ export const validateStoreID = () => check('storeId').isInt().notEmpty();
 export const validateUsername = () => check('username').isString().isLength({ min: 5, max: 15 }).notEmpty();
 
 export const validatePassword = () => check('password').isString().isLength({ min: 5, max: 15 }).notEmpty();
+
+export const validatePay = () => check('pay').isInt({ min: 0, max: 1 }).notEmpty();
