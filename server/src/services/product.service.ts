@@ -21,6 +21,11 @@ export class ProductService {
         return product;
     }
 
+    public async getByIds(id: number[]): Promise<Product[] | undefined> {
+        const product = await this.repository.getByIds(id);
+        return product;
+    }
+    
     public async checkExistByName(name: string, storeId: number): Promise<boolean> {
         const isExist = await this.repository.getByName(name, storeId)
         return isExist ? true : false;
@@ -46,7 +51,6 @@ export class ProductService {
     public async update(params: IProductUpdateParams): Promise<UpdateResult | undefined> {
         const product = new Product();
         Object.assign(product, params);
-        // console.log(product);
         return await this.repository.update(product);
     }
 

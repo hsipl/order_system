@@ -10,7 +10,7 @@ export class TagRepository {
             select: field,
             order: {
                 status: "ASC",
-                createdAt: "DESC"
+                createdAt: "ASC"
             }
         });
     }

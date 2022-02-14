@@ -1,7 +1,7 @@
-import { FindConditions, UpdateResult } from "typeorm";
+import { FindConditions, Like, UpdateResult } from "typeorm";
 import { Tag } from "../entity/tag";
 import { TagRepository } from "../repository/tag.respository";
-import { Like } from "typeorm";
+
 export class TagService {
     constructor(private readonly repository: TagRepository) { }
 
