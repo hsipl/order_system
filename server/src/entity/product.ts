@@ -9,6 +9,7 @@ import {
     ManyToOne,
     BaseEntity,
     ManyToMany,
+    OneToMany,
     JoinTable
 } from "typeorm";
 import { Store } from "./store";
@@ -52,7 +53,7 @@ export class Product extends BaseEntity {
         }
     })
     tags: Tag[];
-
+    
     @Column({
         type: "tinyint",
         unsigned: true,
@@ -60,6 +61,7 @@ export class Product extends BaseEntity {
         default: 0,
     })
     status: number;
+
     @CreateDateColumn({ name: "createdAt" })
     createdAt: Date;
 
