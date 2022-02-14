@@ -25,7 +25,6 @@ describe("Testing Store Repository", () => {
     }
     Store.find = jest.fn().mockReturnValue(mockData)
     const data = await repo.get({"status": 0})
-    console.log(data)
     expect(data).toBe(mockData)
    })
    test("test getbyid", async() => {
