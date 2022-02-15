@@ -14,7 +14,7 @@ export class UserService {
     private readonly repository: UserRepository,
     private readonly cacheService: CacheService,
     private readonly StoreRepository: StoreRepository,
-  ) {}
+  ) { }
 
   public async create(params: ICreateUserParams, req: Request) {
     const { sessionID } = req;
@@ -60,13 +60,12 @@ export class UserService {
   public async getAllEmployee(req: Request) {
     const { sessionID } = req;
     const sessionData = await this.cacheService.get(`sess:${sessionID}`);
-    const { role, storeId } = JSON.parse(sessionData).user;
+    const { role, store } = JSON.parse(sessionData).user;
     if (role !== 1) {
       throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
     }
-    // console.log(storeId);
 
-    const employees = await this.repository.getAllEmployee({ storeId });
+    const employees = await this.repository.getAllEmployee({ storeId: store.id });
     return employees;
   }
 }

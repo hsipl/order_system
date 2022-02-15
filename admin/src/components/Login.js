@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
-import styledC from "styled-components";
 import { styled } from "@mui/material/styles";
 import {
   Dialog,
@@ -12,7 +11,8 @@ import {
   Stack,
 } from "@mui/material";
 
-const LoginCon = styled(Dialog)({
+
+const LoginContainer = styled(Dialog)({
   ".MuiBackdrop-root": {
     backgroundColor: "#F3F3FA",
   },
@@ -36,15 +36,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const history = useHistory();
   const [userLogin, setUserLogin] = useState(false);
-  const [errMes, setErrMes] = useState(false);
-
-  let config = {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  };
+  const [errMes, setErrMes] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("user-info")) {
@@ -54,52 +46,67 @@ const Login = () => {
 
   function handleUsername(e) {
     setUserName(e.target.value);
-    console.log(e);
   }
 
   function handlePassWord(e) {
     setPassword(e.target.value);
-    console.log(e);
   }
 
-  async function login() {
-    console.warn(username, password);
-    let item = { username, password };
-    // history.push("/");
-  }
+  const config = {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  };
+
+  const url = "http://localhost:8000/api/user/login";
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     axios
-      .post(
-        "http://localhost:8000/api/user/login",
-        { username, password },
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          withCredentials: true,
-        }
-      )
+      .post(url, { username, password }, config)
       .then((result) => {
-        console.log(result.data.msg);
+        let UserInfo = result.data.data;
 
-        setUserLogin(true);
-        history.push("/");
-        // console.log(result.headers['set-cookie']);
-        console.log(result.headers);
+        if (UserInfo.type === 1) {
+          console.log(result.data.msg);
+          setUserLogin(true);
+
+          localStorage.setItem("Name", JSON.stringify(UserInfo.name));
+
+          localStorage.setItem(
+            "StoreName",
+            JSON.stringify(UserInfo.storeId.name)
+          );
+          localStorage.setItem(
+            "StoreStatus",
+            JSON.stringify(UserInfo.storeId.status)
+          );
+          localStorage.setItem("UserName", JSON.stringify(UserInfo.name));
+          localStorage.setItem(
+            "UserAccount",
+            JSON.stringify(UserInfo.username)
+          );
+          localStorage.setItem(
+            "StoreLogo",
+            JSON.stringify(UserInfo.storeId.image)
+          );
+          localStorage.setItem(
+            "StoreType",
+            JSON.stringify(UserInfo.storeId.type)
+          );
+          history.push("/");
+        } else {
+          setUserLogin(false);
+          setErrMes(1);
+        }
       })
       .catch((err) => {
         console.log(err);
         setUserLogin(false);
-        setErrMes(true);
-        // history.push("/")//temporary
+        setErrMes(0);
       });
-
-    localStorage.setItem("name", JSON.stringify(username));
-    localStorage.setItem("password", JSON.stringify(password));
   }
 
   const handleKeypress = (e) => {
@@ -107,10 +114,9 @@ const Login = () => {
       handleSubmit();
     }
   };
-
   return (
     <>
-      <LoginCon open="true" maxWidth="xl">
+      <LoginContainer open="true" maxWidth="xl">
         <DialogTitle sx={{ fontWeight: "bold", textAlign: "center" }}>
           登入
         </DialogTitle>
@@ -134,19 +140,14 @@ const Login = () => {
               label="密碼"
               onKeyPress={handleKeypress}
             />
-            {errMes == true && <Wrong severity="warning">帳號或密碼錯誤</Wrong>}
-            <Submit
-              id="ButtonSubmit"
-              variant="contained"
-              type="submit"
-              onClick={login}
-            >
+            {errMes === 0 && <Wrong severity="warning">帳號或密碼錯誤</Wrong>}
+            {errMes === 1 && <Wrong severity="warning">權限不足</Wrong>}
+            <Submit id="ButtonSubmit" variant="contained" type="submit">
               登入
             </Submit>
           </Stack>
-          {/* <Register href="/">Don't have an account? Sign Up</Register> */}
         </form>
-      </LoginCon>
+      </LoginContainer>
     </>
   );
 };
