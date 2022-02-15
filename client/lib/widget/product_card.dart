@@ -1,18 +1,16 @@
+import 'package:client/model/app_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'order_dialog.dart';
 
 class ProductCard extends StatefulWidget {
   const ProductCard({
     Key? key,
-    required this.img,
-    required this.info,
-    required this.product,
-    required this.price,
+    required this.productId,
   }) : super(key: key);
-  final String product;
-  final List<String> info;
-  final String price;
-  final String img;
+
+  final int productId;
+
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -59,10 +57,7 @@ class _ProductCardState extends State<ProductCard> {
                   child: Opacity(
                     opacity: a1.value,
                     child: OrderDialog(
-                      img: super.widget.img,
-                      info: super.widget.info,
-                      product: super.widget.product,
-                      price: super.widget.price,
+                      productId: super.widget.productId,
                     ),
                   ),
                 );
@@ -80,20 +75,25 @@ class _ProductCardState extends State<ProductCard> {
             });
           },
           child: Center(
-            child: ListTile(
-              enabled: true,
-              leading: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Image(image: NetworkImage(widget.img)),
-                  )
-                ],
-              ),
-              title: Text(widget.product),
-              trailing: Text(widget.price),
+            child: StoreConnector<AppState,AppState>(
+              converter: (store) => store.state,
+              builder: (context,store){
+                return ListTile(
+                  enabled: true,
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Image(image: NetworkImage(store.newProductList[widget.productId].img)),
+                      )
+                    ],
+                  ),
+                  title: Text(store.newProductList[widget.productId].product),
+                  trailing: Text(store.newProductList[widget.productId].price),
+                );
+              },
             ),
           ),
         ),

@@ -1,9 +1,14 @@
+import 'package:client/model/app_state.dart';
+import 'package:client/services/decorations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+
+import '../styled_buttons.dart';
 
 class TagsInput extends StatelessWidget {
-  const TagsInput({Key? key, required this.tagButtons}) : super(key: key);
-  final List<Widget> tagButtons;
+  const TagsInput({Key? key, required this.index}) : super(key: key);
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +28,42 @@ class TagsInput extends StatelessWidget {
             removeTop: true,
             child: CupertinoScrollbar(
               child: SingleChildScrollView(
-                child: Wrap(
-                  alignment: WrapAlignment.start,
-                  crossAxisAlignment: WrapCrossAlignment.start,
-                  spacing: 5,
-                  children: tagButtons,
+                child: StoreConnector<AppState,AppState>(
+                  converter: (store)  => store.state,
+                  builder: (context, store){
+                    return Wrap(
+                      alignment: WrapAlignment.start,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      spacing: 5,
+                      children: tagButtonGenerate(store,index),
+                    );
+                  } ,
                 ),
               ),
             ),
           ),
         ));
   }
+}
+
+List<ActionButton> tagButtonGenerate(store,index){
+  List product = store.newProductList;
+  List tags = product[index].tags;
+  return List.generate(
+    tags.length,
+        (i) => ActionButton(
+      action: tags[i],
+      color: primaryTextColor,
+      onPress: () {
+        // setState(() {
+        //   List<String> checkList =
+        //   customLabels[customLabels.length - 1].split(',');
+        //   if (!checkList.contains(widget.info[i])) {
+        //     customLabels[customLabels.length - 1] =
+        //         customLabels[customLabels.length - 1] + widget.info[i] + ',';
+        //   }
+        // });
+      },
+    ),
+  );
 }

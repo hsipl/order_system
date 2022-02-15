@@ -1,9 +1,12 @@
+import 'package:client/model/app_state.dart';
 import 'package:client/services/decorations.dart';
+import 'package:client/services/serializer.dart';
 import 'package:client/widget/styled_buttons.dart';
 import 'package:client/widget/widget_for_order_dialog/action_row.dart';
 import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
 import 'package:client/widget/widget_for_order_dialog/tag_input.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'widget_for_order_dialog/label_text_container.dart';
 import 'widget_for_order_dialog/amount_input.dart';
 import 'widget_for_order_dialog/filter_image.dart';
@@ -12,15 +15,9 @@ import 'widget_for_order_dialog/product_info.dart';
 class OrderDialog extends StatefulWidget {
   const OrderDialog(
       {Key? key,
-      required this.img,
-      required this.product,
-      required this.price,
-      required this.info})
+      required this.productId,})
       : super(key: key);
-  final String product;
-  final List<String> info;
-  final String price;
-  final String img;
+  final int productId;
 
   @override
   _OrderDialogState createState() => _OrderDialogState();
@@ -95,76 +92,66 @@ class _OrderDialogState extends State<OrderDialog> {
           }),
     ];
 
-    tagButtons = List.generate(
-      widget.info.length,
-      (i) => ActionButton(
-        action: widget.info[i],
-        color: primaryTextColor,
-        onPress: () {
-          setState(() {
-            List<String> checkList =
-                customLabels[customLabels.length - 1].split(',');
-            if (!checkList.contains(widget.info[i])) {
-              customLabels[customLabels.length - 1] =
-                  customLabels[customLabels.length - 1] + widget.info[i] + ',';
-            }
-          });
-        },
-      ),
-    );
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-      child: SingleChildScrollView(
-        child: SizedBox(
-          height: 600.0,
-          width: 900.0,
-          child: Column(
-            children: <Widget>[
-              Stack(
-                  clipBehavior: Clip.antiAlias,
-                  alignment: Alignment.center,
-                  children: [
-                    FilteredImage(
-                      image: widget.img,
-                    ),
-                    ProductInfo(widget: widget),
-                  ]),
+    return StoreConnector<AppState,AppState>(
+      converter: (store) => store.state,
+      builder:(context,store){
+        Product product = store.newProductList[widget.productId];
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          child: SingleChildScrollView(
+            child: SizedBox(
+              height: 600.0,
+              width: 900.0,
+              child: Column(
+                children: <Widget>[
+                  Stack(
+                      clipBehavior: Clip.antiAlias,
+                      alignment: Alignment.center,
+                      children: [
+                        FilteredImage(
+                          image: product.img,
+                        ),
+                        ProductInfo(productId: widget.productId),
+                      ]),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(20, 25, 20, 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    LabelTextContainer(
-                      deleteItem: deleteItem,
-                      getCustomData: getCustomData,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 25, 20, 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LabelTextContainer(
+                          deleteItem: deleteItem,
+                          getCustomData: getCustomData,
+                        ),
+                        TagsInput(index : widget.productId),
+                        AmountInput(
+                          amount: amount,
+                          returnAmount: getAmount,
+                        ),
+                        EditButtonsForTextContainer(buttons: editButtons),
+                      ],
                     ),
-                    TagsInput(tagButtons: tagButtons),
-                    AmountInput(
-                      amount: amount,
-                      returnAmount: getAmount,
-                    ),
-                    EditButtonsForTextContainer(buttons: editButtons),
-                  ],
-                ),
+                  ),
+                  //TODO send values to ActionRow()
+                  ActionRow(
+                    amount: customLabelsNum,
+                    price: product.price.toString(),
+                    labels: customLabels,
+                    product: product.name,
+                  ),
+                ],
               ),
-              //TODO send values to ActionRow()
-              ActionRow(
-                amount: customLabelsNum,
-                price: widget.price,
-                labels: customLabels,
-                product: widget.product,
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }

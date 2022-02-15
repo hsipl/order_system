@@ -65,14 +65,13 @@ class _CardsColumnState extends State<CardsColumn> {
                 controller: _controller,
                 child: StoreConnector<AppState, AppState>(
                   converter: (store) => store.state,
-                  builder: (context, store){
+                  builder: (context, store) {
                     return ListView(
                       padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                       controller: _controller,
-                      children: cardGenerate(store,widget.category),
+                      children: cardGenerate(store, widget.category),
                     );
                   },
-
                 ),
               ),
             ),
@@ -83,17 +82,13 @@ class _CardsColumnState extends State<CardsColumn> {
   }
 }
 
-
-List<Widget> cardGenerate(store,category){
+List<Widget> cardGenerate(store, category) {
   List product = store.newProductList;
   List<Widget> cards = List.generate(product.length, (i) {
     if (product[i].category == category) {
       return ProductCard(
-          img:
-          'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a',
-          info: product[i].tags,
-          product: product[i].name.toString(),
-          price: product[i].price.toString() + '元');
+        productId: i,
+      );
     } else {
       return Container();
     }
