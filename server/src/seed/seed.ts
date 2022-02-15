@@ -181,7 +181,7 @@ const genData = async () => {
 
 
 
-  console.log('START PRODUCT TAG SUCCESS...');
+  console.log('1START PRODUCT TAG SUCCESS...');
   const productData = []
   for (let i = 0; i < 32; i++) {
     let product = new Product();
