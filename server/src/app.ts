@@ -15,7 +15,7 @@ import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity/index";
 import swaggerUi from "swagger-ui-express";
-import swaggerJsdoc from "swagger-jsdoc";
+import swaggerJSDoc from "swagger-jsdoc";
 import swaggerDocument from "../swagger.json";
 
 // create app class for server
@@ -57,20 +57,45 @@ export class App {
   }
 
   private swaggerDoc() {
-    const options = {
-      swaggerDefinition: {
-        // 這邊會是你的api文件網頁描述
+    const options: swaggerJSDoc.Operation = {
+      definition: {
+        openapi: "3.0.0",
         info: {
-          title: "Order System API",
-          version: "1.0.0",
-          description: "Simple RESTful API in Node.js with TypeScript",
+          title: 'Order System API Title',
+          version: '1.0'
         },
+        components: {
+          securitySchemas: {
+            bearerAuth: {
+              type: 'http',
+              scheme: "bearer",
+              bearerFormat: "JWT"
+            },
+          },
+        },
+        security: [
+          { bearerAuth: [], }
+        ]
       },
       // 這邊會是你想要產生的api文件檔案，我是直接讓swagger去列出所有controllers
-      apis: ["./controller/*.ts"],
+      apis: ["./src/routes/*.ts","./src/entity/*.ts"],
     };
-    const specs = swaggerJsdoc(options);
-    this.app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
+    const specs = swaggerJSDoc(options);
+    this.app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    // this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
+    //   swaggerDefinition: {
+    //     // 這邊會是你的api文件網頁描述
+    //     info: {
+    //         title: "Order System API",
+    //         version: "1.0.0",
+    //         description: "Simple RESTful API in Node.js with TypeScript",
+    //     },
+    // },
+    // this.app.get("docs.json", (req: Request, res: Response) => {
+    //     res.setHeader("Content-Type", "application/json");
+    //     res.send(swaggerSpec);
+    // });
+
   }
 
   private setRoutes(): void {
