@@ -1,5 +1,6 @@
 import 'package:client/model/app_state.dart';
 import 'package:client/services/decorations.dart';
+import 'package:client/services/serializer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -7,8 +8,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import '../styled_buttons.dart';
 
 class TagsInput extends StatelessWidget {
-  const TagsInput({Key? key, required this.index}) : super(key: key);
-  final int index;
+  const TagsInput({Key? key, required this.productId,required this.setTagFunction}) : super(key: key);
+  final int productId;
+  final Function setTagFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +33,12 @@ class TagsInput extends StatelessWidget {
                 child: StoreConnector<AppState,AppState>(
                   converter: (store)  => store.state,
                   builder: (context, store){
+
                     return Wrap(
                       alignment: WrapAlignment.start,
                       crossAxisAlignment: WrapCrossAlignment.start,
                       spacing: 5,
-                      children: tagButtonGenerate(store,index),
+                      children: tagButtonGenerate(store,productId,setTagFunction),
                     );
                   } ,
                 ),
@@ -46,23 +49,16 @@ class TagsInput extends StatelessWidget {
   }
 }
 
-List<ActionButton> tagButtonGenerate(store,index){
-  List product = store.newProductList;
-  List tags = product[index].tags;
+List<ActionButton> tagButtonGenerate(store,productId,setTagFunction){
+  Product product = Product.find(store,productId);
+  List tags = product.tags;
   return List.generate(
     tags.length,
         (i) => ActionButton(
       action: tags[i],
       color: primaryTextColor,
-      onPress: () {
-        // setState(() {
-        //   List<String> checkList =
-        //   customLabels[customLabels.length - 1].split(',');
-        //   if (!checkList.contains(widget.info[i])) {
-        //     customLabels[customLabels.length - 1] =
-        //         customLabels[customLabels.length - 1] + widget.info[i] + ',';
-        //   }
-        // });
+      onPress: (){
+        setTagFunction(tags,i);
       },
     ),
   );

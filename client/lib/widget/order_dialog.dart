@@ -13,10 +13,10 @@ import 'widget_for_order_dialog/filter_image.dart';
 import 'widget_for_order_dialog/product_info.dart';
 
 class OrderDialog extends StatefulWidget {
-  const OrderDialog(
-      {Key? key,
-      required this.productId,})
-      : super(key: key);
+  const OrderDialog({
+    Key? key,
+    required this.productId,
+  }) : super(key: key);
   final int productId;
 
   @override
@@ -24,7 +24,6 @@ class OrderDialog extends StatefulWidget {
 }
 
 class _OrderDialogState extends State<OrderDialog> {
-  List<Widget> tagButtons = [];
   List<Widget> editButtons = [];
 
   List<String> customLabels = [''];
@@ -52,6 +51,16 @@ class _OrderDialogState extends State<OrderDialog> {
     setState(() {
       this.amount = amount;
       customLabelsNum[customLabelsNum.length - 1] = this.amount.toString();
+    });
+  }
+
+  void setTag(tags, i) {
+    setState(() {
+      List<String> checkList = customLabels[customLabels.length - 1].split(',');
+      if (!checkList.contains(tags[i])) {
+        customLabels[customLabels.length - 1] =
+            customLabels[customLabels.length - 1] + tags[i] + ',';
+      }
     });
   }
 
@@ -92,66 +101,68 @@ class _OrderDialogState extends State<OrderDialog> {
           }),
     ];
 
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState,AppState>(
-      converter: (store) => store.state,
-      builder:(context,store){
-        Product product = store.newProductList[widget.productId];
-        return Dialog(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
-          child: SingleChildScrollView(
-            child: SizedBox(
-              height: 600.0,
-              width: 900.0,
-              child: Column(
-                children: <Widget>[
-                  Stack(
-                      clipBehavior: Clip.antiAlias,
-                      alignment: Alignment.center,
-                      children: [
-                        FilteredImage(
-                          image: product.img,
-                        ),
-                        ProductInfo(productId: widget.productId),
-                      ]),
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, store) {
+          Product product = Product.find(store, widget.productId);
+          return Dialog(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12.0)),
+            child: SingleChildScrollView(
+              child: SizedBox(
+                height: 600.0,
+                width: 900.0,
+                child: Column(
+                  children: <Widget>[
+                    Stack(
+                        clipBehavior: Clip.antiAlias,
+                        alignment: Alignment.center,
+                        children: [
+                          FilteredImage(
+                            image: product.img,
+                          ),
+                          ProductInfo(productId: widget.productId),
+                        ]),
 
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 25, 20, 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        LabelTextContainer(
-                          deleteItem: deleteItem,
-                          getCustomData: getCustomData,
-                        ),
-                        TagsInput(index : widget.productId),
-                        AmountInput(
-                          amount: amount,
-                          returnAmount: getAmount,
-                        ),
-                        EditButtonsForTextContainer(buttons: editButtons),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 25, 20, 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          LabelTextContainer(
+                            deleteItem: deleteItem,
+                            getCustomData: getCustomData,
+                          ),
+                          TagsInput(
+                            productId: widget.productId,
+                            setTagFunction: setTag,
+                          ),
+                          AmountInput(
+                            amount: amount,
+                            returnAmount: getAmount,
+                          ),
+                          EditButtonsForTextContainer(buttons: editButtons),
+                        ],
+                      ),
                     ),
-                  ),
-                  //TODO send values to ActionRow()
-                  ActionRow(
-                    amount: customLabelsNum,
-                    price: product.price.toString(),
-                    labels: customLabels,
-                    product: product.name,
-                  ),
-                ],
+                    //TODO send values to ActionRow()
+                    ActionRow(
+                      amount: customLabelsNum,
+                      price: product.price,
+                      labels: customLabels,
+                      product: product.name,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 }

@@ -1,4 +1,5 @@
 import 'package:client/model/app_state.dart';
+import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:client/services/decorations.dart';
@@ -83,11 +84,12 @@ class _CardsColumnState extends State<CardsColumn> {
 }
 
 List<Widget> cardGenerate(store, category) {
-  List product = store.newProductList;
-  List<Widget> cards = List.generate(product.length, (i) {
-    if (product[i].category == category) {
+
+  List<Widget> cards = List.generate(store.newProductList.length, (i) {
+    Product product = store.newProductList[i];
+    if (product.category == category) {
       return ProductCard(
-        productId: i,
+        productId: product.id,
       );
     } else {
       return Container();

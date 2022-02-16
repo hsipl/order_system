@@ -17,8 +17,7 @@ class ProductInfo extends StatelessWidget {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, store) {
-
-        Product product = store.newProductList[productId];
+        Product product = Product.find(store, productId);
 
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,

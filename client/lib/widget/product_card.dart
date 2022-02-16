@@ -1,4 +1,5 @@
 import 'package:client/model/app_state.dart';
+import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'order_dialog.dart';
@@ -10,7 +11,6 @@ class ProductCard extends StatefulWidget {
   }) : super(key: key);
 
   final int productId;
-
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -69,15 +69,13 @@ class _ProductCardState extends State<ProductCard> {
               pageBuilder: (context, animation1, animation2) {
                 return Container();
               },
-            ).then((dataFromDialog){
-              // DEBUG
-              print(dataFromDialog);
-            });
+            );
           },
           child: Center(
-            child: StoreConnector<AppState,AppState>(
+            child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,
-              builder: (context,store){
+              builder: (context, store) {
+                Product product = Product.find(store, widget.productId);
                 return ListTile(
                   enabled: true,
                   leading: Column(
@@ -86,12 +84,12 @@ class _ProductCardState extends State<ProductCard> {
                       SizedBox(
                         height: 50,
                         width: 50,
-                        child: Image(image: NetworkImage(store.newProductList[widget.productId].img)),
+                        child: Image(image: NetworkImage(product.img)),
                       )
                     ],
                   ),
-                  title: Text(store.newProductList[widget.productId].product),
-                  trailing: Text(store.newProductList[widget.productId].price),
+                  title: Text(product.name),
+                  trailing: Text(product.price),
                 );
               },
             ),
@@ -101,4 +99,3 @@ class _ProductCardState extends State<ProductCard> {
     );
   }
 }
-
