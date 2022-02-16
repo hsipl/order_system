@@ -65,7 +65,6 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
                         text: '送出',
                         onPress: () {
                           print(store.newCheckoutList);
-                          print(store.newProductList);
                         }),
                   );
                 }),

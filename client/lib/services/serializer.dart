@@ -18,6 +18,7 @@ class Product {
     img = 'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a';
     category = map['category'];
     status = map['status'];
+    tags.add('原味');
     for (final tag in map['tags']) {
       tags.add(tag['tag']);
     }
