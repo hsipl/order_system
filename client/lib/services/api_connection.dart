@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:client/model/app_state.dart';
 import 'package:client/redux/actions.dart';
 import 'package:client/services/serializer.dart';
+import 'package:client/widget/error_dialog.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
@@ -13,7 +15,7 @@ const String kStorePath = 'http://140.125.45.167:8000/api/store';
 const String kProductPath = 'http://140.125.45.167:8000/api/product';
 
 class Api {
-  Future<String> login(Map loginData) async {
+  Future<String> login(Map loginData, context) async {
     String status = '';
     try {
       final uri = Uri.parse(kLoginPath);
@@ -31,12 +33,19 @@ class Api {
         Map<String, dynamic> store =
             jsonDecode(response.body)['data']['storeId'];
         setStoreInfoSharedPrefs(jsonEncode(store));
+        setLoginSharedPrefs(true);
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/home_activate', (Route<dynamic> route) => false);
       } else {
         status = 'login api: ' + response.statusCode.toString();
+        setLoginSharedPrefs(false);
+        showErrorDialog(context, status);
       }
       status = response.statusCode.toString();
     } on TimeoutException catch (e) {
       status = 'login api: ' + e.toString();
+      setLoginSharedPrefs(false);
+      showErrorDialog(context, status);
     }
     return status;
   }
@@ -55,9 +64,11 @@ class Api {
         StoreProvider.of<AppState>(context).dispatch(ProductClear());
       } else {
         status = 'logout api: ' + response.statusCode.toString();
+        showErrorDialog(context, status);
       }
     } on TimeoutException catch (e) {
       status = 'logout api : ' + e.toString();
+      showErrorDialog(context, status);
     }
     return status;
   }
@@ -86,9 +97,17 @@ class Api {
         status = response.statusCode.toString();
       } else {
         status = 'product api : ' + response.statusCode.toString();
+        setLoginSharedPrefs(false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/home_deactivate', (Route<dynamic> route) => false);
+        showErrorDialog(context, status);
       }
     } on TimeoutException catch (e) {
       status = 'product api : ' + e.toString();
+      setLoginSharedPrefs(false);
+      Navigator.pushNamedAndRemoveUntil(
+          context, '/home_deactivate', (Route<dynamic> route) => false);
+      showErrorDialog(context, status);
     }
     return status;
   }
