@@ -10,7 +10,6 @@ class AmountInput extends StatefulWidget {
   }) : super(key: key);
 
   final Function returnAmount;
-
   final int amount;
 
   @override

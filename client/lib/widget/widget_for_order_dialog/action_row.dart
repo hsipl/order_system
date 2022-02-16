@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import '../styled_buttons.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-
 enum Actions { orderData }
+
 class ActionRow extends StatefulWidget {
   const ActionRow({
     Key? key,
@@ -15,8 +15,6 @@ class ActionRow extends StatefulWidget {
     required this.amount,
     required this.product,
   }) : super(key: key);
-
-
 
   final String price;
   final String product;
@@ -35,24 +33,24 @@ class _ActionRowState extends State<ActionRow> {
       child: Row(
         children: [
           SizedBox(
-            width: 150,
-            height: 50,
-            child:ActionButton(
-                  action: '確定',
-                  color: kConfirmButtonColor,
-                  //TODO send values to check out column
-                  onPress: () {
-                    Map returnDataFromDialog = {
-                      'product':widget.product,
-                      'price':widget.price,
-                      'labels':widget.labels,
-                      'amount' :widget.amount,
-                    };
-                    StoreProvider.of<AppState>(context).dispatch(CheckoutAdd(returnDataFromDialog));
-                    Navigator.pop(context,returnDataFromDialog);
-                  },
-                )
-          ),
+              width: 150,
+              height: 50,
+              child: ActionButton(
+                action: '確定',
+                color: kConfirmButtonColor,
+                //TODO send values to check out column
+                onPress: () {
+                  Map returnDataFromDialog = {
+                    'product': widget.product,
+                    'price': widget.price,
+                    'labels': widget.labels,
+                    'amount': widget.amount,
+                  };
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(CheckoutAdd(returnDataFromDialog));
+                  Navigator.pop(context, returnDataFromDialog);
+                },
+              )),
           const Spacer(),
           SizedBox(
             width: 150,

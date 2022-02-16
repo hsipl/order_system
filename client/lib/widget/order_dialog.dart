@@ -1,7 +1,5 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
-import 'package:client/widget/styled_buttons.dart';
 import 'package:client/widget/widget_for_order_dialog/action_row.dart';
 import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
 import 'package:client/widget/widget_for_order_dialog/tag_input.dart';
@@ -64,44 +62,31 @@ class _OrderDialogState extends State<OrderDialog> {
     });
   }
 
-  @override
-  void initState() {
-    //TODO Refactor those ugly code
-    editButtons = [
-      ActionButton(
-          color: kConfirmButtonColor,
-          action: '輸入下列',
-          onPress: () {
-            setState(
-              () {
-                if (customLabels.last != '' && customLabelsNum.last != '') {
-                  customLabels.add('');
-                  customLabelsNum.add('1');
-                  amount = 1;
-                } else {
-                  customLabels.last = '';
-                  customLabelsNum.last = '1';
-                  amount = 1;
-                  const snackBar = SnackBar(
-                    content: Text('不符合規範，因此刪除'),
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                }
-              },
-            );
-          }),
-      ActionButton(
-          color: kCancelButtonColor,
-          action: '清空所有',
-          onPress: () {
-            setState(() {
-              customLabels = [''];
-              customLabelsNum = ['1'];
-            });
-          }),
-    ];
+  void nextLabel() {
+    setState(
+      () {
+        if (customLabels.last != '' && customLabelsNum.last != '') {
+          customLabels.add('');
+          customLabelsNum.add('1');
+          amount = 1;
+        } else {
+          customLabels.last = '';
+          customLabelsNum.last = '1';
+          amount = 1;
+          const snackBar = SnackBar(
+            content: Text('不符合規範，因此刪除'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      },
+    );
+  }
 
-    super.initState();
+  void clearLabel() {
+    setState(() {
+      customLabels = [''];
+      customLabelsNum = ['1'];
+    });
   }
 
   @override
@@ -147,7 +132,10 @@ class _OrderDialogState extends State<OrderDialog> {
                             amount: amount,
                             returnAmount: getAmount,
                           ),
-                          EditButtonsForTextContainer(buttons: editButtons),
+                          EditButtonsForTextContainer(
+                            nextLabel: nextLabel,
+                            clearLabel: clearLabel,
+                          ),
                         ],
                       ),
                     ),
