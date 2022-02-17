@@ -1,12 +1,12 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions.dart';
+import 'package:client/redux/actions/checkout_action.dart';
+import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 import '../styled_buttons.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-enum Actions { orderData }
 
 class ActionRow extends StatefulWidget {
   const ActionRow({
@@ -39,14 +39,17 @@ class _ActionRowState extends State<ActionRow> {
                 color: kConfirmButtonColor,
                 //TODO send values to check out column
                 onPress: () {
-                  Map<String,dynamic> returnDataFromDialog = {
+                  Map<String, dynamic> returnDataFromDialog = {
                     'productId': widget.productId,
                     'tags': widget.tags,
                     'amount': widget.amount,
                   };
-                  CheckoutItem checkoutItem = CheckoutItem.fromMap(returnDataFromDialog);
+                  CheckoutItem checkoutItem =
+                      CheckoutItem.fromMap(returnDataFromDialog);
                   StoreProvider.of<AppState>(context)
                       .dispatch(CheckoutAdd(checkoutItem));
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(TempCheckoutClear());
                   Navigator.pop(context, returnDataFromDialog);
                 },
               )),
@@ -57,7 +60,11 @@ class _ActionRowState extends State<ActionRow> {
             child: ActionButton(
               action: '取消',
               color: kCancelButtonColor,
-              onPress: () => Navigator.pop(context),
+              onPress: () {
+                StoreProvider.of<AppState>(context)
+                    .dispatch(TempCheckoutClear());
+                Navigator.pop(context);
+              },
             ),
           ),
         ],

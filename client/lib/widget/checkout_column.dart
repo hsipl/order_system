@@ -1,5 +1,5 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions.dart';
+import 'package:client/redux/actions/checkout_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
 import 'package:client/widget/styled_buttons.dart';
@@ -99,7 +99,7 @@ class _CheckListState extends State<CheckList> {
                 key: UniqueKey(),
                 onDismissed: (direction) {
                   setState(() {
-                    store.newCheckoutList.removeAt(index);
+                    StoreProvider.of<AppState>(context).dispatch(CheckoutRemove(index));
                   });
                 },
                 background: Padding(

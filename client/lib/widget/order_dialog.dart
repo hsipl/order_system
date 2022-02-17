@@ -1,5 +1,5 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions.dart';
+import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/serializer.dart';
 import 'package:client/widget/widget_for_order_dialog/action_row.dart';
 import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
@@ -29,7 +29,6 @@ class _OrderDialogState extends State<OrderDialog> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -37,7 +36,10 @@ class _OrderDialogState extends State<OrderDialog> {
         converter: (store) => store.state,
         builder: (context, store) {
           Product product = Product.find(store, widget.productId);
-
+          CheckoutItem tempItem = CheckoutItem(product.id, 0, []);
+          if(store.newTempCheckoutList.isEmpty){
+            StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(tempItem));
+          }
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0)),
@@ -68,7 +70,7 @@ class _OrderDialogState extends State<OrderDialog> {
                             productId: widget.productId,
                           ),
                           const AmountInput(),
-                          const EditButtonsForTextContainer(),
+                          EditButtonsForTextContainer(productId: widget.productId,),
                         ],
                       ),
                     ),

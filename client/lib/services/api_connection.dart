@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions.dart';
+import 'package:client/redux/actions/product_action.dart';
 import 'package:client/services/serializer.dart';
 import 'package:client/widget/error_dialog.dart';
 import 'package:flutter/material.dart';

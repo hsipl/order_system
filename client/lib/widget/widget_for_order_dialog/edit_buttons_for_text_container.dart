@@ -5,12 +5,12 @@ import '../styled_buttons.dart';
 
 class EditButtonsForTextContainer extends StatelessWidget {
   const EditButtonsForTextContainer({
-    Key? key,
+    Key? key,required this.productId,
   }) : super(key: key);
 
-  void nextLabel() {}
-
-  void clearLabel() {}
+  final int productId;
+  void nextCheckoutItem() {}
+  void clearCheckoutItem() {}
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +31,12 @@ class EditButtonsForTextContainer extends StatelessWidget {
             ActionButton(
               color: kConfirmButtonColor,
               action: '輸入下列',
-              onPress: nextLabel,
+              onPress: nextCheckoutItem,
             ),
             ActionButton(
               color: kCancelButtonColor,
               action: '清空所有',
-              onPress: clearLabel,
+              onPress: clearCheckoutItem,
             ),
           ],
         ),

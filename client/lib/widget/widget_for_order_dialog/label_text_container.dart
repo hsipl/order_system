@@ -1,4 +1,5 @@
 import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/decorations.dart';
 
 import 'package:flutter/material.dart';
@@ -66,10 +67,9 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
                         child: Dismissible(
                           key: UniqueKey(),
                           onDismissed: (direction) {
-                            setState(() {
-                              store.newTempCheckoutList.removeAt(index);
-                            });
-                          },
+                            StoreProvider.of<AppState>(context)
+                                  .dispatch(TempCheckoutRemove(index));
+                             },
                           background: Container(
                               color: kCancelButtonColor,
                               child: const Icon(Icons.delete,
