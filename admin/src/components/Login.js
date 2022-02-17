@@ -84,6 +84,7 @@ const Login = () => {
       });
       localStorage.setItem("name", JSON.stringify(username));
       localStorage.setItem("password", JSON.stringify(password));
+      localStorage.setItem("Tabs", "1");
   }
 
   const handleKeypress = (e) => {

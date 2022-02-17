@@ -39,7 +39,11 @@ import TabPanel from "@mui/lab/TabPanel";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Tooltip from "@mui/material/Tooltip";
+import Divider from "@mui/material/Divider";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Draggable from "react-draggable";
 
 const Productcon = styled.div`
   position: relative;
@@ -73,8 +77,7 @@ const Product = () => {
   const [open, setOpen] = useState(false);
   const [openDe, setOpenDe] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  const [currentSauceInfo, setCurrentSauceInfo] = useState();
-  const [currentProductInfo, setCurrentProductInfo] = useState();
+  // const [currentSauceInfo, setCurrentSauceInfo] = useState();
   const [sauceInfo, setSauceInfo] = useState({
     tag: "",
     status: 0,
@@ -89,22 +92,44 @@ const Product = () => {
     status: 0,
     storeId: localStorage.getItem("StoreId"),
   });
+  const [currentSauce, setCurrentSauce] = useState({});
+  const [currentInfo, setCurrentInfo] = useState({});
 
   /*Tab*/
 
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = useState(localStorage.getItem("Tabs"));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    {
+      localStorage.setItem("Tabs", newValue);
+    }
   };
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleDeClickOpen = (id) => {
+  const handleProductDeClickOpen = (id, item, index) => {
     setOpenDe(true);
     setCurrentId(id);
+    setCurrentInfo({
+      ["name"]: item.name,
+      ["price"]: item.price,
+      ["category"]:
+        item.category === "肉類"
+          ? 0
+          : item.category === "蔬菜類"
+          ? 1
+          : item.category === "加工類"
+          ? 2
+          : 3,
+      ["category2"]: item.category,
+      ["image"]: item.image,
+
+      ["tag"]: getProductId[index],
+      ["tagName"]: getProductTag[index],
+    });
   };
 
   const handleDeClose = () => {
@@ -115,11 +140,31 @@ const Product = () => {
     setOpen(false);
   };
 
-  const handleEditOpen = (id, tag, name) => {
+  const handleProductEditOpen = (id, item, index) => {
     setOpenEdit(true);
 
-    setCurrentSauceInfo(tag);
-    setCurrentProductInfo(name);
+    setCurrentInfo({
+      ["name"]: item.name,
+      ["price"]: item.price,
+      ["category"]:
+        item.category === "肉類"
+          ? 0
+          : item.category === "蔬菜類"
+          ? 1
+          : item.category === "加工類"
+          ? 2
+          : 3,
+      ["category2"]: item.category,
+      ["image"]: item.image,
+
+      ["tag"]: getProductId[index],
+      ["tagName"]: getProductTag[index],
+    });
+
+    // console.log(currentInfo);
+    // console.log(currentInfo.tag.length);
+    // console.log(item.image);
+    // console.log(currentInfo.tagName);
     setCurrentId(id);
   };
 
@@ -136,12 +181,19 @@ const Product = () => {
     withCredentials: true,
   };
 
+  function PaperComponent(props) {
+    return (
+      <Draggable>
+        <Paper {...props} />
+      </Draggable>
+    );
+  }
+
   /***************Handle Sauce***************/
   useEffect(() => {
     const get_SauceApi = async () => {
       let { data } = await axios.get(url_Sauce, config);
       setSauceData(data);
-
       for (var i = 0; i < data.length; i++) {
         data[i].status === 0
           ? (data[i].status = "使用中")
@@ -161,28 +213,56 @@ const Product = () => {
     }));
   }
 
-  const handleSubmit = async () => {
+  const handleSauceDeClickOpen = (item, index) => {
+    setOpenDe(true);
+
+    setCurrentSauce({
+      ["id"]: item.id,
+      ["tag"]: item.tag,
+      ["status"]: item.status === "使用中" ? 0 : 1,
+    });
+    // console.log(currentSauce)
+  };
+
+  const handleSauceEditOpen = (item, index) => {
+    setOpenEdit(true);
+
+    setCurrentSauce({
+      ["id"]: item.id,
+      ["tag"]: item.tag,
+      ["status"]: item.status === "使用中" ? 0 : 1,
+    });
+    // console.log(currentSauce)
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       await axios.post(url_Sauce, JSON.stringify(sauceInfo), config);
 
       window.location.reload();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+      console.log(JSON.stringify(sauceInfo));
+    }
   };
 
-  const handleEditSubmit = async () => {
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
     try {
       await axios.put(
-        url_Sauce + "/" + currentId,
+        url_Sauce + "/" + currentSauce.id,
         JSON.stringify(sauceInfo),
         config
       );
       window.location.reload();
+      console.log("sucess");
     } catch (error) {}
   };
 
   const handleDelete = async () => {
     try {
-      await axios.delete(url_Sauce + "/" + currentId, config);
+      await axios.delete(url_Sauce + "/" + currentSauce.id, config);
       window.location.reload();
     } catch (error) {}
   };
@@ -197,10 +277,16 @@ const Product = () => {
         item.tag.toLowerCase().includes(searchInput.toLocaleLowerCase())
       );
   /***************Handle Product***************/
+  const [ProSau, setProSau] = useState({});
+
   useEffect(() => {
     const get_ProductApi = async () => {
       let { data } = await axios.get(url_Product, config);
+
       setProductData(data);
+
+      // console.log(data);
+
       for (var i = 0; i < data.length; i++) {
         data[i].status === 0
           ? (data[i].status = "使用中")
@@ -212,6 +298,7 @@ const Product = () => {
           : data[i].category === 2
           ? (data[i].category = "加工類")
           : (data[i].category = "其他類");
+        data[i].image === null ? (data[i].category = "無") : console.log();
       }
       setChangeProductData(data);
     };
@@ -247,7 +334,8 @@ const Product = () => {
         });
   };
 
-  const handleProductSubmit = async () => {
+  const handleProductSubmit = async (e) => {
+    e.preventDefault();
     const formData = new FormData();
     formData.append("name", productInfo.name);
     formData.append("price", productInfo.price);
@@ -255,7 +343,7 @@ const Product = () => {
     formData.append("status", productInfo.status);
     formData.append("storeId", productInfo.storeId);
 
-    for (var i = 1; i <= sauceData.length; i++) {
+    for (var i = 1; i <= 1000; i++) {
       formData.append("tags[" + i + "]", productInfo["tags[" + i + "]"]);
     }
     formData.append("image", productInfo.image);
@@ -267,6 +355,7 @@ const Product = () => {
       window.location.reload();
     } catch (error) {
       console.log(error);
+      console.log(productInfo);
     }
   };
 
@@ -282,35 +371,73 @@ const Product = () => {
   const handleProductEditSubmit = async () => {
     try {
       const formData = new FormData();
-      formData.append("name", currentProductInfo);
-      formData.append("price", productInfo.price);
-      formData.append("category", productInfo.category);
+      productInfo.name === ""
+        ? formData.append("name", currentInfo.name)
+        : formData.append("name", productInfo.name);
+      productInfo.price === ""
+        ? formData.append("price", currentInfo.price)
+        : formData.append("price", productInfo.price);
+      productInfo.price === ""
+        ? formData.append("category", currentInfo.category)
+        : formData.append("category", productInfo.category);
       formData.append("status", productInfo.status);
       formData.append("storeId", productInfo.storeId);
-      for (var i = 1; i <= sauceData.length; i++) {
+      for (var i = 1; i <= 1000; i++) {
         formData.append("tags[" + i + "]", productInfo["tags[" + i + "]"]);
       }
       formData.append("image", productInfo.image);
       await axios.put(url_Product + "/" + currentId, formData, config);
-      window.location.reload();
+      // console.log(productInfo.tag)
     } catch (error) {
       console.log(error);
+      // console.log(productInfo);
     }
   };
 
-  const sauceTag = sauceData.map((sauce) => (
+  const sauceTag = sauceData.map((sauce, index) => (
     <FormControlLabel
       control={
         <Checkbox
           onChange={handleCheckChange}
           check={productInfo}
           value={sauce.id}
+          // value={index}
           name="tags"
         />
       }
       label={sauce.tag}
     />
   ));
+
+  // const currentSauceTag = sauceData.map((sauce) => (
+  //   <FormControlLabel
+  //     control={
+  //       <Checkbox
+  //       onChange={handleCheckChange}
+  //       checked={productInfo}
+  //       value={sauce.id}
+  //       name="tags"
+
+  //       />
+  //     }
+  //     label={sauce.tag}
+  //   />
+
+  // ));
+
+  // const [checkedTag,setCheckedTag] = useState([])
+  // function handleTag(){
+  //   sauce.id===1?true:false
+  // }
+
+  // for(let i=1;i<=currentInfo.tag.length;i++)
+  // {
+  //   i===currentInfo.tag[i-1]?setCheckedTag("true"):setCheckedTag("flase")
+
+  // }
+
+  let getProductTag = productData.map((taggs) => taggs.tags.map((k) => k.tag));
+  let getProductId = productData.map((taggs) => taggs.tags.map((k) => k.id));
 
   return (
     <>
@@ -330,10 +457,7 @@ const Product = () => {
         <Box sx={{ width: "100%", typography: "body1" }}>
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList
-                onChange={handleChange}
-                aria-label="lab API tabs example"
-              >
+              <TabList onChange={handleChange}>
                 <Tab label="調味料資訊" value="1" />
                 <Tab label="商品資訊" value="2" />
               </TabList>
@@ -374,10 +498,11 @@ const Product = () => {
                   onBackdropClick="false"
                   // style={{height:'500px'}}
                   maxWidth="xs"
+                  // PaperComponent={PaperComponent}
                 >
                   <DialogTitle
                     id="alert-dialog-title"
-                    style={{ textAlign: "center" }}
+                    style={{ textAlign: "center", cursor: "move" }}
                   >
                     {"新增商品資訊"}
                   </DialogTitle>
@@ -408,23 +533,24 @@ const Product = () => {
                         required="true"
                       />
                       <br /> <br />
-                      <InputLabel id="demo-simple-select-label">
+                      {/* <InputLabel id="demo-simple-select-label">
                         種類
-                      </InputLabel>
-                      <Select
+                      </InputLabel> */}
+                      <TextField
+                        select
                         onChange={handleProductInfo}
                         value={productInfo.category}
                         name="category"
                         label="種類"
                         sx={{ width: 390 }}
-                        required="true"
-                        // defaultValue={0}
+                        // required="true"
+                        // defaultValue={1}
                       >
                         <MenuItem value={0}>肉類</MenuItem>
                         <MenuItem value={1}>蔬菜類</MenuItem>
                         <MenuItem value={2}>加工類</MenuItem>
                         <MenuItem value={3}>其他類</MenuItem>
-                      </Select>
+                      </TextField>
                       <br />
                       <br />
                       <InputLabel id="demo-simple-select-label">
@@ -451,7 +577,7 @@ const Product = () => {
                 <br />
                 <br />
                 <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 850 }} aria-label="simple table">
+                  <Table sx={{ minWidth: 850 }}>
                     <TableHead>
                       <TableRow>
                         <TableCell
@@ -526,26 +652,28 @@ const Product = () => {
                       </TableRow>
                     </TableHead>
 
-                    {productData.map((item) => {
+                    {productData.map((item, index) => {
                       return (
                         <>
                           <TableRow
-                            key={item.id}
+                            // key={item.tags}
                             sx={{
                               "&:last-child td, &:last-child th": { border: 0 },
                             }}
+                            hover={true}
+                            title={getProductTag[index]}
                           >
                             <TableCell align="center">{item.id}</TableCell>
 
                             <TableCell align="center">{item.name}</TableCell>
                             <TableCell align="center">{item.price}</TableCell>
-
-                            <img
-                              src={"http://localhost:8000/" + item.image}
-                              alt={item.image}
-                              width="100"
-                              hight="50"
-                            />
+                            <TableCell align="center">
+                              <img
+                                src={"http://localhost:8000/" + item.image}
+                                alt={item.image}
+                                width="150"
+                              />
+                            </TableCell>
                             <TableCell align="center">
                               {item.category}
                             </TableCell>
@@ -553,135 +681,175 @@ const Product = () => {
 
                             <TableCell align="center">
                               <Button
-                                onClick={() => handleDeClickOpen(item.id)}
+                                onClick={() =>
+                                  handleProductDeClickOpen(item.id, item, index)
+                                }
                               >
                                 <DeleteIcon />
                               </Button>
                               <Button
                                 onClick={() =>
-                                  handleEditOpen(item.id, item.tag, item.name)
+                                  handleProductEditOpen(item.id, item, index)
                                 }
                               >
                                 <EditIcon />
                               </Button>
                             </TableCell>
                           </TableRow>
-
-                          <Dialog
-                            open={openDe}
-                            onClose={handleDeClose}
-                            aria-labelledby="delete"
-                            aria-describedby="delete"
-                            onBackdropClick="false"
-                            fullWidth="true"
-                            maxWidth="xs"
-                          >
-                            <DialogTitle id="delete">
-                              {"確定要刪除此項目?"}
-                            </DialogTitle>
-                            <DialogContent>
-                              <Button onClick={handleDeClose}>取消</Button>
-
-                              <Button onClick={() => handleProductDelete()}>
-                                確認
-                              </Button>
-                            </DialogContent>
-                          </Dialog>
                         </>
                       );
                     })}
+                    {/* 刪除商品Dialog */}
+                    <Dialog
+                      open={openDe}
+                      onClose={handleDeClose}
+                      aria-labelledby="delete"
+                      aria-describedby="delete"
+                      onBackdropClick="false"
+                      fullWidth="true"
+                      maxWidth="xs"
+                      PaperComponent={PaperComponent}
+                    >
+                      <DialogTitle id="delete" style={{ cursor: "move" }}>
+                        {"確定要刪除此商品?"}
+                        {/* {currentInfo.name} */}
+                      </DialogTitle>
+                      <DialogContent>
+                        <List aria-label="mailbox folders">
+                          <ListItem button>
+                            <ListItemText primary="產品名稱 :" />
+                            <ListItemText
+                              primary={currentInfo.name}
+                              sx={{ textAlign: "center" }}
+                            />
+                          </ListItem>
+                          <Divider />
+                          <ListItem button>
+                            <ListItemText primary="價錢 : " />
+                            <ListItemText
+                              primary={currentInfo.price}
+                              sx={{ textAlign: "center", maxWidth: "50%" }}
+                            />
+                          </ListItem>
+                          <Divider />
+                          <ListItem button>
+                            <ListItemText primary="圖片 : " />
+                            <img
+                              src={"http://localhost:8000/" + currentInfo.image}
+                              alt={currentInfo.image}
+                              width="150"
+                            />
+                          </ListItem>
+                          <Divider />
+
+                          <ListItem button>
+                            <ListItemText primary="類別 : " />
+                            <ListItemText
+                              primary={currentInfo.category2}
+                              sx={{ textAlign: "center", maxWidth: "50%" }}
+                            />
+                          </ListItem>
+
+                          <Divider />
+
+                          <ListItem button>
+                            <ListItemText primary="調味料 : " />
+                            <ListItemText
+                              primary={"" + currentInfo.tagName + ""}
+                              sx={{ textAlign: "center", maxWidth: "50%" }}
+                            />
+                          </ListItem>
+                        </List>
+
+                        <DialogActions sx={{ height: 0 }}>
+                          <Button onClick={handleDeClose}>取消</Button>
+
+                          <Button onClick={() => handleProductDelete()}>
+                            確認
+                          </Button>
+                        </DialogActions>
+                      </DialogContent>
+                    </Dialog>
+                    {/* 修改商品Dialog */}
+                    <Dialog
+                      open={openEdit}
+                      onClose={handleProductEditOpen}
+                      aria-labelledby="edit"
+                      aria-describedby="edit"
+                      onBackdropClick="false"
+                      fullWidth="true"
+                      maxWidth="xs"
+                      // PaperComponent={PaperComponent}
+                    >
+                      <DialogTitle
+                        id="edit"
+                        style={{ textAlign: "center", cursor: "move" }}
+                      >
+                        {"修改商品資訊"}
+                      </DialogTitle>
+
+                      <AddFormProduct onSubmit={handleProductEditSubmit}>
+                        <DialogContent>
+                          <TextField
+                            onChange={handleProductInfo}
+                            name="name"
+                            label="商品名稱"
+                            variant="outlined"
+                            sx={{ width: 300 }}
+                            defaultValue={currentInfo.name}
+                          />
+                          <br /> <br />
+                          <TextField
+                            onChange={handleProductInfo}
+                            defaultValue={currentInfo.price}
+                            name="price"
+                            label="價格"
+                            variant="outlined"
+                            sx={{ width: 300 }}
+                            required
+                          />
+                          <br /> <br />
+                          {/* <InputLabel id="demo-simple-select-label">
+                            種類
+                          </InputLabel> */}
+                          <TextField
+                          select
+                            onChange={handleProductInfo}
+                            // value={productInfo.category}
+                            name="category"
+                            label="種類"
+                            sx={{ width: 300 }}
+                            defaultValue={currentInfo.category}
+                          >
+                            <MenuItem value={0}>肉類</MenuItem>
+                            <MenuItem value={1}>蔬菜類</MenuItem>
+                            <MenuItem value={2}>加工類</MenuItem>
+                            <MenuItem value={3}>其他類</MenuItem>
+                          </TextField>
+                          <br />
+                          <br />
+                          <InputLabel id="demo-simple-select-label">
+                            調味料選項
+                          </InputLabel>
+                          <FormGroup row={true}>{sauceTag}</FormGroup>
+                          <br />
+                          <input
+                            type="file"
+                            accept="image/png, image/jpeg"
+                            onChange={onImageChange}
+                          ></input>
+                          <img width="100#" src={image} />
+                        </DialogContent>
+                        <DialogActions sx={{ height: 0 }}>
+                          <Button onClick={handleEditClose}>取消</Button>
+                          <Button type="submit" onClick={handleEditClose}>
+                            確認
+                          </Button>
+                        </DialogActions>
+                      </AddFormProduct>
+                    </Dialog>
                   </Table>
                 </TableContainer>
-
-                <Dialog
-                  open={openDe}
-                  onClose={handleDeClose}
-                  aria-labelledby="delete"
-                  aria-describedby="delete"
-                  onBackdropClick="false"
-                  fullWidth="true"
-                  maxWidth="xs"
-                >
-                  <DialogTitle id="delete">{"確定要刪除此商品?"}</DialogTitle>
-                  <DialogContent>
-                    <Button onClick={handleDeClose}>取消</Button>
-
-                    <Button onClick={() => handleProductDelete()}>確認</Button>
-                  </DialogContent>
-                </Dialog>
-
-                <Dialog
-                  open={openEdit}
-                  onClose={handleEditOpen}
-                  aria-labelledby="edit"
-                  aria-describedby="edit"
-                  onBackdropClick="false"
-                  fullWidth="true"
-                  maxWidth="xs"
-                >
-                  <DialogTitle id="edit" style={{ textAlign: "center" }}>
-                    {"修改商品資訊"}
-                  </DialogTitle>
-
-                  <AddFormProduct onSubmit={handleProductEditSubmit}>
-                    <DialogContent>
-                      <TextField
-                        disabled
-                        value={currentProductInfo}
-                        name="name"
-                        label="商品名稱"
-                        variant="outlined"
-                        sx={{ width: 300 }}
-                        defaultValue={currentProductInfo}
-                      />
-                      <br /> <br />
-                      <TextField
-                        onChange={handleProductInfo}
-                        value={sauceInfo.price}
-                        name="price"
-                        label="價格"
-                        variant="outlined"
-                        sx={{ width: 300 }}
-                      />
-                      <br /> <br />
-                      <InputLabel id="demo-simple-select-label">
-                        種類
-                      </InputLabel>
-                      <Select
-                        onChange={handleProductInfo}
-                        value={sauceInfo.category}
-                        name="category"
-                        label="種類"
-                        sx={{ width: 300 }}
-                        // defaultValue={0}
-                      >
-                        <MenuItem value={0}>肉類</MenuItem>
-                        <MenuItem value={1}>蔬菜類</MenuItem>
-                        <MenuItem value={2}>加工類</MenuItem>
-                        <MenuItem value={3}>其他類</MenuItem>
-                      </Select>
-                      <br />
-                      <br />
-                      <InputLabel id="demo-simple-select-label">
-                        調味料選項
-                      </InputLabel>
-                      <FormGroup row={true}>{sauceTag}</FormGroup>
-                      <br />
-                      <input
-                        type="file"
-                        accept="image/png, image/jpeg"
-                        onChange={onImageChange}
-                      ></input>
-                      <img width="100#" src={image} />
-                    </DialogContent>
-                    <DialogActions sx={{ height: 0 }}>
-                      <Button onClick={handleEditClose}>取消</Button>
-                      <Button type="submit" onClick={handleEditClose}>
-                        確認
-                      </Button>
-                    </DialogActions>
-                  </AddFormProduct>
-                </Dialog>
 
                 {/*****調味料**************************************************/}
               </TabPanel>
@@ -715,14 +883,13 @@ const Product = () => {
                 <Dialog
                   open={open}
                   onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
                   onBackdropClick="false"
+                  // PaperComponent={PaperComponent}
                   // style={{height:'500px'}}
                 >
                   <DialogTitle
                     id="alert-dialog-title"
-                    style={{ textAlign: "center" }}
+                    style={{ textAlign: "center", cursor: "move" }}
                   >
                     {"新增調味料資訊"}
                   </DialogTitle>
@@ -739,12 +906,14 @@ const Product = () => {
                         label="調味料名稱"
                         variant="outlined"
                         sx={{ width: 300 }}
+                        required="true"
                       />
                       <br /> <br />
-                      <InputLabel id="demo-simple-select-label">
+                      {/* <InputLabel id="demo-simple-select-label">
                         狀態
-                      </InputLabel>
-                      <Select
+                      </InputLabel> */}
+                      <TextField
+                        select
                         onChange={handleSauceInfo}
                         value={sauceInfo.status}
                         name="status"
@@ -754,7 +923,7 @@ const Product = () => {
                       >
                         <MenuItem value={0}>使用中</MenuItem>
                         <MenuItem value={1}>未使用</MenuItem>
-                      </Select>
+                      </TextField>
                       <br />
                       <br />
                     </DialogContent>
@@ -815,7 +984,7 @@ const Product = () => {
                       </TableRow>
                     </TableHead>
 
-                    {filtered.map((item) => {
+                    {filtered.map((item, index) => {
                       return (
                         <>
                           <TableRow
@@ -838,93 +1007,109 @@ const Product = () => {
 
                             <TableCell align="center">
                               <Button
-                                onClick={() => handleDeClickOpen(item.id)}
+                                onClick={() =>
+                                  handleSauceDeClickOpen(item, index)
+                                }
                               >
                                 <DeleteIcon />
                               </Button>
                               <Button
-                                onClick={() =>
-                                  handleEditOpen(item.id, item.tag)
-                                }
+                                onClick={() => handleSauceEditOpen(item, index)}
                               >
                                 <EditIcon />
                               </Button>
                             </TableCell>
                           </TableRow>
-
-                          <Dialog
-                            open={openDe}
-                            onClose={handleDeClose}
-                            aria-labelledby="delete"
-                            aria-describedby="delete"
-                            onBackdropClick="false"
-                            fullWidth="true"
-                            maxWidth="xs"
-                          >
-                            <DialogTitle id="delete">
-                              {"確定要刪除此項目?"}
-                            </DialogTitle>
-                            <DialogContent style={{ textAlign: "right" }}>
-                              <Button onClick={handleDeClose}>取消</Button>
-
-                              <Button onClick={() => handleDelete()}>
-                                確認
-                              </Button>
-                            </DialogContent>
-                          </Dialog>
-
-                          <Dialog
-                            open={openEdit}
-                            onClose={handleEditClose}
-                            aria-labelledby="edit"
-                            aria-describedby="edit"
-                            onBackdropClick="false"
-                            fullWidth="true"
-                            maxWidth="xs"
-                          >
-                            <DialogTitle
-                              id="edit"
-                              style={{ textAlign: "center" }}
-                            >
-                              {"修改調味料資訊"}
-                            </DialogTitle>
-
-                            <AddForm style={{ height: "300px" }}>
-                              <DialogContent>
-                                <TextField
-                                  defaultValue={currentSauceInfo}
-                                  onChange={handleSauceInfo}
-                                  name="tag"
-                                  label="調味料名稱"
-                                  variant="outlined"
-                                  sx={{ width: 380 }}
-                                />
-                                <br /> <br />
-                                <InputLabel id="edit">狀態</InputLabel>
-                                <Select
-                                  onChange={handleSauceInfo}
-                                  value={0}
-                                  name="status"
-                                  label="狀態"
-                                  sx={{ width: 380 }}
-                                >
-                                  <MenuItem value={0}>使用中</MenuItem>
-                                  <MenuItem value={1}>未使用</MenuItem>
-                                </Select>
-                                <br />
-                                <br />
-                              </DialogContent>
-                              <DialogActions sx={{ height: 40 }}>
-                                <Button onClick={handleEditClose}>取消</Button>
-                                <Button onClick={() => handleEditSubmit()}>
-                                  確認
-                                </Button>
-                              </DialogActions>
-                            </AddForm>
-                          </Dialog>
                         </>
                       );
                     })}
+                    {/* 刪除調味料Dialog */}
+                    <Dialog
+                      open={openDe}
+                      onClose={handleDeClose}
+                      aria-labelledby="delete"
+                      aria-describedby="delete"
+                      onBackdropClick="false"
+                      fullWidth="true"
+                      maxWidth="xs"
+                      PaperComponent={PaperComponent}
+                    >
+                      <DialogTitle id="delete" style={{ cursor: "move" }}>
+                        {"確定要刪除此項目?"}
+                      </DialogTitle>
+                      <DialogContent style={{ textAlign: "right" }}>
+                        <List aria-label="mailbox folders">
+                          <ListItem button>
+                            <ListItemText primary="調味料名稱 :" />
+                            <ListItemText
+                              primary={currentSauce.tag}
+                              sx={{ textAlign: "center" }}
+                            />
+                          </ListItem>
+                          <Divider />
+                        </List>
+
+                        <Button onClick={handleDeClose}>取消</Button>
+
+                        <Button onClick={() => handleDelete()}>確認</Button>
+                      </DialogContent>
+                    </Dialog>
+                    {/* 修改調味料Dialog */}
+                    <Dialog
+                      open={openEdit}
+                      onClose={handleSauceEditOpen}
+                      aria-labelledby="edit"
+                      aria-describedby="edit"
+                      onBackdropClick="false"
+                      fullWidth="true"
+                      maxWidth="xs"
+                      // PaperComponent={PaperComponent}
+                    >
+                      <DialogTitle
+                        id="edit"
+                        style={{ textAlign: "center", cursor: "move" }}
+                      >
+                        {"修改調味料資訊"}
+                      </DialogTitle>
+
+                      <AddForm
+                        style={{ height: "300px" }}
+                        onSubmit={handleEditSubmit}
+                      >
+                        <DialogContent>
+                          <TextField
+                            onChange={handleSauceInfo}
+                            defaultValue={currentSauce.tag}
+                            name="tag"
+                            label="調味料名稱"
+                            variant="outlined"
+                            sx={{ width: 380 }}
+                          />
+                          <br /> <br />
+                          {/* <InputLabel id="edit">狀態</InputLabel> */}
+                          <TextField
+                            select
+                            onChange={handleSauceInfo}
+                            defaultValue={currentSauce.status}
+                            // value={item}
+                            name="status"
+                            label="狀態"
+                            sx={{ width: 380 }}
+                          >
+                            <MenuItem value={0}>使用中</MenuItem>
+                            <MenuItem value={1}>未使用</MenuItem>
+                          </TextField>
+                          <br />
+                          <br />
+                        </DialogContent>
+                        <DialogActions sx={{ height: 40 }}>
+                          <Button onClick={handleEditClose}>取消</Button>
+                          <Button type="submit" onClick={handleEditClose}>
+                            確認
+                          </Button>
+                        </DialogActions>
+                      </AddForm>
+                    </Dialog>
                   </Table>
                 </TableContainer>
               </TabPanel>

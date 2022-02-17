@@ -19,6 +19,7 @@ import {
 import Cookies from "js-cookie";
 
 import styled from "styled-components";
+import { ListItem } from "@mui/material";
 const LogoutBtn = styled.button`
   position: relative;
   top: 6rem;
@@ -28,22 +29,25 @@ const LogoutBtn = styled.button`
 `;
 
 function App() {
+  const PreivateContain = [
+    { path: "/product", component: Product },
+    { path: "/shop", component: Shop },
+    { path: "/order", component: Order },
+    { path: "/report", component: Report },
+    { path: "/handover", component: Handover },
+  ];
   return (
     <div>
       <Router>
-        <Route path="/login">
-          <Login />
-        </Route>
+        <Route path="/login" component={Login}/>
+
 
         <Switch>
           <Route path="/" exact component={Home} />
-          <PrivateRoute path="/home" component={Home} />
-          <PrivateRoute path="/product" component={Product} />
-          <PrivateRoute path="/shop" component={Shop} />
-          <PrivateRoute path="/order" component={Order} />
-          <PrivateRoute path="/report" component={Report} />
-          <PrivateRoute path="/handover" component={Handover} />
-          <Route path="/login" render={() => <login />}></Route>
+          {PreivateContain.map((item) => (
+            <PrivateRoute path={item.path} component={item.component} />
+          ))}
+          <Route path="/login" component={Login}></Route>
         </Switch>
       </Router>
     </div>
