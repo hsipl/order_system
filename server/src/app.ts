@@ -61,27 +61,29 @@ export class App {
       definition: {
         openapi: "3.0.0",
         info: {
-          title: 'Order System API Title',
-          version: '1.0'
+          title: "Order System API Title",
+          version: "1.0",
         },
         components: {
           securitySchemas: {
             bearerAuth: {
-              type: 'http',
+              type: "http",
               scheme: "bearer",
-              bearerFormat: "JWT"
+              bearerFormat: "JWT",
             },
           },
         },
-        security: [
-          { bearerAuth: [], }
-        ]
+        security: [{ bearerAuth: [] }],
       },
       // 這邊會是你想要產生的api文件檔案，我是直接讓swagger去列出所有controllers
-      apis: ["./src/routes/*.ts","./src/entity/*.ts"],
+      apis: ["./src/routes/*.ts", "./src/entity/*.ts"],
     };
     const specs = swaggerJSDoc(options);
-    this.app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    this.app.use(
+      "/api/docs",
+      swaggerUi.serve,
+      swaggerUi.setup(swaggerDocument)
+    );
     // this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
     //   swaggerDefinition: {
     //     // 這邊會是你的api文件網頁描述
@@ -95,7 +97,6 @@ export class App {
     //     res.setHeader("Content-Type", "application/json");
     //     res.send(swaggerSpec);
     // });
-
   }
 
   private setRoutes(): void {

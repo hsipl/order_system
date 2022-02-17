@@ -1,0 +1,771 @@
+swagger: "2.0"
+info:
+  description: "Order System Api"
+  version: "1.0.0"
+  title: "Order System Api"
+
+basePath: "/api"
+tags:
+- name: "User"
+  description: "Everything about user controller"
+- name: "Store"
+  description: "Everything about store controller"
+- name: "Product"
+  description: "Everything about product controller"
+- name: "Handover"
+  description: "Everything about handover controller"
+- name: "Tag"
+  description: "Everything about tag controller"
+- name: "Order"
+  description: "Everything about order controller"
+schemes:
+- "https"
+- "http"
+paths:
+  /users/login:
+    post:
+      tags:
+      - "User"
+      description: ""
+      consumes:
+      - "application/json"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "formData"
+        required: true
+        type: "string"
+      responses:
+        "200":
+          description: "login success."
+  /users/logout:
+    get:
+      tags:
+      - "User"
+      description: ""
+      consumes:
+      - "application/json"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "logout success."
+  /users/employee:
+    get:
+      tags:
+      - "User"
+      description: ""
+      consumes:
+      - "application/json"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "logout success."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+  /users/register:
+    post:
+      tags:
+      - "User"
+      description: ""
+      consumes:
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "name"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "type"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "image"
+        in: "formData"
+        required: true
+        type: "file"
+      - name: "storeId"
+        in: "formData"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "register success."
+  /store:
+    get:
+      tags:
+      - "Store"
+      description: "Get Store Data."
+      consumes:
+      - "application/json"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Get Store Data."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Store"
+    post:
+      tags:
+      - "Store"
+      description: "Create Store."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "type"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "image"
+        in: "formData"
+        required: true
+        type: "file"
+      responses:
+        "200":
+          description: "Create Store Success."
+  /store/{storeId}:
+    put:
+      tags:
+      - "Store"
+      description: "Update Store Data."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "storeId"
+        in: "path"
+        description: "ID of Store"
+        required: true
+        type: "integer"
+        format: "int64"
+      - name: "name"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "type"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "image"
+        in: "formData"
+        required: true
+        type: "file"
+      responses:
+        "200":
+          description: "Update store success."
+    delete:
+      tags:
+      - "Store"
+      description: "Delete Store Data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "storeId"
+        in: "path"
+        description: "ID of Store"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Delete store success."
+  
+  /tag:
+    get:
+      tags:
+      - "Tag"
+      description: "Get Tag Data."
+      consumes:
+      - "application/json"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Get Tag Data."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Tag"
+    post:
+      tags:
+      - "Tag"
+      description: "Create Tag."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tag"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Create Tag Success."
+  /tag/{tagId}:
+    put:
+      tags:
+      - "Tag"
+      description: "Update Store Data."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tagId"
+        in: "path"
+        description: "ID of Tag"
+        required: true
+        type: "number"
+      - name: "tag"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Update tag success."
+    delete:
+      tags:
+      - "Tag"
+      description: "Delete Store Data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "tagId"
+        in: "path"
+        description: "ID of Store"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Delete tag success."
+  /handover:
+    get:
+      tags:
+      - "Handover"
+      description: "Get Handover Data."
+      consumes:
+      - "application/json"
+      - "application/x-www-form-urlencoded"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Get Handover Data."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Handover"
+    post:
+      tags:
+      - "Handover"
+      description: "Create Handover."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "user_id"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "sysmoney"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "realcash"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Create Handover Success."
+  /handover/{handoverId}:
+    put:
+      tags:
+      - "Handover"
+      description: "Update Store Data."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "handoverId"
+        in: "path"
+        description: "ID of Handover"
+        required: true
+        type: "number"
+      - name: "user_id"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "sysmoney"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "realcash"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Update tag success."
+    delete:
+      tags:
+      - "Handover"
+      description: "Delete Handover Data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "handoverId"
+        in: "path"
+        description: "ID of Store"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Delete handoverId success."
+  /product:
+    get:
+      tags:
+      - "Product"
+      description: "Get Product Data."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Get Product Data."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Product"
+    post:
+      tags:
+      - "Product"
+      description: "Create Product."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "price"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "category"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "storeId"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "image"
+        in: "formData"
+        required: true
+        type: "file"
+      - name: "tags"
+        in: "formData"
+        type: "array"
+        items:
+          type: "number"
+      responses:
+        "200":
+          description: "Create Product Success."
+  /product/{productId}:
+    put:
+      tags:
+      - "Product"
+      description: "Update Store Data."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "ID of Product"
+        required: true
+        type: "number"
+      - name: "name"
+        in: "formData"
+        required: true
+        type: "string"
+      - name: "price"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "category"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "storeId"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "image"
+        in: "formData"
+        required: true
+        type: "file"
+      - name: "tags"
+        in: "formData"
+        type: "array"
+        items:
+          type: "number"
+      responses:
+        "200":
+          description: "Update product success."
+    delete:
+      tags:
+      - "Product"
+      description: "Delete Product Data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "ID of Product"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Delete Product success."
+  /order:
+    get:
+      tags:
+      - "Order"
+      description: "Get Order Data."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Get Order Data."
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Order"
+    post:
+      tags:
+      - "Order"
+      description: "Create Order."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "pay"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "storeId"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "products"
+        in: "formData"
+        type: "array"
+        description: "[{productId:number,description:string}]"
+        items:
+          type: "number"
+          
+      responses:
+        "200":
+          description: "Create Product Success."
+  /order/{orderId}:
+    put:
+      tags:
+      - "Order"
+      description: "Update Order Data."
+      consumes:
+      - "application/json"
+      - "multipart/form-data"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "orderId"
+        in: "path"
+        description: "ID of Order"
+        required: true
+        type: "number"
+      - name: "pay"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "status"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "storeId"
+        in: "formData"
+        required: true
+        type: "number"
+      - name: "products"
+        in: "formData"
+        type: "array"
+        description: "[{productId:number,description:string} or {id:number,description:string,name:string,price:number}]"
+        items:
+          type: "number"
+      responses:
+        "200":
+          description: "Update order success."
+    delete:
+      tags:
+      - "Order"
+      description: "Delete Order Data."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "orderId"
+        in: "path"
+        description: "ID of Order"
+        required: true
+        type: "number"
+      responses:
+        "200":
+          description: "Delete Order success."
+
+
+definitions:
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int"
+      username:
+        type: "string"
+        minimum: 5
+        maximum: 15
+      password:
+        type: "string"
+        minimum: 5
+        maximum: 15
+      name:
+        type: "string"
+      storeId:
+        $ref: "#/definitions/Store"
+      type:
+        type: "integer"
+        minimum: 0
+        maximum: 1
+      status:
+        type: "integer"
+        minimum: 0
+        maximum: 1
+      image:
+        type: "string"
+    xml:
+      name: "User"
+  Store:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "number"
+      name:
+        type: "string"
+      type:
+        type: "integer"
+        format: "number"
+        minimum: 0
+        maximum: 1
+        description: "0: Branch Store, 1: Head Store"
+      status:
+        type: "integer"
+        format: "number"
+        minimum: 0
+        maximum: 1
+      image:
+        type: "string"
+  Tag:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "number"
+      tag:
+        type: "string"
+      status:
+        type: "integer"
+        format: "number"
+        minimum: 0
+        maximum: 1
+  Product:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "number"
+      storeId:
+        $ref: "#/definitions/Store"
+      tags:
+        $ref: "#/definitions/Tag"
+      name:
+        type: "string"
+      price:
+        type: "integer"
+        format: "number"
+      category:
+        type: "integer"
+        format: "number"
+        description: "0: Branch Store, 1: Head Store"
+      status:
+        type: "integer"
+        format: "number"
+        minimum: 0
+        maximum: 1
+      image:
+        type: "string"
+  Order:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "number"
+      storeId:
+        $ref: "#/definitions/Store"
+      pay:
+        type: "integer"
+        format: "number"
+        description: "0: Unpaid 1:Pay"
+      status:
+        type: "integer"
+        format: "number"
+        minimum: 0
+        maximum: 1 
+      orderProducts:
+        $ref: "#/definitions/orderProducts"
+  orderProducts:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "number"
+      name:
+        type: "string"
+      description:
+        type: "string"
+      price:
+        type: "integer"
+        format: "number"
+      orderId:
+        $ref: "#/definitions/Order"
+  Handover:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "number"
+      userId:
+        $ref: "#/definitions/User"
+      sysmoney:
+        type: "integer"
+        format: "number"
+      realcash:
+        type: "integer"
+        format: "number"
+      status:
+        type: "integer"
+        format: "number"
+        minimum: 0
+        maximum: 1 
+  
