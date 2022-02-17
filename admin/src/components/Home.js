@@ -1,29 +1,13 @@
 import React from "react";
-import styledC from "styled-components";
-import { styled } from "@mui/material/styles";
-import Navbar from "./Navbar";
-import { Paper } from "@mui/material";
-
-
-const HomeCon = styled(Paper)({
-  position: "fixed",
-  top: "6rem",
-  left: "10rem",
-  right:'0px',
-  bottom:'0px',
-  fontSize:"20px",
-  backgroundColor:'#efebe9',
-  borderRadius: '2px',
-});
+import { BodyContainer, Navbar, Content } from "./Navbar";
 
 const Home = () => {
-  return(
+  return (
     <>
-    <Navbar />
-    <HomeCon id="home">
-
-    </HomeCon>
-
+      <BodyContainer>
+        <Navbar />
+        <Content></Content>
+      </BodyContainer>
     </>
   );
 };
