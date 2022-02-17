@@ -5,12 +5,12 @@ import '../styled_buttons.dart';
 
 class EditButtonsForTextContainer extends StatelessWidget {
   const EditButtonsForTextContainer({
-    required this.nextLabel,
-    required this.clearLabel,
     Key? key,
   }) : super(key: key);
-  final Function nextLabel;
-  final Function clearLabel;
+
+  void nextLabel() {}
+
+  void clearLabel() {}
 
   @override
   Widget build(BuildContext context) {

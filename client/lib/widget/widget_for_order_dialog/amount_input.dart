@@ -1,16 +1,16 @@
+import 'package:client/model/app_state.dart';
 import 'package:client/services/decorations.dart';
+import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import '../styled_buttons.dart';
 
 class AmountInput extends StatefulWidget {
   const AmountInput({
-    required this.returnAmount,
-    required this.amount,
+
     Key? key,
   }) : super(key: key);
 
-  final Function returnAmount;
-  final int amount;
 
   @override
   State<AmountInput> createState() => _AmountInputState();
@@ -19,7 +19,15 @@ class AmountInput extends StatefulWidget {
 class _AmountInputState extends State<AmountInput> {
   @override
   Widget build(BuildContext context) {
-    int amount = widget.amount;
+    int amount = 0;
+    // CheckoutItem tempItem = CheckoutItem(widget.productId, 0, []);
+    // void setAmount(int amount,store) {
+    //   if(store.newTempCheckoutList.length==0){
+    //     StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(tempItem));
+    //   }
+    //   tempItem.amount = amount;
+    //   print(tempItem.amount);
+    // }
     return SizedBox(
       height: 250,
       width: 100,
@@ -38,7 +46,6 @@ class _AmountInputState extends State<AmountInput> {
               action: '+5',
               onPress: () {
                 amount = amount + 5;
-                widget.returnAmount(amount);
               },
             ),
             ActionButton(
@@ -46,7 +53,6 @@ class _AmountInputState extends State<AmountInput> {
               action: '+',
               onPress: () {
                 amount = amount + 1;
-                widget.returnAmount(amount);
               },
             ),
             ActionButton(
@@ -57,7 +63,6 @@ class _AmountInputState extends State<AmountInput> {
                 if (amount < 1) {
                   amount = 1;
                 }
-                widget.returnAmount(amount);
               },
             ),
             ActionButton(
@@ -68,7 +73,6 @@ class _AmountInputState extends State<AmountInput> {
                 if (amount < 1) {
                   amount = 1;
                 }
-                widget.returnAmount(amount);
               },
             ),
           ],

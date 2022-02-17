@@ -1,4 +1,5 @@
 import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions.dart';
 import 'package:client/services/serializer.dart';
 import 'package:client/widget/widget_for_order_dialog/action_row.dart';
 import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
@@ -22,79 +23,21 @@ class OrderDialog extends StatefulWidget {
 }
 
 class _OrderDialogState extends State<OrderDialog> {
-  List<Widget> editButtons = [];
 
-  List<String> customLabels = [''];
-  List<String> customLabelsNum = ['1'];
-  int amount = 1;
-
-  void deleteItem(int index) {
-    (customLabels.length == 1)
-        ? customLabels = ['']
-        : customLabels.removeAt(index);
-    (customLabelsNum.length == 1)
-        ? customLabelsNum = ['1']
-        : customLabelsNum.removeAt(index);
+  void addItem(item){
+    StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(item));
   }
 
-  Map getCustomData() {
-    return {
-      'labels': customLabels,
-      'num': customLabelsNum,
-      'length': customLabelsNum.length
-    };
-  }
 
-  void getAmount(int amount) {
-    setState(() {
-      this.amount = amount;
-      customLabelsNum[customLabelsNum.length - 1] = this.amount.toString();
-    });
-  }
-
-  void setTag(tags, i) {
-    setState(() {
-      List<String> checkList = customLabels[customLabels.length - 1].split(',');
-      if (!checkList.contains(tags[i])) {
-        customLabels[customLabels.length - 1] =
-            customLabels[customLabels.length - 1] + tags[i] + ',';
-      }
-    });
-  }
-
-  void nextLabel() {
-    setState(
-      () {
-        if (customLabels.last != '' && customLabelsNum.last != '') {
-          customLabels.add('');
-          customLabelsNum.add('1');
-          amount = 1;
-        } else {
-          customLabels.last = '';
-          customLabelsNum.last = '1';
-          amount = 1;
-          const snackBar = SnackBar(
-            content: Text('不符合規範，因此刪除'),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      },
-    );
-  }
-
-  void clearLabel() {
-    setState(() {
-      customLabels = [''];
-      customLabelsNum = ['1'];
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
+
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, store) {
           Product product = Product.find(store, widget.productId);
+
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0)),
@@ -120,31 +63,20 @@ class _OrderDialogState extends State<OrderDialog> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          LabelTextContainer(
-                            deleteItem: deleteItem,
-                            getCustomData: getCustomData,
-                          ),
+                          const LabelTextContainer(),
                           TagsInput(
                             productId: widget.productId,
-                            setTagFunction: setTag,
                           ),
-                          AmountInput(
-                            amount: amount,
-                            returnAmount: getAmount,
-                          ),
-                          EditButtonsForTextContainer(
-                            nextLabel: nextLabel,
-                            clearLabel: clearLabel,
-                          ),
+                          const AmountInput(),
+                          const EditButtonsForTextContainer(),
                         ],
                       ),
                     ),
                     //TODO send values to ActionRow()
                     ActionRow(
-                      amount: customLabelsNum,
-                      price: product.price,
-                      labels: customLabels,
-                      product: product.name,
+                      amount: 1,
+                      tags: [],
+                      productId: widget.productId,
                     ),
                   ],
                 ),

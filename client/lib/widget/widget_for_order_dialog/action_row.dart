@@ -1,6 +1,7 @@
 import 'package:client/model/app_state.dart';
 import 'package:client/redux/actions.dart';
 import 'package:client/services/decorations.dart';
+import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 import '../styled_buttons.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -10,16 +11,14 @@ enum Actions { orderData }
 class ActionRow extends StatefulWidget {
   const ActionRow({
     Key? key,
-    required this.price,
-    required this.labels,
+    required this.tags,
+    required this.productId,
     required this.amount,
-    required this.product,
   }) : super(key: key);
 
-  final String price;
-  final String product;
-  final List<String> labels;
-  final List<String> amount;
+  final int productId;
+  final int amount;
+  final List<String> tags;
 
   @override
   State<ActionRow> createState() => _ActionRowState();
@@ -40,14 +39,14 @@ class _ActionRowState extends State<ActionRow> {
                 color: kConfirmButtonColor,
                 //TODO send values to check out column
                 onPress: () {
-                  Map returnDataFromDialog = {
-                    'product': widget.product,
-                    'price': widget.price,
-                    'labels': widget.labels,
+                  Map<String,dynamic> returnDataFromDialog = {
+                    'productId': widget.productId,
+                    'tags': widget.tags,
                     'amount': widget.amount,
                   };
+                  CheckoutItem checkoutItem = CheckoutItem.fromMap(returnDataFromDialog);
                   StoreProvider.of<AppState>(context)
-                      .dispatch(CheckoutAdd(returnDataFromDialog));
+                      .dispatch(CheckoutAdd(checkoutItem));
                   Navigator.pop(context, returnDataFromDialog);
                 },
               )),

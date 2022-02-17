@@ -1,6 +1,7 @@
 import 'package:client/model/app_state.dart';
 import 'package:client/redux/actions.dart';
 import 'package:client/services/decorations.dart';
+import 'package:client/services/serializer.dart';
 import 'package:client/widget/styled_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -103,10 +104,11 @@ class _CheckListState extends State<CheckList> {
                 },
                 background: Padding(
                   padding: const EdgeInsets.all(4.0),
-                  child: Container(color: kCancelButtonColor,
+                  child: Container(
+                      color: kCancelButtonColor,
                       child: const Icon(Icons.delete, color: Colors.white)),
                 ),
-                child: CheckoutItem(item: store.newCheckoutList[index]),
+                child: CheckoutTile(item: store.newCheckoutList[index]),
               ),
             );
           },
@@ -116,41 +118,45 @@ class _CheckListState extends State<CheckList> {
   }
 }
 
-class CheckoutItem extends StatelessWidget {
-  const CheckoutItem({
+class CheckoutTile extends StatelessWidget {
+  const CheckoutTile({
     Key? key,
     required this.item,
   }) : super(key: key);
 
-  final Map item;
+  final CheckoutItem item;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        height: 80,
-        child: Card(
-          elevation: 2,
-          child: Center(
-            child: ListTile(
-              enabled: true,
-              leading: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const <Widget>[
-                  SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: Image(
-                        image: NetworkImage(
-                            'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a')),
-                  )
-                ],
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, store) {
+        Product product = Product.find(store, item.productId);
+        return SizedBox(
+          height: 80,
+          child: Card(
+            elevation: 2,
+            child: Center(
+              child: ListTile(
+                enabled: true,
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: Image(image: NetworkImage(product.img)),
+                    )
+                  ],
+                ),
+                title: Text(product.name + '*' + item.amount.toString()),
+                subtitle: Text(item.tags.toString()),
+                trailing: Text((item.amount*int.parse(product.price)).toString()),
               ),
-              title: Text(item['product']),
-              subtitle: Text('title'),
-              trailing: Text(item['price']),
             ),
           ),
-        ),
+        );
+      },
     );
   }
 }

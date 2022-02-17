@@ -1,4 +1,5 @@
 import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,13 +10,22 @@ import '../styled_buttons.dart';
 
 class TagsInput extends StatelessWidget {
   const TagsInput(
-      {Key? key, required this.productId, required this.setTagFunction})
+      {Key? key, required this.productId})
       : super(key: key);
   final int productId;
-  final Function setTagFunction;
+
 
   @override
   Widget build(BuildContext context) {
+    CheckoutItem tempItem = CheckoutItem(productId, 0, []);
+    void setTag(tags, i,store) {
+      if(store.newTempCheckoutList.length==0){
+        StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(tempItem));
+      }
+      tempItem.tags.add(tags[i]);
+      print(tempItem.tags);
+    }
+
     return SizedBox(
       height: 250,
       width: 300,
@@ -40,7 +50,7 @@ class TagsInput extends StatelessWidget {
                     crossAxisAlignment: WrapCrossAlignment.start,
                     spacing: 5,
                     children:
-                        tagButtonGenerate(store, productId, setTagFunction),
+                        tagButtonGenerate(store, productId, setTag),
                   );
                 },
               ),
@@ -61,7 +71,7 @@ List<ActionButton> tagButtonGenerate(store, productId, setTagFunction) {
       action: tags[i],
       color: primaryTextColor,
       onPress: () {
-        setTagFunction(tags, i);
+        setTagFunction(tags, i,store);
       },
     ),
   );
