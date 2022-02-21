@@ -25,6 +25,7 @@ class OrderDialog extends StatefulWidget {
 class _OrderDialogState extends State<OrderDialog> {
   @override
   Widget build(BuildContext context) {
+    StoreProvider.of<AppState>(context).dispatch(TempCheckoutClear());
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, store) {
@@ -32,6 +33,7 @@ class _OrderDialogState extends State<OrderDialog> {
             StoreProvider.of<AppState>(context)
                 .dispatch(TempCheckoutAdd(widget.product));
           }
+
           return Dialog(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12.0)),

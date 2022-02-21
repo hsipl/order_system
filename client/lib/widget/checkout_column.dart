@@ -102,7 +102,6 @@ class _CheckListState extends State<CheckList> {
           itemCount: store.newCheckoutList.length,
           itemBuilder: (context, index) {
             CheckoutItem item = store.newCheckoutList[index];
-
             return ClipRect(
               child: Dismissible(
                 key: UniqueKey(),
@@ -144,6 +143,7 @@ class CheckoutTile extends StatelessWidget {
     for (String tag in item.tags) {
       tagString += tag + ',';
     }
+
     return SizedBox(
       height: 80,
       child: Card(
@@ -163,7 +163,7 @@ class CheckoutTile extends StatelessWidget {
             ),
             title: Text(item.product.name),
             subtitle: Text(tagString),
-            trailing: Text('${int.parse(item.product.price)* item.amount}'),
+            trailing: Text('${int.parse(item.product.price) * item.amount}'),
           ),
         ),
       ),

@@ -31,9 +31,8 @@ class _ActionRowState extends State<ActionRow> {
                 //TODO send values to check out column
                 onPress: () {
                   StoreProvider.of<AppState>(context).dispatch(CheckoutAdd());
-                  StoreProvider.of<AppState>(context).dispatch(UpdateCheckoutPrice());
                   StoreProvider.of<AppState>(context)
-                      .dispatch(TempCheckoutClear());
+                      .dispatch(UpdateCheckoutPrice());
                   Navigator.pop(context);
                 },
               )),

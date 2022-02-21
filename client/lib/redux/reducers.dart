@@ -48,7 +48,6 @@ AppState reducer(AppState prevState, dynamic action) {
   // OrderDialog 的表單
   else if (action is TempCheckoutAdd) {
     // OrderDialog List 新增物件 tempCheckoutItem(預購物品 還沒送到右邊的)
-
     prevState.tempCheckoutList
         .add(CheckoutItem(product: action.payload, tags: []));
     newState.tempCheckoutList = prevState.tempCheckoutList;
