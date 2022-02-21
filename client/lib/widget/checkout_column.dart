@@ -163,7 +163,7 @@ class CheckoutTile extends StatelessWidget {
             ),
             title: Text(item.product.name),
             subtitle: Text(tagString),
-            trailing: Text(item.product.price * item.amount),
+            trailing: Text('${int.parse(item.product.price)* item.amount}'),
           ),
         ),
       ),
