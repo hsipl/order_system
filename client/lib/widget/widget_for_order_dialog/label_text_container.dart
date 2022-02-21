@@ -101,6 +101,11 @@ class ListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String tagString = '';
+    for (String tag in checkoutItems[index].tags) {
+      tagString += tag + ',';
+    }
+
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
@@ -111,7 +116,7 @@ class ListItem extends StatelessWidget {
           ),
         ),
         child: ListTile(
-          title: Text(checkoutItems[index].tags.toString()),
+          title: Text(tagString),
           trailing: Text(checkoutItems[index].amount.toString()),
         ),
       ),

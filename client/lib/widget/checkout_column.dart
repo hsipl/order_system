@@ -133,6 +133,11 @@ class CheckoutTile extends StatelessWidget {
       converter: (store) => store.state,
       builder: (context, store) {
         Product product = Product.find(store, item.productId);
+        String tagString = '';
+        for (String tag in item.tags) {
+          tagString += tag + ',';
+        }
+
         return SizedBox(
           height: 80,
           child: Card(
@@ -151,7 +156,7 @@ class CheckoutTile extends StatelessWidget {
                   ],
                 ),
                 title: Text(product.name + '*' + item.amount.toString()),
-                subtitle: Text(item.tags.toString()),
+                subtitle: Text(tagString),
                 trailing:
                     Text((item.amount * int.parse(product.price)).toString()),
               ),
