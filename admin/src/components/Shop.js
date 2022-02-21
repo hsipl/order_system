@@ -23,43 +23,19 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
-import Select from "@mui/material/Select";
+
 import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
+
 import EditIcon from "@material-ui/icons/Edit";
 import Box from "@mui/material/Box";
 import SearchIcon from "@material-ui/icons/Search";
 import Navbar from "../components/Navbar";
-import Draggable from 'react-draggable';
-
-
-
-// export const handleShopButton = (props) => {
-
-//   return(
-//   <>
-//     <Button onClick={props.click2}>
-//       <DeleteIcon />
-//     </Button>
-   
-//   </>
-//   )
-// };
-
-// export const handleShopButtonClose = () => {
-//   return(
-//   <>
-//     <Button disabled>
-//       <DeleteIcon />
-//     </Button>
-  
-//   </>
-//   )
-// }
-
-// const ButtonDel = styled(Button)({
-//   disabled
-// })
+import Draggable from "react-draggable";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Chip from "@mui/material/Chip";
+import Divider from "@mui/material/Divider";
 
 const ShopContainer = styled(Box)({
   position: "absolute",
@@ -102,17 +78,23 @@ const Shop = () => {
     status: 0,
   });
 
-  const [currentId, setCurrentId] = useState("");
+  const [currentShop, setCurrentShop] = useState({});
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleDeClickOpen = (id) => {
+  const handleDeClickOpen = (item) => {
     setOpenDel(true);
-    setCurrentId(id);
+    setCurrentShop({
+      ["id"]: item.id,
+      ["name"]: item.name,
+      ["type"]: item.type,
+      ["status"]: item.status,
+      ["image"]: item.image,
+    });
 
-    console.log(currentId);
+    console.log(currentShop);
   };
 
   const handleDeClose = () => {
@@ -123,7 +105,6 @@ const Shop = () => {
     setOpen(false);
   };
 
-  const [currentShop, setCurrentShop] = useState({});
   const handleEditOpen = (item) => {
     setOpenEdit(true);
 
@@ -133,7 +114,7 @@ const Shop = () => {
       ["type"]: item.type === "總店" ? 1 : 0,
       ["status"]: item.status === "營業中" ? 0 : 1,
     });
-    console.log(currentShop);
+    console.log(currentShop.name);
   };
 
   const handleEditClose = () => {
@@ -233,8 +214,8 @@ const Shop = () => {
   function PaperComponent(props) {
     return (
       <Draggable
-      handle="#draggable-dialog-title"
-      cancel={'[class*="MuiDialogContent-root"]'}
+        handle="#draggable-dialog-title"
+        cancel={'[class*="MuiDialogContent-root"]'}
       >
         <Paper {...props} />
       </Draggable>
@@ -257,16 +238,17 @@ const Shop = () => {
         <Dialog
           open={open}
           onClose={handleClose}
-          // aria-labelledby="alert-dialog-title"
-          // aria-describedby="alert-dialog-description"
           onBackdropClick="false"
           fullWidth="true"
           maxWidth="xs"
           // PaperComponent={PaperComponent}
           aria-labelledby="draggable-dialog-title"
-    
         >
-          <DialogTitle id="alert-dialog-title" style={{ textAlign: "center", cursor: "move" }}  id="draggable-dialog-title">
+          <DialogTitle
+            id="alert-dialog-title"
+            style={{ textAlign: "center", cursor: "move" }}
+            id="draggable-dialog-title"
+          >
             {"新增店鋪資訊"}
           </DialogTitle>
 
@@ -281,7 +263,6 @@ const Shop = () => {
                 sx={{ width: 250 }}
               />
               <br /> <br />
-              {/* <InputLabel id="demo-simple-select-label">類型</InputLabel> */}
               <TextField
                 select
                 onChange={handleShopInfo}
@@ -294,7 +275,6 @@ const Shop = () => {
                 <MenuItem value={1}>總店</MenuItem>
               </TextField>
               <br /> <br />
-              {/* <InputLabel id="demo-simple-select-label">狀態</InputLabel> */}
               <TextField
                 select
                 onChange={handleShopInfo}
@@ -341,8 +321,8 @@ const Shop = () => {
         </Button>
         <br />
         <br />
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 850 }} aria-label="simple table">
+        <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+          <Table stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell
@@ -436,19 +416,12 @@ const Shop = () => {
                     <TableCell align="center">{item.status}</TableCell>
                     <TableCell align="center">{item.createdAt}</TableCell>
                     <TableCell align="center">
-                      {/* {item.status === "已歇業"
-                        ? <Button disabled/>
-                        : <Button/>} */}
-                        
                       <Button onClick={() => handleDeClickOpen(item)}>
                         <DeleteIcon />
                       </Button>
-                      <Button
-                        onClick={() => handleEditOpen( item)}
-                      >
+                      <Button onClick={() => handleEditOpen(item)}>
                         <EditIcon />
                       </Button>
-
                     </TableCell>
                   </TableRow>
                 </>
@@ -464,10 +437,42 @@ const Shop = () => {
               maxWidth="xs"
               PaperComponent={PaperComponent}
             >
-              <DialogTitle style={{ cursor: "move" }} id="delete">{"確定要刪除此項目?"}</DialogTitle>
-              <DialogContent>
+              <DialogTitle style={{ cursor: "move" }} id="delete">
+                {"確定要刪除此項目?"}
+              </DialogTitle>
+              <DialogContent style={{ textAlign: "right" }}>
+                <List aria-label="mailbox folders">
+                  <ListItem button>
+                    <ListItemText
+                      primary="店家名稱 :"
+                      sx={{ maxWidth: "50%" }}
+                    />
+                    <Chip label={currentShop.name} />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button>
+                    <ListItemText primary="類型 :" sx={{ maxWidth: "50%" }} />
+                    <Chip label={currentShop.type} />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button>
+                    <ListItemText primary="狀態 :" sx={{ maxWidth: "50%" }} />
+                    <Chip label={currentShop.status} />
+                  </ListItem>
+                  <Divider />
+                  <ListItem button>
+                    <ListItemText
+                      primary="店家照片 :"
+                      sx={{ maxWidth: "40%" }}
+                    />
+                    <img
+                      src={"http://localhost:8000/" + currentShop.image}
+                      alt={currentShop.image}
+                      width="150"
+                    />
+                  </ListItem>
+                </List>
                 <Button onClick={handleDeClose}>取消</Button>
-
                 <Button onClick={() => handleDelete()}>確認</Button>
               </DialogContent>
             </Dialog>
@@ -482,7 +487,10 @@ const Shop = () => {
               maxWidth="xs"
               // PaperComponent={PaperComponent}
             >
-              <DialogTitle id="edit" style={{ textAlign: "center", cursor: "move" }}>
+              <DialogTitle
+                id="edit"
+                style={{ textAlign: "center", cursor: "move" }}
+              >
                 {"修改店鋪資訊"}
               </DialogTitle>
 
@@ -497,7 +505,6 @@ const Shop = () => {
                     sx={{ width: 250 }}
                   />
                   <br /> <br />
-                  {/* <InputLabel id="edit">類型</InputLabel> */}
                   <TextField
                     select
                     onChange={handleShopInfo}
@@ -510,7 +517,6 @@ const Shop = () => {
                     <MenuItem value={1}>總店</MenuItem>
                   </TextField>
                   <br /> <br />
-                  {/* <InputLabel id="edit">狀態</InputLabel> */}
                   <TextField
                     select
                     onChange={handleShopInfo}

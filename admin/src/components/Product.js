@@ -26,7 +26,6 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 
 import Box from "@mui/material/Box";
 import SearchIcon from "@material-ui/icons/Search";
@@ -44,6 +43,13 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Draggable from "react-draggable";
+import Chip from "@mui/material/Chip";
+
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Productcon = styled.div`
   position: relative;
@@ -77,7 +83,7 @@ const Product = () => {
   const [open, setOpen] = useState(false);
   const [openDe, setOpenDe] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
-  // const [currentSauceInfo, setCurrentSauceInfo] = useState();
+
   const [sauceInfo, setSauceInfo] = useState({
     tag: "",
     status: 0,
@@ -161,16 +167,30 @@ const Product = () => {
       ["tagName"]: getProductTag[index],
     });
 
-    // console.log(currentInfo);
-    // console.log(currentInfo.tag.length);
-    // console.log(item.image);
-    // console.log(currentInfo.tagName);
     setCurrentId(id);
   };
 
   const handleEditClose = () => {
     setOpenEdit(false);
   };
+
+  const [SnackbarOpen, setSnackbarOpen] = useState(false);
+
+  const handleSnackClick = () => {
+    setSnackbarOpen(true);
+  };
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
   const url_Sauce = "http://localhost:8000/api/tag";
   const url_Product = "http://localhost:8000/api/product";
@@ -221,7 +241,6 @@ const Product = () => {
       ["tag"]: item.tag,
       ["status"]: item.status === "使用中" ? 0 : 1,
     });
-    // console.log(currentSauce)
   };
 
   const handleSauceEditOpen = (item, index) => {
@@ -232,7 +251,6 @@ const Product = () => {
       ["tag"]: item.tag,
       ["status"]: item.status === "使用中" ? 0 : 1,
     });
-    // console.log(currentSauce)
   };
 
   const handleSubmit = async (e) => {
@@ -334,8 +352,7 @@ const Product = () => {
         });
   };
 
-  const handleProductSubmit = async (e) => {
-    e.preventDefault();
+  const handleProductSubmit = async () => {
     const formData = new FormData();
     formData.append("name", productInfo.name);
     formData.append("price", productInfo.price);
@@ -350,12 +367,14 @@ const Product = () => {
 
     try {
       await axios.post(url_Product, formData, config);
-
-      console.log("sucess");
-      window.location.reload();
+      // console.log();
+      // window.location.reload();
+      // {handleSnackClick}
+      
     } catch (error) {
       console.log(error);
       console.log(productInfo);
+      // {handleSnackClick}
     }
   };
 
@@ -387,10 +406,8 @@ const Product = () => {
       }
       formData.append("image", productInfo.image);
       await axios.put(url_Product + "/" + currentId, formData, config);
-      // console.log(productInfo.tag)
     } catch (error) {
       console.log(error);
-      // console.log(productInfo);
     }
   };
 
@@ -409,38 +426,26 @@ const Product = () => {
     />
   ));
 
-  // const currentSauceTag = sauceData.map((sauce) => (
-  //   <FormControlLabel
-  //     control={
-  //       <Checkbox
-  //       onChange={handleCheckChange}
-  //       checked={productInfo}
-  //       value={sauce.id}
-  //       name="tags"
-
-  //       />
-  //     }
-  //     label={sauce.tag}
-  //   />
-
-  // ));
-
-  // const [checkedTag,setCheckedTag] = useState([])
-  // function handleTag(){
-  //   sauce.id===1?true:false
-  // }
-
-  // for(let i=1;i<=currentInfo.tag.length;i++)
-  // {
-  //   i===currentInfo.tag[i-1]?setCheckedTag("true"):setCheckedTag("flase")
-
-  // }
-
   let getProductTag = productData.map((taggs) => taggs.tags.map((k) => k.tag));
   let getProductId = productData.map((taggs) => taggs.tags.map((k) => k.id));
 
+
   return (
     <>
+      {/* <Snackbar
+        open={SnackbarOpen}
+        autoHideDuration={6000}
+        onClose={handleSnackClose}
+      >
+        <Alert
+          onClose={handleSnackClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          This is a success message!
+        </Alert>
+      </Snackbar>
+      <ToastContainer /> */}
       <Navbar />
       <Productcon id="product">
         <Stack spacing={2}>
@@ -458,12 +463,12 @@ const Product = () => {
           <TabContext value={value}>
             <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
               <TabList onChange={handleChange}>
-                <Tab label="調味料資訊" value="1" />
-                <Tab label="商品資訊" value="2" />
+                <Tab label="商品資訊" value="1" />
+                <Tab label="調味料資訊" value="2" />
               </TabList>
               {/*Tab1*/}
               {/****************************************************************************/}
-              <TabPanel value="2">
+              <TabPanel value="1">
                 <Box>
                   <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                     <SearchIcon
@@ -488,6 +493,7 @@ const Product = () => {
                 >
                   新增商品資訊
                 </Button>
+
                 {/* Dialog1*/}
 
                 <Dialog
@@ -496,7 +502,6 @@ const Product = () => {
                   aria-labelledby="alert-dialog-title"
                   aria-describedby="alert-dialog-description"
                   onBackdropClick="false"
-                  // style={{height:'500px'}}
                   maxWidth="xs"
                   // PaperComponent={PaperComponent}
                 >
@@ -507,10 +512,7 @@ const Product = () => {
                     {"新增商品資訊"}
                   </DialogTitle>
 
-                  <AddFormProduct
-                    onSubmit={handleProductSubmit}
-                    // style={{ height: "280px", width: "350px" }}
-                  >
+                  <AddFormProduct onSubmit={handleProductSubmit}>
                     <DialogContent>
                       <TextField
                         onChange={handleProductInfo}
@@ -533,9 +535,6 @@ const Product = () => {
                         required="true"
                       />
                       <br /> <br />
-                      {/* <InputLabel id="demo-simple-select-label">
-                        種類
-                      </InputLabel> */}
                       <TextField
                         select
                         onChange={handleProductInfo}
@@ -543,8 +542,6 @@ const Product = () => {
                         name="category"
                         label="種類"
                         sx={{ width: 390 }}
-                        // required="true"
-                        // defaultValue={1}
                       >
                         <MenuItem value={0}>肉類</MenuItem>
                         <MenuItem value={1}>蔬菜類</MenuItem>
@@ -567,7 +564,12 @@ const Product = () => {
                     </DialogContent>
                     <DialogActions sx={{ height: 0 }}>
                       <Button onClick={handleClose}>取消</Button>
-                      <Button type="submit" onClick={handleClose}>
+                      <Button
+                        type="submit"
+                        // onClick={handleClose}
+                        // onClick={notify}
+                        onClick={handleSnackClick}
+                      >
                         確認
                       </Button>
                     </DialogActions>
@@ -576,8 +578,9 @@ const Product = () => {
 
                 <br />
                 <br />
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 850 }}>
+
+                <TableContainer sx={{ maxHeight: 500 }} component={Paper}>
+                  <Table stickyHeader>
                     <TableHead>
                       <TableRow>
                         <TableCell
@@ -654,49 +657,45 @@ const Product = () => {
 
                     {productData.map((item, index) => {
                       return (
-                        <>
-                          <TableRow
-                            // key={item.tags}
-                            sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
-                            }}
-                            hover={true}
-                            title={getProductTag[index]}
-                          >
-                            <TableCell align="center">{item.id}</TableCell>
+                        <TableRow
+                          // key={item.tags}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                          hover={true}
+                          title={getProductTag[index]}
+                        >
+                          <TableCell align="center">{item.id}</TableCell>
 
-                            <TableCell align="center">{item.name}</TableCell>
-                            <TableCell align="center">{item.price}</TableCell>
-                            <TableCell align="center">
-                              <img
-                                src={"http://localhost:8000/" + item.image}
-                                alt={item.image}
-                                width="150"
-                              />
-                            </TableCell>
-                            <TableCell align="center">
-                              {item.category}
-                            </TableCell>
-                            <TableCell align="center">{item.status}</TableCell>
+                          <TableCell align="center">{item.name}</TableCell>
+                          <TableCell align="center">{item.price}</TableCell>
+                          <TableCell align="center">
+                            <img
+                              src={"http://localhost:8000/" + item.image}
+                              alt={item.image}
+                              width="150"
+                            />
+                          </TableCell>
+                          <TableCell align="center">{item.category}</TableCell>
+                          <TableCell align="center">{item.status}</TableCell>
 
-                            <TableCell align="center">
-                              <Button
-                                onClick={() =>
-                                  handleProductDeClickOpen(item.id, item, index)
-                                }
-                              >
-                                <DeleteIcon />
-                              </Button>
-                              <Button
-                                onClick={() =>
-                                  handleProductEditOpen(item.id, item, index)
-                                }
-                              >
-                                <EditIcon />
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        </>
+                          <TableCell align="center">
+                            <Button
+                              onClick={() =>
+                                handleProductDeClickOpen(item.id, item, index)
+                              }
+                            >
+                              <DeleteIcon />
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                handleProductEditOpen(item.id, item, index)
+                              }
+                            >
+                              <EditIcon />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
                       );
                     })}
                     {/* 刪除商品Dialog */}
@@ -712,28 +711,30 @@ const Product = () => {
                     >
                       <DialogTitle id="delete" style={{ cursor: "move" }}>
                         {"確定要刪除此商品?"}
-                        {/* {currentInfo.name} */}
                       </DialogTitle>
                       <DialogContent>
                         <List aria-label="mailbox folders">
                           <ListItem button>
-                            <ListItemText primary="產品名稱 :" />
                             <ListItemText
-                              primary={currentInfo.name}
-                              sx={{ textAlign: "center" }}
+                              primary="產品名稱 :"
+                              sx={{ maxWidth: "50%" }}
                             />
+                            <Chip label={currentInfo.name} />
                           </ListItem>
                           <Divider />
                           <ListItem button>
-                            <ListItemText primary="價錢 : " />
                             <ListItemText
-                              primary={currentInfo.price}
-                              sx={{ textAlign: "center", maxWidth: "50%" }}
+                              primary="價錢 : "
+                              sx={{ maxWidth: "50%" }}
                             />
+                            <Chip label={currentInfo.price} />
                           </ListItem>
                           <Divider />
                           <ListItem button>
-                            <ListItemText primary="圖片 : " />
+                            <ListItemText
+                              primary="圖片 : "
+                              sx={{ maxWidth: "35%" }}
+                            />
                             <img
                               src={"http://localhost:8000/" + currentInfo.image}
                               alt={currentInfo.image}
@@ -743,21 +744,21 @@ const Product = () => {
                           <Divider />
 
                           <ListItem button>
-                            <ListItemText primary="類別 : " />
                             <ListItemText
-                              primary={currentInfo.category2}
-                              sx={{ textAlign: "center", maxWidth: "50%" }}
+                              primary="類別 : "
+                              sx={{ maxWidth: "50%" }}
                             />
+                            <Chip label={currentInfo.category2} />
                           </ListItem>
 
                           <Divider />
 
                           <ListItem button>
-                            <ListItemText primary="調味料 : " />
                             <ListItemText
-                              primary={"" + currentInfo.tagName + ""}
-                              sx={{ textAlign: "center", maxWidth: "50%" }}
+                              primary="調味料 : "
+                              sx={{ maxWidth: "50%" }}
                             />
+                            <Chip label={"" + currentInfo.tagName + ""} />
                           </ListItem>
                         </List>
 
@@ -809,13 +810,9 @@ const Product = () => {
                             required
                           />
                           <br /> <br />
-                          {/* <InputLabel id="demo-simple-select-label">
-                            種類
-                          </InputLabel> */}
                           <TextField
-                          select
+                            select
                             onChange={handleProductInfo}
-                            // value={productInfo.category}
                             name="category"
                             label="種類"
                             sx={{ width: 300 }}
@@ -854,7 +851,7 @@ const Product = () => {
                 {/*****調味料**************************************************/}
               </TabPanel>
               {/*Tab2*/}
-              <TabPanel value="1">
+              <TabPanel value="2">
                 <Box>
                   <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                     <SearchIcon
@@ -885,7 +882,6 @@ const Product = () => {
                   onClose={handleClose}
                   onBackdropClick="false"
                   // PaperComponent={PaperComponent}
-                  // style={{height:'500px'}}
                 >
                   <DialogTitle
                     id="alert-dialog-title"
@@ -909,9 +905,6 @@ const Product = () => {
                         required="true"
                       />
                       <br /> <br />
-                      {/* <InputLabel id="demo-simple-select-label">
-                        狀態
-                      </InputLabel> */}
                       <TextField
                         select
                         onChange={handleSauceInfo}
@@ -938,8 +931,8 @@ const Product = () => {
 
                 <br />
                 <br />
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 850 }} aria-label="simple table">
+                <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                  <Table stickyHeader>
                     <TableHead>
                       <TableRow>
                         <TableCell
@@ -1040,11 +1033,11 @@ const Product = () => {
                       <DialogContent style={{ textAlign: "right" }}>
                         <List aria-label="mailbox folders">
                           <ListItem button>
-                            <ListItemText primary="調味料名稱 :" />
                             <ListItemText
-                              primary={currentSauce.tag}
-                              sx={{ textAlign: "center" }}
+                              primary="調味料名稱 :"
+                              sx={{ maxWidth: "70%" }}
                             />
+                            <Chip label={currentSauce.tag} />
                           </ListItem>
                           <Divider />
                         </List>
@@ -1086,12 +1079,10 @@ const Product = () => {
                             sx={{ width: 380 }}
                           />
                           <br /> <br />
-                          {/* <InputLabel id="edit">狀態</InputLabel> */}
                           <TextField
                             select
                             onChange={handleSauceInfo}
                             defaultValue={currentSauce.status}
-                            // value={item}
                             name="status"
                             label="狀態"
                             sx={{ width: 380 }}
