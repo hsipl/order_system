@@ -34,6 +34,8 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
                     onPress: () {
                       StoreProvider.of<AppState>(context)
                           .dispatch(CheckoutClear());
+                      StoreProvider.of<AppState>(context)
+                          .dispatch(UpdateCheckoutPrice());
                     },
                   ),
                 ),
@@ -100,11 +102,7 @@ class _CheckListState extends State<CheckList> {
           itemCount: store.newCheckoutList.length,
           itemBuilder: (context, index) {
             CheckoutItem item = store.newCheckoutList[index];
-            int amount = item.amount;
-            String tagString = '';
-            for (String tag in item.tags) {
-              tagString += tag + ',';
-            }
+
             return ClipRect(
               child: Dismissible(
                 key: UniqueKey(),
@@ -121,10 +119,7 @@ class _CheckListState extends State<CheckList> {
                       child: const Icon(Icons.delete, color: Colors.white)),
                 ),
                 child: CheckoutTile(
-                  img: item.product.img,
-                  name: item.product.name + '*$amount',
-                  tagString: tagString,
-                  itemPrice: int.parse(item.product.price) * amount,
+                  item: item,
                 ),
               ),
             );
@@ -138,19 +133,17 @@ class _CheckListState extends State<CheckList> {
 class CheckoutTile extends StatelessWidget {
   const CheckoutTile({
     Key? key,
-    required this.name,
-    required this.tagString,
-    required this.img,
-    required this.itemPrice,
+    required this.item,
   }) : super(key: key);
 
-  final String name;
-  final String tagString;
-  final String img;
-  final int itemPrice;
+  final CheckoutItem item;
 
   @override
   Widget build(BuildContext context) {
+    String tagString = '';
+    for (String tag in item.tags) {
+      tagString += tag + ',';
+    }
     return SizedBox(
       height: 80,
       child: Card(
@@ -164,13 +157,13 @@ class CheckoutTile extends StatelessWidget {
                 SizedBox(
                   height: 50,
                   width: 50,
-                  child: Image(image: NetworkImage(img)),
+                  child: Image(image: NetworkImage(item.product.img)),
                 )
               ],
             ),
-            title: Text(name),
+            title: Text(item.product.name),
             subtitle: Text(tagString),
-            trailing: Text('$itemPrice'),
+            trailing: Text(item.product.price * item.amount),
           ),
         ),
       ),
