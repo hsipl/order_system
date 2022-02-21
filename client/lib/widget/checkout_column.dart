@@ -93,12 +93,25 @@ class CheckList extends StatefulWidget {
 }
 
 class _CheckListState extends State<CheckList> {
+  final _scrollController = ScrollController();
+
+  void _scrollDown() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 250), curve: Curves.ease);
+    }
+  }
   @override
   Widget build(BuildContext context) {
+
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, store) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _scrollDown();
+        });
         return ListView.builder(
+          controller: _scrollController,
           itemCount: store.newCheckoutList.length,
           itemBuilder: (context, index) {
             CheckoutItem item = store.newCheckoutList[index];
