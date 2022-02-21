@@ -26,13 +26,13 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      _scrollDown();
-    });
-
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, store) {
+        WidgetsBinding.instance!.addPostFrameCallback((_) {
+          _scrollDown();
+        });
+
         List checkoutItems = store.newTempCheckoutList;
 
         List<Widget> listWidget = [];
