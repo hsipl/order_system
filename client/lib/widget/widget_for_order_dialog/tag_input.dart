@@ -1,4 +1,5 @@
 import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,11 +17,6 @@ class TagsInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    void setTag(tags, i,store) {
-      CheckoutItem tempItem = store.newTempCheckoutList.last;
-      tempItem.tags.add(tags[i]);
-      print(tempItem.tags);
-    }
 
     return SizedBox(
       height: 250,
@@ -46,7 +42,7 @@ class TagsInput extends StatelessWidget {
                     crossAxisAlignment: WrapCrossAlignment.start,
                     spacing: 5,
                     children:
-                        tagButtonGenerate(store, productId, setTag),
+                        tagButtonGenerate(store, productId,context),
                   );
                 },
               ),
@@ -58,7 +54,7 @@ class TagsInput extends StatelessWidget {
   }
 }
 
-List<ActionButton> tagButtonGenerate(store, productId, setTag) {
+List<ActionButton> tagButtonGenerate(store, productId,context) {
   Product product = Product.find(store, productId);
   List tags = product.tags;
   return List.generate(
@@ -67,7 +63,7 @@ List<ActionButton> tagButtonGenerate(store, productId, setTag) {
       action: tags[i],
       color: primaryTextColor,
       onPress: () {
-        setTag(tags, i,store);
+        StoreProvider.of<AppState>(context).dispatch(SetTempCheckoutItemTags(tags[i]));
       },
     ),
   );

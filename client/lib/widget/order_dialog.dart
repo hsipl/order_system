@@ -24,9 +24,6 @@ class OrderDialog extends StatefulWidget {
 
 class _OrderDialogState extends State<OrderDialog> {
 
-  void addItem(item){
-    StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(item));
-  }
 
 
   @override
@@ -36,9 +33,8 @@ class _OrderDialogState extends State<OrderDialog> {
         converter: (store) => store.state,
         builder: (context, store) {
           Product product = Product.find(store, widget.productId);
-          CheckoutItem tempItem = CheckoutItem(product.id, 0, []);
           if(store.newTempCheckoutList.isEmpty){
-            StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(tempItem));
+            StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(widget.productId));
           }
           return Dialog(
             shape: RoundedRectangleBorder(
@@ -75,11 +71,7 @@ class _OrderDialogState extends State<OrderDialog> {
                       ),
                     ),
                     //TODO send values to ActionRow()
-                    ActionRow(
-                      amount: 1,
-                      tags: [],
-                      productId: widget.productId,
-                    ),
+                    ActionRow(),
                   ],
                 ),
               ),

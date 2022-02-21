@@ -11,14 +11,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 class ActionRow extends StatefulWidget {
   const ActionRow({
     Key? key,
-    required this.tags,
-    required this.productId,
-    required this.amount,
   }) : super(key: key);
 
-  final int productId;
-  final int amount;
-  final List<String> tags;
+
 
   @override
   State<ActionRow> createState() => _ActionRowState();
@@ -39,18 +34,12 @@ class _ActionRowState extends State<ActionRow> {
                 color: kConfirmButtonColor,
                 //TODO send values to check out column
                 onPress: () {
-                  Map<String, dynamic> returnDataFromDialog = {
-                    'productId': widget.productId,
-                    'tags': widget.tags,
-                    'amount': widget.amount,
-                  };
-                  CheckoutItem checkoutItem =
-                      CheckoutItem.fromMap(returnDataFromDialog);
+
                   StoreProvider.of<AppState>(context)
-                      .dispatch(CheckoutAdd(checkoutItem));
+                      .dispatch(CheckoutAdd());
                   StoreProvider.of<AppState>(context)
                       .dispatch(TempCheckoutClear());
-                  Navigator.pop(context, returnDataFromDialog);
+                  Navigator.pop(context);
                 },
               )),
           const Spacer(),

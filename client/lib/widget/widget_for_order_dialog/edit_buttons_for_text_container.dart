@@ -1,5 +1,8 @@
+import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import '../styled_buttons.dart';
 
@@ -9,8 +12,6 @@ class EditButtonsForTextContainer extends StatelessWidget {
   }) : super(key: key);
 
   final int productId;
-  void nextCheckoutItem() {}
-  void clearCheckoutItem() {}
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +32,16 @@ class EditButtonsForTextContainer extends StatelessWidget {
             ActionButton(
               color: kConfirmButtonColor,
               action: '輸入下列',
-              onPress: nextCheckoutItem,
+              onPress: (){
+                StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(productId));
+              },
             ),
             ActionButton(
               color: kCancelButtonColor,
               action: '清空所有',
-              onPress: clearCheckoutItem,
+              onPress: (){
+                StoreProvider.of<AppState>(context).dispatch(TempCheckoutClear());
+              },
             ),
           ],
         ),

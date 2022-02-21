@@ -1,4 +1,5 @@
 import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +20,7 @@ class AmountInput extends StatefulWidget {
 class _AmountInputState extends State<AmountInput> {
   @override
   Widget build(BuildContext context) {
-    int amount = 0;
-    // CheckoutItem tempItem = CheckoutItem(widget.productId, 0, []);
-    // void setAmount(int amount,store) {
-    //   if(store.newTempCheckoutList.length==0){
-    //     StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(tempItem));
-    //   }
-    //   tempItem.amount = amount;
-    //   print(tempItem.amount);
-    // }
+
     return SizedBox(
       height: 250,
       width: 100,
@@ -45,34 +38,28 @@ class _AmountInputState extends State<AmountInput> {
               color: primaryTextColor,
               action: '+5',
               onPress: () {
-                amount = amount + 5;
+                StoreProvider.of<AppState>(context).dispatch(SetTempCheckoutItemAmount(5));
               },
             ),
             ActionButton(
               color: primaryTextColor,
               action: '+',
               onPress: () {
-                amount = amount + 1;
+                StoreProvider.of<AppState>(context).dispatch(SetTempCheckoutItemAmount(1));
               },
             ),
             ActionButton(
               color: primaryTextColor,
               action: '-',
               onPress: () {
-                amount = amount - 1;
-                if (amount < 1) {
-                  amount = 1;
-                }
+                StoreProvider.of<AppState>(context).dispatch(SetTempCheckoutItemAmount(-1));
               },
             ),
             ActionButton(
               color: primaryTextColor,
               action: '-5',
               onPress: () {
-                amount = amount - 5;
-                if (amount < 1) {
-                  amount = 1;
-                }
+                StoreProvider.of<AppState>(context).dispatch(SetTempCheckoutItemAmount(-5));
               },
             ),
           ],

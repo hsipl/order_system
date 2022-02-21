@@ -38,11 +38,11 @@ class Product {
 }
 
 class CheckoutItem {
-  late int productId;
-  late int amount;
-  late List tags;
+  late int productId  ;
+  late int amount ;
+  late List tags ;
 
-  CheckoutItem(this.productId, this.amount, this.tags);
+  CheckoutItem({required this.productId, this.amount = 1,required this.tags});
 
   CheckoutItem.fromMap(Map<String, dynamic> map) {
     productId = map['productId'];
