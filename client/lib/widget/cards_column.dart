@@ -84,7 +84,6 @@ class _CardsColumnState extends State<CardsColumn> {
 }
 
 List<Widget> cardGenerate(store, category) {
-
   List<Widget> cards = List.generate(store.newProductList.length, (i) {
     Product product = store.newProductList[i];
     if (product.category == category) {

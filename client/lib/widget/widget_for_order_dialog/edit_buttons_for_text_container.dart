@@ -8,7 +8,8 @@ import '../styled_buttons.dart';
 
 class EditButtonsForTextContainer extends StatelessWidget {
   const EditButtonsForTextContainer({
-    Key? key,required this.productId,
+    Key? key,
+    required this.productId,
   }) : super(key: key);
 
   final int productId;
@@ -32,15 +33,17 @@ class EditButtonsForTextContainer extends StatelessWidget {
             ActionButton(
               color: kConfirmButtonColor,
               action: '輸入下列',
-              onPress: (){
-                StoreProvider.of<AppState>(context).dispatch(TempCheckoutAdd(productId));
+              onPress: () {
+                StoreProvider.of<AppState>(context)
+                    .dispatch(TempCheckoutAdd(productId));
               },
             ),
             ActionButton(
               color: kCancelButtonColor,
               action: '清空所有',
-              onPress: (){
-                StoreProvider.of<AppState>(context).dispatch(TempCheckoutClear());
+              onPress: () {
+                StoreProvider.of<AppState>(context)
+                    .dispatch(TempCheckoutClear());
               },
             ),
           ],

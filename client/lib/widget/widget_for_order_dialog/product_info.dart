@@ -2,7 +2,6 @@ import 'package:client/model/app_state.dart';
 import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import '../order_dialog.dart';
 
 class ProductInfo extends StatelessWidget {
   const ProductInfo({

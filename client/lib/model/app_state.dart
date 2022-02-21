@@ -14,6 +14,8 @@ class AppState {
   }
 
   List get newCheckoutList => checkoutList;
+
   List get newProductList => productList;
+
   List get newTempCheckoutList => tempCheckoutList;
 }

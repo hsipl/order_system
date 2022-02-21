@@ -1,4 +1,3 @@
-import 'package:client/services/serializer.dart';
 class CheckoutAdd {
   CheckoutAdd();
 }

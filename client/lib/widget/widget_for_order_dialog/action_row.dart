@@ -2,18 +2,14 @@ import 'package:client/model/app_state.dart';
 import 'package:client/redux/actions/checkout_action.dart';
 import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/decorations.dart';
-import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 import '../styled_buttons.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-
 
 class ActionRow extends StatefulWidget {
   const ActionRow({
     Key? key,
   }) : super(key: key);
-
-
 
   @override
   State<ActionRow> createState() => _ActionRowState();
@@ -34,9 +30,7 @@ class _ActionRowState extends State<ActionRow> {
                 color: kConfirmButtonColor,
                 //TODO send values to check out column
                 onPress: () {
-
-                  StoreProvider.of<AppState>(context)
-                      .dispatch(CheckoutAdd());
+                  StoreProvider.of<AppState>(context).dispatch(CheckoutAdd());
                   StoreProvider.of<AppState>(context)
                       .dispatch(TempCheckoutClear());
                   Navigator.pop(context);

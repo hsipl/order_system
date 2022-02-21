@@ -99,7 +99,8 @@ class _CheckListState extends State<CheckList> {
                 key: UniqueKey(),
                 onDismissed: (direction) {
                   setState(() {
-                    StoreProvider.of<AppState>(context).dispatch(CheckoutRemove(index));
+                    StoreProvider.of<AppState>(context)
+                        .dispatch(CheckoutRemove(index));
                   });
                 },
                 background: Padding(
@@ -151,7 +152,8 @@ class CheckoutTile extends StatelessWidget {
                 ),
                 title: Text(product.name + '*' + item.amount.toString()),
                 subtitle: Text(item.tags.toString()),
-                trailing: Text((item.amount*int.parse(product.price)).toString()),
+                trailing:
+                    Text((item.amount * int.parse(product.price)).toString()),
               ),
             ),
           ),

@@ -41,4 +41,3 @@ Future<Map?> getStoreInfoSharedPrefs() async {
       jsonDecode(prefs.getString('storeInfo').toString());
   return storeId;
 }
-

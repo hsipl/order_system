@@ -71,7 +71,7 @@ class _OrderDialogState extends State<OrderDialog> {
                       ),
                     ),
                     //TODO send values to ActionRow()
-                    ActionRow(),
+                    const ActionRow(),
                   ],
                 ),
               ),

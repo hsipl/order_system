@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:client/widget/navigation_drawer.dart';
 import 'package:client/widget/cards_column.dart';
 
-
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 

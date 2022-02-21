@@ -9,15 +9,11 @@ import 'package:flutter_redux/flutter_redux.dart';
 import '../styled_buttons.dart';
 
 class TagsInput extends StatelessWidget {
-  const TagsInput(
-      {Key? key, required this.productId})
-      : super(key: key);
+  const TagsInput({Key? key, required this.productId}) : super(key: key);
   final int productId;
 
   @override
   Widget build(BuildContext context) {
-
-
     return SizedBox(
       height: 250,
       width: 300,
@@ -41,8 +37,7 @@ class TagsInput extends StatelessWidget {
                     alignment: WrapAlignment.start,
                     crossAxisAlignment: WrapCrossAlignment.start,
                     spacing: 5,
-                    children:
-                        tagButtonGenerate(store, productId,context),
+                    children: tagButtonGenerate(store, productId, context),
                   );
                 },
               ),
@@ -54,7 +49,7 @@ class TagsInput extends StatelessWidget {
   }
 }
 
-List<ActionButton> tagButtonGenerate(store, productId,context) {
+List<ActionButton> tagButtonGenerate(store, productId, context) {
   Product product = Product.find(store, productId);
   List tags = product.tags;
   return List.generate(
@@ -63,7 +58,8 @@ List<ActionButton> tagButtonGenerate(store, productId,context) {
       action: tags[i],
       color: primaryTextColor,
       onPress: () {
-        StoreProvider.of<AppState>(context).dispatch(SetTempCheckoutItemTags(tags[i]));
+        StoreProvider.of<AppState>(context)
+            .dispatch(SetTempCheckoutItemTags(tags[i]));
       },
     ),
   );

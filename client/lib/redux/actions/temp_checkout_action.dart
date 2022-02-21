@@ -13,13 +13,16 @@ class TempCheckoutRemove {
 class TempCheckoutClear {
   TempCheckoutClear();
 }
+
 // item
-class SetTempCheckoutItemTags  {
+class SetTempCheckoutItemTags {
   final String payload;
+
   SetTempCheckoutItemTags(this.payload);
 }
 
-class SetTempCheckoutItemAmount  {
+class SetTempCheckoutItemAmount {
   final int payload;
+
   SetTempCheckoutItemAmount(this.payload);
 }

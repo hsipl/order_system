@@ -21,7 +21,7 @@ class ErrorDialog extends StatelessWidget {
           child: ActionButton(
             action: '確定',
             color: kConfirmButtonColor,
-            onPress: (){
+            onPress: () {
               Navigator.pop(context);
             },
           ),
@@ -31,7 +31,7 @@ class ErrorDialog extends StatelessWidget {
   }
 }
 
-void showErrorDialog(context,status){
+void showErrorDialog(context, status) {
   showDialog(
     context: context,
     builder: (context) {

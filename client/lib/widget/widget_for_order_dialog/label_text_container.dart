@@ -68,8 +68,8 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
                           key: UniqueKey(),
                           onDismissed: (direction) {
                             StoreProvider.of<AppState>(context)
-                                  .dispatch(TempCheckoutRemove(index));
-                             },
+                                .dispatch(TempCheckoutRemove(index));
+                          },
                           background: Container(
                               color: kCancelButtonColor,
                               child: const Icon(Icons.delete,
