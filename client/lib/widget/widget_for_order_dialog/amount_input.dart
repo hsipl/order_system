@@ -7,9 +7,10 @@ import '../styled_buttons.dart';
 
 class AmountInput extends StatefulWidget {
   const AmountInput({
+    required this.price,
     Key? key,
   }) : super(key: key);
-
+  final int price;
   @override
   State<AmountInput> createState() => _AmountInputState();
 }
@@ -17,6 +18,7 @@ class AmountInput extends StatefulWidget {
 class _AmountInputState extends State<AmountInput> {
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       height: 250,
       width: 100,
@@ -44,6 +46,7 @@ class _AmountInputState extends State<AmountInput> {
               onPress: () {
                 StoreProvider.of<AppState>(context)
                     .dispatch(SetTempCheckoutItemAmount(1));
+
               },
             ),
             ActionButton(
@@ -52,6 +55,7 @@ class _AmountInputState extends State<AmountInput> {
               onPress: () {
                 StoreProvider.of<AppState>(context)
                     .dispatch(SetTempCheckoutItemAmount(-1));
+
               },
             ),
             ActionButton(

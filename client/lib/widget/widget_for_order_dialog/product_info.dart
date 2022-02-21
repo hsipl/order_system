@@ -6,18 +6,16 @@ import 'package:flutter_redux/flutter_redux.dart';
 class ProductInfo extends StatelessWidget {
   const ProductInfo({
     Key? key,
-    required this.productId,
+    required this.product,
   }) : super(key: key);
 
-  final int productId;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
       converter: (store) => store.state,
       builder: (context, store) {
-        Product product = Product.find(store, productId);
-
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

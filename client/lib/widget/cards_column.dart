@@ -88,7 +88,7 @@ List<Widget> cardGenerate(store, category) {
     Product product = store.newProductList[i];
     if (product.category == category) {
       return ProductCard(
-        productId: product.id,
+        product: product,
       );
     } else {
       return Container();

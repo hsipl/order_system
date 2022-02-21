@@ -11,3 +11,7 @@ class CheckoutRemove {
 class CheckoutClear {
   CheckoutClear();
 }
+
+class UpdateCheckoutPrice{
+  UpdateCheckoutPrice();
+}

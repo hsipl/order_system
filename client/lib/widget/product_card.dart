@@ -7,10 +7,10 @@ import 'order_dialog.dart';
 class ProductCard extends StatefulWidget {
   const ProductCard({
     Key? key,
-    required this.productId,
+    required this.product,
   }) : super(key: key);
 
-  final int productId;
+  final Product product;
 
   @override
   _ProductCardState createState() => _ProductCardState();
@@ -57,7 +57,7 @@ class _ProductCardState extends State<ProductCard> {
                   child: Opacity(
                     opacity: a1.value,
                     child: OrderDialog(
-                      productId: super.widget.productId,
+                      product: super.widget.product,
                     ),
                   ),
                 );
@@ -75,7 +75,6 @@ class _ProductCardState extends State<ProductCard> {
             child: StoreConnector<AppState, AppState>(
               converter: (store) => store.state,
               builder: (context, store) {
-                Product product = Product.find(store, widget.productId);
                 return ListTile(
                   enabled: true,
                   leading: Column(
@@ -84,12 +83,12 @@ class _ProductCardState extends State<ProductCard> {
                       SizedBox(
                         height: 50,
                         width: 50,
-                        child: Image(image: NetworkImage(product.img)),
+                        child: Image(image: NetworkImage(widget.product.img)),
                       )
                     ],
                   ),
-                  title: Text(product.name),
-                  trailing: Text(product.price),
+                  title: Text(widget.product.name),
+                  trailing: Text(widget.product.price),
                 );
               },
             ),

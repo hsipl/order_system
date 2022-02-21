@@ -13,39 +13,33 @@ class Product {
   Product.fromMap(Map<String, dynamic> map) {
     id = map['id'];
     name = map['name'];
-    price = map['price'].toString() ;
+    price = map['price'].toString();
     // img = map['image'];
     img =
         'https://d1ralsognjng37.cloudfront.net/3ea3bab1-7c51-4812-8534-03821aff031a';
     category = map['category'];
     status = map['status'];
-    tags.add('不辣');
     for (final tag in map['tags']) {
       tags.add(tag['tag']);
     }
   }
-
-  static Product find(store, productId) {
-    late Product product;
-    for (int i = 0; i < store.newProductList.length; i++) {
-      product = store.newProductList[i];
-      if (product.id == productId) {
-        break;
-      }
-    }
-    return product;
-  }
 }
 
 class CheckoutItem {
-  late int productId  ;
-  late int amount ;
-  late List tags ;
+  late Product product;
 
-  CheckoutItem({required this.productId, this.amount = 1,required this.tags});
+  late int amount;
+
+  late List tags;
+
+  CheckoutItem({
+    required this.product,
+    this.amount = 1,
+    required this.tags,
+  });
 
   CheckoutItem.fromMap(Map<String, dynamic> map) {
-    productId = map['productId'];
+    product = map['product'];
     tags = map['tags'];
     amount = map['amount'];
   }

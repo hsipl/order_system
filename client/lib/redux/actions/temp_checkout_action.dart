@@ -1,5 +1,7 @@
+import 'package:client/services/serializer.dart';
+
 class TempCheckoutAdd {
-  final int payload;
+  final Product payload;
 
   TempCheckoutAdd(this.payload);
 }
@@ -26,3 +28,4 @@ class SetTempCheckoutItemAmount {
 
   SetTempCheckoutItemAmount(this.payload);
 }
+

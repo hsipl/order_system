@@ -1,6 +1,7 @@
 import 'package:client/model/app_state.dart';
 import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/decorations.dart';
+import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -9,10 +10,10 @@ import '../styled_buttons.dart';
 class EditButtonsForTextContainer extends StatelessWidget {
   const EditButtonsForTextContainer({
     Key? key,
-    required this.productId,
+    required this.product,
   }) : super(key: key);
 
-  final int productId;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class EditButtonsForTextContainer extends StatelessWidget {
               action: '輸入下列',
               onPress: () {
                 StoreProvider.of<AppState>(context)
-                    .dispatch(TempCheckoutAdd(productId));
+                    .dispatch(TempCheckoutAdd(product));
               },
             ),
             ActionButton(

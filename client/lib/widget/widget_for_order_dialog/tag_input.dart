@@ -9,8 +9,8 @@ import 'package:flutter_redux/flutter_redux.dart';
 import '../styled_buttons.dart';
 
 class TagsInput extends StatelessWidget {
-  const TagsInput({Key? key, required this.productId}) : super(key: key);
-  final int productId;
+  const TagsInput({Key? key, required this.product}) : super(key: key);
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +30,11 @@ class TagsInput extends StatelessWidget {
           removeTop: true,
           child: CupertinoScrollbar(
             child: SingleChildScrollView(
-              child: StoreConnector<AppState, AppState>(
-                converter: (store) => store.state,
-                builder: (context, store) {
-                  return Wrap(
-                    alignment: WrapAlignment.start,
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    spacing: 5,
-                    children: tagButtonGenerate(store, productId, context),
-                  );
-                },
+              child: Wrap(
+                alignment: WrapAlignment.start,
+                crossAxisAlignment: WrapCrossAlignment.start,
+                spacing: 5,
+                children: tagButtonGenerate(product, context),
               ),
             ),
           ),
@@ -49,8 +44,7 @@ class TagsInput extends StatelessWidget {
   }
 }
 
-List<ActionButton> tagButtonGenerate(store, productId, context) {
-  Product product = Product.find(store, productId);
+List<ActionButton> tagButtonGenerate(product, context) {
   List tags = product.tags;
   return List.generate(
     tags.length,
