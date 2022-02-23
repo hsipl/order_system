@@ -1,7 +1,7 @@
 import { Connection, createConnection } from 'typeorm';
 import { Store } from '../../entity/store';
 import { StoreRepository } from "../../repository/store.repository";
-import { getConnection } from './connect';
+import { getConnection } from '../connect';
 const repo = new StoreRepository()
 let connection: any
 
@@ -24,7 +24,7 @@ describe("Testing Store Repository", () => {
         "createdAt": "2022-01-19T15:19:46.211Z"
     }
     Store.find = jest.fn().mockReturnValue(mockData)
-    const data = await repo.get({"status": 0})
+    const data = await repo.get({})
     expect(data).toBe(mockData)
    })
    test("test getbyid", async() => {
@@ -50,7 +50,7 @@ describe("Testing Store Repository", () => {
         "createdAt": "2022-01-19T15:19:46.211Z"
     }
     Store.findOne = jest.fn().mockReturnValue(mockData)
-    const data = await repo.getByName("kcy main store")
+    const data = await repo.getByName("kcy main  store")
     expect(data).toBe(mockData)
    })
 
