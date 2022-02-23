@@ -1,7 +1,7 @@
 import { Connection, createConnection } from 'typeorm';
 import { Store } from '../../entity/store';
 import { StoreRepository } from "../../repository/store.repository";
-import { getConnection } from './connect';
+import { getConnection } from '../connect';
 const repo = new StoreRepository()
 let connection: any
 

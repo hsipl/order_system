@@ -4,7 +4,7 @@ export async function getConnection() {
     let connection = await createConnection({
         "name": "default",
         "type": "mysql",
-        "host": "db",
+        "host": "localhost",
         "port": 3306,
         "username": "hsipl",
         "password": "hsipl211",
