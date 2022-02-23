@@ -2,12 +2,6 @@ kind: pipeline
 name: Build for production
 type: docker
 
-trigger:
-  branch: 
-    - main
-  event: 
-    - pull_request
-
 services:
 - name: db
   image: mysql
@@ -16,10 +10,10 @@ services:
     MYSQL_PASSWORD: hsipl211
     MYSQL_ROOT_PASSWORD: hsipl211
     MYSQL_DATABASE: dev_db
+
 - name: redis
   image: redis:alpine
 
-  
 steps:
 - name: Run Test
   image: node:latest
@@ -29,37 +23,23 @@ steps:
   commands:
     - echo "start running test..."
     - bash ./build.sh
-- name: ssh commands
-  image: appleboy/drone-ssh
-  depends_on:
-      - Run Test
-  settings:
-    host: 
-      from_secret: host 
-    username: 
-      from_secret: user 
-    password: 
-      from_secret: password 
-    port: 22
-    
-    script:
-      - cd /home/hsipl/feng/Order_System/prd/order_system
-      - git pull 
-    when:
-      branch:
-        - main
-      event:
-        - push
+
 - name: slack
   image: plugins/slack
   depends_on:
-      - ssh commands
+      - Run Test
   settings:
     webhook:
       from_secret: slack_webhook
     channel: order_system
   when:
     status: [ success, failure ]
+
+trigger:
+  branch: 
+    - main
+  event: 
+    - pull_request
 ---
 
 kind: pipeline
@@ -74,6 +54,7 @@ services:
     MYSQL_PASSWORD: hsipl211
     MYSQL_ROOT_PASSWORD: hsipl211
     MYSQL_DATABASE: dev_db
+    
 - name: redis
   image: redis:alpine
 
@@ -86,34 +67,20 @@ steps:
   commands:
     - echo "start running test..."
     - bash ./build.sh
-- name: ssh commands
-  image: appleboy/drone-ssh
-  depends_on:
-      - Run Test
-  settings:
-    host: 
-      from_secret: host 
-    username: 
-      from_secret: user 
-    password: 
-      from_secret: password 
-    port: 22
-    script:
-      - cd /home/hsipl/feng/Order_System/dev/order_system
-      - git pull 
-    when:
-      branch:
-        - development
-      event:
-        - push
 
 - name: slack
   image: plugins/slack
   depends_on:
-      - ssh commands
+      - Run Test
   settings:
     webhook:
       from_secret: slack_webhook
     channel: order_system
   when:
     status: [ success, failure ]
+
+trigger:
+  branch: 
+    - development
+  event: 
+    - push    
