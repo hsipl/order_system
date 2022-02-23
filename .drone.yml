@@ -81,6 +81,6 @@ steps:
 
 trigger:
   branch: 
-    - dev
+    - development
   event: 
     - push    
