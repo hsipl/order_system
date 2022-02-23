@@ -2,12 +2,6 @@ kind: pipeline
 name: Build for production
 type: docker
 
-trigger:
-  branch: 
-    - main
-  event: 
-    - pull_request
-
 services:
 - name: db
   image: mysql
@@ -16,6 +10,7 @@ services:
     MYSQL_PASSWORD: hsipl211
     MYSQL_ROOT_PASSWORD: hsipl211
     MYSQL_DATABASE: dev_db
+
 - name: redis
   image: redis:alpine
 
@@ -59,6 +54,7 @@ services:
     MYSQL_PASSWORD: hsipl211
     MYSQL_ROOT_PASSWORD: hsipl211
     MYSQL_DATABASE: dev_db
+    
 - name: redis
   image: redis:alpine
 
