@@ -1,4 +1,4 @@
-import { UpdateResult } from "typeorm";
+import { FindConditions, Like, UpdateResult } from "typeorm";
 import { Product } from "../entity/product";
 import { ProductRepository } from "../repository/product.repository";
 import { IProductCreateParams, IProductUpdateParams, IProductDeleteParams, IProudctUpdate } from "../interafaces/product.interface";
@@ -6,8 +6,11 @@ import { IProductCreateParams, IProductUpdateParams, IProductDeleteParams, IProu
 export class ProductService {
     constructor(private readonly repository: ProductRepository) { }
 
-    public async getAll(): Promise<Product[]> {
-        const product = await this.repository.getAll();
+    public async get(query:FindConditions<Product>): Promise<Product[]> {
+        if (Object.keys(query).includes('name')) {
+            query.name = Like('%' + query.name + '%');
+          }
+        const product = await this.repository.get(query);
         return product;
     }
 
