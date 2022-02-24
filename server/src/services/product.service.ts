@@ -1,4 +1,4 @@
-import { UpdateResult } from "typeorm";
+import { FindConditions, Like, UpdateResult } from "typeorm";
 import { Product } from "../entity/product";
 import { ProductRepository } from "../repository/product.repository";
 import { IProductCreateParams, IProductUpdateParams, IProductDeleteParams, IProudctUpdate } from "../interafaces/product.interface";
@@ -6,8 +6,11 @@ import { IProductCreateParams, IProductUpdateParams, IProductDeleteParams, IProu
 export class ProductService {
     constructor(private readonly repository: ProductRepository) { }
 
-    public async getAll(): Promise<Product[]> {
-        const product = await this.repository.getAll();
+    public async get(query:FindConditions<Product>): Promise<Product[]> {
+        if (Object.keys(query).includes('name')) {
+            query.name = Like('%' + query.name + '%');
+          }
+        const product = await this.repository.get(query);
         return product;
     }
 
@@ -21,6 +24,11 @@ export class ProductService {
         return product;
     }
 
+    public async getByIds(id: number[]): Promise<Product[] | undefined> {
+        const product = await this.repository.getByIds(id);
+        return product;
+    }
+    
     public async checkExistByName(name: string, storeId: number): Promise<boolean> {
         const isExist = await this.repository.getByName(name, storeId)
         return isExist ? true : false;
@@ -46,7 +54,6 @@ export class ProductService {
     public async update(params: IProductUpdateParams): Promise<UpdateResult | undefined> {
         const product = new Product();
         Object.assign(product, params);
-        // console.log(product);
         return await this.repository.update(product);
     }
 

@@ -21,7 +21,7 @@ export default class StoreRoute extends BasicRoute {
     );
     const validator = new StoreValidator();
     const auth = new Auth();
-    this.router.get('/', auth.authAdmin.bind(auth), controller.getAll.bind(controller));
+    this.router.get('/', auth.authAdmin.bind(auth), controller.get.bind(controller));
     this.router.get(
       '/:id',
       auth.authAdmin.bind(auth),

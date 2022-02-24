@@ -61,7 +61,7 @@ export class App {
 
   private async setDBConnection() {
     try {
-      console.log(`connect to mysql db on ${this.mode}`)
+      console.log(`connect to mysql db on ${this.mode}`);
       const connection = await createConnection(this.mode);
       if (connection.isConnected) {
         console.log("MySQL db already connect.");
