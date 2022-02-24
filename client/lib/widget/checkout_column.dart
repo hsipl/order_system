@@ -2,6 +2,7 @@ import 'package:client/model/app_state.dart';
 import 'package:client/redux/actions/checkout_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
+import 'package:client/widget/shopping_confirm_dialog.dart';
 import 'package:client/widget/styled_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -71,7 +72,24 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
                       color: kConfirmButtonColor,
                       text: '送出',
                       onPress: () {
-                        print(store.newCheckoutList);
+                        showGeneralDialog(
+                          transitionBuilder: (context, a1, a2, widget) {
+                            return FadeTransition(
+                              opacity: a1,
+                              child: Opacity(
+                                opacity: a1.value,
+                                child: const ShoppingConfirmDialog(),
+                              ),
+                            );
+                          },
+                          transitionDuration: const Duration(milliseconds: 200),
+                          barrierDismissible: true,
+                          barrierLabel: '',
+                          context: context,
+                          pageBuilder: (context, animation1, animation2) {
+                            return Container();
+                          },
+                        );
                       }),
                 ),
               ],

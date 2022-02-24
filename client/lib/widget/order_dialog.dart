@@ -59,15 +59,30 @@ class _OrderDialogState extends State<OrderDialog> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const LabelTextContainer(),
-                          TagsInput(
-                            product: widget.product,
+                          const Expanded(
+                            flex: 4,
+                            child: LabelTextContainer(),
                           ),
-                          AmountInput(
-                            price: int.parse(widget.product.price),
+                          SizedBox(width: 4,),
+                          Expanded(
+                            flex: 4,
+                            child: TagsInput(
+                              product: widget.product,
+                            ),
                           ),
-                          EditButtonsForTextContainer(
-                            product: widget.product,
+                          SizedBox(width: 4,),
+                          Expanded(
+                            flex: 2,
+                            child: AmountInput(
+                              price: int.parse(widget.product.price),
+                            ),
+                          ),
+                          SizedBox(width: 4,),
+                          Expanded(
+                            flex: 2,
+                            child: EditButtonsForTextContainer(
+                              product: widget.product,
+                            ),
                           ),
                         ],
                       ),
