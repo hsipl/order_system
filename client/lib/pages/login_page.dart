@@ -1,9 +1,7 @@
 import 'package:client/widget/loading_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:client/services/preference_operation.dart';
 import 'package:client/services/api_connection.dart';
 import 'package:client/widget/login_text_field.dart';
-import 'package:client/widget/error_dialog.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -52,19 +50,7 @@ class _LoginState extends State<Login> {
                   };
                   showLoaderDialog(context);
                   await Future.delayed(const Duration(seconds: 1));
-                  Api().login(loginData).then(
-                    (status) {
-                      if (status == '200') {
-                        Api().product().then(
-                          (status) {
-                            loginChecker(context, status);
-                          },
-                        );
-                      } else {
-                        loginChecker(context, status);
-                      }
-                    },
-                  );
+                  Api().login(loginData, context);
                 },
                 child: const Text('Login'),
               ),
@@ -73,22 +59,6 @@ class _LoginState extends State<Login> {
           ],
         ),
       ),
-    );
-  }
-}
-
-void loginChecker(context, String status) {
-  if (status == '200') {
-    setLoginSharedPrefs(true);
-    Navigator.pushNamedAndRemoveUntil(
-        context, '/home_activate', (Route<dynamic> route) => false);
-  } else {
-    Navigator.pop(context);
-    showDialog(
-      context: context,
-      builder: (context) {
-        return ErrorDialog(status: status);
-      },
     );
   }
 }

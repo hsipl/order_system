@@ -1,12 +1,21 @@
+import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions/checkout_action.dart';
+import 'package:client/redux/actions/temp_checkout_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:flutter/material.dart';
 import '../styled_buttons.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-class ActionRow extends StatelessWidget {
+class ActionRow extends StatefulWidget {
   const ActionRow({
     Key? key,
   }) : super(key: key);
 
+  @override
+  State<ActionRow> createState() => _ActionRowState();
+}
+
+class _ActionRowState extends State<ActionRow> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,15 +23,19 @@ class ActionRow extends StatelessWidget {
       child: Row(
         children: [
           SizedBox(
-            width: 150,
-            height: 50,
-            child: ActionButton(
-              action: '確定',
-              color: kConfirmButtonColor,
-              //TODO send values to check out column
-              onPress: () => Navigator.pop(context),
-            ),
-          ),
+              width: 150,
+              height: 50,
+              child: ActionButton(
+                action: '確定',
+                color: kConfirmButtonColor,
+                //TODO send values to check out column
+                onPress: () {
+                  StoreProvider.of<AppState>(context).dispatch(CheckoutAdd());
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(UpdateCheckoutPrice());
+                  Navigator.pop(context);
+                },
+              )),
           const Spacer(),
           SizedBox(
             width: 150,
@@ -30,7 +43,11 @@ class ActionRow extends StatelessWidget {
             child: ActionButton(
               action: '取消',
               color: kCancelButtonColor,
-              onPress: () => Navigator.pop(context),
+              onPress: () {
+                StoreProvider.of<AppState>(context)
+                    .dispatch(TempCheckoutClear());
+                Navigator.pop(context);
+              },
             ),
           ),
         ],

@@ -1,3 +1,4 @@
+import 'package:client/services/api_connection.dart';
 import 'package:client/services/preference_operation.dart';
 import 'package:client/widget/checkout_column.dart';
 import 'package:client/widget/home_actions.dart';
@@ -22,6 +23,7 @@ class _HomePageState extends State<HomePage> {
         title = value!['name'];
       });
     });
+    Api().product(context);
     super.initState();
   }
 
