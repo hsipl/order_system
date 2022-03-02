@@ -1,4 +1,4 @@
-import 'package:client/widget/widget_for_order_dialog/action_row.dart';
+import 'package:client/widget/order_dialog/action_row.dart';
 import 'package:flutter/material.dart';
 
 class ShoppingConfirmDialog extends StatelessWidget {

@@ -3,7 +3,7 @@ import 'package:client/redux/actions/shopping_action.dart';
 import 'package:client/redux/actions/temp_shopping_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:flutter/material.dart';
-import '../styled_buttons.dart';
+import '../button_style/styled_buttons.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 class ActionRow extends StatefulWidget {

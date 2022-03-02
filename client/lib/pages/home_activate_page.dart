@@ -1,10 +1,10 @@
 import 'package:client/services/api_connection.dart';
 import 'package:client/services/preference_operation.dart';
-import 'package:client/widget/shopping_column.dart';
-import 'package:client/widget/home_pop_up_menu.dart';
+import 'package:client/widget/shopping_column/shopping_column.dart';
+import 'package:client/widget/app_bar_widget/home_pop_up_menu.dart';
 import 'package:flutter/material.dart';
-import 'package:client/widget/navigation_drawer.dart';
-import 'package:client/widget/product_cards_column.dart';
+import 'package:client/widget/app_bar_widget/navigation_drawer.dart';
+import 'package:client/widget/product_cards_column/product_cards_column.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

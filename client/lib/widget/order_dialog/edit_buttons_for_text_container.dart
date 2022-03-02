@@ -5,7 +5,7 @@ import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import '../styled_buttons.dart';
+import '../button_style/styled_buttons.dart';
 
 class EditButtonsForTextContainer extends StatelessWidget {
   const EditButtonsForTextContainer({

@@ -1,15 +1,15 @@
 import 'package:client/model/app_state.dart';
 import 'package:client/redux/actions/temp_shopping_action.dart';
 import 'package:client/services/serializer.dart';
-import 'package:client/widget/widget_for_order_dialog/action_row.dart';
-import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
-import 'package:client/widget/widget_for_order_dialog/tag_input.dart';
+import 'package:client/widget/order_dialog/action_row.dart';
+import 'package:client/widget/order_dialog/edit_buttons_for_text_container.dart';
+import 'package:client/widget/order_dialog/tag_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'widget_for_order_dialog/label_text_container.dart';
-import 'widget_for_order_dialog/quantity_input.dart';
-import 'widget_for_order_dialog/filter_image.dart';
-import 'widget_for_order_dialog/product_info.dart';
+import 'label_text_container.dart';
+import 'quantity_input.dart';
+import 'filter_image.dart';
+import 'product_info.dart';
 
 class OrderDialog extends StatefulWidget {
   const OrderDialog({

@@ -1,7 +1,7 @@
 import 'package:client/services/api_connection.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/preference_operation.dart';
-import 'package:client/widget/styled_buttons.dart';
+import 'package:client/widget/button_style/styled_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

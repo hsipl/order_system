@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-import '../styled_buttons.dart';
+import '../button_style/styled_buttons.dart';
 
 class TagsInput extends StatelessWidget {
   const TagsInput({Key? key, required this.product}) : super(key: key);

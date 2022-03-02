@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/services/decorations.dart';
-import 'styled_buttons.dart';
+import '../button_style/styled_buttons.dart';
 
 class ErrorDialog extends StatelessWidget {
   const ErrorDialog({

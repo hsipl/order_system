@@ -2,8 +2,8 @@ import 'package:client/model/app_state.dart';
 import 'package:client/redux/actions/shopping_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
-import 'package:client/widget/shopping_confirm_dialog.dart';
-import 'package:client/widget/styled_buttons.dart';
+import 'package:client/widget/shopping_column/shopping_confirm_dialog.dart';
+import 'package:client/widget/button_style/styled_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
