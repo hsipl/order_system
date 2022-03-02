@@ -1,7 +1,7 @@
-import 'package:client/widget/loading_dialog.dart';
+import 'package:client/widget/situation_dialog/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:client/services/api_connection.dart';
-import 'package:client/widget/login_text_field.dart';
+import 'package:client/widget/login_page_widget/login_text_field.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

@@ -1,15 +1,15 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions/temp_checkout_action.dart';
+import 'package:client/redux/actions/temp_shopping_action.dart';
 import 'package:client/services/serializer.dart';
-import 'package:client/widget/widget_for_order_dialog/action_row.dart';
-import 'package:client/widget/widget_for_order_dialog/edit_buttons_for_text_container.dart';
-import 'package:client/widget/widget_for_order_dialog/tag_input.dart';
+import 'package:client/widget/order_dialog/action_row.dart';
+import 'package:client/widget/order_dialog/edit_buttons_for_text_container.dart';
+import 'package:client/widget/order_dialog/tag_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'widget_for_order_dialog/label_text_container.dart';
-import 'widget_for_order_dialog/amount_input.dart';
-import 'widget_for_order_dialog/filter_image.dart';
-import 'widget_for_order_dialog/product_info.dart';
+import 'label_text_container.dart';
+import 'quantity_input.dart';
+import 'filter_image.dart';
+import 'product_info.dart';
 
 class OrderDialog extends StatefulWidget {
   const OrderDialog({
@@ -25,13 +25,13 @@ class OrderDialog extends StatefulWidget {
 class _OrderDialogState extends State<OrderDialog> {
   @override
   Widget build(BuildContext context) {
-    StoreProvider.of<AppState>(context).dispatch(TempCheckoutClear());
+    StoreProvider.of<AppState>(context).dispatch(TempShoppingListClear());
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, store) {
-          if (store.newTempCheckoutList.isEmpty) {
+          if (store.newTempShoppingList.isEmpty) {
             StoreProvider.of<AppState>(context)
-                .dispatch(TempCheckoutAdd(widget.product));
+                .dispatch(TempShoppingListAdd(widget.product));
           }
 
           return Dialog(
@@ -73,7 +73,7 @@ class _OrderDialogState extends State<OrderDialog> {
                           SizedBox(width: 4,),
                           Expanded(
                             flex: 2,
-                            child: AmountInput(
+                            child: QuantityInput(
                               price: int.parse(widget.product.price),
                             ),
                           ),
