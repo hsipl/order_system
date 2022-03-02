@@ -1,10 +1,10 @@
 import 'package:client/services/api_connection.dart';
 import 'package:client/services/preference_operation.dart';
-import 'package:client/widget/checkout_column.dart';
-import 'package:client/widget/home_actions.dart';
+import 'package:client/widget/shopping_column.dart';
+import 'package:client/widget/home_pop_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:client/widget/navigation_drawer.dart';
-import 'package:client/widget/cards_column.dart';
+import 'package:client/widget/product_cards_column.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
-        actions: homeActions(),
+        actions: homePopUpMenu(),
       ),
       drawer: const ActivateDrawer(),
       body: const ActivateHomePage(),
@@ -49,19 +49,19 @@ class ActivateHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: const [
-        CardsColumn(
+        ProductCardsColumn(
           type: '雞肉類',
           category: 0,
         ),
-        CardsColumn(
+        ProductCardsColumn(
           type: '加工類',
           category: 1,
         ),
-        CardsColumn(
+        ProductCardsColumn(
           type: '蔬菜類',
           category: 2,
         ),
-        CardsColumn(
+        ProductCardsColumn(
           type: '其他',
           category: 3,
         ),
@@ -73,7 +73,7 @@ class ActivateHomePage extends StatelessWidget {
             thickness: 2,
           ),
         ),
-        CheckoutColumn(),
+        ShoppingColumn(),
       ],
     );
   }

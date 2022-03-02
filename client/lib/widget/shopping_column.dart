@@ -1,5 +1,5 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions/checkout_action.dart';
+import 'package:client/redux/actions/shopping_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
 import 'package:client/widget/shopping_confirm_dialog.dart';
@@ -7,14 +7,14 @@ import 'package:client/widget/styled_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
-class CheckoutColumn extends StatefulWidget {
-  const CheckoutColumn({Key? key}) : super(key: key);
+class ShoppingColumn extends StatefulWidget {
+  const ShoppingColumn({Key? key}) : super(key: key);
 
   @override
-  _CheckoutColumnState createState() => _CheckoutColumnState();
+  _ShoppingColumnState createState() => _ShoppingColumnState();
 }
 
-class _CheckoutColumnState extends State<CheckoutColumn> {
+class _ShoppingColumnState extends State<ShoppingColumn> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
@@ -29,21 +29,21 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
               children: [
                 Expanded(
                   flex: 2,
-                  child: CheckoutColumnButton(
+                  child: ShoppingColumnButton(
                     color: kCancelButtonColor,
                     text: '清空',
                     onPress: () {
                       StoreProvider.of<AppState>(context)
-                          .dispatch(CheckoutClear());
+                          .dispatch(ShoppingListClear());
                       StoreProvider.of<AppState>(context)
-                          .dispatch(UpdateCheckoutPrice());
+                          .dispatch(UpdateTotalAmount());
                     },
                   ),
                 ),
                 //TODO : the checkout row
                 const Expanded(
                   flex: 16,
-                  child: CheckList(),
+                  child: ShoppingList(),
                 ),
                 const Divider(
                   color: Colors.black,
@@ -68,7 +68,7 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
 
                 Expanded(
                   flex: 2,
-                  child: CheckoutColumnButton(
+                  child: ShoppingColumnButton(
                       color: kConfirmButtonColor,
                       text: '送出',
                       onPress: () {
@@ -101,16 +101,16 @@ class _CheckoutColumnState extends State<CheckoutColumn> {
   }
 }
 
-class CheckList extends StatefulWidget {
-  const CheckList({
+class ShoppingList extends StatefulWidget {
+  const ShoppingList({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<CheckList> createState() => _CheckListState();
+  State<ShoppingList> createState() => _ShoppingListState();
 }
 
-class _CheckListState extends State<CheckList> {
+class _ShoppingListState extends State<ShoppingList> {
   final _scrollController = ScrollController();
 
   void _scrollDown() {
@@ -130,17 +130,17 @@ class _CheckListState extends State<CheckList> {
         });
         return ListView.builder(
           controller: _scrollController,
-          itemCount: store.newCheckoutList.length,
+          itemCount: store.newShoppingList.length,
           itemBuilder: (context, index) {
-            CheckoutItem item = store.newCheckoutList[index];
+            ShoppingItem item = store.newShoppingList[index];
             return ClipRect(
               child: Dismissible(
                 key: UniqueKey(),
                 onDismissed: (direction) {
                   StoreProvider.of<AppState>(context)
-                      .dispatch(CheckoutRemove(index));
+                      .dispatch(ShoppingLIstRemove(index));
                   StoreProvider.of<AppState>(context)
-                      .dispatch(UpdateCheckoutPrice());
+                      .dispatch(UpdateTotalAmount());
                 },
                 background: Padding(
                   padding: const EdgeInsets.all(4.0),
@@ -166,7 +166,7 @@ class CheckoutTile extends StatelessWidget {
     required this.item,
   }) : super(key: key);
 
-  final CheckoutItem item;
+  final ShoppingItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -192,9 +192,9 @@ class CheckoutTile extends StatelessWidget {
                 )
               ],
             ),
-            title: Text(item.product.name + '*${item.amount}'),
+            title: Text(item.product.name + '*${item.quantity}'),
             subtitle: Text(tagString),
-            trailing: Text('${int.parse(item.product.price) * item.amount}'),
+            trailing: Text('${int.parse(item.product.price) * item.quantity}'),
           ),
         ),
       ),

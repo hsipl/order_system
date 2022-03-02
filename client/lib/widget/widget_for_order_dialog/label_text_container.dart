@@ -1,5 +1,5 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions/temp_checkout_action.dart';
+import 'package:client/redux/actions/temp_shopping_action.dart';
 import 'package:client/services/decorations.dart';
 
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
           _scrollDown();
         });
 
-        List checkoutItems = store.newTempCheckoutList;
+        List checkoutItems = store.newTempShoppingList;
 
         List<Widget> listWidget = [];
         for (int i = 0; i < checkoutItems.length; i++) {
@@ -68,7 +68,7 @@ class _LabelTextContainerState extends State<LabelTextContainer> {
                           key: UniqueKey(),
                           onDismissed: (direction) {
                             StoreProvider.of<AppState>(context)
-                                .dispatch(TempCheckoutRemove(index));
+                                .dispatch(TempShoppingListRemove(index));
                           },
                           background: Container(
                               color: kCancelButtonColor,
@@ -117,7 +117,7 @@ class ListItem extends StatelessWidget {
         ),
         child: ListTile(
           title: Text(tagString),
-          trailing: Text(checkoutItems[index].amount.toString()),
+          trailing: Text(checkoutItems[index].quantity.toString()),
         ),
       ),
     );

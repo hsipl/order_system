@@ -1,5 +1,5 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions/temp_checkout_action.dart';
+import 'package:client/redux/actions/temp_shopping_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +36,7 @@ class EditButtonsForTextContainer extends StatelessWidget {
               action: '輸入下列',
               onPress: () {
                 StoreProvider.of<AppState>(context)
-                    .dispatch(TempCheckoutAdd(product));
+                    .dispatch(TempShoppingListAdd(product));
               },
             ),
             ActionButton(
@@ -44,7 +44,7 @@ class EditButtonsForTextContainer extends StatelessWidget {
               action: '清空所有',
               onPress: () {
                 StoreProvider.of<AppState>(context)
-                    .dispatch(TempCheckoutClear());
+                    .dispatch(TempShoppingListClear());
               },
             ),
           ],

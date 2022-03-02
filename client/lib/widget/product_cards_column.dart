@@ -6,17 +6,17 @@ import 'package:client/services/decorations.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'product_card.dart';
 
-class CardsColumn extends StatefulWidget {
-  const CardsColumn({Key? key, required this.type, required this.category})
+class ProductCardsColumn extends StatefulWidget {
+  const ProductCardsColumn({Key? key, required this.type, required this.category})
       : super(key: key);
   final String type;
   final int category;
 
   @override
-  _CardsColumnState createState() => _CardsColumnState();
+  _ProductCardsColumnState createState() => _ProductCardsColumnState();
 }
 
-class _CardsColumnState extends State<CardsColumn> {
+class _ProductCardsColumnState extends State<ProductCardsColumn> {
   @override
   Widget build(BuildContext context) {
     final _controller = ScrollController();

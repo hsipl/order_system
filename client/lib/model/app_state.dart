@@ -1,25 +1,25 @@
 import 'package:client/services/serializer.dart';
 
 class AppState {
-  List<CheckoutItem> checkoutList = [];
-  List<CheckoutItem> tempCheckoutList = [];
+  List<ShoppingItem> shoppingList = [];
+  List<ShoppingItem> tempShoppingList = [];
   List<Product> productList = [];
   int totalAmount = 0;
 
-  AppState({required this.checkoutList});
+  AppState({required this.shoppingList});
 
   AppState.fromAppState(AppState another) {
-    checkoutList = another.checkoutList;
+    shoppingList = another.shoppingList;
     productList = another.productList;
-    tempCheckoutList = another.tempCheckoutList;
+    tempShoppingList = another.tempShoppingList;
     totalAmount = another.totalAmount;
   }
 
-  List get newCheckoutList => checkoutList;
+  List get newShoppingList => shoppingList;
 
   List get newProductList => productList;
 
-  List get newTempCheckoutList => tempCheckoutList;
+  List get newTempShoppingList => tempShoppingList;
 
   int get newTotalAmount => totalAmount;
 }

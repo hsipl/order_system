@@ -1,36 +1,36 @@
 import 'package:client/model/app_state.dart';
 import 'package:client/services/serializer.dart';
 
-import 'actions/checkout_action.dart';
+import 'actions/shopping_action.dart';
 import 'actions/product_action.dart';
-import 'actions/temp_checkout_action.dart';
+import 'actions/temp_shopping_action.dart';
 
 AppState reducer(AppState prevState, dynamic action) {
   AppState newState = AppState.fromAppState(prevState);
 
   // Checkout表單
-  if (action is CheckoutAdd) {
+  if (action is ShoppingListAdd) {
     // 新增物件到 Checkout Column
 
-    for (CheckoutItem item in prevState.tempCheckoutList) {
-      prevState.checkoutList.add(item);
+    for (ShoppingItem item in prevState.tempShoppingList) {
+      prevState.shoppingList.add(item);
     }
-    newState.checkoutList = prevState.checkoutList;
-  } else if (action is CheckoutRemove) {
+    newState.shoppingList = prevState.shoppingList;
+  } else if (action is ShoppingLIstRemove) {
     // 刪除 Checkout Column 物件
 
-    prevState.checkoutList.removeAt(action.payload);
-    newState.checkoutList = prevState.checkoutList;
-  } else if (action is CheckoutClear) {
+    prevState.shoppingList.removeAt(action.payload);
+    newState.shoppingList = prevState.shoppingList;
+  } else if (action is ShoppingListClear) {
     // 清空 Checkout Column 物件
 
-    newState.checkoutList = [];
-  } else if (action is UpdateCheckoutPrice) {
+    newState.shoppingList = [];
+  } else if (action is UpdateTotalAmount) {
     // 計算總金額
 
     prevState.totalAmount = 0;
-    for (CheckoutItem item in prevState.checkoutList) {
-      prevState.totalAmount += item.amount * int.parse(item.product.price);
+    for (ShoppingItem item in prevState.shoppingList) {
+      prevState.totalAmount += item.quantity * int.parse(item.product.price);
     }
     newState.totalAmount = prevState.totalAmount;
   }
@@ -46,36 +46,36 @@ AppState reducer(AppState prevState, dynamic action) {
     newState.productList = [];
   }
   // OrderDialog 的表單
-  else if (action is TempCheckoutAdd) {
+  else if (action is TempShoppingListAdd) {
     // OrderDialog List 新增物件 tempCheckoutItem(預購物品 還沒送到右邊的)
-    prevState.tempCheckoutList
-        .add(CheckoutItem(product: action.payload, tags: []));
-    newState.tempCheckoutList = prevState.tempCheckoutList;
-  } else if (action is TempCheckoutClear) {
+    prevState.tempShoppingList
+        .add(ShoppingItem(product: action.payload, tags: []));
+    newState.tempShoppingList = prevState.tempShoppingList;
+  } else if (action is TempShoppingListClear) {
     // OrderDialog List 清空 CheckoutItem
 
-    newState.tempCheckoutList = [];
-  } else if (action is TempCheckoutRemove) {
+    newState.tempShoppingList = [];
+  } else if (action is TempShoppingListRemove) {
     // OrderDialog List 移除指定 tempCheckoutItem
 
-    prevState.tempCheckoutList.removeAt(action.payload);
-    newState.tempCheckoutList = prevState.tempCheckoutList;
+    prevState.tempShoppingList.removeAt(action.payload);
+    newState.tempShoppingList = prevState.tempShoppingList;
   }
   // CheckoutItem 控制
   else if (action is SetTempCheckoutItemTags) {
     // CheckoutItem 新增Tag
 
-    prevState.tempCheckoutList.last.tags.add(action.payload);
-    newState.tempCheckoutList.last.tags = prevState.tempCheckoutList.last.tags;
-  } else if (action is SetTempCheckoutItemAmount) {
+    prevState.tempShoppingList.last.tags.add(action.payload);
+    newState.tempShoppingList.last.tags = prevState.tempShoppingList.last.tags;
+  } else if (action is SetTempShoppingItemQuantity) {
     // CheckoutItem 新增數量
 
-    prevState.tempCheckoutList.last.amount += action.payload;
-    if (prevState.tempCheckoutList.last.amount < 1) {
-      prevState.tempCheckoutList.last.amount = 1;
+    prevState.tempShoppingList.last.quantity += action.payload;
+    if (prevState.tempShoppingList.last.quantity < 1) {
+      prevState.tempShoppingList.last.quantity = 1;
     }
-    newState.tempCheckoutList.last.amount =
-        prevState.tempCheckoutList.last.amount;
+    newState.tempShoppingList.last.quantity =
+        prevState.tempShoppingList.last.quantity;
   }
 
   return newState;

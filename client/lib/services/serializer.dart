@@ -25,22 +25,22 @@ class Product {
   }
 }
 
-class CheckoutItem {
+class ShoppingItem {
   late Product product;
 
-  late int amount;
+  late int quantity;
 
   late List tags;
 
-  CheckoutItem({
+  ShoppingItem({
     required this.product,
-    this.amount = 1,
+    this.quantity = 1,
     required this.tags,
   });
 
-  CheckoutItem.fromMap(Map<String, dynamic> map) {
+  ShoppingItem.fromMap(Map<String, dynamic> map) {
     product = map['product'];
     tags = map['tags'];
-    amount = map['amount'];
+    quantity = map['amount'];
   }
 }

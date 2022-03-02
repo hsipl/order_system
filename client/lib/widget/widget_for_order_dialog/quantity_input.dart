@@ -1,21 +1,21 @@
 import 'package:client/model/app_state.dart';
-import 'package:client/redux/actions/temp_checkout_action.dart';
+import 'package:client/redux/actions/temp_shopping_action.dart';
 import 'package:client/services/decorations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import '../styled_buttons.dart';
 
-class AmountInput extends StatefulWidget {
-  const AmountInput({
+class QuantityInput extends StatefulWidget {
+  const QuantityInput({
     required this.price,
     Key? key,
   }) : super(key: key);
   final int price;
   @override
-  State<AmountInput> createState() => _AmountInputState();
+  State<QuantityInput> createState() => _QuantityInputState();
 }
 
-class _AmountInputState extends State<AmountInput> {
+class _QuantityInputState extends State<QuantityInput> {
   @override
   Widget build(BuildContext context) {
 
@@ -37,7 +37,7 @@ class _AmountInputState extends State<AmountInput> {
               action: '+5',
               onPress: () {
                 StoreProvider.of<AppState>(context)
-                    .dispatch(SetTempCheckoutItemAmount(5));
+                    .dispatch(SetTempShoppingItemQuantity(5));
               },
             ),
             ActionButton(
@@ -45,7 +45,7 @@ class _AmountInputState extends State<AmountInput> {
               action: '+',
               onPress: () {
                 StoreProvider.of<AppState>(context)
-                    .dispatch(SetTempCheckoutItemAmount(1));
+                    .dispatch(SetTempShoppingItemQuantity(1));
 
               },
             ),
@@ -54,7 +54,7 @@ class _AmountInputState extends State<AmountInput> {
               action: '-',
               onPress: () {
                 StoreProvider.of<AppState>(context)
-                    .dispatch(SetTempCheckoutItemAmount(-1));
+                    .dispatch(SetTempShoppingItemQuantity(-1));
 
               },
             ),
@@ -63,7 +63,7 @@ class _AmountInputState extends State<AmountInput> {
               action: '-5',
               onPress: () {
                 StoreProvider.of<AppState>(context)
-                    .dispatch(SetTempCheckoutItemAmount(-5));
+                    .dispatch(SetTempShoppingItemQuantity(-5));
               },
             ),
           ],

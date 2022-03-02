@@ -29,7 +29,7 @@ class EnterPoint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _initState = AppState(checkoutList: []);
+    final _initState = AppState(shoppingList: []);
     final _store = Store<AppState>(reducer, initialState: _initState);
     bool? login;
     return FutureBuilder<bool?>(
