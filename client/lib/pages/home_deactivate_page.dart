@@ -1,5 +1,5 @@
-import 'package:client/widget/home_actions.dart';
-import 'package:client/widget/navigation_drawer.dart';
+import 'package:client/widget/app_bar_widget/home_pop_up_menu.dart';
+import 'package:client/widget/app_bar_widget/navigation_drawer.dart';
 import 'package:flutter/material.dart';
 
 class DeactivateHomePage extends StatelessWidget {
@@ -10,7 +10,7 @@ class DeactivateHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
-        actions: homeActions(),
+        actions: homePopUpMenu(),
       ),
       drawer: const DeactivateDrawer(),
       body: const Center(

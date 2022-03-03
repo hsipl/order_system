@@ -41,14 +41,3 @@ Future<Map?> getStoreInfoSharedPrefs() async {
       jsonDecode(prefs.getString('storeInfo').toString());
   return storeId;
 }
-
-Future<void> setProductSharedPrefs(var product) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.setString('product', product.toString());
-}
-
-Future<List<dynamic>?> getProductSharedPrefs() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<dynamic> storeId = jsonDecode(prefs.getString('product').toString());
-  return storeId;
-}
