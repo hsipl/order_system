@@ -1,7 +1,8 @@
 import React from "react";
 import axios from "axios";
-import { styled } from "@mui/material/styles";
+import {  } from "@mui/material/styles";
 import {
+  styled,
   Breadcrumbs,
   CardMedia,
   Paper,
@@ -51,8 +52,8 @@ const LeftNav = styled(Paper)({
 
 export const BodyContainer = styled(Paper)({
   display: "grid",
-  gridTemplateRows: "6rem 9fr",
-  gridTemplateColumns: "10rem 12fr",
+  gridTemplateRows: "6rem auto",
+  gridTemplateColumns: "10rem auto",
   height: "100vh",
   fontSize: "20px",
 });
@@ -60,12 +61,9 @@ export const BodyContainer = styled(Paper)({
 export const Content = styled(Paper)({
   fontSize: "20px",
   backgroundColor: "#efebe9",
-  gridColumn: "2 / -1",
-  gridRow: "2 / -1",
-  padding: "1rem 3rem",
-  display: "grid",
-  gridTemplateRows: "1fr 11fr",
-  gridRowGap: "1rem",
+  gridColumn: "2 / auto",
+  gridRow: "2 / auto",
+  padding: "3rem",
 });
 
 export const Breadcrumb = (props) => {
@@ -154,6 +152,7 @@ export const Navbar = () => {
       </TopNav>
       <NavDialog open={open} onClose={handleClose} />
       <LeftNav square elevation={0}>
+        
         <FilterLeftButtons
           isfilter={JSON.parse(localStorage.getItem("StoreType"))}
         />

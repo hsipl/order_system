@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import {
   Button,
   CardMedia,
+  Chip,
   Dialog,
   DialogContent,
   Table,
@@ -11,8 +12,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import ImageTwoTone from '@material-ui/icons/ImageTwoTone';
-
+import ImageTwoTone from "@material-ui/icons/ImageTwoTone";
 
 const DialogContainer = styled(Dialog)({
   borderRadius: "50px",
@@ -29,36 +29,35 @@ const FormContent = styled(DialogContent)({
   display: "flex",
   padding: "1rem",
   justifyItems: "center",
-  justifyContent:"center",
+  justifyContent: "center",
   backgroundColor: "#E5E8ED",
 });
 
 const InfoTableCell = styled(TableCell)({
-  border: 0,
   txetAlign: "left",
-  fontSize:16,
-  padding:"0px 16px",
+  fontSize: 16,
+  padding: "0px 16px",
 });
 
 const DialogImg = styled(CardMedia)({
   width: "16rem",
   height: "12rem",
-  display:"flex",
-  justifyContent:"center",
-  alignContent:"center",
+  display: "flex",
+  justifyContent: "center",
+  alignContent: "center",
 });
 
 const CloseBtn = styled(Button)({
   backgroundColor: "#E5E8ED",
-  padding:"1rem",
+  padding: "1rem",
   ":hover": {
     backgroundColor: "#E5E8ED",
   },
 });
 
-const NoImg  = styled(ImageTwoTone)({
-  fontSize:"6rem",
-  }) 
+const NoImg = styled(ImageTwoTone)({
+  fontSize: "6rem",
+});
 
 export const NavDialog = (props) => {
   const { open, onClose } = props;
@@ -86,7 +85,11 @@ export const NavDialog = (props) => {
     if (LogoUrl !== "") {
       return <DialogImg image={"http://localhost:8000/" + LogoUrl} />;
     } else {
-      return <DialogImg><NoImg fontSize="large" /></DialogImg>;
+      return (
+        <DialogImg>
+          <NoImg fontSize="large" />
+        </DialogImg>
+      );
     }
   }
 
@@ -102,16 +105,20 @@ export const NavDialog = (props) => {
           本店資訊
         </DialogTitle>
         <FormContent>
-          <Logo url = {StoreLogo} />
+          <Logo url={StoreLogo} />
           <Table size="small">
             <TableBody>
               {StoreInfo.map((item, index) => (
-                <TableRow key={StoreInfo.indexOf(item)}>
+                <TableRow
+                  hover
+                  key={StoreInfo.indexOf(item)}
+                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                >
                   <InfoTableCell align="center" key={"title" + index}>
                     {item.title}
                   </InfoTableCell>
                   <InfoTableCell align="left" key={"Info" + index}>
-                    {item.info}
+                    <Chip label={item.info} />
                   </InfoTableCell>
                 </TableRow>
               ))}
