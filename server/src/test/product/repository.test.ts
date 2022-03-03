@@ -26,7 +26,7 @@ describe("Test Product Repository", () => {
             "updatedAt": "2022-01-19T16:08:43.686Z"
         }
         Product.find = jest.fn().mockReturnValue(mockData)
-        const data = await repo.getAll()
+        const data = await repo.get({})
         expect(data).toBe(mockData)
     })
     test("test create", async () => {
