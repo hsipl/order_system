@@ -1,12 +1,17 @@
-import { UpdateResult } from 'typeorm';
+import { FindConditions, UpdateResult } from 'typeorm';
 import { Store } from '../entity/store';
 
 const field: (keyof Store)[] = ['id', 'name', 'status', 'type', 'image', 'createdAt'];
 
 export class StoreRepository {
-  async getAll(): Promise<Store[]> {
+  async get(query: FindConditions<Store>): Promise<Store[]> {
     return await Store.find({
+      where: query,
       select: field,
+      order: {
+        status: "ASC",
+        createdAt: "ASC"
+      }
     });
   }
 

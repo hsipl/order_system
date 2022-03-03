@@ -24,7 +24,7 @@ describe("Testing Store Repository", () => {
         "createdAt": "2022-01-19T15:19:46.211Z"
     }
     Store.find = jest.fn().mockReturnValue(mockData)
-    const data = await repo.getAll()
+    const data = await repo.get({})
     expect(data).toBe(mockData)
    })
    test("test getbyid", async() => {
@@ -50,7 +50,7 @@ describe("Testing Store Repository", () => {
         "createdAt": "2022-01-19T15:19:46.211Z"
     }
     Store.findOne = jest.fn().mockReturnValue(mockData)
-    const data = await repo.getByName("kcy main store")
+    const data = await repo.getByName("kcy main  store")
     expect(data).toBe(mockData)
    })
 

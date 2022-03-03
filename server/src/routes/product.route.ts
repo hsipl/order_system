@@ -24,7 +24,7 @@ export default class ProductRoute extends BasicRoute {
             new StoreService(new StoreRepository(), new CacheService()),
             new TagService(new TagRepository())
         );
-        this.router.get("/", auth.authUser.bind(auth), controller.getAll.bind(controller));
+        this.router.get("/", auth.authUser.bind(auth), controller.get.bind(controller));
         this.router.get("/:id",auth.authUser.bind(auth),  controller.getById.bind(controller));
         this.router.post("/", auth.authAdmin.bind(auth),  upload.single('image'),controller.create.bind(controller));
         this.router.put("/:id",auth.authAdmin.bind(auth),  upload.single('image'), controller.update.bind(controller));
