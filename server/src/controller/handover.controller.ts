@@ -74,8 +74,7 @@ class HandoverController {
 
     try {
       const handoverExist = await this.service.checkExistByUserId(userId);
-      console.log(handoverExist);
-      if (!sysmoney) {
+      if (!handoverExist||!sysmoney) {
         return next(new ErrorHandler(errorStatusCode.Forbidden, errorMsg.DataAlreadyExist));
       }
       const params: IHandoverCreateParams = {
