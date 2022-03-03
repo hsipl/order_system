@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-List<Widget> homeActions() {
+List<Widget> homePopUpMenu() {
   return [
     PopupMenuButton(
         icon: const Icon(Icons.notifications),
