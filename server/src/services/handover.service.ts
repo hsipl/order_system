@@ -7,17 +7,21 @@ import CacheService from './cache.service';
 
 export class HandoverService {
   constructor(
-    private readonly repository: HandoverRepository,    
+    private readonly repository: HandoverRepository,
     private readonly cacheService: CacheService,
-    ) {}
+  ) { }
 
-  async getAll(status:number,id: number): Promise<Handover[]> {
+  async getAll(status: number, id: number): Promise<Handover[]> {
     const handover = await this.repository.getAll(status);
     return handover;
   }
+  async getByDate(date: Date): Promise<Handover[]> {
+    const handover = await this.repository.getByDate(date);
+    return handover;
+  }
 
-  async getById(status:number,id: number): Promise<Handover | undefined> {
-    const handover = await this.repository.getById(status,id);
+  async getById(status: number, id: number): Promise<Handover | undefined> {
+    const handover = await this.repository.getById(status, id);
     return handover;
   }
 
@@ -26,19 +30,19 @@ export class HandoverService {
     return !!isExist;
   }
 
-  async create(req: Request,params:IHandoverCreateParams): Promise<Handover> {
+  async create(req: Request, params: IHandoverCreateParams): Promise<Handover> {
     const newHandover = new Handover();
     Object.assign(newHandover, params);
     return await this.repository.create(newHandover);
   }
 
-  async update( params:IHandoverUpdateParams ): Promise<UpdateResult | undefined> {
+  async update(params: IHandoverUpdateParams): Promise<UpdateResult | undefined> {
     const handover = new Handover();
     Object.assign(handover, params);
     return await this.repository.update(handover);
-}
+  }
 
-  async updatedelete( params:IHandoverUpdateParams ): Promise<UpdateResult | undefined> {
+  async updatedelete(params: IHandoverUpdateParams): Promise<UpdateResult | undefined> {
     const handover = new Handover();
     Object.assign(handover, params);
     return await this.repository.update(handover);
