@@ -76,27 +76,14 @@ export class App {
         security: [{ bearerAuth: [] }],
       },
       // 這邊會是你想要產生的api文件檔案，我是直接讓swagger去列出所有controllers
-      apis: ["./src/routes/*.ts", "./src/entity/*.ts"],
+      apis: ["./src/entity/*.ts","./src/routes/*.ts"],
     };
     const specs = swaggerJSDoc(options);
     this.app.use(
       "/api/docs",
       swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument)
+      swaggerUi.setup(specs)
     );
-    // this.app.use("/docs", swaggerUi.serve, swaggerUi.setup(specs));
-    //   swaggerDefinition: {
-    //     // 這邊會是你的api文件網頁描述
-    //     info: {
-    //         title: "Order System API",
-    //         version: "1.0.0",
-    //         description: "Simple RESTful API in Node.js with TypeScript",
-    //     },
-    // },
-    // this.app.get("docs.json", (req: Request, res: Response) => {
-    //     res.setHeader("Content-Type", "application/json");
-    //     res.send(swaggerSpec);
-    // });
   }
 
   private setRoutes(): void {
