@@ -73,7 +73,7 @@ describe("Test Product Repository", () => {
     })
     // test("test get by id", async () => {
     //     const mockData = {
-    //         "id": 1,
+    //         "id": 2,
     //         "name": "鹽酥雞",
     //         "price": "50",
     //         "image": "",
@@ -83,9 +83,11 @@ describe("Test Product Repository", () => {
     //         "createdAt": "2022-01-19T16:08:43.686Z",
     //         "updatedAt": "2022-01-19T16:08:43.686Z"
     //     }
+    //     // Product.save = jest.fn().mockResolvedValue(mockData)
     //     Product.find = jest.fn().mockReturnValue(mockData)
-    //     const data = await repo.getById(3)
+    //     const data = await repo.getById(2)
     //     console.log(data)
+    //     console.log(mockData)
     //     expect(data).toBe(mockData)
     // })
 
