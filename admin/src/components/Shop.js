@@ -24,7 +24,7 @@ import { Box } from "@mui/system";
 import Draggable from "react-draggable";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import { Search } from "@material-ui/icons";
-import { TableContent, TableHeads } from "./Table";
+import { TableShop, TableHeads } from "./Table";
 import { UploadImgButton } from "./Buttons";
 
 const SearchContainer = styled(Box)({
@@ -430,7 +430,7 @@ const Shop = () => {
                     </TableCell>
                   </TableRow> */}
 
-                  <TableContent
+                  <TableShop
                     Page={"shop"}
                     Img={item.image}
                     StoreName={item.name}

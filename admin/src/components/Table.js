@@ -51,37 +51,28 @@ export function ControlCell(props) {
     );
   }
 }
-export function TableContent(props) {
-  const Page = props.Page;
+export function TableShop(props) {
   const DelBTN = props.Del;
   const EditBTN = props.Edit;
   const Id = props.Id;
-  const UserName = props.UserName;
-  const UserAccount = props.UserAccount;
   const Img = props.Img;
   const StoreName = props.StoreName;
   const StoreType = props.StoreType;
   const StoreStatus = props.StoreStatus;
   const CreatedAt = props.CreatedAt;
 
-  const PageTable = {
-    // product: ["產品名稱", "價格", "圖片", "類別", "狀態", "操作"],
-    employee: [UserName, UserAccount, "職位", "操作"],
-    shop: [
-      <img src={"http://localhost:8000/" + Img} alt={Img} height="100" />,
-      StoreName,
-      StoreType,
-      StoreStatus,
-      CreatedAt,
-      <ControlCell status={StoreStatus} Del={DelBTN} Edit={EditBTN} />,
-    ],
-    // report: ["產品名稱", "銷售總額(元)", "銷售總數(份)"],
-    // handover: ["交班人", "系統金額", "實際金額", "交班時間"],
-  };
+  const ShopData = [
+    <img src={"http://localhost:8000/" + Img} alt={Img} height="100" />,
+    StoreName,
+    StoreType,
+    StoreStatus,
+    CreatedAt,
+    <ControlCell status={StoreStatus} Del={DelBTN} Edit={EditBTN} />,
+  ];
 
   return (
     <TableRow key={Id}>
-      {PageTable[Page].map((item) => (
+      {ShopData.map((item) => (
         <TableCell
           align="center"
           sx={{
