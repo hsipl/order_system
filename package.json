@@ -5,6 +5,5 @@
   "scripts": {
     "prepare": "husky install",
     "pre-commit": "sh ./scripts/prettier-before-commit.sh"
-    
   }
 }

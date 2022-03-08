@@ -1,8 +1,8 @@
 import { UpdateResult } from "typeorm";
 import { Handover } from "../entity/handover";
-
+import { User } from '../entity/user';
 const field: (keyof Handover)[] = ["id", "userId", "sysmoney", "realcash","status", "createdAt"];
-
+const Userfield: (keyof User)[] = ['id'];
 export class HandoverRepository {
 
   async getAll(status:number): Promise<Handover[]> {
@@ -48,12 +48,12 @@ export class HandoverRepository {
     }
   }
 
-  async getByUserId(userId: number): Promise<Handover | undefined> {
-    return await Handover.findOne({
+  async getByUserId(userId: number): Promise<User | undefined> {
+    return await User.findOne({
       where: {
-        userId,
+        id : userId,
       },
-      select: field,
+      select: Userfield,
     });
   }
   

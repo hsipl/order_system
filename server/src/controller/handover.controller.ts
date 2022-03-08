@@ -9,6 +9,7 @@ import {
   IHandoverDeleteParams,
 
 } from '../interafaces/handover.interface';
+const logger = require("../logger");
 class HandoverController {
   private readonly service: HandoverService;
 
@@ -32,6 +33,7 @@ class HandoverController {
           );
         }
         res.status(200).json(handover);
+        logger.info(`[${req.ip}] - [${res.statusCode}] - [${req.method}] - [${req.originalUrl}] - [true]`)    
       }catch (error) {
         console.log("get handover by id error: ", error);
         return next(
@@ -46,6 +48,7 @@ class HandoverController {
     else{
       const handover = await this.service.getAll(status,id);      
       res.status(200).json(handover);
+      logger.info(`[${req.ip}] - [${res.statusCode}] - [${req.method}] - [${req.originalUrl}] - [true]`)
     }
   }
   async create(req: Request, res: Response, next: NextFunction) {
@@ -73,9 +76,9 @@ class HandoverController {
     };
 
     const newHandover = await this.service.create(req, params);
-    res.status(200).send({ result: true });
+    next(new ErrorHandler(200, "true"));  
 
-  } catch (error) {
+  } catch (error) { 
     console.log('create handover error: ', error);
     return next(
       new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
@@ -118,7 +121,7 @@ class HandoverController {
         new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError),
       );
     }
-    res.status(200).send({ result: true });
+    next(new ErrorHandler(200, "true"));  
   } catch (error) {
     console.log('update handover error: ', error);
     return next(
@@ -149,7 +152,7 @@ class HandoverController {
         )
       );
     }
-    res.status(200).send({ result: true });
+    next(new ErrorHandler(200, "true"));  
   } catch (error) {
     return next(
       new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),

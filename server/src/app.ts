@@ -14,7 +14,6 @@ import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity/index";
-
 // create app class for server
 export class App {
   private app: express.Application = express();
