@@ -89,7 +89,6 @@ class UserController {
   async getAllEmployee(req: Request, res: Response, next: NextFunction) {
     try {
       const employees = await this.service.getAllEmployee(req);
-      console.log(employees);
       res.status(200).json(employees);
     } catch (error) {
       console.log('get employees error: ', error);
