@@ -32,8 +32,8 @@ class ActionButton extends StatelessWidget {
   }
 }
 
-class CheckoutColumnButton extends StatelessWidget {
-  const CheckoutColumnButton({
+class ShoppingColumnButton extends StatelessWidget {
+  const ShoppingColumnButton({
     required this.text,
     required this.color,
     required this.onPress,
