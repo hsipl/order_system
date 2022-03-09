@@ -14,11 +14,12 @@ import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity/index";
+import Foo from "../src/middlewares/autocal";
 
 // create app class for server
 export class App {
   private app: express.Application = express();
-
+  foo = Foo;
   private mode: string;
 
   constructor() {
@@ -50,6 +51,7 @@ export class App {
     };
     this.app.use(cors(corsOptions));
     this.setSession();
+    this.foo;
   }
 
   private setRoutes(): void {
