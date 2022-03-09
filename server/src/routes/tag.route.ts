@@ -10,35 +10,32 @@ import Auth from '../middlewares/auth';
  *     tags:
  *     - Tag
  *     description: Get Tag Data
- *     consumes:
- *     - application/json
- *     - application/x-www-form-urlencoded 
- *     produces:
- *     - application/json
  *     responses:
  *       200:
  *         description: Get Tag Data
- *         schema:
- *           type: array
- *           $ref: '#/components/schemas/Tag'
+ *         content:
+ *           application/x-www-form-urlencoded:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Tag'
  *   post:
  *     tags:
  *     - Tag
  *     description: Create Tag
- *     consumes:
- *     - application/json
- *     - application/x-www-form-urlencoded
- *     produces:
- *     - application/json
- *     parameters:
- *     - name: tag
- *       in: formData
- *       required: true
- *       type: string
- *     - name: status
- *       in: formData
- *       required: true
- *       type: number
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tag:
+ *                 type: string
+ *               status:
+ *                 type: number
+ *             required:
+ *             - tag
+ *             - status
  *     responses:
  *       200:
  *         description: Create Tag Success
@@ -47,21 +44,12 @@ import Auth from '../middlewares/auth';
  *     tags:
  *     - Tag
  *     description: Get Tag Data
- *     consumes:
- *     - application/json
- *     - application/x-www-form-urlencoded
- *     produces:
- *     - application/json
  *     parameters:
  *     - name: tagId
  *       in: path
- *       description: ID of Tag
  *       required: true
- *       type: number
- *     - name: tag
- *       in: formData
- *       required: true
- *       type: string
+ *       schema:
+ *         type: number
  *     responses:
  *       200:
  *         description: Get Tag Data
@@ -69,25 +57,26 @@ import Auth from '../middlewares/auth';
  *     tags:
  *     - Tag
  *     description: Update Store Data
- *     consumes:
- *     - application/json
- *     - multipart/form-data
- *     produces:
- *     - application/json
  *     parameters:
  *     - name: tagId
  *       in: path
- *       description: ID of Tag
  *       required: true
- *       type: number
- *     - name: tag
- *       in: formData
+ *       schema:
+ *         type: number
+ *     requestBody:
  *       required: true
- *       type: string
- *     - name: status
- *       in: formData
- *       required: true
- *       type: number
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               tag:
+ *                 type: string
+ *               status:
+ *                 type: number
+ *             required:
+ *             - tag
+ *             - status
  *     responses:
  *       200:
  *         description: Upadate Tag Success
@@ -95,27 +84,15 @@ import Auth from '../middlewares/auth';
  *     tags:
  *     - Tag
  *     description: Delete Tag Data
- *     consumes:
- *     - application/json
- *     produces:
- *     - application/json
  *     parameters:
  *     - name: tagId
  *       in: path
- *       description: Delete Tag Data
- *       consumes:
- *       - application/json
- *       produces:
- *       - application/json
- *       parameters:
- *       - name: tagId
- *         in: path
- *         description: ID of Tag
- *         required: true
+ *       required: true
+ *       schema:
  *         type: number
- *       responses:
- *         200:
- *           description: Delete Tag Success
+ *     responses:
+ *       200:
+ *         description: Delete Tag Success
  */
 
 

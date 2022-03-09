@@ -16,20 +16,19 @@ import { UserValidator } from '../validator/user';
  *     tags:
  *     - User
  *     description: Get Tag Data
- *     consumes:
- *     - application/json
- *     - application/x-www-form-urlencoded
- *     produces:
- *     - application/json
- *     parameters:
- *     - name: username
- *       in: formData
- *       required: true
- *       type: string
- *     - name: password
- *       in: formData
- *       required: true
- *       type: string
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: number
+ *             required:
+ *             - username
+ *             - password
  *     responses:
  *       200:
  *         description: login success
@@ -37,11 +36,6 @@ import { UserValidator } from '../validator/user';
  *   get:
  *     tags:
  *     - User
- *     consumes:
- *     - application/json
- *     - application/x-www-form-urlencoded
- *     produces:
- *     - application/json
  *     responses:
  *       200:
  *         description: logout success
@@ -49,39 +43,34 @@ import { UserValidator } from '../validator/user';
  *    post:
  *      tags:
  *      - User
- *      consumes:
- *      - multipart/form-data
- *      produces:
- *      - application/json
- *      parameters:
- *      - name: username
- *        in: formData
- *        required: true
- *        type: string
- *      - name: password
- *        in: formData
- *        required: true
- *        type: string
- *      - name: name
- *        in: formData
- *        required: true
- *        type: string
- *      - name: type
- *        in: formData
- *        required: true
- *        type: number
- *      - name: status
- *        in: formData
- *        required: true
- *        type: number
- *      - name: image
- *        in: formData
- *        required: true
- *        type: file
- *      - name: storeId
- *        in: formData
- *        required: true
- *        type: number
+ *      requestBody:
+ *        content:
+ *          multipart/form-data:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                username:
+ *                  type: string
+ *                password:
+ *                  type: number
+ *                name:
+ *                  type: string
+ *                type:
+ *                  type: number
+ *                status:
+ *                  type: number
+ *                image:
+ *                  type: file
+ *                storeId:
+ *                  type: number
+ *              required:
+ *              - username
+ *              - password
+ *              - name
+ *              - type
+ *              - status
+ *              - image
+ *              - storeId
  *      responses:
  *        200:
  *          description: register success
@@ -89,18 +78,16 @@ import { UserValidator } from '../validator/user';
  *   get:
  *     tags:
  *     - User
- *     consumes:
- *     - application/json
- *     - application/x-www-form-urlencoded
- *     produces:
- *     - application/json
+ *     description: ''
  *     responses:
  *       200:
  *         description: logout success
- *         schemas:
- *           type: array
- *           items:
- *             $ref: '#/conponents/schemas/User'
+ *         content:
+ *           application/x-www-form-urlencoded:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
  *       
  * 
  */

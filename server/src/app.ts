@@ -64,6 +64,7 @@ export class App {
           title: "Order System API Title",
           version: "1.0",
         },
+        servers: [{ url: 'http://localhost:8000/api/' }],
         components: {
           securitySchemas: {
             bearerAuth: {
@@ -76,16 +77,11 @@ export class App {
         security: [{ bearerAuth: [] }],
       },
       // 這邊會是你想要產生的api文件檔案，我是直接讓swagger去列出所有controllers
-      apis: ["./src/entity/*.ts","./src/routes/*.ts"],
+      apis: ["./src/routes/*.ts", "./src/entity/*.ts"],
     };
     const specs = swaggerJSDoc(options);
-    this.app.use(
-      "/api/docs",
-      swaggerUi.serve,
-      swaggerUi.setup(specs)
-    );
+    this.app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
   }
-
   private setRoutes(): void {
     for (const route of router) {
       this.app.use(`/api/${route.getPrefix()}`, route.getRouter());
