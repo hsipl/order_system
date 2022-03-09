@@ -64,7 +64,7 @@ export class App {
           title: "Order System API Title",
           version: "1.0",
         },
-        servers: [{ url: 'http://localhost:8000/api/' }],
+        servers: [{ url: "http://localhost:8000/api/" }],
         components: {
           securitySchemas: {
             bearerAuth: {
