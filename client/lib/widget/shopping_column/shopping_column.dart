@@ -74,11 +74,14 @@ class _ShoppingColumnState extends State<ShoppingColumn> {
                       onPress: () {
                         showGeneralDialog(
                           transitionBuilder: (context, a1, a2, widget) {
-                            return FadeTransition(
-                              opacity: a1,
-                              child: Opacity(
-                                opacity: a1.value,
-                                child: const ShoppingConfirmDialog(),
+                            return Align(
+                              alignment: Alignment.center,
+                              child: FadeTransition(
+                                opacity: a1,
+                                child: Opacity(
+                                  opacity: a1.value,
+                                  child: const ShoppingConfirmDialog(),
+                                ),
                               ),
                             );
                           },
@@ -148,7 +151,7 @@ class _ShoppingListState extends State<ShoppingList> {
                       color: kCancelButtonColor,
                       child: const Icon(Icons.delete, color: Colors.white)),
                 ),
-                child: CheckoutTile(
+                child: ShoppingTile(
                   item: item,
                 ),
               ),
@@ -160,8 +163,8 @@ class _ShoppingListState extends State<ShoppingList> {
   }
 }
 
-class CheckoutTile extends StatelessWidget {
-  const CheckoutTile({
+class ShoppingTile extends StatelessWidget {
+  const ShoppingTile({
     Key? key,
     required this.item,
   }) : super(key: key);

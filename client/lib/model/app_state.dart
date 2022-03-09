@@ -15,7 +15,7 @@ class AppState {
     totalAmount = another.totalAmount;
   }
 
-  List get newShoppingList => shoppingList;
+  List<ShoppingItem> get newShoppingList => shoppingList;
 
   List get newProductList => productList;
 
