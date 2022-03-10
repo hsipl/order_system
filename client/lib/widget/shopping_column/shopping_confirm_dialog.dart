@@ -1,8 +1,6 @@
-import 'package:client/widget/button_style/styled_buttons.dart';
 import 'package:client/widget/order_dialog/action_row.dart';
 import 'package:flutter/material.dart';
-
-import '../../services/decorations.dart';
+import 'calculator.dart';
 import 'final_shopping_list.dart';
 
 class ShoppingConfirmDialog extends StatelessWidget {
@@ -70,71 +68,5 @@ class ShoppingConfirmDialog extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class Calculator extends StatefulWidget {
-  const Calculator({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  State<Calculator> createState() => _CalculatorState();
-}
-
-class _CalculatorState extends State<Calculator> {
-  List buttons = List.generate(
-      10,
-      (index) => ActionButton(
-          color: primaryTextColor,
-          action: index.toString(),
-          onPress: () => print(index)));
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buttons[7],
-            buttons[8],
-            buttons[9],
-          ],),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buttons[4],
-            buttons[5],
-            buttons[6],
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buttons[1],
-            buttons[2],
-            buttons[3],
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buttons[0],
-
-          ],
-        ),
-        Text('應收'),
-        Text('實收'),
-        Text('找零'),
-      ],
-    ));
   }
 }

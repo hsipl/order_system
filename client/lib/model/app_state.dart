@@ -5,6 +5,7 @@ class AppState {
   List<ShoppingItem> tempShoppingList = [];
   List<Product> productList = [];
   int totalAmount = 0;
+  int sheetNo = 0;
 
   AppState({required this.shoppingList});
 
