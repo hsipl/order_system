@@ -1,5 +1,5 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
+import { styled } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export const LeftButton = styled(Link)({
@@ -37,8 +37,8 @@ export const LeftButtons = (props) => {
   const FilterLeftButtons = props.info;
   return (
     <>
-      {FilterLeftButtons.map((btn, index) => (
-        <LeftButton class={"LeftBTN" + index} key={btn.id} to={btn.url}>
+      {FilterLeftButtons.map((btn) => (
+        <LeftButton  key={btn.id} to={btn.url}>
           {btn.name}
         </LeftButton>
       ))}

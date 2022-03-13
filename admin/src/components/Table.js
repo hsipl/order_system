@@ -52,22 +52,22 @@ export function ControlCell(props) {
   }
 }
 export function TableShop(props) {
-  const DelBTN = props.Del;
-  const EditBTN = props.Edit;
+  const delBTN = props.Del;
+  const editBTN = props.Edit;
   const Id = props.Id;
   const Img = props.Img;
-  const StoreName = props.StoreName;
-  const StoreType = props.StoreType;
-  const StoreStatus = props.StoreStatus;
-  const CreatedAt = props.CreatedAt;
+  const storeName = props.storeName;
+  const storeType = props.storeType;
+  const storeStatus = props.storeStatus;
+  const createdAt = props.createdAt;
 
   const ShopData = [
     <img src={"http://localhost:8000/" + Img} alt={Img} height="100" />,
-    StoreName,
-    StoreType,
-    StoreStatus,
-    CreatedAt,
-    <ControlCell status={StoreStatus} Del={DelBTN} Edit={EditBTN} />,
+    storeName,
+    storeType,
+    storeStatus,
+    createdAt,
+    <ControlCell status={storeStatus} Del={delBTN} Edit={editBTN} />,
   ];
 
   return (

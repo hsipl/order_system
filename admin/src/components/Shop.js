@@ -1,75 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
-  styled,
   Chip,
   Container,
-  DialogContentText,
   Divider,
   List,
   ListItem,
   ListItemText,
   Paper,
-  Typography,
   Table,
   TableContainer,
-  TextField,
   Dialog,
   DialogActions,
-  DialogContent,
   Button,
   MenuItem,
+  Stack,
 } from "@mui/material";
-import { Box } from "@mui/system";
-import Draggable from "react-draggable";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import { Search } from "@material-ui/icons";
 import { TableShop, TableHeads } from "./Table";
 import { UploadImgButton } from "./Buttons";
-
-const SearchContainer = styled(Box)({
-  display: "flex",
-  width: "100%",
-  alignItems: "center",
-
-  ".AddBTN": {
-    marginLeft: "auto",
-  },
-});
-
-const SearchBox = styled(TextField)({
-  margin: "1rem",
-  "& .MuiInputBase-root": {
-    background: "rgba(255, 255, 255, 0.8)",
-  },
-  ":first-child": {
-    marginLeft: "0",
-  },
-});
-
-const FormTitle = styled(Typography)({
-  fontWeight: "bold",
-  margin: "2rem 0 0 0",
-  textAlign: "center",
-});
-
-const FormContent = styled(DialogContent)({
-  display: "grid",
-  margin: "0 0.5rem",
-});
-
-const Input = styled(TextField)({
-  margin: "1.5rem",
-  color: "gray",
-});
-
-const DialogText = styled(DialogContentText)({
-  margin: "0.5rem 1.5rem",
-});
+import {
+  DialogText,
+  FormTitle,
+  SearchBox,
+  SearchContainer,
+  Input,
+  PaperComponent,
+} from "./SearchAndForm";
 
 const Shop = () => {
   const [arrayData, setArratData] = useState([]);
-  const [changeArrayData, setChangeArrayData] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [openDel, setOpenDel] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -208,7 +169,6 @@ const Shop = () => {
         : (data[i].status = "已歇業");
     }
 
-    setChangeArrayData(data);
     setSearchData(data);
   }
 
@@ -260,17 +220,6 @@ const Shop = () => {
     }
   };
 
-  function PaperComponent(props) {
-    return (
-      <Draggable
-        handle="#draggable-dialog-title"
-        cancel={'[class*="MuiDialogContent-root"]'}
-      >
-        <Paper {...props} />
-      </Draggable>
-    );
-  }
-
   return (
     <>
       <BodyContainer>
@@ -278,12 +227,11 @@ const Shop = () => {
         <Content>
           <Breadcrumb name="分店管理" />
           <SearchContainer>
-            <Box>
               <SearchBox
                 id="SearchProductName"
                 label="店家名稱"
                 variant="filled"
-                autoComplete
+
                 type="search"
                 name="name"
                 value={searchInput.name}
@@ -305,7 +253,6 @@ const Shop = () => {
                 <MenuItem value={0}>營業中</MenuItem>
                 <MenuItem value={1}>已歇業</MenuItem>
               </SearchBox>
-            </Box>
             <Button size="large" color="inherit" onClick={() => handleSearch()}>
               <Search fontSize="large" />
             </Button>
@@ -326,18 +273,13 @@ const Shop = () => {
             onBackdropClick="false"
             fullWidth="true"
             maxWidth="sm"
+            // 移動部分尚未解決
             // PaperComponent={PaperComponent}
             // aria-labelledby="draggable-dialog-title"
           >
-            {/* <DialogTitle
-              id="alert-dialog-title"
-              style={{ textAlign: "center", cursor: "move" }}
-              id="draggable-dialog-title"
-            >
-              {"新增店鋪資訊"}
-            </DialogTitle> */}
             <FormTitle
               variant="h6"
+              // 移動部分尚未解決
               // style={{ cursor: "move" }}
               // id="draggable-dialog-title"
             >
@@ -345,13 +287,14 @@ const Shop = () => {
             </FormTitle>
 
             <form onSubmit={handleSubmit}>
-              <FormContent>
+            <Stack mx={5} my={3}>
                 <Input
                   onChange={handleShopInfo}
                   value={shopInfo.name}
                   name="name"
                   label="店家名稱"
                   variant="outlined"
+                  required
                 />
                 <Input
                   select
@@ -359,6 +302,7 @@ const Shop = () => {
                   value={shopInfo.type}
                   label="類型"
                   name="type"
+                  required
                 >
                   <MenuItem value={0}>分店</MenuItem>
                   <MenuItem value={1}>總店</MenuItem>
@@ -369,6 +313,7 @@ const Shop = () => {
                   value={shopInfo.status}
                   name="status"
                   label="狀態"
+                  required
                 >
                   <MenuItem value={0}>營業中</MenuItem>
                 </Input>
@@ -385,15 +330,14 @@ const Shop = () => {
                   <img width="100#" src={image} />
                 </Container>
                 <DialogActions>
-                <Button onClick={handleClose} size="large">
-                  取消
-                </Button>
-                <Button type="submit" onClick={handleSubmit} size="large">
-                  確認
-                </Button>
-              </DialogActions>
-              </FormContent>
-
+                  <Button onClick={handleClose} size="large">
+                    取消
+                  </Button>
+                  <Button type="submit" onClick={handleSubmit} size="large">
+                    確認
+                  </Button>
+                </DialogActions>
+              </Stack>
             </form>
           </Dialog>
 
@@ -433,10 +377,10 @@ const Shop = () => {
                   <TableShop
                     Page={"shop"}
                     Img={item.image}
-                    StoreName={item.name}
-                    StoreType={item.type}
-                    StoreStatus={item.status}
-                    CreatedAt={item.createdAt}
+                    storeName={item.name}
+                    storeType={item.type}
+                    storeStatus={item.status}
+                    createdAt={item.createdAt}
                     item={item}
                     Del={() => handleDeClickOpen(item)}
                     Edit={() => handleEditOpen(item)}
@@ -446,8 +390,6 @@ const Shop = () => {
               <Dialog
                 open={openDel}
                 onClose={handleDeClose}
-                // aria-labelledby="delete"
-                // aria-describedby="delete"
                 onBackdropClick="false"
                 fullWidth="true"
                 maxWidth="xs"
@@ -461,7 +403,7 @@ const Shop = () => {
                 >
                   {"確定要刪除此項目?"}
                 </FormTitle>
-                <FormContent style={{ textAlign: "right" }}>
+                <Stack  mx={5} my={3} style={{ textAlign: "right" }}>
                   <List aria-label="mailbox folders">
                     <ListItem button>
                       <ListItemText
@@ -497,7 +439,7 @@ const Shop = () => {
                     <Button onClick={handleDeClose}>取消</Button>
                     <Button onClick={() => handleDelete()}>確認</Button>
                   </DialogActions>
-                </FormContent>
+                </Stack>
               </Dialog>
 
               <Dialog
@@ -511,6 +453,7 @@ const Shop = () => {
               >
                 <FormTitle
                   variant="h6"
+                  // 可移動部分尚未解決
                   // style={{ cursor: "move" }}
                   // id="draggable-dialog-title"
                 >
@@ -518,7 +461,7 @@ const Shop = () => {
                 </FormTitle>
 
                 <form>
-                  <FormContent>
+                <Stack  mx={5} my={3}>
                     <Input
                       defaultValue={currentShop.name}
                       onChange={handleShopInfo}
@@ -562,11 +505,10 @@ const Shop = () => {
                       <img width="100#" src={image} />
                     </Container>
                     <DialogActions>
-                    <Button onClick={handleEditClose}>取消</Button>
-                    <Button onClick={() => handleEditSubmit()}>確認</Button>
-                  </DialogActions>
-                  </FormContent>
-
+                      <Button onClick={handleEditClose}>取消</Button>
+                      <Button onClick={() => handleEditSubmit()}>確認</Button>
+                    </DialogActions>
+                  </Stack>
                 </form>
               </Dialog>
             </Table>

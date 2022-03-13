@@ -16,7 +16,7 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const PreivateContain = [
+  const PrivateContain = [
     { path: "/product", component: Product },
     { path: "/shop", component: Shop },
     { path: "/employee", component: Employee },
@@ -31,7 +31,7 @@ function App() {
 
         <Switch>
           <Route path="/" exact component={Home} />
-          {PreivateContain.map((item) => (
+          {PrivateContain.map((item) => (
             <PrivateRoute path={item.path} component={item.component} />
           ))}
           <Route path="/login" component={Login}></Route>
