@@ -17,18 +17,21 @@ export default class HandoverRoute extends BasicRoute {
       new HandoverService(new HandoverRepository(), new CacheService()),
     );
     const auth = new Auth();
-    this.router.get("/",  auth.authAdmin.bind(auth),(req, res, next) =>
-    controller.getAll(req, res, next)
+    this.router.get("/date", auth.authAdmin.bind(auth), (req, res, next) =>
+      controller.getByDate(req, res, next)
     );
-    this.router.post("/",  auth.authUser.bind(auth),(req, res, next) =>
-    controller.create(req, res, next)
+    this.router.get("/", auth.authAdmin.bind(auth), (req, res, next) =>
+      controller.getAll(req, res, next)
+    );
+    this.router.post("/", auth.authUser.bind(auth), (req, res, next) =>
+      controller.create(req, res, next)
     );
     this.router.put("/", auth.authAdmin.bind(auth), (req, res, next) =>
-    controller.update(req, res, next)
+      controller.update(req, res, next)
     );
-    this.router.delete("/",  auth.authAdmin.bind(auth),(req, res, next) =>
-    controller.delete(req, res, next)
+    this.router.delete("/", auth.authAdmin.bind(auth), (req, res, next) =>
+      controller.delete(req, res, next)
     );
-    
+
   }
 }
