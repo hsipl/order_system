@@ -25,4 +25,7 @@ export class OrderProduct extends BaseEntity {
 
     @Column({ type: "int", default: 0, })
     price: number;
+
+    @Column({ type: "int", default: 0, })
+    quantity: number;
 }
