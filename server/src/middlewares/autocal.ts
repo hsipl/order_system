@@ -5,7 +5,7 @@ class AutoCal {
   
     constructor() {
         // 秒 分 時
-      this.cronJob = new CronJob('0 47 22 * * *', async () => {
+      this.cronJob = new CronJob('0 0 04 * * *', async () => {
         try {
           await this.bar();
         } catch (e) {

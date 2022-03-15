@@ -10,6 +10,7 @@ interface IPopularProductsParams {
 }
 
 export interface IPopularProductParams extends IPopularProductsParams{
+    forEach: any;
     turnoverId: number;
     name: string;
     quantity: number;
