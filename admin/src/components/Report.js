@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import {
   MenuItem,
@@ -23,9 +24,33 @@ const Report = () => {
     setBranch(event.target.value);
   };
 
-  const [value, setValue] = React.useState(null);
-  const [value2, setValue2] = React.useState(null);
+  const [startDate, setStartDate] = React.useState(null);
+  const [endDate, setEndDate] = React.useState(null);
 
+  const [allStore, setAllStore] = React.useState([]);
+
+  const url = "http://localhost:8000/api/store";
+
+  let config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  };
+
+  useEffect(() => {
+    const get_api = async () => {
+      let { data } = await axios.get(url, config);
+      for (var i = 0; i < data.length; i++) {
+        setAllStore((preData) => ([
+          ...preData,
+          data[i].name,
+        ]))
+      } 
+    };
+    get_api();
+  }, []);
+console.log(branch)
   return (
     <>
       <BodyContainer>
@@ -41,17 +66,18 @@ const Report = () => {
               onChange={handleChange}
               sx={{ width: "10rem" }}
             >
-              <MenuItem value={1}>分店一</MenuItem>
-              <MenuItem value={2}>分店二</MenuItem>
-              <MenuItem value={3}>分店三</MenuItem>
+              {allStore.map((item,index) => (
+                <MenuItem value={index}>{item}</MenuItem>
+              ))}
+              
             </SearchBox>
             <Stack direction="row">
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="選取起始時間"
-                  value={value}
+                  value={startDate}
                   onChange={(newValue) => {
-                    setValue(newValue);
+                    setStartDate(newValue);
                   }}
                   renderInput={(params) => (
                     <SearchBox variant="filled" {...params} />
@@ -61,9 +87,9 @@ const Report = () => {
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DatePicker
                   label="選取結束時間"
-                  value={value2}
+                  value={endDate}
                   onChange={(newValue) => {
-                    setValue2(newValue);
+                    setEndDate(newValue);
                   }}
                   renderInput={(params) => (
                     <SearchBox variant="filled" {...params} />
