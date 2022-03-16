@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useCallback}from "react";
 import { styled } from "@mui/material/styles";
 import Navbar from "./Navbar";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -6,6 +6,9 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import Box from "@mui/material/Box";
+
+// import {useMappedState,useDispatch} from 'redux-react-hook';
+
 
 const HomeContainer = styled(Box)({
   position:"absolute",
@@ -25,7 +28,10 @@ const breadcrumbs = [
 ];
 
 
-const Home = () => {
+const Home = (props) => {
+
+
+
 
   return (
     <>
@@ -39,6 +45,7 @@ const Home = () => {
             {breadcrumbs}
           </Breadcrumbs>
         </Stack>
+
       </HomeContainer>
     </>
   );

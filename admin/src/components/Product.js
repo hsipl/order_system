@@ -16,8 +16,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 
 import TextField from "@mui/material/TextField";
 import InputLabel from "@mui/material/InputLabel";
@@ -28,7 +26,6 @@ import DialogTitle from "@mui/material/DialogTitle";
 import MenuItem from "@mui/material/MenuItem";
 
 import Box from "@mui/material/Box";
-import SearchIcon from "@material-ui/icons/Search";
 
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -45,11 +42,31 @@ import ListItemText from "@mui/material/ListItemText";
 import Draggable from "react-draggable";
 import Chip from "@mui/material/Chip";
 
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { TableContent, TableHeads, TableProduct } from "./Table";
+import { Nightlife, Search } from "@material-ui/icons";
+
+const SearchContainer = styled(Box)({
+  display: "flex",
+  width: "100%",
+  alignItems: "center",
+
+  ".AddBTN": {
+    marginLeft: "auto",
+  },
+});
+
+const SearchBox = styled(TextField)({
+  margin: "1rem",
+  "& .MuiInputBase-root": {
+    background: "rgba(255, 255, 255, 0.8)",
+  },
+  ":first-child": {
+    marginLeft: "0",
+  },
+});
 
 const Productcon = styled.div`
   position: relative;
@@ -79,7 +96,15 @@ const Product = () => {
   const [sauceData, setSauceData] = useState([]);
   const [currentId, setCurrentId] = useState("");
   const [changeArrayData, setChangeArrayData] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchSauceInput, setSearchSauceInput] = useState({
+    name: "",
+    status: "",
+  });
+  const [searchInput, setSearchInput] = useState({
+    name: "",
+    status: "",
+    category: "",
+  });
   const [open, setOpen] = useState(false);
   const [openDe, setOpenDe] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -88,7 +113,9 @@ const Product = () => {
     tag: "",
     status: 0,
   });
+  const [sauceFilter, setSauceFilter] = useState([]);
   const [productData, setProductData] = useState([]);
+  const [productFilter, setProductFilter] = useState([]);
   const [changeProductData, setChangeProductData] = useState([]);
   const [image, setImage] = useState(null);
   const [productInfo, setProductInfo] = useState({
@@ -136,6 +163,7 @@ const Product = () => {
       ["tag"]: getProductId[index],
       ["tagName"]: getProductTag[index],
     });
+ 
   };
 
   const handleDeClose = () => {
@@ -146,6 +174,7 @@ const Product = () => {
     setOpen(false);
   };
 
+  const [selectTag, setSelectTag] = useState([]);
   const handleProductEditOpen = (id, item, index) => {
     setOpenEdit(true);
 
@@ -168,29 +197,14 @@ const Product = () => {
     });
 
     setCurrentId(id);
+
   };
 
   const handleEditClose = () => {
     setOpenEdit(false);
   };
 
-  const [SnackbarOpen, setSnackbarOpen] = useState(false);
 
-  const handleSnackClick = () => {
-    setSnackbarOpen(true);
-  };
-
-  const handleSnackClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setSnackbarOpen(false);
-  };
-
-  const Alert = React.forwardRef(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-  });
 
   const url_Sauce = "http://localhost:8000/api/tag";
   const url_Product = "http://localhost:8000/api/product";
@@ -220,9 +234,20 @@ const Product = () => {
           : (data[i].status = "已停用");
       }
       setChangeArrayData(data);
+      setSauceFilter(data);
+      console.log(sauceData);
     };
     get_SauceApi();
   }, []);
+
+  // const mounted=useRef();
+
+  // useEffect(() => {
+  //   mounted.current===false?
+  //   mounted.current = true:
+  //   setSnackbarOpen(true)
+
+  // }, sauceData.length);
 
   function handleSauceInfo(e) {
     const { value, name } = e.target;
@@ -253,16 +278,14 @@ const Product = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
       await axios.post(url_Sauce, JSON.stringify(sauceInfo), config);
-
-      window.location.reload();
     } catch (error) {
       console.log(error);
       console.log(JSON.stringify(sauceInfo));
     }
+    // setSnackbarOpen(true)
   };
 
   const handleEditSubmit = async (e) => {
@@ -285,15 +308,85 @@ const Product = () => {
     } catch (error) {}
   };
 
-  function SearchOnChange(e) {
-    setSearchInput(e.target.value);
+  function SearchSauceOnChange(e) {
+    const { value, name } = e.target;
+    setSearchSauceInput((preData) => ({
+      ...preData,
+      [name]: value,
+    }));
   }
 
-  const filtered = !searchInput
-    ? sauceData
-    : sauceData.filter((item) =>
-        item.tag.toLowerCase().includes(searchInput.toLocaleLowerCase())
-      );
+  function SearchOnChange(e) {
+    const { value, name } = e.target;
+    setSearchInput((preData) => ({
+      ...preData,
+      [name]: value,
+    }));
+  }
+
+  const filtered = sauceFilter === null ? sauceData : sauceFilter;
+
+  const handleSauceSearch = async () => {
+    try {
+      if (searchSauceInput.name === "" && searchSauceInput.status === "") {
+        let { data } = await axios.get(url_Sauce, config);
+
+        sauceChange(data);
+      } else if (
+        searchSauceInput.name !== "" &&
+        searchSauceInput.status === ""
+      ) {
+        let { data } = await axios.get(
+          url_Sauce + "?tag=" + searchSauceInput.name,
+          config
+        );
+        sauceChange(data);
+      } else if (
+        searchSauceInput.name === "" &&
+        searchSauceInput.status !== ""
+      ) {
+        let { data } = await axios.get(
+          url_Sauce + "?status=" + searchSauceInput.status,
+          config
+        );
+        sauceChange(data);
+      } else {
+        let { data } = await axios.get(
+          url_Sauce +
+            "?tag=" +
+            searchSauceInput.name +
+            "&status=" +
+            searchSauceInput.status,
+          config
+        );
+        sauceChange(data);
+      }
+    } catch (error) {}
+  };
+
+  function sauceChange(data) {
+    for (var i = 0; i < data.length; i++) {
+      data[i].status === 0
+        ? (data[i].status = "使用中")
+        : (data[i].status = "已停用");
+    }
+    setSauceFilter(data);
+  }
+
+  const handleClean = async () => {
+    setSauceFilter(null);
+    setProductFilter(null);
+    setSearchSauceInput({
+      name: "",
+      status: "",
+    });
+    setSearchInput({
+      name: "",
+      status: "",
+      category: "",
+    });
+  };
+
   /***************Handle Product***************/
   const [ProSau, setProSau] = useState({});
 
@@ -307,8 +400,8 @@ const Product = () => {
 
       for (var i = 0; i < data.length; i++) {
         data[i].status === 0
-          ? (data[i].status = "使用中")
-          : (data[i].status = "已停用");
+          ? (data[i].status = "販賣中")
+          : (data[i].status = "已停售");
         data[i].category === 0
           ? (data[i].category = "肉類")
           : data[i].category === 1
@@ -319,6 +412,8 @@ const Product = () => {
         data[i].image === null ? (data[i].category = "無") : console.log();
       }
       setChangeProductData(data);
+      console.log(data);
+      setProductFilter(data);
     };
     get_ProductApi();
   }, []);
@@ -330,6 +425,106 @@ const Product = () => {
       ...preData,
       [name]: value,
     }));
+  }
+
+  const filteredProduct = productFilter === null ? productData : productFilter;
+
+  const handleProductSearch = async () => {
+    try {
+      if (
+        searchInput.name === "" &&
+        searchInput.status === "" &&
+        searchInput.category === ""
+      ) {
+        let { data } = await axios.get(url_Product, config);
+
+        productChange(data);
+      } else if (
+        searchInput.name !== "" &&
+        searchInput.status === "" &&
+        searchInput.category === ""
+      ) {
+        let { data } = await axios.get(
+          url_Product + "?name=" + searchInput.name,
+          config
+        );
+        productChange(data);
+      } else if (
+        searchInput.name === "" &&
+        searchInput.status !== "" &&
+        searchInput.category === ""
+      ) {
+        let { data } = await axios.get(
+          url_Product + "?status=" + searchInput.status,
+          config
+        );
+        productChange(data);
+      } else if (
+        searchInput.name === "" &&
+        searchInput.status === "" &&
+        searchInput.category !== ""
+      ) {
+        let { data } = await axios.get(
+          url_Product + "?category=" + searchInput.category,
+          config
+        );
+        productChange(data);
+      } else if (
+        searchInput.name !== "" &&
+        searchInput.status !== "" &&
+        searchInput.category === ""
+      ) {
+        let { data } = await axios.get(
+          url_Product +
+            "?name=" +
+            searchInput.category +
+            "&status=" +
+            searchInput.status,
+          config
+        );
+        productChange(data);
+      } else if (
+        searchInput.name === "" &&
+        searchInput.status !== "" &&
+        searchInput.category !== ""
+      ) {
+        let { data } = await axios.get(
+          url_Product +
+            "?status=" +
+            searchInput.status +
+            "&category=" +
+            searchInput.category,
+          config
+        );
+        productChange(data);
+      } else {
+        let { data } = await axios.get(
+          url_Product +
+            "?name=" +
+            searchInput.name +
+            "&category=" +
+            searchInput.category,
+          config
+        );
+        productChange(data);
+      }
+    } catch (error) {}
+  };
+
+  function productChange(data) {
+    for (var i = 0; i < data.length; i++) {
+      data[i].status === 0
+        ? (data[i].status = "販賣中")
+        : (data[i].status = "已停售");
+      data[i].category === 0
+        ? (data[i].category = "肉類")
+        : data[i].category === 1
+        ? (data[i].category = "蔬菜類")
+        : data[i].category === 2
+        ? (data[i].category = "加工類")
+        : (data[i].category = "其他類");
+    }
+    setProductFilter(data);
   }
 
   const onImageChange = (e) => {
@@ -367,14 +562,8 @@ const Product = () => {
 
     try {
       await axios.post(url_Product, formData, config);
-      // console.log();
-      // window.location.reload();
-      // {handleSnackClick}
-      
     } catch (error) {
       console.log(error);
-      console.log(productInfo);
-      // {handleSnackClick}
     }
   };
 
@@ -411,41 +600,34 @@ const Product = () => {
     }
   };
 
-  const sauceTag = sauceData.map((sauce, index) => (
-    <FormControlLabel
-      control={
-        <Checkbox
-          onChange={handleCheckChange}
-          check={productInfo}
-          value={sauce.id}
-          // value={index}
-          name="tags"
-        />
-      }
-      label={sauce.tag}
-    />
-  ));
+  const sauceTag = sauceData.map((sauce, index) =>
+    sauce.status === "已停用" ? null : (
+      <FormControlLabel
+        control={
+          <Checkbox
+            onChange={handleCheckChange}
+            check={productInfo}
+            value={sauce.id}
+            name="tags"
+          />
+        }
+        label={sauce.tag}
+      />
+    )
+  );
 
   let getProductTag = productData.map((taggs) => taggs.tags.map((k) => k.tag));
   let getProductId = productData.map((taggs) => taggs.tags.map((k) => k.id));
-
 
   return (
     <>
       {/* <Snackbar
         open={SnackbarOpen}
-        autoHideDuration={6000}
+        autoHideDuration={1000}
         onClose={handleSnackClose}
-      >
-        <Alert
-          onClose={handleSnackClose}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          This is a success message!
-        </Alert>
-      </Snackbar>
-      <ToastContainer /> */}
+        message="Sucess!"
+      ></Snackbar> */}
+      <ToastContainer />
       <Navbar />
       <Productcon id="product">
         <Stack spacing={2}>
@@ -469,30 +651,71 @@ const Product = () => {
               {/*Tab1*/}
               {/****************************************************************************/}
               <TabPanel value="1">
-                <Box>
-                  <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-                    <SearchIcon
-                      sx={{ color: "action.active", mr: 1, my: 0.5 }}
-                    />
-                    <TextField
-                      id="input-with-sx"
-                      label="Search"
-                      variant="standard"
+
+                <SearchContainer>
+                  <Box>
+                    <SearchBox
+                      id="SearchProductName"
+                      label="商品名稱"
+                      variant="filled"
+                      autoComplete
                       type="search"
-                      value={searchInput}
+                      name="name"
+                      value={searchInput.name}
                       onChange={SearchOnChange}
                     />
                   </Box>
-                </Box>
-
-                <br />
-                <Button
-                  onClick={handleClickOpen}
-                  variant="contained"
-                  color="success"
-                >
-                  新增商品資訊
-                </Button>
+                  <SearchBox
+                    id="SearchSauceStatus"
+                    select
+                    label="使用狀態"
+                    value={searchInput.status}
+                    onChange={SearchOnChange}
+                    variant="filled"
+                    name="status"
+                    sx={{ width: "10rem" }}
+                  >
+                    <MenuItem value="">
+                      <em style={{ color: "gray" }}>請選擇</em>
+                    </MenuItem>
+                    <MenuItem value={0}>販賣中</MenuItem>
+                    <MenuItem value={1}>已停售</MenuItem>
+                  </SearchBox>
+                  <SearchBox
+                    id="SearchSauceStatus"
+                    select
+                    label="類別"
+                    value={searchInput.category}
+                    onChange={SearchOnChange}
+                    variant="filled"
+                    name="category"
+                    sx={{ width: "10rem" }}
+                  >
+                    <MenuItem value="">
+                      <em style={{ color: "gray" }}>請選擇</em>
+                    </MenuItem>
+                    <MenuItem value={0}>肉類</MenuItem>
+                    <MenuItem value={1}>蔬菜類</MenuItem>
+                    <MenuItem value={2}>加工類</MenuItem>
+                    <MenuItem value={3}>其他類</MenuItem>
+                  </SearchBox>
+                  <Button
+                    size="large"
+                    color="inherit"
+                    onClick={() => handleProductSearch()}
+                  >
+                    <Search fontSize="large" />
+                  </Button>
+                  <Button onClick={handleClean}>清除搜尋</Button>
+                  <Button
+                    onClick={handleClickOpen}
+                    variant="contained"
+                    color="success"
+                    className="AddBTN"
+                  >
+                    新增商品資訊
+                  </Button>
+                </SearchContainer>
 
                 {/* Dialog1*/}
 
@@ -503,7 +726,6 @@ const Product = () => {
                   aria-describedby="alert-dialog-description"
                   onBackdropClick="false"
                   maxWidth="xs"
-                  // PaperComponent={PaperComponent}
                 >
                   <DialogTitle
                     id="alert-dialog-title"
@@ -564,12 +786,7 @@ const Product = () => {
                     </DialogContent>
                     <DialogActions sx={{ height: 0 }}>
                       <Button onClick={handleClose}>取消</Button>
-                      <Button
-                        type="submit"
-                        // onClick={handleClose}
-                        // onClick={notify}
-                        onClick={handleSnackClick}
-                      >
+                      <Button type="submit" >
                         確認
                       </Button>
                     </DialogActions>
@@ -655,49 +872,23 @@ const Product = () => {
                       </TableRow>
                     </TableHead>
 
-                    {productData.map((item, index) => {
-                      return (
-                        <TableRow
-                          // key={item.tags}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                          hover={true}
-                          title={getProductTag[index]}
-                        >
-                          <TableCell align="center">{item.id}</TableCell>
-
-                          <TableCell align="center">{item.name}</TableCell>
-                          <TableCell align="center">{item.price}</TableCell>
-                          <TableCell align="center">
-                            <img
-                              src={"http://localhost:8000/" + item.image}
-                              alt={item.image}
-                              width="150"
-                            />
-                          </TableCell>
-                          <TableCell align="center">{item.category}</TableCell>
-                          <TableCell align="center">{item.status}</TableCell>
-
-                          <TableCell align="center">
-                            <Button
-                              onClick={() =>
-                                handleProductDeClickOpen(item.id, item, index)
-                              }
-                            >
-                              <DeleteIcon />
-                            </Button>
-                            <Button
-                              onClick={() =>
-                                handleProductEditOpen(item.id, item, index)
-                              }
-                            >
-                              <EditIcon />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                    {filteredProduct.map((item, index) => (
+                      <TableProduct
+                        productId={item.id}
+                        productName={item.name}
+                        productCategory={item.category}
+                        productImage={item.image}
+                        productPrice={item.price}
+                        ProductTag={getProductTag[index]}
+                        productStatus={item.status}
+                        // CreatedAt={item.createdAt}
+                        // item={item}
+                        Del={() =>
+                          handleProductDeClickOpen(item.id, item, index)
+                        }
+                        Edit={() => handleProductEditOpen(item.id, item, index)}
+                      />
+                    ))}
                     {/* 刪除商品Dialog */}
                     <Dialog
                       open={openDe}
@@ -719,7 +910,10 @@ const Product = () => {
                               primary="產品名稱 :"
                               sx={{ maxWidth: "50%" }}
                             />
-                            <Chip label={currentInfo.name} />
+                            <Chip
+                              label={currentInfo.name}
+                              style={{ margin: "auto" }}
+                            />
                           </ListItem>
                           <Divider />
                           <ListItem button>
@@ -727,18 +921,22 @@ const Product = () => {
                               primary="價錢 : "
                               sx={{ maxWidth: "50%" }}
                             />
-                            <Chip label={currentInfo.price} />
+                            <Chip
+                              label={currentInfo.price}
+                              style={{ margin: "auto" }}
+                            />
                           </ListItem>
                           <Divider />
                           <ListItem button>
                             <ListItemText
                               primary="圖片 : "
-                              sx={{ maxWidth: "35%" }}
+                              sx={{ maxWidth: "55%" }}
                             />
                             <img
                               src={"http://localhost:8000/" + currentInfo.image}
                               alt={currentInfo.image}
                               width="150"
+                              style={{ margin: "auto" }}
                             />
                           </ListItem>
                           <Divider />
@@ -748,7 +946,10 @@ const Product = () => {
                               primary="類別 : "
                               sx={{ maxWidth: "50%" }}
                             />
-                            <Chip label={currentInfo.category2} />
+                            <Chip
+                              label={currentInfo.category2}
+                              style={{ margin: "auto" }}
+                            />
                           </ListItem>
 
                           <Divider />
@@ -758,7 +959,10 @@ const Product = () => {
                               primary="調味料 : "
                               sx={{ maxWidth: "50%" }}
                             />
-                            <Chip label={"" + currentInfo.tagName + ""} />
+                            <Chip
+                              label={"" + currentInfo.tagName + ""}
+                              style={{ margin: "auto" }}
+                            />
                           </ListItem>
                         </List>
 
@@ -834,6 +1038,8 @@ const Product = () => {
                             type="file"
                             accept="image/png, image/jpeg"
                             onChange={onImageChange}
+                            // value={"http://localhost:8000/" + currentInfo.image}
+                            // value="C:/Users/user/Desktop/gogoro.jfif"
                           ></input>
                           <img width="100#" src={image} />
                         </DialogContent>
@@ -852,30 +1058,53 @@ const Product = () => {
               </TabPanel>
               {/*Tab2*/}
               <TabPanel value="2">
-                <Box>
-                  <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-                    <SearchIcon
-                      sx={{ color: "action.active", mr: 1, my: 0.5 }}
+                <SearchContainer>
+                  <Box>
+                    <SearchBox
+                      id="SearchProductName"
+                      label="調味料名稱"
+                      variant="filled"
+                      autoComplete
+                      // type="search"
+                      name="name"
+                      value={searchSauceInput.name}
+                      onChange={SearchSauceOnChange}
                     />
-                    <TextField
-                      id="input-with-sx"
-                      label="Search"
-                      variant="standard"
-                      type="search"
-                      value={searchInput}
-                      onChange={SearchOnChange}
-                    />
+                    <SearchBox
+                      id="SearchSauceStatus"
+                      select
+                      label="使用狀態"
+                      value={searchSauceInput.status}
+                      onChange={SearchSauceOnChange}
+                      variant="filled"
+                      name="status"
+                      sx={{ width: "10rem" }}
+                    >
+                      <MenuItem value="">
+                        <em style={{ color: "gray" }}>請選擇</em>
+                      </MenuItem>
+                      <MenuItem value={0}>使用中</MenuItem>
+                      <MenuItem value={1}>已停用</MenuItem>
+                    </SearchBox>
                   </Box>
-                </Box>
+                  <Button
+                    size="large"
+                    color="inherit"
+                    onClick={() => handleSauceSearch()}
+                  >
+                    <Search fontSize="large" />
+                  </Button>
+                  <Button onClick={handleClean}>清除搜尋</Button>
+                  <Button
+                    onClick={handleClickOpen}
+                    variant="contained"
+                    color="success"
+                    className="AddBTN"
+                  >
+                    新增調味料資訊
+                  </Button>
+                </SearchContainer>
 
-                <br />
-                <Button
-                  onClick={handleClickOpen}
-                  variant="contained"
-                  color="success"
-                >
-                  新增調味料資訊
-                </Button>
                 {/* Dialog1*/}
                 <Dialog
                   open={open}
@@ -976,46 +1205,17 @@ const Product = () => {
                         </TableCell>
                       </TableRow>
                     </TableHead>
+                 
 
-                    {filtered.map((item, index) => {
-                      return (
-                        <>
-                          <TableRow
-                            key={item.id}
-                            sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
-                            }}
-                          >
-                            <TableCell
-                              align="center"
-                              component="th"
-                              scope="item"
-                            >
-                              {item.id}
-                            </TableCell>
-
-                            <TableCell align="center">{item.tag}</TableCell>
-
-                            <TableCell align="center">{item.status}</TableCell>
-
-                            <TableCell align="center">
-                              <Button
-                                onClick={() =>
-                                  handleSauceDeClickOpen(item, index)
-                                }
-                              >
-                                <DeleteIcon />
-                              </Button>
-                              <Button
-                                onClick={() => handleSauceEditOpen(item, index)}
-                              >
-                                <EditIcon />
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        </>
-                      );
-                    })}
+                    {filtered.map((item, index) => (
+                      <TableProduct
+                        TagId={item.id}
+                        TagTag={item.tag}
+                        TagStatus={item.status}
+                        Del={() => handleSauceDeClickOpen(item)}
+                        Edit={() => handleSauceEditOpen(item)}
+                      />
+                    ))}
                     {/* 刪除調味料Dialog */}
                     <Dialog
                       open={openDe}

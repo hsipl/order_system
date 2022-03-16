@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
 
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, PureComponent } from "react";
 import styledC from "styled-components";
 
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -37,6 +37,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Chip from "@mui/material/Chip";
 import Divider from "@mui/material/Divider";
 
+
 const ShopContainer = styled(Box)({
   position: "absolute",
   top: "6rem",
@@ -65,7 +66,7 @@ const breadcrumbs = [
   </Typography>,
 ];
 
-const Shop = () => {
+const Shop = (props) => {
   const [arrayData, setArratData] = useState([]);
   const [changeArrayData, setChangeArrayData] = useState([]);
   const [searchInput, setSearchInput] = useState("");
@@ -79,6 +80,8 @@ const Shop = () => {
   });
 
   const [currentShop, setCurrentShop] = useState({});
+
+  
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -550,4 +553,14 @@ const Shop = () => {
   );
 };
 
-export default Shop;
+// const mapStateToProps = (state) =>({
+//   value: state.value,
+// });
+
+// const mapDispatchToProps = (dispatch) =>({
+//   openAction:() => dispatch(openAction()),
+//   closeAction:() => dispatch(closeAction()),
+// });
+
+
+export default (Shop);

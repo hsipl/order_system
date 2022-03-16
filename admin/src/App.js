@@ -30,7 +30,9 @@ const LogoutBtn = styled.button`
 
 function App() {
   const PreivateContain = [
+    // { path: "/", component: Home },
     { path: "/product", component: Product },
+    { path: "/home", component: Home },
     { path: "/shop", component: Shop },
     { path: "/order", component: Order },
     { path: "/report", component: Report },
@@ -43,11 +45,12 @@ function App() {
 
 
         <Switch>
-          <Route path="/" exact component={Home} />
+          <Route path="/login" exact component={Login} />
           {PreivateContain.map((item) => (
             <PrivateRoute path={item.path} component={item.component} />
           ))}
-          <Route path="/login" component={Login}></Route>
+          <Route path="/" component={Home}></Route>
+          <Redirect path="*" to="/login" ></Redirect>
         </Switch>
       </Router>
     </div>
