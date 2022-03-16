@@ -8,6 +8,29 @@ import {
 } from "typeorm";
 import { Order } from "./order";
 
+/**
+ * @swagger
+ *   components:
+ *     schemas:
+ *       OrderProducts:
+ *         type: object
+ *         properties:
+ *           id: 
+ *             type: integer
+ *             format: number
+ *           description:
+ *             type: string
+ *             nullable: true
+ *             length: 128
+ *           orderId:
+ *             $ref: '#/components/schemas/Order'
+ *           name:
+ *             type: string
+ *           price:
+ *             type: integr
+ *             format: number
+ */
+
 @Entity('order_product')
 export class OrderProduct extends BaseEntity {
     @PrimaryGeneratedColumn()

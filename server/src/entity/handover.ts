@@ -11,6 +11,38 @@ import {
 } from "typeorm";
 import { User } from "./user";
 
+/**
+ * @swagger
+ *   components:
+ *     schemas:
+ *       Handover:
+ *         type: object
+ *         properties: 
+ *           id:
+ *             type: integer 
+ *             format: number
+ *           userId:
+ *             $ref: '#/components/schemas/User'
+ *           sysmoney:
+ *             type: integer
+ *             format: number
+ *           realcash:
+ *             type: integer
+ *             format: number
+ *           status:
+ *             type: tinyint
+ *             format: number
+ *             unsigned: true
+ *             default: 0
+ *             description: 0 Opening 1 Closing
+ *           createdAt:
+ *             type: string
+ *           updatedAt:
+ *             type: string
+ *           deletedAt:
+ *             type: string
+ */
+
 @Entity()
 export class Handover extends BaseEntity{
     @PrimaryGeneratedColumn({ unsigned: true })
