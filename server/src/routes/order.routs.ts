@@ -13,6 +13,116 @@ import { OrderProductRepository } from "../repository/orderProduct.repository";
 import OrderProductController from "../controller/orderProduct.controller";
 import { OrderValidator } from "../validator/order";
 
+/**
+ * @swagger
+ * /order:
+ *   get:
+ *     tags:
+ *     - Order
+ *     description: Get Order Data
+ *     responses:
+ *       200:
+ *         description: Get Order Data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Order'
+ *   post:
+ *     tags:
+ *     - Order
+ *     description: Create Order
+ *     requestBody:
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pay:
+ *                 type: number
+ *               status:
+ *                 type: number
+ *               storeId:
+ *                 type: number
+ *               products:
+ *                 description: {productId:number}
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *             required:
+ *             - pay
+ *             - status
+ *             - storeId
+ *             - products
+ *     responses:
+ *       200:
+ *         description: Update Order Data
+ * /order/{orderId}:
+ *   get:
+ *     tags:
+ *     - Order
+ *     description: Get Order Data
+ *     parameters:
+ *     - name: orderId
+ *       in: path
+ *       required: true
+ *       schema:
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: Get Order Data
+ *   put:
+ *     tags:
+ *     - Order
+ *     description: Update Order Data
+ *     parameters:
+ *     - name: orderId
+ *       in: path
+ *       required: true
+ *       schema:
+ *         type: number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pay:
+ *                 type: number
+ *               status:
+ *                 type: number
+ *               storeId:
+ *                 type: number
+ *               products:
+ *                 type: array
+ *                 description: '{productId:number,description:string} or {id:number,description:string,name:string,price:number}'
+ *                 items:
+ *                   type:number
+ *             required:
+ *             - pay
+ *             - status
+ *             - storeId
+ *             - products
+ *     responses:
+ *       200:
+ *         description: Update Order Success
+ *   delete:
+ *     tags:
+ *     - Order
+ *     description: Delete Order Data
+ *     parameters:
+ *     - name: orderId
+ *       in: path
+ *       required: true
+ *       schema:
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: Delete Order Success
+ */
+
 export default class OrderRoute extends BasicRoute {
     constructor() {
         super();

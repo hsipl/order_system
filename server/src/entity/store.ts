@@ -8,6 +8,42 @@ import {
   BaseEntity,
 } from 'typeorm';
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Store:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           format: number
+ *         name:
+ *           type: string
+ *         type:
+ *           type: tinyint
+ *           format: number
+ *           unsigned: true
+ *           default: 0
+ *           description: 0 Branch Store, 1 Head Store
+ *         status:
+ *           type: tinyint
+ *           format: number
+ *           unsigned: true
+ *           default: 0
+ *           description: 0 Opening, 1 Closing
+ *         image:
+ *           type: string
+ *           nullable: true
+ *           length: 256
+ *         createdAt:
+ *           type: string
+ *         updatedAt:
+ *           type: string
+ *         deletedAt:
+ *           type: string
+ */
+
 @Entity()
 export class Store extends BaseEntity {
   @PrimaryGeneratedColumn()

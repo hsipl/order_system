@@ -14,6 +14,42 @@ import { OrderProduct } from "./orderProuct";
 // import { Product } from "./product";
 import { Store } from "./store";
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Order:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           format: number
+ *         storeId:
+ *           $ref: '#/components/schemas/Store'
+ *         pay:
+ *           type: tinyint
+ *           format: number
+ *           default: 0
+ *           unsigned: true
+ *           description: 0 Unpaid 1 Pay
+ *         status:
+ *           type: tinyint
+ *           format: number
+ *           default: 0
+ *           unsigned: true
+ *           description: 0 Not Delete 1 Delete
+ *         orderProducts:
+ *           $ref: '#/components/schemas/OrderProducts'
+ *         createdAt:
+ *           type: string
+ *         updatedAt:
+ *           type: string
+ *         deletedAt:
+ *           type: string
+ *           
+ */
+
+
 @Entity()
 export class Order extends BaseEntity {
     @PrimaryGeneratedColumn()
