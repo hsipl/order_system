@@ -16,7 +16,6 @@ import { config } from "./config/config";
 import getConn from "./entity/index";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
-import swaggerDocument from "../swagger.json";
 
 // create app class for server
 export class App {
