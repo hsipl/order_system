@@ -8,6 +8,32 @@ import {
     BaseEntity,
 } from "typeorm";
 
+/**
+ * @swagger
+ *   components:
+ *     schemas:
+ *       Tag:
+ *         type: object
+ *         properties:
+ *           id:
+ *             type: integer
+ *             format: number
+ *           tag:
+ *             type: string
+ *           status:
+ *             type: tinyint
+ *             format: number
+ *             unsigned: true
+ *             default: 0
+ *             description: 0 Can choose, 1 Can't choose
+ *           createdAt:
+ *             type: string
+ *           updatedAt:
+ *             type: string
+ *           deletedAt:
+ *             type: string
+ */
+
 @Entity()
 export class Tag extends BaseEntity {
     @PrimaryGeneratedColumn()
