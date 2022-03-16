@@ -14,6 +14,8 @@ import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity/index";
+import swaggerUi from "swagger-ui-express";
+import swaggerJSDoc from "swagger-jsdoc";
 
 // create app class for server
 export class App {
@@ -25,6 +27,7 @@ export class App {
     this.mode = process.env.MODE ? process.env.MODE : "default";
     this.setDBConnection();
     this.setMiddleWare();
+    this.swaggerDoc();
     this.setRoutes();
     this.app.use(errorHandler);
   }
@@ -52,6 +55,32 @@ export class App {
     this.setSession();
   }
 
+  private swaggerDoc() {
+    const options: swaggerJSDoc.Operation = {
+      definition: {
+        openapi: "3.0.0",
+        info: {
+          title: "Order System API Title",
+          version: "1.0",
+        },
+        servers: [{ url: "http://localhost:8000/api/" }],
+        components: {
+          securitySchemas: {
+            bearerAuth: {
+              type: "http",
+              scheme: "bearer",
+              bearerFormat: "JWT",
+            },
+          },
+        },
+        security: [{ bearerAuth: [] }],
+      },
+      // 這邊會是你想要產生的api文件檔案，我是直接讓swagger去列出所有controllers
+      apis: ["./src/routes/*.ts", "./src/entity/*.ts"],
+    };
+    const specs = swaggerJSDoc(options);
+    this.app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(specs));
+  }
   private setRoutes(): void {
     for (const route of router) {
       this.app.use(`/api/${route.getPrefix()}`, route.getRouter());
