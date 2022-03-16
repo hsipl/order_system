@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
 import styledC from "styled-components";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Typography from "@mui/material/Typography";
@@ -32,6 +32,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { TableHandover } from "./Table";
 import { Search } from "@material-ui/icons";
+import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
+
 
 import Chip from "@mui/material/Chip";
 const HandoverContainer = styled(Box)({
@@ -164,6 +166,7 @@ const Handover = () => {
 
   return (
     <>
+    <BodyContainer>
       <Navbar />
       <HandoverContainer id="handover">
         <Stack spacing={2}>
@@ -359,6 +362,7 @@ const Handover = () => {
           </Table>
         </TableContainer>
       </HandoverContainer>
+      </BodyContainer>
     </>
   );
 };

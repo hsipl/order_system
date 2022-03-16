@@ -67,36 +67,28 @@ export function ControlHandoverCell(props) {
     }
   
 
-export function TableContent(props) {
-  const Page = props.Page;
-  const DelBTN = props.Del;
-  const EditBTN = props.Edit;
+export function TableShop(props) {
+  const delBTN = props.Del;
+  const editBTN = props.Edit;
   const Id = props.Id;
-  const UserName = props.UserName;
-  const UserAccount = props.UserAccount;
   const Img = props.Img;
-  const StoreName = props.StoreName;
-  const StoreType = props.StoreType;
-  const StoreStatus = props.StoreStatus;
-  const CreatedAt = props.CreatedAt;
+  const storeName = props.storeName;
+  const storeType = props.storeType;
+  const storeStatus = props.storeStatus;
+  const createdAt = props.createdAt;
 
-  const PageTable = {
-    employee: [UserName, UserAccount, "職位", "操作"],
-    shop: [
-      <img src={"http://localhost:8000/" + Img} alt={Img} height="100" />,
-      StoreName,
-      StoreType,
-      StoreStatus,
-      CreatedAt,
-      <ControlCell status={StoreStatus} Del={DelBTN} Edit={EditBTN} />,
-    ],
-    // report: ["產品名稱", "銷售總額(元)", "銷售總數(份)"],
-    // handover: ["交班人", "系統金額", "實際金額", "交班時間"],
-  };
+  const ShopData = [
+    <img src={"http://localhost:8000/" + Img} alt={Img} height="100" />,
+    storeName,
+    storeType,
+    storeStatus,
+    createdAt,
+    <ControlCell status={storeStatus} Del={delBTN} Edit={editBTN} />,
+  ];
 
   return (
     <TableRow key={Id}>
-      {PageTable[Page].map((item) => (
+      {ShopData.map((item) => (
         <TableCell
           align="center"
           sx={{

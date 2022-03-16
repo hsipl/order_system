@@ -1,47 +1,22 @@
-import React from "react";
-import styled from "styled-components";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
-import Stack from "@mui/material/Stack";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Navbar from "../components/Navbar";
-
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-
-import TextField from "@mui/material/TextField";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
+import {
+  MenuItem,
+  Table,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  Button,
+  Stack,
+} from "@mui/material";
+import { LocalizationProvider, DatePicker } from "@mui/lab/";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
+import { Search } from "@material-ui/icons";
+import { SearchBox, SearchContainer } from "./SearchAndForm";
+import { TableHeads } from "./Table";
 
-import Table from "@mui/material/Table";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { Button } from "@mui/material";
-
-const Reportcon = styled.div`
-position: relative;
-top: 8rem;
-left: 13rem;
-max-width: 87%;
-font-size: 20px;
-`;
-
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="inherit" href="/">
-    首頁
-  </Link>,
-  <Typography underline="hover" key="2" color="text.primary" href="/handover">
-    財務報表
-  </Typography>,
-];
 const Report = () => {
   const [branch, setBranch] = React.useState("");
 
@@ -49,151 +24,96 @@ const Report = () => {
     setBranch(event.target.value);
   };
 
-  const [value, setValue] = React.useState(null);
-  const [value2, setValue2] = React.useState(null);
+  const [startDate, setStartDate] = React.useState(null);
+  const [endDate, setEndDate] = React.useState(null);
+
+  const [allStore, setAllStore] = React.useState([]);
+
+  const url = "http://localhost:8000/api/store";
+
+  let config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  };
+
+  useEffect(() => {
+    const get_api = async () => {
+      let { data } = await axios.get(url, config);
+      for (var i = 0; i < data.length; i++) {
+        setAllStore((preData) => ([
+          ...preData,
+          data[i].name,
+        ]))
+      } 
+    };
+    get_api();
+  }, []);
+console.log(branch)
   return (
     <>
-      <Navbar />
-      <Reportcon id="report">
-        {" "}
-        <Stack spacing={2}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            {breadcrumbs}
-          </Breadcrumbs>
-        </Stack>
-        <Box>
-          <FormControl sx={{ m: 2, minWidth: 200 }}>
-            <InputLabel id="demo-simple-select-label">選取分店</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+      <BodyContainer>
+        <Navbar />
+        <Content>
+          <Breadcrumb name="財務報表" />
+          <Stack spacing={-3}>
+            <SearchBox
+              select
+              variant="filled"
               value={branch}
-              label="branch"
+              label="選取分店"
               onChange={handleChange}
+              sx={{ width: "10rem" }}
             >
-              <MenuItem value={1}>分店一</MenuItem>
-              <MenuItem value={2}>分店二</MenuItem>
-              <MenuItem value={3}>分店三</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-            label="選取起始時間"
-            value={value}
-            onChange={(newValue) => {
-              setValue(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-        <span>&emsp;</span>
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-            label="選取結束時間"
-            value={value2}
-            onChange={(newValue) => {
-              setValue2(newValue);
-            }}
-            renderInput={(params) => <TextField {...params} />}
-          />
-        </LocalizationProvider>
-        <span>&emsp;</span>
-        <img src="https://img.icons8.com/ios-filled/50/000000/search--v1.png" />
-        <br /> <br />
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
+              {allStore.map((item,index) => (
+                <MenuItem value={index}>{item}</MenuItem>
+              ))}
+              
+            </SearchBox>
+            <Stack direction="row">
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="選取起始時間"
+                  value={startDate}
+                  onChange={(newValue) => {
+                    setStartDate(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <SearchBox variant="filled" {...params} />
+                  )}
+                />
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="選取結束時間"
+                  value={endDate}
+                  onChange={(newValue) => {
+                    setEndDate(newValue);
+                  }}
+                  renderInput={(params) => (
+                    <SearchBox variant="filled" {...params} />
+                  )}
+                />
+              </LocalizationProvider>
+              <Button size="large" color="inherit">
+                <Search fontSize="large" />
+              </Button>
+            </Stack>
+          </Stack>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHeads id="report" />
+
               <TableRow>
-                <TableCell
-                  align="center"
-                  style={{
-                    backgroundColor: "#6379A1",
-                    color: "white",
-                    width: "33%",
-                  }}
-                >
-                  產品名稱
-                </TableCell>
-                <TableCell
-                  align="center"
-                  style={{
-                    backgroundColor: "#6379A1",
-                    color: "white",
-                    width: "33%",
-                  }}
-                >
-                  銷售總額(元)
-                </TableCell>
-                <TableCell
-                  align="center"
-                  style={{
-                    backgroundColor: "#6379A1",
-                    color: "white",
-                    width: "33%",
-                  }}
-                >
-                  銷售總數(份)
-                </TableCell>
+                <TableCell align="center">Product</TableCell>
+                <TableCell align="center">30</TableCell>
+                <TableCell align="center">1</TableCell>
               </TableRow>
-            </TableHead>
-            <TableRow>
-              <TableCell align="center">
-                <TextField
-                  id="input-with-sx"
-                  label="搜尋產品"
-                  variant="standard"
-                  type="search"
-                />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell align="center">Product</TableCell>
-              <TableCell align="center">30</TableCell>
-              <TableCell align="center">1</TableCell>
-            </TableRow>
-
-            
-          </Table>
-
-          {/* <Box>
-            <Box sx={{ display: "flex", mx: 20, my: 1 }}>
-              <TextField
-                id="input-with-sx"
-                label="搜尋產品"
-                variant="standard"
-                type="search"
-              />
-            </Box>
-          </Box>
-                  
-          <Table>
-            <TableCell align="center" style={{ width: "33%" }}>
-              Product
-            </TableCell>
-            <TableCell align="center" style={{ width: "33%" }}>
-              30
-            </TableCell>
-            <TableCell align="center" style={{ width: "33%" }}>
-              1
-            </TableCell>
-          </Table> */}
-          {/* <TableRow>
-              <TableCell align="center">
-            
-                <TextField
-                  id="input-with-sx"
-                  label="搜尋產品"
-                  variant="standard"
-                  type="search"
-                />
-              </TableCell>
-            </TableRow> */}
-        </TableContainer>
-      </Reportcon>
+            </Table>
+          </TableContainer>
+        </Content>
+      </BodyContainer>
     </>
   );
 };

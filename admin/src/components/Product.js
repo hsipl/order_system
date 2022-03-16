@@ -7,7 +7,8 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
+import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 
 import Table from "@mui/material/Table";
 import TableCell from "@mui/material/TableCell";
@@ -41,7 +42,6 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import Draggable from "react-draggable";
 import Chip from "@mui/material/Chip";
-
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -163,7 +163,6 @@ const Product = () => {
       ["tag"]: getProductId[index],
       ["tagName"]: getProductTag[index],
     });
- 
   };
 
   const handleDeClose = () => {
@@ -197,14 +196,11 @@ const Product = () => {
     });
 
     setCurrentId(id);
-
   };
 
   const handleEditClose = () => {
     setOpenEdit(false);
   };
-
-
 
   const url_Sauce = "http://localhost:8000/api/tag";
   const url_Product = "http://localhost:8000/api/product";
@@ -621,461 +617,48 @@ const Product = () => {
 
   return (
     <>
-      {/* <Snackbar
+      <BodyContainer>
+        {/* <Snackbar
         open={SnackbarOpen}
         autoHideDuration={1000}
         onClose={handleSnackClose}
         message="Sucess!"
       ></Snackbar> */}
-      <ToastContainer />
-      <Navbar />
-      <Productcon id="product">
-        <Stack spacing={2}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            {breadcrumbs}
-          </Breadcrumbs>
-        </Stack>
-        <br />
+        <ToastContainer />
+        <Navbar />
+        <Content>
+          <Breadcrumb name="商品管理"/>
 
-        {/*Tab*/}
-        <Box sx={{ width: "100%", typography: "body1" }}>
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList onChange={handleChange}>
-                <Tab label="商品資訊" value="1" />
-                <Tab label="調味料資訊" value="2" />
-              </TabList>
-              {/*Tab1*/}
-              {/****************************************************************************/}
-              <TabPanel value="1">
-
-                <SearchContainer>
-                  <Box>
-                    <SearchBox
-                      id="SearchProductName"
-                      label="商品名稱"
-                      variant="filled"
-                      autoComplete
-                      type="search"
-                      name="name"
-                      value={searchInput.name}
-                      onChange={SearchOnChange}
-                    />
-                  </Box>
-                  <SearchBox
-                    id="SearchSauceStatus"
-                    select
-                    label="使用狀態"
-                    value={searchInput.status}
-                    onChange={SearchOnChange}
-                    variant="filled"
-                    name="status"
-                    sx={{ width: "10rem" }}
-                  >
-                    <MenuItem value="">
-                      <em style={{ color: "gray" }}>請選擇</em>
-                    </MenuItem>
-                    <MenuItem value={0}>販賣中</MenuItem>
-                    <MenuItem value={1}>已停售</MenuItem>
-                  </SearchBox>
-                  <SearchBox
-                    id="SearchSauceStatus"
-                    select
-                    label="類別"
-                    value={searchInput.category}
-                    onChange={SearchOnChange}
-                    variant="filled"
-                    name="category"
-                    sx={{ width: "10rem" }}
-                  >
-                    <MenuItem value="">
-                      <em style={{ color: "gray" }}>請選擇</em>
-                    </MenuItem>
-                    <MenuItem value={0}>肉類</MenuItem>
-                    <MenuItem value={1}>蔬菜類</MenuItem>
-                    <MenuItem value={2}>加工類</MenuItem>
-                    <MenuItem value={3}>其他類</MenuItem>
-                  </SearchBox>
-                  <Button
-                    size="large"
-                    color="inherit"
-                    onClick={() => handleProductSearch()}
-                  >
-                    <Search fontSize="large" />
-                  </Button>
-                  <Button onClick={handleClean}>清除搜尋</Button>
-                  <Button
-                    onClick={handleClickOpen}
-                    variant="contained"
-                    color="success"
-                    className="AddBTN"
-                  >
-                    新增商品資訊
-                  </Button>
-                </SearchContainer>
-
-                {/* Dialog1*/}
-
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  aria-labelledby="alert-dialog-title"
-                  aria-describedby="alert-dialog-description"
-                  onBackdropClick="false"
-                  maxWidth="xs"
-                >
-                  <DialogTitle
-                    id="alert-dialog-title"
-                    style={{ textAlign: "center", cursor: "move" }}
-                  >
-                    {"新增商品資訊"}
-                  </DialogTitle>
-
-                  <AddFormProduct onSubmit={handleProductSubmit}>
-                    <DialogContent>
-                      <TextField
-                        onChange={handleProductInfo}
-                        value={productInfo.name}
-                        name="name"
+          {/*Tab*/}
+          <Box sx={{ width: "100%", typography: "body1" }}>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList onChange={handleChange}>
+                  <Tab label="商品資訊" value="1" />
+                  <Tab label="調味料資訊" value="2" />
+                </TabList>
+                {/*Tab1*/}
+                {/****************************************************************************/}
+                <TabPanel value="1">
+                  <SearchContainer>
+                    <Box>
+                      <SearchBox
+                        id="SearchProductName"
                         label="商品名稱"
-                        variant="outlined"
-                        sx={{ width: 390 }}
-                        style={{ textAlign: "center" }}
-                        required="true"
+                        variant="filled"
+                        autoComplete
+                        type="search"
+                        name="name"
+                        value={searchInput.name}
+                        onChange={SearchOnChange}
                       />
-                      <br /> <br />
-                      <TextField
-                        onChange={handleProductInfo}
-                        value={productInfo.price}
-                        name="price"
-                        label="價格"
-                        variant="outlined"
-                        sx={{ width: 390 }}
-                        required="true"
-                      />
-                      <br /> <br />
-                      <TextField
-                        select
-                        onChange={handleProductInfo}
-                        value={productInfo.category}
-                        name="category"
-                        label="種類"
-                        sx={{ width: 390 }}
-                      >
-                        <MenuItem value={0}>肉類</MenuItem>
-                        <MenuItem value={1}>蔬菜類</MenuItem>
-                        <MenuItem value={2}>加工類</MenuItem>
-                        <MenuItem value={3}>其他類</MenuItem>
-                      </TextField>
-                      <br />
-                      <br />
-                      <InputLabel id="demo-simple-select-label">
-                        調味料選項
-                      </InputLabel>
-                      <FormGroup row={true}>{sauceTag}</FormGroup>
-                      <br />
-                      <input
-                        type="file"
-                        accept="image/png, image/jpeg"
-                        onChange={onImageChange}
-                      ></input>
-                      <img width="100#" src={image} />
-                    </DialogContent>
-                    <DialogActions sx={{ height: 0 }}>
-                      <Button onClick={handleClose}>取消</Button>
-                      <Button type="submit" >
-                        確認
-                      </Button>
-                    </DialogActions>
-                  </AddFormProduct>
-                </Dialog>
-
-                <br />
-                <br />
-
-                <TableContainer sx={{ maxHeight: 500 }} component={Paper}>
-                  <Table stickyHeader>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          編號
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          產品名稱
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          價格
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          圖片
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          類別
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          狀態
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          操作
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-
-                    {filteredProduct.map((item, index) => (
-                      <TableProduct
-                        productId={item.id}
-                        productName={item.name}
-                        productCategory={item.category}
-                        productImage={item.image}
-                        productPrice={item.price}
-                        ProductTag={getProductTag[index]}
-                        productStatus={item.status}
-                        // CreatedAt={item.createdAt}
-                        // item={item}
-                        Del={() =>
-                          handleProductDeClickOpen(item.id, item, index)
-                        }
-                        Edit={() => handleProductEditOpen(item.id, item, index)}
-                      />
-                    ))}
-                    {/* 刪除商品Dialog */}
-                    <Dialog
-                      open={openDe}
-                      onClose={handleDeClose}
-                      aria-labelledby="delete"
-                      aria-describedby="delete"
-                      onBackdropClick="false"
-                      fullWidth="true"
-                      maxWidth="xs"
-                      PaperComponent={PaperComponent}
-                    >
-                      <DialogTitle id="delete" style={{ cursor: "move" }}>
-                        {"確定要刪除此商品?"}
-                      </DialogTitle>
-                      <DialogContent>
-                        <List aria-label="mailbox folders">
-                          <ListItem button>
-                            <ListItemText
-                              primary="產品名稱 :"
-                              sx={{ maxWidth: "50%" }}
-                            />
-                            <Chip
-                              label={currentInfo.name}
-                              style={{ margin: "auto" }}
-                            />
-                          </ListItem>
-                          <Divider />
-                          <ListItem button>
-                            <ListItemText
-                              primary="價錢 : "
-                              sx={{ maxWidth: "50%" }}
-                            />
-                            <Chip
-                              label={currentInfo.price}
-                              style={{ margin: "auto" }}
-                            />
-                          </ListItem>
-                          <Divider />
-                          <ListItem button>
-                            <ListItemText
-                              primary="圖片 : "
-                              sx={{ maxWidth: "55%" }}
-                            />
-                            <img
-                              src={"http://localhost:8000/" + currentInfo.image}
-                              alt={currentInfo.image}
-                              width="150"
-                              style={{ margin: "auto" }}
-                            />
-                          </ListItem>
-                          <Divider />
-
-                          <ListItem button>
-                            <ListItemText
-                              primary="類別 : "
-                              sx={{ maxWidth: "50%" }}
-                            />
-                            <Chip
-                              label={currentInfo.category2}
-                              style={{ margin: "auto" }}
-                            />
-                          </ListItem>
-
-                          <Divider />
-
-                          <ListItem button>
-                            <ListItemText
-                              primary="調味料 : "
-                              sx={{ maxWidth: "50%" }}
-                            />
-                            <Chip
-                              label={"" + currentInfo.tagName + ""}
-                              style={{ margin: "auto" }}
-                            />
-                          </ListItem>
-                        </List>
-
-                        <DialogActions sx={{ height: 0 }}>
-                          <Button onClick={handleDeClose}>取消</Button>
-
-                          <Button onClick={() => handleProductDelete()}>
-                            確認
-                          </Button>
-                        </DialogActions>
-                      </DialogContent>
-                    </Dialog>
-                    {/* 修改商品Dialog */}
-                    <Dialog
-                      open={openEdit}
-                      onClose={handleProductEditOpen}
-                      aria-labelledby="edit"
-                      aria-describedby="edit"
-                      onBackdropClick="false"
-                      fullWidth="true"
-                      maxWidth="xs"
-                      // PaperComponent={PaperComponent}
-                    >
-                      <DialogTitle
-                        id="edit"
-                        style={{ textAlign: "center", cursor: "move" }}
-                      >
-                        {"修改商品資訊"}
-                      </DialogTitle>
-
-                      <AddFormProduct onSubmit={handleProductEditSubmit}>
-                        <DialogContent>
-                          <TextField
-                            onChange={handleProductInfo}
-                            name="name"
-                            label="商品名稱"
-                            variant="outlined"
-                            sx={{ width: 300 }}
-                            defaultValue={currentInfo.name}
-                          />
-                          <br /> <br />
-                          <TextField
-                            onChange={handleProductInfo}
-                            defaultValue={currentInfo.price}
-                            name="price"
-                            label="價格"
-                            variant="outlined"
-                            sx={{ width: 300 }}
-                            required
-                          />
-                          <br /> <br />
-                          <TextField
-                            select
-                            onChange={handleProductInfo}
-                            name="category"
-                            label="種類"
-                            sx={{ width: 300 }}
-                            defaultValue={currentInfo.category}
-                          >
-                            <MenuItem value={0}>肉類</MenuItem>
-                            <MenuItem value={1}>蔬菜類</MenuItem>
-                            <MenuItem value={2}>加工類</MenuItem>
-                            <MenuItem value={3}>其他類</MenuItem>
-                          </TextField>
-                          <br />
-                          <br />
-                          <InputLabel id="demo-simple-select-label">
-                            調味料選項
-                          </InputLabel>
-                          <FormGroup row={true}>{sauceTag}</FormGroup>
-                          <br />
-                          <input
-                            type="file"
-                            accept="image/png, image/jpeg"
-                            onChange={onImageChange}
-                            // value={"http://localhost:8000/" + currentInfo.image}
-                            // value="C:/Users/user/Desktop/gogoro.jfif"
-                          ></input>
-                          <img width="100#" src={image} />
-                        </DialogContent>
-                        <DialogActions sx={{ height: 0 }}>
-                          <Button onClick={handleEditClose}>取消</Button>
-                          <Button type="submit" onClick={handleEditClose}>
-                            確認
-                          </Button>
-                        </DialogActions>
-                      </AddFormProduct>
-                    </Dialog>
-                  </Table>
-                </TableContainer>
-
-                {/*****調味料**************************************************/}
-              </TabPanel>
-              {/*Tab2*/}
-              <TabPanel value="2">
-                <SearchContainer>
-                  <Box>
-                    <SearchBox
-                      id="SearchProductName"
-                      label="調味料名稱"
-                      variant="filled"
-                      autoComplete
-                      // type="search"
-                      name="name"
-                      value={searchSauceInput.name}
-                      onChange={SearchSauceOnChange}
-                    />
+                    </Box>
                     <SearchBox
                       id="SearchSauceStatus"
                       select
                       label="使用狀態"
-                      value={searchSauceInput.status}
-                      onChange={SearchSauceOnChange}
+                      value={searchInput.status}
+                      onChange={SearchOnChange}
                       variant="filled"
                       name="status"
                       sx={{ width: "10rem" }}
@@ -1083,231 +666,638 @@ const Product = () => {
                       <MenuItem value="">
                         <em style={{ color: "gray" }}>請選擇</em>
                       </MenuItem>
-                      <MenuItem value={0}>使用中</MenuItem>
-                      <MenuItem value={1}>已停用</MenuItem>
+                      <MenuItem value={0}>販賣中</MenuItem>
+                      <MenuItem value={1}>已停售</MenuItem>
                     </SearchBox>
-                  </Box>
-                  <Button
-                    size="large"
-                    color="inherit"
-                    onClick={() => handleSauceSearch()}
-                  >
-                    <Search fontSize="large" />
-                  </Button>
-                  <Button onClick={handleClean}>清除搜尋</Button>
-                  <Button
-                    onClick={handleClickOpen}
-                    variant="contained"
-                    color="success"
-                    className="AddBTN"
-                  >
-                    新增調味料資訊
-                  </Button>
-                </SearchContainer>
-
-                {/* Dialog1*/}
-                <Dialog
-                  open={open}
-                  onClose={handleClose}
-                  onBackdropClick="false"
-                  // PaperComponent={PaperComponent}
-                >
-                  <DialogTitle
-                    id="alert-dialog-title"
-                    style={{ textAlign: "center", cursor: "move" }}
-                  >
-                    {"新增調味料資訊"}
-                  </DialogTitle>
-
-                  <AddForm
-                    onSubmit={handleSubmit}
-                    style={{ height: "280px", width: "350px" }}
-                  >
-                    <DialogContent>
-                      <TextField
-                        onChange={handleSauceInfo}
-                        value={sauceInfo.tag}
-                        name="tag"
-                        label="調味料名稱"
-                        variant="outlined"
-                        sx={{ width: 300 }}
-                        required="true"
-                      />
-                      <br /> <br />
-                      <TextField
-                        select
-                        onChange={handleSauceInfo}
-                        value={sauceInfo.status}
-                        name="status"
-                        label="狀態"
-                        sx={{ width: 300 }}
-                        defaultValue={0}
-                      >
-                        <MenuItem value={0}>使用中</MenuItem>
-                        <MenuItem value={1}>未使用</MenuItem>
-                      </TextField>
-                      <br />
-                      <br />
-                    </DialogContent>
-                    <DialogActions sx={{ height: 0 }}>
-                      <Button onClick={handleClose}>取消</Button>
-                      <Button type="submit" onClick={handleClose}>
-                        確認
-                      </Button>
-                    </DialogActions>
-                  </AddForm>
-                </Dialog>
-
-                <br />
-                <br />
-                <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
-                  <Table stickyHeader>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          編號
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          調味料名稱
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          狀態
-                        </TableCell>
-
-                        <TableCell
-                          align="center"
-                          style={{
-                            backgroundColor: "#6379A1",
-                            color: "white",
-                          }}
-                        >
-                          操作
-                        </TableCell>
-                      </TableRow>
-                    </TableHead>
-                 
-
-                    {filtered.map((item, index) => (
-                      <TableProduct
-                        TagId={item.id}
-                        TagTag={item.tag}
-                        TagStatus={item.status}
-                        Del={() => handleSauceDeClickOpen(item)}
-                        Edit={() => handleSauceEditOpen(item)}
-                      />
-                    ))}
-                    {/* 刪除調味料Dialog */}
-                    <Dialog
-                      open={openDe}
-                      onClose={handleDeClose}
-                      aria-labelledby="delete"
-                      aria-describedby="delete"
-                      onBackdropClick="false"
-                      fullWidth="true"
-                      maxWidth="xs"
-                      PaperComponent={PaperComponent}
+                    <SearchBox
+                      id="SearchSauceStatus"
+                      select
+                      label="類別"
+                      value={searchInput.category}
+                      onChange={SearchOnChange}
+                      variant="filled"
+                      name="category"
+                      sx={{ width: "10rem" }}
                     >
-                      <DialogTitle id="delete" style={{ cursor: "move" }}>
-                        {"確定要刪除此項目?"}
-                      </DialogTitle>
-                      <DialogContent style={{ textAlign: "right" }}>
-                        <List aria-label="mailbox folders">
-                          <ListItem button>
-                            <ListItemText
-                              primary="調味料名稱 :"
-                              sx={{ maxWidth: "70%" }}
-                            />
-                            <Chip label={currentSauce.tag} />
-                          </ListItem>
-                          <Divider />
-                        </List>
+                      <MenuItem value="">
+                        <em style={{ color: "gray" }}>請選擇</em>
+                      </MenuItem>
+                      <MenuItem value={0}>肉類</MenuItem>
+                      <MenuItem value={1}>蔬菜類</MenuItem>
+                      <MenuItem value={2}>加工類</MenuItem>
+                      <MenuItem value={3}>其他類</MenuItem>
+                    </SearchBox>
+                    <Button
+                      size="large"
+                      color="inherit"
+                      onClick={() => handleProductSearch()}
+                    >
+                      <Search fontSize="large" />
+                    </Button>
+                    <Button onClick={handleClean}>清除搜尋</Button>
+                    <Button
+                      onClick={handleClickOpen}
+                      variant="contained"
+                      color="success"
+                      className="AddBTN"
+                    >
+                      新增商品資訊
+                    </Button>
+                  </SearchContainer>
 
-                        <Button onClick={handleDeClose}>取消</Button>
+                  {/* Dialog1*/}
 
-                        <Button onClick={() => handleDelete()}>確認</Button>
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                    onBackdropClick="false"
+                    maxWidth="xs"
+                  >
+                    <DialogTitle
+                      id="alert-dialog-title"
+                      style={{ textAlign: "center", cursor: "move" }}
+                    >
+                      {"新增商品資訊"}
+                    </DialogTitle>
+
+                    <AddFormProduct onSubmit={handleProductSubmit}>
+                      <DialogContent>
+                        <TextField
+                          onChange={handleProductInfo}
+                          value={productInfo.name}
+                          name="name"
+                          label="商品名稱"
+                          variant="outlined"
+                          sx={{ width: 390 }}
+                          style={{ textAlign: "center" }}
+                          required="true"
+                        />
+                        <br /> <br />
+                        <TextField
+                          onChange={handleProductInfo}
+                          value={productInfo.price}
+                          name="price"
+                          label="價格"
+                          variant="outlined"
+                          sx={{ width: 390 }}
+                          required="true"
+                        />
+                        <br /> <br />
+                        <TextField
+                          select
+                          onChange={handleProductInfo}
+                          value={productInfo.category}
+                          name="category"
+                          label="種類"
+                          sx={{ width: 390 }}
+                        >
+                          <MenuItem value={0}>肉類</MenuItem>
+                          <MenuItem value={1}>蔬菜類</MenuItem>
+                          <MenuItem value={2}>加工類</MenuItem>
+                          <MenuItem value={3}>其他類</MenuItem>
+                        </TextField>
+                        <br />
+                        <br />
+                        <InputLabel id="demo-simple-select-label">
+                          調味料選項
+                        </InputLabel>
+                        <FormGroup row={true}>{sauceTag}</FormGroup>
+                        <br />
+                        <input
+                          type="file"
+                          accept="image/png, image/jpeg"
+                          onChange={onImageChange}
+                        ></input>
+                        <img width="100#" src={image} />
                       </DialogContent>
-                    </Dialog>
-                    {/* 修改調味料Dialog */}
-                    <Dialog
-                      open={openEdit}
-                      onClose={handleSauceEditOpen}
-                      aria-labelledby="edit"
-                      aria-describedby="edit"
-                      onBackdropClick="false"
-                      fullWidth="true"
-                      maxWidth="xs"
-                      // PaperComponent={PaperComponent}
-                    >
-                      <DialogTitle
-                        id="edit"
-                        style={{ textAlign: "center", cursor: "move" }}
-                      >
-                        {"修改調味料資訊"}
-                      </DialogTitle>
+                      <DialogActions sx={{ height: 0 }}>
+                        <Button onClick={handleClose}>取消</Button>
+                        <Button type="submit">確認</Button>
+                      </DialogActions>
+                    </AddFormProduct>
+                  </Dialog>
 
-                      <AddForm
-                        style={{ height: "300px" }}
-                        onSubmit={handleEditSubmit}
-                      >
-                        <DialogContent>
-                          <TextField
-                            onChange={handleSauceInfo}
-                            defaultValue={currentSauce.tag}
-                            name="tag"
-                            label="調味料名稱"
-                            variant="outlined"
-                            sx={{ width: 380 }}
-                          />
-                          <br /> <br />
-                          <TextField
-                            select
-                            onChange={handleSauceInfo}
-                            defaultValue={currentSauce.status}
-                            name="status"
-                            label="狀態"
-                            sx={{ width: 380 }}
+                  <br />
+                  <br />
+
+                  <TableContainer sx={{ maxHeight: 500 }} component={Paper}>
+                    <Table stickyHeader>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
                           >
-                            <MenuItem value={0}>使用中</MenuItem>
-                            <MenuItem value={1}>未使用</MenuItem>
-                          </TextField>
-                          <br />
-                          <br />
+                            編號
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            產品名稱
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            價格
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            圖片
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            類別
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            狀態
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            操作
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+
+                      {filteredProduct.map((item, index) => (
+                        <TableProduct
+                          productId={item.id}
+                          productName={item.name}
+                          productCategory={item.category}
+                          productImage={item.image}
+                          productPrice={item.price}
+                          ProductTag={getProductTag[index]}
+                          productStatus={item.status}
+                          // CreatedAt={item.createdAt}
+                          // item={item}
+                          Del={() =>
+                            handleProductDeClickOpen(item.id, item, index)
+                          }
+                          Edit={() =>
+                            handleProductEditOpen(item.id, item, index)
+                          }
+                        />
+                      ))}
+                      {/* 刪除商品Dialog */}
+                      <Dialog
+                        open={openDe}
+                        onClose={handleDeClose}
+                        aria-labelledby="delete"
+                        aria-describedby="delete"
+                        onBackdropClick="false"
+                        fullWidth="true"
+                        maxWidth="xs"
+                        PaperComponent={PaperComponent}
+                      >
+                        <DialogTitle id="delete" style={{ cursor: "move" }}>
+                          {"確定要刪除此商品?"}
+                        </DialogTitle>
+                        <DialogContent>
+                          <List aria-label="mailbox folders">
+                            <ListItem button>
+                              <ListItemText
+                                primary="產品名稱 :"
+                                sx={{ maxWidth: "50%" }}
+                              />
+                              <Chip
+                                label={currentInfo.name}
+                                style={{ margin: "auto" }}
+                              />
+                            </ListItem>
+                            <Divider />
+                            <ListItem button>
+                              <ListItemText
+                                primary="價錢 : "
+                                sx={{ maxWidth: "50%" }}
+                              />
+                              <Chip
+                                label={currentInfo.price}
+                                style={{ margin: "auto" }}
+                              />
+                            </ListItem>
+                            <Divider />
+                            <ListItem button>
+                              <ListItemText
+                                primary="圖片 : "
+                                sx={{ maxWidth: "55%" }}
+                              />
+                              <img
+                                src={
+                                  "http://localhost:8000/" + currentInfo.image
+                                }
+                                alt={currentInfo.image}
+                                width="150"
+                                style={{ margin: "auto" }}
+                              />
+                            </ListItem>
+                            <Divider />
+
+                            <ListItem button>
+                              <ListItemText
+                                primary="類別 : "
+                                sx={{ maxWidth: "50%" }}
+                              />
+                              <Chip
+                                label={currentInfo.category2}
+                                style={{ margin: "auto" }}
+                              />
+                            </ListItem>
+
+                            <Divider />
+
+                            <ListItem button>
+                              <ListItemText
+                                primary="調味料 : "
+                                sx={{ maxWidth: "50%" }}
+                              />
+                              <Chip
+                                label={"" + currentInfo.tagName + ""}
+                                style={{ margin: "auto" }}
+                              />
+                            </ListItem>
+                          </List>
+
+                          <DialogActions sx={{ height: 0 }}>
+                            <Button onClick={handleDeClose}>取消</Button>
+
+                            <Button onClick={() => handleProductDelete()}>
+                              確認
+                            </Button>
+                          </DialogActions>
                         </DialogContent>
-                        <DialogActions sx={{ height: 40 }}>
-                          <Button onClick={handleEditClose}>取消</Button>
-                          <Button type="submit" onClick={handleEditClose}>
-                            確認
-                          </Button>
-                        </DialogActions>
-                      </AddForm>
-                    </Dialog>
-                  </Table>
-                </TableContainer>
-              </TabPanel>
-            </Box>
-          </TabContext>
-        </Box>
-      </Productcon>
+                      </Dialog>
+                      {/* 修改商品Dialog */}
+                      <Dialog
+                        open={openEdit}
+                        onClose={handleProductEditOpen}
+                        aria-labelledby="edit"
+                        aria-describedby="edit"
+                        onBackdropClick="false"
+                        fullWidth="true"
+                        maxWidth="xs"
+                        // PaperComponent={PaperComponent}
+                      >
+                        <DialogTitle
+                          id="edit"
+                          style={{ textAlign: "center", cursor: "move" }}
+                        >
+                          {"修改商品資訊"}
+                        </DialogTitle>
+
+                        <AddFormProduct onSubmit={handleProductEditSubmit}>
+                          <DialogContent>
+                            <TextField
+                              onChange={handleProductInfo}
+                              name="name"
+                              label="商品名稱"
+                              variant="outlined"
+                              sx={{ width: 300 }}
+                              defaultValue={currentInfo.name}
+                            />
+                            <br /> <br />
+                            <TextField
+                              onChange={handleProductInfo}
+                              defaultValue={currentInfo.price}
+                              name="price"
+                              label="價格"
+                              variant="outlined"
+                              sx={{ width: 300 }}
+                              required
+                            />
+                            <br /> <br />
+                            <TextField
+                              select
+                              onChange={handleProductInfo}
+                              name="category"
+                              label="種類"
+                              sx={{ width: 300 }}
+                              defaultValue={currentInfo.category}
+                            >
+                              <MenuItem value={0}>肉類</MenuItem>
+                              <MenuItem value={1}>蔬菜類</MenuItem>
+                              <MenuItem value={2}>加工類</MenuItem>
+                              <MenuItem value={3}>其他類</MenuItem>
+                            </TextField>
+                            <br />
+                            <br />
+                            <InputLabel id="demo-simple-select-label">
+                              調味料選項
+                            </InputLabel>
+                            <FormGroup row={true}>{sauceTag}</FormGroup>
+                            <br />
+                            <input
+                              type="file"
+                              accept="image/png, image/jpeg"
+                              onChange={onImageChange}
+                              // value={"http://localhost:8000/" + currentInfo.image}
+                              // value="C:/Users/user/Desktop/gogoro.jfif"
+                            ></input>
+                            <img width="100#" src={image} />
+                          </DialogContent>
+                          <DialogActions sx={{ height: 0 }}>
+                            <Button onClick={handleEditClose}>取消</Button>
+                            <Button type="submit" onClick={handleEditClose}>
+                              確認
+                            </Button>
+                          </DialogActions>
+                        </AddFormProduct>
+                      </Dialog>
+                    </Table>
+                  </TableContainer>
+
+                  {/*****調味料**************************************************/}
+                </TabPanel>
+                {/*Tab2*/}
+                <TabPanel value="2">
+                  <SearchContainer>
+                    <Box>
+                      <SearchBox
+                        id="SearchProductName"
+                        label="調味料名稱"
+                        variant="filled"
+                        autoComplete
+                        // type="search"
+                        name="name"
+                        value={searchSauceInput.name}
+                        onChange={SearchSauceOnChange}
+                      />
+                      <SearchBox
+                        id="SearchSauceStatus"
+                        select
+                        label="使用狀態"
+                        value={searchSauceInput.status}
+                        onChange={SearchSauceOnChange}
+                        variant="filled"
+                        name="status"
+                        sx={{ width: "10rem" }}
+                      >
+                        <MenuItem value="">
+                          <em style={{ color: "gray" }}>請選擇</em>
+                        </MenuItem>
+                        <MenuItem value={0}>使用中</MenuItem>
+                        <MenuItem value={1}>已停用</MenuItem>
+                      </SearchBox>
+                    </Box>
+                    <Button
+                      size="large"
+                      color="inherit"
+                      onClick={() => handleSauceSearch()}
+                    >
+                      <Search fontSize="large" />
+                    </Button>
+                    <Button onClick={handleClean}>清除搜尋</Button>
+                    <Button
+                      onClick={handleClickOpen}
+                      variant="contained"
+                      color="success"
+                      className="AddBTN"
+                    >
+                      新增調味料資訊
+                    </Button>
+                  </SearchContainer>
+
+                  {/* Dialog1*/}
+                  <Dialog
+                    open={open}
+                    onClose={handleClose}
+                    onBackdropClick="false"
+                    // PaperComponent={PaperComponent}
+                  >
+                    <DialogTitle
+                      id="alert-dialog-title"
+                      style={{ textAlign: "center", cursor: "move" }}
+                    >
+                      {"新增調味料資訊"}
+                    </DialogTitle>
+
+                    <AddForm
+                      onSubmit={handleSubmit}
+                      style={{ height: "280px", width: "350px" }}
+                    >
+                      <DialogContent>
+                        <TextField
+                          onChange={handleSauceInfo}
+                          value={sauceInfo.tag}
+                          name="tag"
+                          label="調味料名稱"
+                          variant="outlined"
+                          sx={{ width: 300 }}
+                          required="true"
+                        />
+                        <br /> <br />
+                        <TextField
+                          select
+                          onChange={handleSauceInfo}
+                          value={sauceInfo.status}
+                          name="status"
+                          label="狀態"
+                          sx={{ width: 300 }}
+                          defaultValue={0}
+                        >
+                          <MenuItem value={0}>使用中</MenuItem>
+                          <MenuItem value={1}>未使用</MenuItem>
+                        </TextField>
+                        <br />
+                        <br />
+                      </DialogContent>
+                      <DialogActions sx={{ height: 0 }}>
+                        <Button onClick={handleClose}>取消</Button>
+                        <Button type="submit" onClick={handleClose}>
+                          確認
+                        </Button>
+                      </DialogActions>
+                    </AddForm>
+                  </Dialog>
+
+                  <br />
+                  <br />
+                  <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                    <Table stickyHeader>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            編號
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            調味料名稱
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            狀態
+                          </TableCell>
+
+                          <TableCell
+                            align="center"
+                            style={{
+                              backgroundColor: "#6379A1",
+                              color: "white",
+                            }}
+                          >
+                            操作
+                          </TableCell>
+                        </TableRow>
+                      </TableHead>
+
+                      {filtered.map((item, index) => (
+                        <TableProduct
+                          TagId={item.id}
+                          TagTag={item.tag}
+                          TagStatus={item.status}
+                          Del={() => handleSauceDeClickOpen(item)}
+                          Edit={() => handleSauceEditOpen(item)}
+                        />
+                      ))}
+                      {/* 刪除調味料Dialog */}
+                      <Dialog
+                        open={openDe}
+                        onClose={handleDeClose}
+                        aria-labelledby="delete"
+                        aria-describedby="delete"
+                        onBackdropClick="false"
+                        fullWidth="true"
+                        maxWidth="xs"
+                        PaperComponent={PaperComponent}
+                      >
+                        <DialogTitle id="delete" style={{ cursor: "move" }}>
+                          {"確定要刪除此項目?"}
+                        </DialogTitle>
+                        <DialogContent style={{ textAlign: "right" }}>
+                          <List aria-label="mailbox folders">
+                            <ListItem button>
+                              <ListItemText
+                                primary="調味料名稱 :"
+                                sx={{ maxWidth: "70%" }}
+                              />
+                              <Chip label={currentSauce.tag} />
+                            </ListItem>
+                            <Divider />
+                          </List>
+
+                          <Button onClick={handleDeClose}>取消</Button>
+
+                          <Button onClick={() => handleDelete()}>確認</Button>
+                        </DialogContent>
+                      </Dialog>
+                      {/* 修改調味料Dialog */}
+                      <Dialog
+                        open={openEdit}
+                        onClose={handleSauceEditOpen}
+                        aria-labelledby="edit"
+                        aria-describedby="edit"
+                        onBackdropClick="false"
+                        fullWidth="true"
+                        maxWidth="xs"
+                        // PaperComponent={PaperComponent}
+                      >
+                        <DialogTitle
+                          id="edit"
+                          style={{ textAlign: "center", cursor: "move" }}
+                        >
+                          {"修改調味料資訊"}
+                        </DialogTitle>
+
+                        <AddForm
+                          style={{ height: "300px" }}
+                          onSubmit={handleEditSubmit}
+                        >
+                          <DialogContent>
+                            <TextField
+                              onChange={handleSauceInfo}
+                              defaultValue={currentSauce.tag}
+                              name="tag"
+                              label="調味料名稱"
+                              variant="outlined"
+                              sx={{ width: 380 }}
+                            />
+                            <br /> <br />
+                            <TextField
+                              select
+                              onChange={handleSauceInfo}
+                              defaultValue={currentSauce.status}
+                              name="status"
+                              label="狀態"
+                              sx={{ width: 380 }}
+                            >
+                              <MenuItem value={0}>使用中</MenuItem>
+                              <MenuItem value={1}>未使用</MenuItem>
+                            </TextField>
+                            <br />
+                            <br />
+                          </DialogContent>
+                          <DialogActions sx={{ height: 40 }}>
+                            <Button onClick={handleEditClose}>取消</Button>
+                            <Button type="submit" onClick={handleEditClose}>
+                              確認
+                            </Button>
+                          </DialogActions>
+                        </AddForm>
+                      </Dialog>
+                    </Table>
+                  </TableContainer>
+                </TabPanel>
+              </Box>
+            </TabContext>
+          </Box>
+        </Content>
+      </BodyContainer>
     </>
   );
 };

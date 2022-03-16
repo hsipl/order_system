@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { styled } from "@mui/material/styles";
 import { Paper } from "@mui/material";
-import Navbar from "../components/Navbar";
+// import Navbar from "../components/Navbar";
 
 import styledC from "styled-components";
 import Breadcrumbs from "@mui/material/Breadcrumbs";

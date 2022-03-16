@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { styled } from "@mui/material/styles";
 import { useHistory } from "react-router";
+import axios from "axios";
 import {
+  styled,
   Dialog,
   DialogTitle,
   TextField,
@@ -17,7 +17,6 @@ const LoginContainer = styled(Dialog)({
   },
 });
 
-
 const Input = styled(TextField)({
   margin: "1rem 5rem",
   width: "40vh",
@@ -31,13 +30,12 @@ const Wrong = styled(Alert)({
   margin: "1rem 5rem",
 });
 
-
 const Login = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
   const [userLogin, setUserLogin] = useState(false);
-  const [errMes, setErrMes] = useState(false);
+  const [errMes, setErrMes] = useState("");
 
   useEffect(() => {
     if (localStorage.getItem("user-info")) {
@@ -59,32 +57,59 @@ const Login = () => {
       "Content-Type": "application/json",
     },
     withCredentials: true,
-  }
+  };
 
-  const url = "http://localhost:8000/api/user/login"
+  const url = "http://localhost:8000/api/user/login";
 
   async function handleSubmit(e) {
     e.preventDefault();
     axios
-      .post(
-        url,
-        { username, password },
-          config
-      )
+      .post(url, { username, password }, config)
       .then((result) => {
-        console.log(result.data.msg);
-        setUserLogin(true);
-        localStorage.setItem("StoreId", JSON.stringify(result.data.data.storeId.id));
-        history.push("/");
+        let UserInfo = result.data.data;
+
+        if (UserInfo.type === 1) {
+          console.log(result.data.msg);
+          setUserLogin(true);
+
+          localStorage.setItem("UserName", JSON.stringify(UserInfo.name));
+
+          localStorage.setItem(
+            "StoreName",
+            JSON.stringify(UserInfo.storeId.name)
+          );
+          localStorage.setItem(
+            "StoreStatus",
+            JSON.stringify(UserInfo.storeId.status)
+          );
+
+          localStorage.setItem(
+            "UserAccount",
+            JSON.stringify(UserInfo.username)
+          );
+          localStorage.setItem(
+            "StoreLogo",
+            JSON.stringify(UserInfo.storeId.image)
+          );
+          localStorage.setItem(
+            "StoreType",
+            JSON.stringify(UserInfo.storeId.type)
+          );
+          localStorage.setItem(
+            "Tabs",
+            JSON.stringify(1)
+          );
+          history.push("/");
+        } else {
+          setUserLogin(false);
+          setErrMes(1);
+        }
       })
       .catch((err) => {
         console.log(err);
         setUserLogin(false);
-        setErrMes(true);
+        setErrMes(0);
       });
-      localStorage.setItem("name", JSON.stringify(username));
-      localStorage.setItem("password", JSON.stringify(password));
-      localStorage.setItem("Tabs", "1");
   }
 
   const handleKeypress = (e) => {
@@ -92,7 +117,6 @@ const Login = () => {
       handleSubmit();
     }
   };
-
   return (
     <>
       <LoginContainer open="true" maxWidth="xl">
@@ -119,12 +143,9 @@ const Login = () => {
               label="密碼"
               onKeyPress={handleKeypress}
             />
-            {errMes == true && <Wrong severity="warning">帳號或密碼錯誤</Wrong>}
-            <Submit
-              id="ButtonSubmit"
-              variant="contained"
-              type="submit"
-            >
+            {errMes === 0 && <Wrong severity="warning">帳號或密碼錯誤</Wrong>}
+            {errMes === 1 && <Wrong severity="warning">權限不足</Wrong>}
+            <Submit id="ButtonSubmit" variant="contained" type="submit">
               登入
             </Submit>
           </Stack>
