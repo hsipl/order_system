@@ -1,5 +1,12 @@
 import React from "react";
-import { styled, Button, TableCell, TableHead, TableRow } from "@mui/material";
+import {
+  styled,
+  Button,
+  TableCell,
+  TableHead,
+  TableRow,
+  Tooltip,
+} from "@mui/material";
 import { Edit, Delete } from "@material-ui/icons";
 
 export const TableHeads = (props) => {
@@ -41,12 +48,16 @@ export function ControlCell(props) {
   } else {
     return (
       <>
-        <Button onClick={DelBTN}>
-          <Delete />
-        </Button>
-        <Button onClick={EditBTN}>
-          <Edit />
-        </Button>
+        <Tooltip title="刪除">
+          <Button onClick={DelBTN}>
+            <Delete />
+          </Button>
+        </Tooltip>
+        <Tooltip title="修改">
+          <Button onClick={EditBTN}>
+            <Edit />
+          </Button>
+        </Tooltip>
       </>
     );
   }
