@@ -13,8 +13,13 @@ export class OrderService {
         return order;
     }
 
-    public async getByDate(date:Date):Promise<Order[]>{
+    public async getByDate(date: Date): Promise<Order[]> {
         const order = await this.repository.getByDate(date);
+        return order;
+    }
+
+    public async getByDateAndStoreId(date: Date, storeId: number): Promise<Order[]> {
+        const order = await this.repository.getByDateAndStoreId(date, storeId);
         return order;
     }
 

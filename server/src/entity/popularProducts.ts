@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { Turnover } from './turnover';
 
-@Entity()
+@Entity('popular_products')
 export class PopularProducts extends BaseEntity {
     @PrimaryGeneratedColumn({ unsigned: true })
     id: number;
@@ -25,7 +25,7 @@ export class PopularProducts extends BaseEntity {
 
     @Column()
     quantity: number;
-    
+
     @Column()
     ranking: number;
 

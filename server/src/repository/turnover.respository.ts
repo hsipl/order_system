@@ -10,7 +10,7 @@ export class TurnoverRepository {
             }
         })
     }
-    async create(t: Turnover): Promise<Turnover> {
+    async create(t: Turnover[]): Promise<Turnover[]> {
         return await Turnover.save(t);
     }
 }

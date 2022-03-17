@@ -9,6 +9,9 @@ import { TurnoverService } from '../services/turnover.service';
 import { TurnoverRepository } from '../repository/turnover.respository';
 import { OrderService } from '../services/order.service';
 import { OrderRepository } from '../repository/order.repository';
+import PopularProductController from '../controller/popularProduct.controller';
+import { PopularProductsService } from '../services/popularProducts.service';
+import { PopularProductsRepository } from '../repository/popularProducts.respository';
 
 /**
  * @swagger
@@ -106,11 +109,7 @@ export default class HandoverRoute extends BasicRoute {
     const controller = new HandoverController(
       new HandoverService(new HandoverRepository(), new CacheService()),
     );
-    const t = new TurnoverController(new TurnoverService(new TurnoverRepository()),new OrderService(new OrderRepository()));
     const auth = new Auth();
-    this.router.get("/test", (req, res, next) =>
-    t.calculate(req, res, next)
-    );
     this.router.get("/date", auth.authAdmin.bind(auth), (req, res, next) =>
       controller.getByDate(req, res, next)
     );
@@ -126,7 +125,7 @@ export default class HandoverRoute extends BasicRoute {
     this.router.delete("/", auth.authAdmin.bind(auth), (req, res, next) =>
       controller.delete(req, res, next)
     );
-    
+
 
   }
 }

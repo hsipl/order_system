@@ -1,8 +1,9 @@
 import { FindConditions } from "typeorm";
 import { PopularProducts } from "../entity/popularProducts";
-import { IPopularProductParams } from "../interafaces/popularProducts.interface";
+import { IPopularProductCreateParams } from "../interafaces/popularProducts.interface";
 import { PopularProductsRepository } from "../repository/popularProducts.respository";
 export class PopularProductsService {
+
     constructor(private readonly repository: PopularProductsRepository) { }
 
     async get(query: FindConditions<PopularProducts>): Promise<PopularProducts[]> {
@@ -10,7 +11,7 @@ export class PopularProductsService {
         return popularProducts;
     }
 
-    async create(params: IPopularProductParams[]): Promise<PopularProducts[]> {
+    async create(params: IPopularProductCreateParams[]): Promise<PopularProducts[]> {
         const paramsData: PopularProducts[] = [];
         params.forEach(p => {
             const popularProducts = new PopularProducts();

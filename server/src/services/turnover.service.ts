@@ -11,10 +11,10 @@ export class TurnoverService {
         return turnover;
     }
 
-    public async create(params: ITurnoverCreateParams): Promise<Turnover> {
+    public async create(params: ITurnoverCreateParams[]): Promise<Turnover[]> {
         const turnover = new Turnover();
-        Object.assign(turnover, params)
-        return await this.repository.create(turnover);
+        Object.assign(turnover, params);
+        return await this.repository.create(Object.values(turnover));
     }
 
 }
