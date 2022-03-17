@@ -5,6 +5,7 @@ interface IOrderProductParams {
     description?: string;
     name?: string;
     price?: number;
+    quantity?: number;
 }
 
 export interface IOrderProductCreateParams extends IOrderProductParams {
@@ -12,4 +13,5 @@ export interface IOrderProductCreateParams extends IOrderProductParams {
     description: string;
     name: string;
     price: number;
+    quantity: number;
 }
