@@ -14,6 +14,7 @@ class AppState {
     productList = another.productList;
     tempShoppingList = another.tempShoppingList;
     totalAmount = another.totalAmount;
+    sheetNo = another.sheetNo;
   }
 
   List<ShoppingItem> get newShoppingList => shoppingList;
@@ -23,4 +24,6 @@ class AppState {
   List get newTempShoppingList => tempShoppingList;
 
   int get newTotalAmount => totalAmount;
+
+  int get newSheetNo => sheetNo;
 }

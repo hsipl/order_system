@@ -33,6 +33,10 @@ AppState reducer(AppState prevState, dynamic action) {
       prevState.totalAmount += item.quantity * int.parse(item.product.price);
     }
     newState.totalAmount = prevState.totalAmount;
+  } else if (action is UpdateSheetNo) {
+    prevState.sheetNo += 1;
+
+    newState.sheetNo = prevState.sheetNo;
   }
 
   // Product清單

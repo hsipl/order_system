@@ -1,6 +1,10 @@
+import 'package:client/model/app_state.dart';
 import 'package:client/widget/button_style/styled_buttons.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import '../../services/decorations.dart';
 import 'package:flutter/material.dart';
+
 class Calculator extends StatefulWidget {
   const Calculator({
     Key? key,
@@ -11,98 +15,150 @@ class Calculator extends StatefulWidget {
 }
 
 class _CalculatorState extends State<Calculator> {
-  List buttons = List.generate(
+  String calculatorValue = "0";
+  List buttons = [];
+
+  @override
+  void initState() {
+    buttons = List.generate(
       10,
-          (index) => ActionButton(
+      (index) => ActionButton(
           color: primaryTextColor,
           action: index.toString(),
-          onPress: () => print(index)));
+          onPress: () {
+            setState(() {
+              calculatorValue += index.toString();
+            });
+          }),
+    );
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        Row(
+    return StoreConnector<AppState, AppState>(
+      converter: (store) => store.state,
+      builder: (context, store) {
+        int totalAmount = store.newTotalAmount;
+        return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            buttons[7],
-            buttons[8],
-            buttons[9],
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buttons[4],
-            buttons[5],
-            buttons[6],
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            buttons[1],
-            buttons[2],
-            buttons[3],
-          ],
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ActionButton(
-                color: kCancelButtonColor,
-                action: "AC",
-                onPress: () => print(10)),
-            buttons[0],
-            ActionButton(
-                color: kCancelButtonColor,
-                action: "C",
-                onPress: () => print(10)),
-          ],
-        ),
-        const Divider(
-          height: 1,
-        ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(17,0,0,0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '實收',
-              style: TextStyle(fontSize: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                buttons[7],
+                buttons[8],
+                buttons[9],
+              ],
             ),
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(17,0,0,0),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '應收',
-              style: TextStyle(fontSize: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                buttons[4],
+                buttons[5],
+                buttons[6],
+              ],
             ),
-          ),
-        ),
-        const Divider(
-          height: 1,
-        ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(17,0,0,5),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(
-              '找零',
-              style: TextStyle(fontSize: 20),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                buttons[1],
+                buttons[2],
+                buttons[3],
+              ],
             ),
-          ),
-        ),
-      ],
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ActionButton(
+                    color: kCancelButtonColor,
+                    action: "AC",
+                    onPress: () {
+                      setState(() {
+                        calculatorValue = "0";
+                      });
+                    }),
+                buttons[0],
+                ActionButton(
+                    color: kCancelButtonColor,
+                    action: "C",
+                    onPress: () {
+                      setState(() {
+                        List<String> c = calculatorValue.split("");
+                        c.removeLast();
+                        if(c.isEmpty){
+                          calculatorValue = "0";
+                        }else{
+                          calculatorValue = c.join();
+                        }
+
+                      });
+                    }),
+              ],
+            ),
+            const Divider(
+              height: 1,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(17, 0, 17, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "實收",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    "${int.parse(calculatorValue)}",
+                    style: TextStyle(fontSize: 20),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(17, 0, 17, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "應收",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    "$totalAmount",
+                    style: TextStyle(fontSize: 20),
+                  )
+                ],
+              ),
+            ),
+            const Divider(
+              height: 1,
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(17, 0, 17, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "找零",
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  Text(
+                    "${int.parse(calculatorValue) - totalAmount}",
+                    style: TextStyle(fontSize: 20),
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

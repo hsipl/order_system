@@ -15,3 +15,7 @@ class ShoppingListClear {
 class UpdateTotalAmount{
   UpdateTotalAmount();
 }
+
+class UpdateSheetNo{
+  UpdateSheetNo();
+}

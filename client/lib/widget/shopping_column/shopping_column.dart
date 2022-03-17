@@ -21,6 +21,7 @@ class _ShoppingColumnState extends State<ShoppingColumn> {
       converter: (store) => store.state,
       builder: (context, store) {
         int totalAmount = store.newTotalAmount;
+        int sheetNo = store.newSheetNo;
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 5, 4, 5),
@@ -59,7 +60,7 @@ class _ShoppingColumnState extends State<ShoppingColumn> {
                                 BorderRadius.all(Radius.circular(20.0))),
                         child: Center(
                             child: Text(
-                          "編號:0\n總金額 $totalAmount 元",
+                          "編號 : $sheetNo \n總金額 $totalAmount 元",
                           textAlign: TextAlign.center,
                           style: const TextStyle(fontSize: 25),
                         )),
