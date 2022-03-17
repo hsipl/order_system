@@ -14,7 +14,7 @@ class AutoCal {
     new PopularProductController(new PopularProductsService(new PopularProductsRepository()), new OrderService(new OrderRepository())));
   constructor() {
     // 秒 分 時
-    this.cronJob = new CronJob('0 29 00 * * *', async () => {
+    this.cronJob = new CronJob('0 0 04 * * *', async () => {
       try {
         await this.controller.calculate();
       } catch (e) {
