@@ -21,12 +21,10 @@ class PopularProductController {
                     let keys = Object.keys(data);
                     const name: string = op.name;
                     if (keys.find(e => e == name)) {
-                        // data[name] = data[name] + Number(op.quantity);
-                        data[name] = data[name] + 1;
+                        data[name] = data[name] + Number(op.quantity);
                     } else {
                         let obj: { [k: string]: number } = {};
-                        obj[name] = 1;
-                        // obj[name] = Number(op.quantity);
+                        obj[name] = Number(op.quantity);
                         data = Object.assign(data, obj)
                     }
                 });

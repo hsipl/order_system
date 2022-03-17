@@ -24,8 +24,7 @@ class TurnoverController {
     }
 
     async calculate() {
-        const date = new Date('2022-03-20')
-        // const date = new Date()
+        const date = new Date()
         const order = await this.orderService.getByDate(date)
         if (order.length != 0) {
             // 需要加上判斷是否 order 為空的

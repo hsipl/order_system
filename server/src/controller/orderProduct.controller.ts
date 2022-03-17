@@ -41,7 +41,8 @@ class OrderProductController {
                     const description: string = p.description;
                     const price: number = product.price;
                     const name: string = product.name;
-                    const orderProduct: IOrderProductCreateParams = { description, price, name, orderId };
+                    const quantity: number = p.quantity;
+                    const orderProduct: IOrderProductCreateParams = { description, price, name, orderId, quantity };
                     params.push(orderProduct)
                 }
             });

@@ -14,14 +14,14 @@ import errorHandler from "./middlewares/errorhandler";
 import * as _ from "./bases/declares/session";
 import { config } from "./config/config";
 import getConn from "./entity/index";
-import Foo from "./utils/autocal";
+import AutoCal from "./utils/autoCal";
 import swaggerUi from "swagger-ui-express";
 import swaggerJSDoc from "swagger-jsdoc";
 
 // create app class for server
 export class App {
   private app: express.Application = express();
-  foo = Foo;
+  autoCal = AutoCal;
   private mode: string;
 
   constructor() {
@@ -54,7 +54,7 @@ export class App {
     };
     this.app.use(cors(corsOptions));
     this.setSession();
-    this.foo;
+    this.autoCal;
   }
 
   private swaggerDoc() {
