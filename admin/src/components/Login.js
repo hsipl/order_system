@@ -73,6 +73,7 @@ const Login = () => {
           setUserLogin(true);
 
           localStorage.setItem("UserName", JSON.stringify(UserInfo.name));
+          localStorage.setItem("StoreId", JSON.stringify(UserInfo.storeId.id));
 
           localStorage.setItem(
             "StoreName",
