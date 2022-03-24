@@ -11,6 +11,7 @@ import {
   Container,
   Stack,
   MenuItem,
+  Alert,
 } from "@mui/material";
 import { Delete, Edit, Search } from "@material-ui/icons";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
@@ -37,6 +38,7 @@ const Employee = () => {
 
   const [image, setImage] = useState(null);
 
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [employeeInfo, setEmployeeInfo] = useState({
     name: "",
@@ -44,6 +46,8 @@ const Employee = () => {
     password: "",
     type: 0,
   });
+
+  const [errMes, setErrMes] = useState("");
 
   const config = {
     headers: {
@@ -88,9 +92,54 @@ const Employee = () => {
     }));
   }
 
+  function handleUsername(e) {
+    setUsername(e.target.value);
+  }
+
+  function handleLength(e) {
+    const { value, name } = e.target;
+    if (value.length <= 5) {
+      setErrMes(0);
+      setEmployeeInfo((preData) => ({
+        ...preData,
+        [name]: "",
+      }));
+    } else if (value.length > 15) {
+      setErrMes(1);
+      setEmployeeInfo((preData) => ({
+        ...preData,
+        [name]: "",
+      }));
+    } else {
+      setErrMes("");
+      setEmployeeInfo((preData) => ({
+        ...preData,
+        [name]: value,
+      }));
+    }
+  }
+
   function handlePassWord(e) {
     setPassword(e.target.value);
   }
+
+  function handleCheck(e) {
+    if (e.target.value !== password) {
+      setErrMes(2);
+      setEmployeeInfo((preData) => ({
+        ...preData,
+        password: "",
+      }));
+    } else {
+      setErrMes("");
+      setEmployeeInfo((preData) => ({
+        ...preData,
+        password: e.target.value,
+      }));
+    }
+  }
+
+  console.log(errMes,employeeInfo)
 
   const onImageChange = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));
@@ -103,6 +152,9 @@ const Employee = () => {
   const handleClose = () => {
     setOpen(false);
     setImage(null);
+    setErrMes("");
+    setUsername("");
+    setPassword("");
     setEmployeeInfo({
       name: "",
       username: "",
@@ -116,7 +168,7 @@ const Employee = () => {
     formData.append("storeId", localStorage.getItem("StoreId"));
     formData.append("name", employeeInfo.name);
     formData.append("type", employeeInfo.type);
-    formData.append("username", employeeInfo.account);
+    formData.append("username", employeeInfo.username);
     formData.append("password", employeeInfo.password);
     formData.append("image", employeeInfo.image);
 
@@ -212,8 +264,8 @@ const Employee = () => {
               {"註冊員工帳戶"}
             </FormTitle>
 
-            <form>
-              <Stack mx={5} my={3}>
+            <form onSubmit={handleSubmit}>
+              <Stack mx={5} my={2}>
                 <Stack direction="row" justifyContent="space-between">
                   <Input
                     name="name"
@@ -237,12 +289,13 @@ const Employee = () => {
                   </Input>
                 </Stack>
                 <Input
-                  name="account"
+                  name="username"
                   label="請輸入帳號"
                   variant="outlined"
                   required
-                  onChange={handleEmployeeInfo}
-                  value={employeeInfo.account}
+                  onChange={handleUsername}
+                  value={username}
+                  onBlur={handleLength}
                 />
                 <Input
                   name="password"
@@ -251,16 +304,36 @@ const Employee = () => {
                   type="password"
                   required
                   onChange={handlePassWord}
+                  onBlur={handleLength}
                 />
+
                 <Input
                   name="password"
                   label="請再次輸入密碼"
                   variant="outlined"
                   type="password"
                   required
-                  onChange={handleEmployeeInfo}
+                  onBlur={handleCheck}
                 />
-
+                {errMes === 0 && (
+                  <Alert severity="warning" sx={{ marginX: "1.5rem" }}>
+                    帳號或密碼長度過短,限制為5-15字
+                  </Alert>
+                )}
+                {errMes === 1 && (
+                  <Alert severity="warning" sx={{ marginX: "1.5rem" }}>
+                    帳號或密碼長度過長,限制為5-15字
+                  </Alert>
+                )}
+                {errMes === 2 && (
+                  <Alert
+                    severity="warning"
+                    px="1rem"
+                    sx={{ marginX: "1.5rem" }}
+                  >
+                    兩次密碼不相同，請重新輸入
+                  </Alert>
+                )}
                 <DialogText>Logo圖片:</DialogText>
                 <Container>
                   <UploadImgButton
@@ -285,7 +358,7 @@ const Employee = () => {
             </form>
           </Dialog>
 
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{ maxHeight: "38rem" }}>
             <Table stickyHeader>
               <TableHeads id={"employee"} />
               {filtered.map((item) => (
