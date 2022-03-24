@@ -7,9 +7,10 @@ import { StoreService } from '../services/store.service';
 import { UserService } from '../services/user.service';
 import ErrorHandler from './error.controller';
 import { deleteFile } from '../utils/fileUpload';
+import { User } from '../entity/user';
 
 class UserController {
-  constructor(private readonly service: UserService) {}
+  constructor(private readonly service: UserService) { }
 
   public async create(req: Request, res: Response, next: NextFunction) {
     const image = req.file ? req.file.filename : '';
@@ -97,5 +98,21 @@ class UserController {
       );
     }
   }
+
+  async getUser(req: Request, res: Response, next: NextFunction) {
+    try {
+      const query = new User();
+      Object.assign(query, req.query)
+      const user = await this.service.getAllUser(req, query);
+      res.status(200).json(user);
+    } catch (error) {
+      console.log('get user error: ', error);
+      return next(
+        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
+      );
+    }
+  }
+
 }
+
 export default UserController;
