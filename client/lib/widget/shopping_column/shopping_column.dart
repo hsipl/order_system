@@ -21,7 +21,9 @@ class _ShoppingColumnState extends State<ShoppingColumn> {
       converter: (store) => store.state,
       builder: (context, store) {
         int totalAmount = store.newTotalAmount;
+
         int sheetNo = store.newSheetNo;
+
         return Expanded(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(0, 5, 4, 5),
@@ -60,7 +62,9 @@ class _ShoppingColumnState extends State<ShoppingColumn> {
                                 BorderRadius.all(Radius.circular(20.0))),
                         child: Center(
                             child: Text(
+
                           "編號 : $sheetNo \n總金額 $totalAmount 元",
+
                           textAlign: TextAlign.center,
                           style: const TextStyle(fontSize: 25),
                         )),
@@ -75,6 +79,7 @@ class _ShoppingColumnState extends State<ShoppingColumn> {
                       onPress: () {
                         showGeneralDialog(
                           transitionBuilder: (context, a1, a2, widget) {
+
                             return Align(
                               alignment: Alignment.center,
                               child: FadeTransition(
@@ -83,6 +88,7 @@ class _ShoppingColumnState extends State<ShoppingColumn> {
                                   opacity: a1.value,
                                   child: const ShoppingConfirmDialog(),
                                 ),
+
                               ),
                             );
                           },
@@ -142,7 +148,9 @@ class _ShoppingListState extends State<ShoppingList> {
                 key: UniqueKey(),
                 onDismissed: (direction) {
                   StoreProvider.of<AppState>(context)
+
                       .dispatch(ShoppingListRemove(index));
+
                   StoreProvider.of<AppState>(context)
                       .dispatch(UpdateTotalAmount());
                 },
@@ -152,7 +160,9 @@ class _ShoppingListState extends State<ShoppingList> {
                       color: kCancelButtonColor,
                       child: const Icon(Icons.delete, color: Colors.white)),
                 ),
+
                 child: ShoppingTile(
+
                   item: item,
                 ),
               ),
@@ -164,8 +174,10 @@ class _ShoppingListState extends State<ShoppingList> {
   }
 }
 
+
 class ShoppingTile extends StatelessWidget {
   const ShoppingTile({
+
     Key? key,
     required this.item,
   }) : super(key: key);

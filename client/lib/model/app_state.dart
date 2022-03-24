@@ -22,6 +22,7 @@ class AppState {
     animatedListKey = another.animatedListKey;
   }
 
+
   List<ShoppingItem> get newShoppingList => shoppingList;
 
   List get newProductList => productList;

@@ -3,8 +3,10 @@ import 'package:client/redux/actions/final_shopping_list.dart';
 import 'package:client/services/serializer.dart';
 import 'package:flutter/material.dart';
 
+
 import '../services/decorations.dart';
 import 'actions/calculator_action.dart';
+
 import 'actions/shopping_action.dart';
 import 'actions/product_action.dart';
 import 'actions/temp_shopping_action.dart';
@@ -12,7 +14,9 @@ import 'actions/temp_shopping_action.dart';
 AppState reducer(AppState prevState, dynamic action) {
   AppState newState = AppState.fromAppState(prevState);
 
+
   // ShoppingList表單
+
   if (action is ShoppingListAdd) {
     // 新增物件到 Checkout Column
 
@@ -20,7 +24,9 @@ AppState reducer(AppState prevState, dynamic action) {
       prevState.shoppingList.add(item);
     }
     newState.shoppingList = prevState.shoppingList;
+
   } else if (action is ShoppingListRemove) {
+
     // 刪除 Checkout Column 物件
 
     prevState.shoppingList.removeAt(action.payload);

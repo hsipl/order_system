@@ -1,3 +1,4 @@
+
 import 'package:client/model/app_state.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -5,6 +6,7 @@ import 'action_row.dart';
 import 'package:flutter/material.dart';
 import 'calculator.dart';
 import 'final_shopping_list.dart';
+
 
 class ShoppingConfirmDialog extends StatelessWidget {
   const ShoppingConfirmDialog({Key? key}) : super(key: key);
@@ -74,6 +76,7 @@ class ShoppingConfirmDialog extends StatelessWidget {
           ),
         );
       },
+
     );
   }
 }
