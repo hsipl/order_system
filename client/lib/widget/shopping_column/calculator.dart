@@ -2,6 +2,7 @@ import 'package:client/model/app_state.dart';
 import 'package:client/widget/button_style/styled_buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import '../../redux/actions/calculator_action.dart';
 import '../../services/decorations.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,8 @@ class _CalculatorState extends State<Calculator> {
           onPress: () {
             setState(() {
               calculatorValue += index.toString();
+              StoreProvider.of<AppState>(context)
+                  .dispatch(CalculatorValue(calculatorValue));
             });
           }),
     );
@@ -41,6 +44,7 @@ class _CalculatorState extends State<Calculator> {
       converter: (store) => store.state,
       builder: (context, store) {
         int totalAmount = store.newTotalAmount;
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -81,7 +85,8 @@ class _CalculatorState extends State<Calculator> {
                     action: "AC",
                     onPress: () {
                       setState(() {
-                        calculatorValue = "0";
+                        StoreProvider.of<AppState>(context)
+                            .dispatch(CalculatorValue("0"));
                       });
                     }),
                 buttons[0],
@@ -93,9 +98,12 @@ class _CalculatorState extends State<Calculator> {
                         List<String> c = calculatorValue.split("");
                         c.removeLast();
                         if(c.isEmpty){
-                          calculatorValue = "0";
+                          StoreProvider.of<AppState>(context)
+                              .dispatch(CalculatorValue("0"));
                         }else{
                           calculatorValue = c.join();
+                          StoreProvider.of<AppState>(context)
+                              .dispatch(CalculatorValue(calculatorValue));
                         }
 
                       });
@@ -115,7 +123,7 @@ class _CalculatorState extends State<Calculator> {
                     style: TextStyle(fontSize: 20),
                   ),
                   Text(
-                    "${int.parse(calculatorValue)}",
+                    "${int.parse(store.calculatorValue)}",
                     style: TextStyle(fontSize: 20),
                   )
                 ],
@@ -150,7 +158,7 @@ class _CalculatorState extends State<Calculator> {
                     style: TextStyle(fontSize: 20),
                   ),
                   Text(
-                    "${int.parse(calculatorValue) - totalAmount}",
+                    "${int.parse(store.calculatorValue) - totalAmount}",
                     style: TextStyle(fontSize: 20),
                   )
                 ],

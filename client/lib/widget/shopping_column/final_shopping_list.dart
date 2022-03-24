@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:client/services/serializer.dart';
 import '../../model/app_state.dart';
+import '../../redux/actions/final_shopping_list.dart';
 
 class FinalShoppingList extends StatefulWidget {
   const FinalShoppingList({
@@ -17,21 +18,9 @@ class FinalShoppingList extends StatefulWidget {
 class _FinalShoppingListState extends State<FinalShoppingList> {
   final GlobalKey<AnimatedListState> _key = GlobalKey();
 
-  void _removeItem(int index) {
-    _key.currentState!.removeItem(index, (_, animation) {
-      return SizeTransition(
-        axisAlignment: -1,
-        sizeFactor: animation,
-        child: Container(
-            height: 50,
-            color: kCancelButtonColor,
-            child: Center(child: Icon(Icons.delete, color: Colors.white))),
-      );
-    }, duration: const Duration(milliseconds: 250));
-  }
-
   @override
   Widget build(BuildContext context) {
+    StoreProvider.of<AppState>(context).dispatch(SetKey(_key));
     return StoreConnector<AppState, AppState>(
         converter: (store) => store.state,
         builder: (context, store) {
@@ -58,7 +47,7 @@ class _FinalShoppingListState extends State<FinalShoppingList> {
                     context: context,
                     removeTop: true,
                     child: AnimatedList(
-                      key: _key,
+                      key: store.animatedListKey,
                       initialItemCount: items.length,
                       itemBuilder: (context, index, animation) {
                         return SizedBox(
@@ -88,13 +77,15 @@ class _FinalShoppingListState extends State<FinalShoppingList> {
                                 child: Center(
                                   child: IconButton(
                                     onPressed: () {
-                                      _removeItem(index);
                                       StoreProvider.of<AppState>(context)
-                                          .dispatch(ShoppingLIstRemove(index));
+                                          .dispatch(RemoveFinalShoppingListItem(
+                                              index));
+                                      StoreProvider.of<AppState>(context)
+                                          .dispatch(ShoppingListRemove(index));
                                       StoreProvider.of<AppState>(context)
                                           .dispatch(UpdateTotalAmount());
                                     },
-                                    icon: Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete),
                                   ),
                                 ),
                               ),

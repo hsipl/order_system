@@ -32,42 +32,42 @@ class ShoppingConfirmDialog extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           '確認訂單',
                           style: TextStyle(fontSize: 30),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
                           '編號 : $sheetNo',
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Text(
                           '金額 : $totalAmount',
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                       ],
                     ),
                   ),
-                  Divider(color: Colors.grey, height: 1),
+                  const Divider(color: Colors.grey, height: 1),
                   IntrinsicHeight(
                     child: Row(
-                      children: [
+                      children: const[
                         Expanded(flex: 2, child: FinalShoppingList()),
                         VerticalDivider(color: Colors.grey, width: 1),
                         Expanded(flex: 1, child: Calculator()),
                       ],
                     ),
                   ),
-                  Divider(color: Colors.grey, height: 1),
-                  ActionRow(),
+                  const Divider(color: Colors.grey, height: 1),
+                  const ActionRow(),
                 ],
               ),
             ),

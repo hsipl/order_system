@@ -1,4 +1,5 @@
 import 'package:client/services/serializer.dart';
+import 'package:flutter/material.dart';
 
 class AppState {
   List<ShoppingItem> shoppingList = [];
@@ -6,6 +7,8 @@ class AppState {
   List<Product> productList = [];
   int totalAmount = 0;
   int sheetNo = 0;
+  String calculatorValue = "0";
+  GlobalKey<AnimatedListState> animatedListKey = GlobalKey();
 
   AppState({required this.shoppingList});
 
@@ -15,6 +18,8 @@ class AppState {
     tempShoppingList = another.tempShoppingList;
     totalAmount = another.totalAmount;
     sheetNo = another.sheetNo;
+    calculatorValue = another.calculatorValue;
+    animatedListKey = another.animatedListKey;
   }
 
   List<ShoppingItem> get newShoppingList => shoppingList;
@@ -26,4 +31,8 @@ class AppState {
   int get newTotalAmount => totalAmount;
 
   int get newSheetNo => sheetNo;
+
+  String get newCalculatorValue => calculatorValue;
+
+  GlobalKey get newAnimatedListKey => animatedListKey;
 }

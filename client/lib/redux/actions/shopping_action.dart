@@ -2,10 +2,10 @@ class ShoppingListAdd {
   ShoppingListAdd();
 }
 
-class ShoppingLIstRemove {
+class ShoppingListRemove {
   final int payload;
 
-  ShoppingLIstRemove(this.payload);
+  ShoppingListRemove(this.payload);
 }
 
 class ShoppingListClear {
@@ -19,3 +19,4 @@ class UpdateTotalAmount{
 class UpdateSheetNo{
   UpdateSheetNo();
 }
+

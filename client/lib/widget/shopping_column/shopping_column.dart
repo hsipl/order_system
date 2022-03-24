@@ -142,7 +142,7 @@ class _ShoppingListState extends State<ShoppingList> {
                 key: UniqueKey(),
                 onDismissed: (direction) {
                   StoreProvider.of<AppState>(context)
-                      .dispatch(ShoppingLIstRemove(index));
+                      .dispatch(ShoppingListRemove(index));
                   StoreProvider.of<AppState>(context)
                       .dispatch(UpdateTotalAmount());
                 },

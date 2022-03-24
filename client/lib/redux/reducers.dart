@@ -1,6 +1,10 @@
 import 'package:client/model/app_state.dart';
+import 'package:client/redux/actions/final_shopping_list.dart';
 import 'package:client/services/serializer.dart';
+import 'package:flutter/material.dart';
 
+import '../services/decorations.dart';
+import 'actions/calculator_action.dart';
 import 'actions/shopping_action.dart';
 import 'actions/product_action.dart';
 import 'actions/temp_shopping_action.dart';
@@ -8,7 +12,7 @@ import 'actions/temp_shopping_action.dart';
 AppState reducer(AppState prevState, dynamic action) {
   AppState newState = AppState.fromAppState(prevState);
 
-  // Checkout表單
+  // ShoppingList表單
   if (action is ShoppingListAdd) {
     // 新增物件到 Checkout Column
 
@@ -16,7 +20,7 @@ AppState reducer(AppState prevState, dynamic action) {
       prevState.shoppingList.add(item);
     }
     newState.shoppingList = prevState.shoppingList;
-  } else if (action is ShoppingLIstRemove) {
+  } else if (action is ShoppingListRemove) {
     // 刪除 Checkout Column 物件
 
     prevState.shoppingList.removeAt(action.payload);
@@ -37,6 +41,30 @@ AppState reducer(AppState prevState, dynamic action) {
     prevState.sheetNo += 1;
 
     newState.sheetNo = prevState.sheetNo;
+  }
+  // final shopping list
+  else if (action is SetKey) {
+    prevState.animatedListKey = action.payload;
+    newState.animatedListKey = prevState.animatedListKey;
+  } else if (action is RemoveFinalShoppingListItem) {
+    prevState.animatedListKey.currentState!.removeItem(action.payload,
+        (_, animation) {
+      return SizeTransition(
+        axisAlignment: -1,
+        sizeFactor: animation,
+        child: Container(
+            height: 50,
+            color: kCancelButtonColor,
+            child:
+                const Center(child: Icon(Icons.delete, color: Colors.white))),
+      );
+    }, duration: const Duration(milliseconds: 100));
+    newState.animatedListKey = prevState.animatedListKey;
+  }
+  // calculator
+  else if (action is CalculatorValue) {
+    prevState.calculatorValue = action.payload;
+    newState.calculatorValue = prevState.calculatorValue;
   }
 
   // Product清單
