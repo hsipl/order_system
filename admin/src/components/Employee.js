@@ -139,8 +139,6 @@ const Employee = () => {
     }
   }
 
-  console.log(errMes,employeeInfo)
-
   const onImageChange = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));
     setEmployeeInfo((preData) => ({
@@ -161,6 +159,26 @@ const Employee = () => {
       password: "",
       type: 0,
     });
+  };
+
+  const handleSearch = async () => {
+    if (searchInput.name === "" && searchInput.status === "") {
+    } else if (searchInput.name === "" && searchInput.status !== "") {
+      let { data } = await axios.get(
+        url+"/user?status=" + searchInput.status,
+        config
+      );
+      toChinese(data);
+    } else if (searchInput.name !== "" && searchInput.status === "") {
+      let { data } = await axios.get(url+"/user?name=" + searchInput.name, config);
+      toChinese(data);
+    } else {
+      let { data } = await axios.get(
+        url +"/user?name=" + searchInput.name + "&status=" + searchInput.status,
+        config
+      );
+      toChinese(data);
+    }
   };
 
   const handleSubmit = async () => {
@@ -231,7 +249,7 @@ const Employee = () => {
               <MenuItem value={0}>在職</MenuItem>
               <MenuItem value={1}>已離職</MenuItem>
             </SearchBox>
-            <Button size="large" color="inherit">
+            <Button size="large" color="inherit" onClick={handleSearch}>
               <Search fontSize="large" />
             </Button>
             <Button onClick={handleClean}>清除搜尋</Button>
@@ -316,18 +334,18 @@ const Employee = () => {
                   onBlur={handleCheck}
                 />
                 {errMes === 0 && (
-                  <Alert severity="warning" sx={{ marginX: "1.5rem" }}>
-                    帳號或密碼長度過短,限制為5-15字
+                  <Alert severity="error" sx={{ marginX: "1.5rem" }}>
+                    帳號或密碼字數不足,限制為5-15字
                   </Alert>
                 )}
                 {errMes === 1 && (
-                  <Alert severity="warning" sx={{ marginX: "1.5rem" }}>
-                    帳號或密碼長度過長,限制為5-15字
+                  <Alert severity="error" sx={{ marginX: "1.5rem" }}>
+                    帳號或密碼字數過長,限制為5-15字
                   </Alert>
                 )}
                 {errMes === 2 && (
                   <Alert
-                    severity="warning"
+                    severity="error"
                     px="1rem"
                     sx={{ marginX: "1.5rem" }}
                   >
