@@ -3,7 +3,7 @@ import { FindConditions, Like } from 'typeorm';
 import { errorMsg, errorStatusCode } from '../bases/errorTypes';
 import ErrorHandler from '../controller/error.controller';
 import { User } from '../entity/user';
-import { ICheckExist, ICreateUserParams, ILoginUserParams } from '../interafaces/user.interface';
+import { ICheckExist, ICreateUserParams, ILoginUserParams, IUpdateUserParams } from '../interafaces/user.interface';
 import errorhandler from '../middlewares/errorhandler';
 import { StoreRepository } from '../repository/store.repository';
 import { UserRepository } from '../repository/user.repository';
@@ -45,14 +45,22 @@ export class UserService {
     user = Object.assign(user, params);
     return await this.repository.create(user);
   }
-
+  public async update(params: IUpdateUserParams) {
+    params.password = encrypt(params.password);
+    let user = new User();
+    user = Object.assign(user, params);
+    return await this.repository.update(params.id, user);
+  }
   public async login(params: ILoginUserParams) {
     params.password = encrypt(params.password);
     params.status = 0;
     const isExist = await this.repository.findOne(params);
     return isExist;
   }
-
+  public async checkIsExitById(id: number) {
+    const isExist = await this.repository.findOne({ id });
+    return isExist;
+  }
   public async checkIsExistByUsernameAndName(params: ICheckExist) {
     const isExist = await this.repository.findOne(params);
     return isExist;

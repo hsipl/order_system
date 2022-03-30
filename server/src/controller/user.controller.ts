@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import { errorMsg, errorStatusCode } from '../bases/errorTypes';
-import { ILoginUserParams } from '../interafaces/user.interface';
+import { ILoginUserParams, IUpdateUserParams } from '../interafaces/user.interface';
 import { UserRepository } from '../repository/user.repository';
 import { StoreService } from '../services/store.service';
 import { UserService } from '../services/user.service';
@@ -50,7 +50,31 @@ class UserController {
       );
     }
   }
-
+  async update(req: Request, res: Response, next: NextFunction) {
+    const id: number = parseInt(req.params.id);
+    const { name, username, password, storeId, type, }: { name: string; username: string; password: string; storeId: number; type: number } = req.body;
+    const params: IUpdateUserParams = { id, name, username, password, storeId, type };
+    try {
+      const checkIsExist = await this.service.checkIsExitById(id);
+      if (!checkIsExist) {
+        return next(
+          new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
+        );
+      }
+      const updatedRes = await this.service.update(params);
+      if (updatedRes === undefined) {
+        return next(
+          new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
+        );
+      }
+      res.status(200).send({ result: true });
+    } catch (error) {
+      console.log('update user error:', error);
+      return next(
+        new ErrorHandler(errorStatusCode.InternalServerError, errorMsg.InternalServerError),
+      );
+    }
+  }
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       const errors = validationResult(req);

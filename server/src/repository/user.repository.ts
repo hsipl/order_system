@@ -1,12 +1,15 @@
 import { ICreateUserParams, IUserGetEmployee, IUserParams } from '../interafaces/user.interface';
 import { User } from '../entity/user';
-import { FindConditions } from 'typeorm';
+import { FindConditions, UpdateResult } from 'typeorm';
 
 const field: (keyof User)[] = ['id', 'name', 'status', 'type', 'image', 'createdAt'];
 const loginField: (keyof User)[] = ['name', 'type', 'storeId'];
 export class UserRepository {
   async create(user: User) {
     return await User.save(user);
+  }
+  async update(id: number, user: User): Promise<UpdateResult | undefined> {
+    return await User.update(id, user);
   }
   async getUsers(query: FindConditions<User>): Promise<User[]> {
     return await User.find({
