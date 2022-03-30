@@ -17,11 +17,19 @@ export class OrderRepository {
     async getByDate(date: Date): Promise<Order[]> {
         const begin = subDays(date, 1)
         const end = date
-        console.log(subDays(date, 1))
-        console.log(date)
+        return await Order.find({
+            relations: ["orderProducts", "storeId"],
+            where: { createdAt: Between(begin, end) },
+            select: field
+        })
+    }
+
+    async getByDateAndStoreId(date: Date, storeId: number): Promise<Order[]> {
+        const begin = subDays(date, 1)
+        const end = date
         return await Order.find({
             relations: ["orderProducts"],
-            where: { createdAt: Between(subDays(date, 1), date) },
+            where: { createdAt: Between(begin, end), storeId: storeId },
             select: field
         })
     }
