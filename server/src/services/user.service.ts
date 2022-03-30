@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { FindConditions, Like } from 'typeorm';
 import { errorMsg, errorStatusCode } from '../bases/errorTypes';
 import ErrorHandler from '../controller/error.controller';
 import { User } from '../entity/user';
@@ -67,5 +68,19 @@ export class UserService {
 
     const employees = await this.repository.getAllEmployee({ storeId: store.id });
     return employees;
+  }
+
+  public async getAllUser(req: Request, query: FindConditions<User>) {
+    const { sessionID } = req;
+    const sessionData = await this.cacheService.get(`sess:${sessionID}`);
+    const { role, store } = JSON.parse(sessionData).user;
+    if (role !== 1) {
+      throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
+    }
+    if (Object.keys(query).includes('name')) {
+      query.name = Like('%' + query.name + '%');
+    }
+    const users = await this.repository.getUsers(query)
+    return users
   }
 }

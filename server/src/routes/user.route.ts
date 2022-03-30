@@ -119,5 +119,10 @@ export default class UserRoute extends BasicRoute {
       auth.authAdmin.bind(auth),
       controller.getAllEmployee.bind(controller),
     );
+    this.router.get(
+      '/user',
+      auth.authAdmin.bind(auth),
+      controller.getUser.bind(controller),
+    );
   }
 }
