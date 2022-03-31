@@ -324,7 +324,6 @@ const Shop = () => {
                     id="contained-button-file"
                     multiple
                     type="file"
-                    accept="image/png, image/jpeg"
                     onChange={onImageChange}
                   />
                   <img width="100#" src={image} />
@@ -499,7 +498,6 @@ const Shop = () => {
                         id="contained-button-file"
                         multiple
                         type="file"
-                        accept="image/png, image/jpeg"
                         onChange={onImageChange}
                       />
                       <img width="100#" src={image} />

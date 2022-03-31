@@ -44,10 +44,14 @@ const Employee = () => {
     name: "",
     username: "",
     password: "",
+    status:0,
     type: 0,
   });
 
   const [errMes, setErrMes] = useState("");
+
+  const [openEdit, setOpenEdit] = React.useState(false);
+  const [currentInfo, setCurrentInfo] = useState({});
 
   const config = {
     headers: {
@@ -155,6 +159,7 @@ const Employee = () => {
     setPassword("");
     setEmployeeInfo({
       name: "",
+
       username: "",
       password: "",
       type: 0,
@@ -165,16 +170,23 @@ const Employee = () => {
     if (searchInput.name === "" && searchInput.status === "") {
     } else if (searchInput.name === "" && searchInput.status !== "") {
       let { data } = await axios.get(
-        url+"/user?status=" + searchInput.status,
+        url + "/user?status=" + searchInput.status,
         config
       );
       toChinese(data);
     } else if (searchInput.name !== "" && searchInput.status === "") {
-      let { data } = await axios.get(url+"/user?name=" + searchInput.name, config);
+      let { data } = await axios.get(
+        url + "/user?name=" + searchInput.name,
+        config
+      );
       toChinese(data);
     } else {
       let { data } = await axios.get(
-        url +"/user?name=" + searchInput.name + "&status=" + searchInput.status,
+        url +
+          "/user?name=" +
+          searchInput.name +
+          "&status=" +
+          searchInput.status,
         config
       );
       toChinese(data);
@@ -216,6 +228,56 @@ const Employee = () => {
   };
 
   const filtered = searchData === null ? allData : searchData;
+
+  const handleEditOpen = (item) => {
+    setOpenEdit(true);
+
+    setCurrentInfo({
+      ["id"]: item.id,
+      ["name"]: item.name,
+      ["status"]: item.status === "在職" ? 0 : 1,
+    });
+  };
+  
+  const handleEditClose = () => {
+    setOpenEdit(false);
+  };
+
+  console.log(employeeInfo)
+
+  const handleEditSubmit = async () => {
+    const formData = new FormData();
+    employeeInfo.name === ""
+      ? formData.append("name", currentInfo.name)
+      : formData.append("name", employeeInfo.name);
+    formData.append("status", employeeInfo.status);
+    employeeInfo.password === ""
+      ? formData.append("password", currentInfo.password)
+      : formData.append("password", employeeInfo.password);
+    try {
+      await axios.put(url + "/user" + currentInfo.id, formData, config);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeClickOpen = (item) => {
+    setOpenDel(true);
+    setCurrentShop({
+      ["id"]: item.id,
+      ["name"]: item.name,
+      ["type"]: item.type,
+      ["status"]: item.status,
+      ["image"]: item.image,
+    });
+  };
+
+  const handleDeClose = () => {
+    setOpenDel(false);
+  };
+
+
 
   return (
     <>
@@ -295,7 +357,7 @@ const Employee = () => {
                   />
                   <Input
                     name="status"
-                    label="狀態"
+                    label="職位"
                     variant="outlined"
                     select
                     required
@@ -344,22 +406,17 @@ const Employee = () => {
                   </Alert>
                 )}
                 {errMes === 2 && (
-                  <Alert
-                    severity="error"
-                    px="1rem"
-                    sx={{ marginX: "1.5rem" }}
-                  >
+                  <Alert severity="error" px="1rem" sx={{ marginX: "1.5rem" }}>
                     兩次密碼不相同，請重新輸入
                   </Alert>
                 )}
-                <DialogText>Logo圖片:</DialogText>
+                <DialogText>員工照片:</DialogText>
                 <Container>
                   <UploadImgButton
                     accept="image/*"
                     id="contained-button-file"
                     multiple
                     type="file"
-                    accept="image/png, image/jpeg"
                     onChange={onImageChange}
                   />
                   <img width="100#" src={image} />
@@ -389,10 +446,106 @@ const Employee = () => {
                     Status={item.status}
                     item={item}
                     // Del={() => handleDeClickOpen(item)}
-                    // Edit={() => handleEditOpen(item)}
+                    Edit={() => handleEditOpen(item)}
                   />
                 </>
               ))}
+
+              <Dialog
+                open={openEdit}
+                onClose={handleEditClose}
+                onBackdropClick="false"
+                aria-labelledby="edit"
+                aria-describedby="edit"
+                fullWidth="true"
+                maxWidth="sm"
+              >
+                <FormTitle
+                  variant="h6"
+                  // 可移動部分尚未解決
+                  // style={{ cursor: "move" }}
+                  // id="draggable-dialog-title"
+                >
+                  {"修改員工資訊"}
+                </FormTitle>
+
+                <form onSubmit={handleSubmit}>
+                  <Stack mx={5} my={2}>
+                    <Stack direction="row" justifyContent="space-between">
+                      <Input
+                        name="name"
+                        label="姓名"
+                        variant="outlined"
+                        required
+                        onChange={handleEmployeeInfo}
+                        defaultValue={currentInfo.name}
+                      />
+                      <Input
+                        name="status"
+                        label="狀態"
+                        variant="outlined"
+                        select
+                        required
+                        onChange={handleEmployeeInfo}
+                        defaultValue={currentInfo.status}
+                        sx={{ width: "12rem" }}
+                        // disabled
+                      >
+                        <MenuItem value={0}>在職</MenuItem>
+                        <MenuItem value={1} disabled>
+                        已離職
+                      </MenuItem>
+                      </Input>
+                    </Stack>
+                    <Input
+                      name="password"
+                      label="請輸入密碼"
+                      variant="outlined"
+                      type="password"
+                      required
+                      onChange={handlePassWord}
+                      onBlur={handleLength}
+                    />
+
+                    <Input
+                      name="password"
+                      label="請再次輸入密碼"
+                      variant="outlined"
+                      type="password"
+                      required
+                      onBlur={handleCheck}
+                    />
+                    {errMes === 0 && (
+                      <Alert severity="error" sx={{ marginX: "1.5rem" }}>
+                        帳號或密碼字數不足,限制為5-15字
+                      </Alert>
+                    )}
+                    {errMes === 1 && (
+                      <Alert severity="error" sx={{ marginX: "1.5rem" }}>
+                        帳號或密碼字數過長,限制為5-15字
+                      </Alert>
+                    )}
+                    {errMes === 2 && (
+                      <Alert
+                        severity="error"
+                        px="1rem"
+                        sx={{ marginX: "1.5rem" }}
+                      >
+                        兩次密碼不相同，請重新輸入
+                      </Alert>
+                    )}
+                    <DialogActions>
+                      <Button onClick={handleEditClose} size="large">
+                        取消
+                      </Button>
+                      <Button type="submit" size="large">
+                        確認
+                      </Button>
+                    </DialogActions>
+                  </Stack>
+                </form>
+              </Dialog>
+
             </Table>
           </TableContainer>
         </Content>
