@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
-import { styled } from "@mui/material/styles";
 import {
+  styled,
   Dialog,
   DialogTitle,
   TextField,
@@ -10,7 +10,6 @@ import {
   Alert,
   Stack,
 } from "@mui/material";
-
 
 const LoginContainer = styled(Dialog)({
   ".MuiBackdrop-root": {
@@ -73,7 +72,7 @@ const Login = () => {
           console.log(result.data.msg);
           setUserLogin(true);
 
-          localStorage.setItem("Name", JSON.stringify(UserInfo.name));
+          localStorage.setItem("UserName", JSON.stringify(UserInfo.name));
 
           localStorage.setItem(
             "StoreName",
@@ -83,7 +82,7 @@ const Login = () => {
             "StoreStatus",
             JSON.stringify(UserInfo.storeId.status)
           );
-          localStorage.setItem("UserName", JSON.stringify(UserInfo.name));
+
           localStorage.setItem(
             "UserAccount",
             JSON.stringify(UserInfo.username)
