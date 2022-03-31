@@ -3,94 +3,60 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import Breadcrumbs from "@mui/material/Breadcrumbs";
-import Typography from "@mui/material/Typography";
-import Link from "@mui/material/Link";
+import {
+  Typography,
+  Link,
+  Table,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  TextField,
+  InputLabel,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  MenuItem,
+  Box,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
+  Divider,
+  List,
+  ListItem,
+  Chip,
+  ListItemText,
+  Tab,
+} from "@mui/material";
+
+import {
+  DialogText,
+  FormTitle,
+  SearchBox,
+  SearchContainer,
+  Input,
+  PaperComponent,
+} from "./SearchAndForm";
+
 import Stack from "@mui/material/Stack";
-import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-// import Navbar from "../components/Navbar";
+
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
-
-import Table from "@mui/material/Table";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Button from "@mui/material/Button";
-
-import TextField from "@mui/material/TextField";
-import InputLabel from "@mui/material/InputLabel";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import MenuItem from "@mui/material/MenuItem";
-
-import Box from "@mui/material/Box";
-
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Divider from "@mui/material/Divider";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Draggable from "react-draggable";
-import Chip from "@mui/material/Chip";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TableContent, TableHeads, TableProduct } from "./Table";
 import { Nightlife, Search } from "@material-ui/icons";
 
-const SearchContainer = styled(Box)({
-  display: "flex",
-  width: "100%",
-  alignItems: "center",
-
-  ".AddBTN": {
-    marginLeft: "auto",
-  },
-});
-
-const SearchBox = styled(TextField)({
-  margin: "1rem",
-  "& .MuiInputBase-root": {
-    background: "rgba(255, 255, 255, 0.8)",
-  },
-  ":first-child": {
-    marginLeft: "0",
-  },
-});
-
-const Productcon = styled.div`
-  position: relative;
-  top: 8rem;
-  left: 13rem;
-  max-width: 87%;
-  font-size: 20px;
-`;
 
 const AddForm = styled.form`
   height: 400px;
 `;
-const AddFormProduct = styled.form`
-  height: 60vh;
-`;
 
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="inherit" href="/">
-    首頁
-  </Link>,
-  <Typography underline="hover" key="2" color="text.primary" href="/product">
-    商品管理
-  </Typography>,
-];
 
 const Product = () => {
   const [sauceData, setSauceData] = useState([]);
@@ -123,7 +89,7 @@ const Product = () => {
     price: "",
     category: "",
     status: 0,
-    storeId: localStorage.getItem("StoreId"),
+    storeId: localStorage.getItem("StoreType"),
   });
   const [currentSauce, setCurrentSauce] = useState({});
   const [currentInfo, setCurrentInfo] = useState({});
@@ -222,16 +188,20 @@ const Product = () => {
   /***************Handle Sauce***************/
   useEffect(() => {
     const get_SauceApi = async () => {
-      let { data } = await axios.get(url_Sauce, config);
-      setSauceData(data);
-      for (var i = 0; i < data.length; i++) {
-        data[i].status === 0
-          ? (data[i].status = "使用中")
-          : (data[i].status = "已停用");
+      try {
+        let { data } = await axios.get(url_Sauce, config);
+        setSauceData(data);
+        for (var i = 0; i < data.length; i++) {
+          data[i].status === 0
+            ? (data[i].status = "使用中")
+            : (data[i].status = "已停用");
+        }
+        setChangeArrayData(data);
+        setSauceFilter(data);
+        console.log(data);
+      } catch (e) {
+        localStorage.removeItem("UserAccount");
       }
-      setChangeArrayData(data);
-      setSauceFilter(data);
-      console.log(sauceData);
     };
     get_SauceApi();
   }, []);
@@ -284,8 +254,7 @@ const Product = () => {
     // setSnackbarOpen(true)
   };
 
-  const handleEditSubmit = async (e) => {
-    e.preventDefault();
+  const handleEditSubmit = async () => {
     try {
       await axios.put(
         url_Sauce + "/" + currentSauce.id,
@@ -384,32 +353,32 @@ const Product = () => {
   };
 
   /***************Handle Product***************/
-  const [ProSau, setProSau] = useState({});
 
   useEffect(() => {
     const get_ProductApi = async () => {
-      let { data } = await axios.get(url_Product, config);
-
-      setProductData(data);
-
-      // console.log(data);
-
-      for (var i = 0; i < data.length; i++) {
-        data[i].status === 0
-          ? (data[i].status = "販賣中")
-          : (data[i].status = "已停售");
-        data[i].category === 0
-          ? (data[i].category = "肉類")
-          : data[i].category === 1
-          ? (data[i].category = "蔬菜類")
-          : data[i].category === 2
-          ? (data[i].category = "加工類")
-          : (data[i].category = "其他類");
-        data[i].image === null ? (data[i].category = "無") : console.log();
+      try {
+        let { data } = await axios.get(url_Product+"?storeId="+localStorage.getItem("StoreId"), config);
+        console.log(data);
+        setProductData(data);
+        for (var i = 0; i < data.length; i++) {
+          data[i].status === 0
+            ? (data[i].status = "販賣中")
+            : (data[i].status = "已停售");
+          data[i].category === 0
+            ? (data[i].category = "肉類")
+            : data[i].category === 1
+            ? (data[i].category = "蔬菜類")
+            : data[i].category === 2
+            ? (data[i].category = "加工類")
+            : (data[i].category = "其他類");
+          data[i].image === null ? (data[i].category = "無") : console.log();
+        }
+        setChangeProductData(data);
+        console.log(data);
+        setProductFilter(data);
+      } catch (e) {
+        localStorage.removeItem("UserAccount");
       }
-      setChangeProductData(data);
-      console.log(data);
-      setProductFilter(data);
     };
     get_ProductApi();
   }, []);
@@ -624,10 +593,10 @@ const Product = () => {
         onClose={handleSnackClose}
         message="Sucess!"
       ></Snackbar> */}
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         <Navbar />
         <Content>
-          <Breadcrumb name="商品管理"/>
+          <Breadcrumb name="商品管理" />
 
           {/*Tab*/}
           <Box sx={{ width: "100%", typography: "body1" }}>
@@ -715,14 +684,14 @@ const Product = () => {
                     onBackdropClick="false"
                     maxWidth="xs"
                   >
-                    <DialogTitle
+                    <FormTitle
                       id="alert-dialog-title"
                       style={{ textAlign: "center", cursor: "move" }}
                     >
                       {"新增商品資訊"}
-                    </DialogTitle>
+                    </FormTitle>
 
-                    <AddFormProduct onSubmit={handleProductSubmit}>
+                    <form onSubmit={handleProductSubmit}>
                       <DialogContent>
                         <TextField
                           onChange={handleProductInfo}
@@ -730,7 +699,7 @@ const Product = () => {
                           name="name"
                           label="商品名稱"
                           variant="outlined"
-                          sx={{ width: 390 }}
+                          sx={{ width: 350 }}
                           style={{ textAlign: "center" }}
                           required="true"
                         />
@@ -741,7 +710,7 @@ const Product = () => {
                           name="price"
                           label="價格"
                           variant="outlined"
-                          sx={{ width: 390 }}
+                          sx={{ width: 350 }}
                           required="true"
                         />
                         <br /> <br />
@@ -751,7 +720,7 @@ const Product = () => {
                           value={productInfo.category}
                           name="category"
                           label="種類"
-                          sx={{ width: 390 }}
+                          sx={{ width: 350 }}
                         >
                           <MenuItem value={0}>肉類</MenuItem>
                           <MenuItem value={1}>蔬菜類</MenuItem>
@@ -772,11 +741,11 @@ const Product = () => {
                         ></input>
                         <img width="100#" src={image} />
                       </DialogContent>
-                      <DialogActions sx={{ height: 0 }}>
+                      <DialogActions>
                         <Button onClick={handleClose}>取消</Button>
                         <Button type="submit">確認</Button>
                       </DialogActions>
-                    </AddFormProduct>
+                    </form>
                   </Dialog>
 
                   <br />
@@ -784,79 +753,7 @@ const Product = () => {
 
                   <TableContainer sx={{ maxHeight: 500 }} component={Paper}>
                     <Table stickyHeader>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            編號
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            產品名稱
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            價格
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            圖片
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            類別
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            狀態
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            操作
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
+                      <TableHeads id={"product"} />
 
                       {filteredProduct.map((item, index) => (
                         <TableProduct
@@ -888,81 +785,83 @@ const Product = () => {
                         maxWidth="xs"
                         PaperComponent={PaperComponent}
                       >
-                        <DialogTitle id="delete" style={{ cursor: "move" }}>
+                        <FormTitle id="delete" style={{ cursor: "move" }}>
                           {"確定要刪除此商品?"}
-                        </DialogTitle>
+                        </FormTitle>
                         <DialogContent>
-                          <List aria-label="mailbox folders">
-                            <ListItem button>
-                              <ListItemText
-                                primary="產品名稱 :"
-                                sx={{ maxWidth: "50%" }}
-                              />
-                              <Chip
-                                label={currentInfo.name}
-                                style={{ margin: "auto" }}
-                              />
-                            </ListItem>
-                            <Divider />
-                            <ListItem button>
-                              <ListItemText
-                                primary="價錢 : "
-                                sx={{ maxWidth: "50%" }}
-                              />
-                              <Chip
-                                label={currentInfo.price}
-                                style={{ margin: "auto" }}
-                              />
-                            </ListItem>
-                            <Divider />
-                            <ListItem button>
-                              <ListItemText
-                                primary="圖片 : "
-                                sx={{ maxWidth: "55%" }}
-                              />
-                              <img
-                                src={
-                                  "http://localhost:8000/" + currentInfo.image
-                                }
-                                alt={currentInfo.image}
-                                width="150"
-                                style={{ margin: "auto" }}
-                              />
-                            </ListItem>
-                            <Divider />
+                          <Stack mx={4} my={2} style={{ textAlign: "right" }}>
+                            <List aria-label="mailbox folders">
+                              <ListItem button>
+                                <ListItemText
+                                  primary="產品名稱 :"
+                                  sx={{ maxWidth: "50%" }}
+                                />
+                                <Chip
+                                  label={currentInfo.name}
+                                  style={{ margin: "auto" }}
+                                />
+                              </ListItem>
+                              <Divider />
+                              <ListItem button>
+                                <ListItemText
+                                  primary="價錢 : "
+                                  sx={{ maxWidth: "50%" }}
+                                />
+                                <Chip
+                                  label={currentInfo.price}
+                                  style={{ margin: "auto" }}
+                                />
+                              </ListItem>
+                              <Divider />
+                              <ListItem button>
+                                <ListItemText
+                                  primary="圖片 : "
+                                  sx={{ maxWidth: "55%" }}
+                                />
+                                <img
+                                  src={
+                                    "http://localhost:8000/" + currentInfo.image
+                                  }
+                                  alt={currentInfo.image}
+                                  width="150"
+                                  style={{ margin: "auto" }}
+                                />
+                              </ListItem>
+                              <Divider />
 
-                            <ListItem button>
-                              <ListItemText
-                                primary="類別 : "
-                                sx={{ maxWidth: "50%" }}
-                              />
-                              <Chip
-                                label={currentInfo.category2}
-                                style={{ margin: "auto" }}
-                              />
-                            </ListItem>
+                              <ListItem button>
+                                <ListItemText
+                                  primary="類別 : "
+                                  sx={{ maxWidth: "50%" }}
+                                />
+                                <Chip
+                                  label={currentInfo.category2}
+                                  style={{ margin: "auto" }}
+                                />
+                              </ListItem>
 
-                            <Divider />
+                              <Divider />
 
-                            <ListItem button>
-                              <ListItemText
-                                primary="調味料 : "
-                                sx={{ maxWidth: "50%" }}
-                              />
-                              <Chip
-                                label={"" + currentInfo.tagName + ""}
-                                style={{ margin: "auto" }}
-                              />
-                            </ListItem>
-                          </List>
+                              <ListItem button>
+                                <ListItemText
+                                  primary="調味料 : "
+                                  sx={{ maxWidth: "50%" }}
+                                />
+                                <Chip
+                                  label={"" + currentInfo.tagName + ""}
+                                  style={{ margin: "auto" }}
+                                />
+                              </ListItem>
+                            </List>
 
-                          <DialogActions sx={{ height: 0 }}>
-                            <Button onClick={handleDeClose}>取消</Button>
+                            <DialogActions sx={{ height: 0 }}>
+                              <Button onClick={handleDeClose}>取消</Button>
 
-                            <Button onClick={() => handleProductDelete()}>
-                              確認
-                            </Button>
-                          </DialogActions>
+                              <Button onClick={() => handleProductDelete()}>
+                                確認
+                              </Button>
+                            </DialogActions>
+                          </Stack>
                         </DialogContent>
                       </Dialog>
                       {/* 修改商品Dialog */}
@@ -974,72 +873,75 @@ const Product = () => {
                         onBackdropClick="false"
                         fullWidth="true"
                         maxWidth="xs"
+
                         // PaperComponent={PaperComponent}
                       >
-                        <DialogTitle
+                        <FormTitle
                           id="edit"
                           style={{ textAlign: "center", cursor: "move" }}
                         >
                           {"修改商品資訊"}
-                        </DialogTitle>
+                        </FormTitle>
 
-                        <AddFormProduct onSubmit={handleProductEditSubmit}>
-                          <DialogContent>
-                            <TextField
-                              onChange={handleProductInfo}
-                              name="name"
-                              label="商品名稱"
-                              variant="outlined"
-                              sx={{ width: 300 }}
-                              defaultValue={currentInfo.name}
-                            />
-                            <br /> <br />
-                            <TextField
-                              onChange={handleProductInfo}
-                              defaultValue={currentInfo.price}
-                              name="price"
-                              label="價格"
-                              variant="outlined"
-                              sx={{ width: 300 }}
-                              required
-                            />
-                            <br /> <br />
-                            <TextField
-                              select
-                              onChange={handleProductInfo}
-                              name="category"
-                              label="種類"
-                              sx={{ width: 300 }}
-                              defaultValue={currentInfo.category}
-                            >
-                              <MenuItem value={0}>肉類</MenuItem>
-                              <MenuItem value={1}>蔬菜類</MenuItem>
-                              <MenuItem value={2}>加工類</MenuItem>
-                              <MenuItem value={3}>其他類</MenuItem>
-                            </TextField>
-                            <br />
-                            <br />
-                            <InputLabel id="demo-simple-select-label">
-                              調味料選項
-                            </InputLabel>
-                            <FormGroup row={true}>{sauceTag}</FormGroup>
-                            <br />
-                            <input
-                              type="file"
-                              accept="image/png, image/jpeg"
-                              onChange={onImageChange}
-                              // value={"http://localhost:8000/" + currentInfo.image}
-                              // value="C:/Users/user/Desktop/gogoro.jfif"
-                            ></input>
-                            <img width="100#" src={image} />
-                          </DialogContent>
-                          <DialogActions sx={{ height: 0 }}>
-                            <Button onClick={handleEditClose}>取消</Button>
-                            <Button type="submit" onClick={handleEditClose}>
-                              確認
-                            </Button>
-                          </DialogActions>
-                        </AddFormProduct>
+                        <form onSubmit={handleProductEditSubmit}>
+                          <Stack mx={5} my={3}>
+                            <DialogContent>
+                              <TextField
+                                onChange={handleProductInfo}
+                                name="name"
+                                label="商品名稱"
+                                variant="outlined"
+                                sx={{ width: 300 }}
+                                defaultValue={currentInfo.name}
+                              />
+                              <br /> <br />
+                              <TextField
+                                onChange={handleProductInfo}
+                                defaultValue={currentInfo.price}
+                                name="price"
+                                label="價格"
+                                variant="outlined"
+                                sx={{ width: 300 }}
+                                required
+                              />
+                              <br /> <br />
+                              <TextField
+                                select
+                                onChange={handleProductInfo}
+                                name="category"
+                                label="種類"
+                                sx={{ width: 300 }}
+                                defaultValue={currentInfo.category}
+                              >
+                                <MenuItem value={0}>肉類</MenuItem>
+                                <MenuItem value={1}>蔬菜類</MenuItem>
+                                <MenuItem value={2}>加工類</MenuItem>
+                                <MenuItem value={3}>其他類</MenuItem>
+                              </TextField>
+                              <br />
+                              <br />
+                              <InputLabel id="demo-simple-select-label">
+                                調味料選項
+                              </InputLabel>
+                              <FormGroup row={true}>{sauceTag}</FormGroup>
+                              <br />
+                              <input
+                                type="file"
+                                accept="image/png, image/jpeg"
+                                onChange={onImageChange}
+                                // value={"http://localhost:8000/" + currentInfo.image}
+                                // value="C:/Users/user/Desktop/gogoro.jfif"
+                              ></input>
+                              <img width="100#" src={image} />
+                            </DialogContent>
+                            <DialogActions sx={{ height: 0 }}>
+                              <Button onClick={handleEditClose}>取消</Button>
+                              <Button type="submit" onClick={handleEditClose}>
+                                確認
+                              </Button>
+                            </DialogActions>
+                          </Stack>
+                        </form>
                       </Dialog>
                     </Table>
                   </TableContainer>
@@ -1152,49 +1054,7 @@ const Product = () => {
                   <br />
                   <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
                     <Table stickyHeader>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            編號
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            調味料名稱
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            狀態
-                          </TableCell>
-
-                          <TableCell
-                            align="center"
-                            style={{
-                              backgroundColor: "#6379A1",
-                              color: "white",
-                            }}
-                          >
-                            操作
-                          </TableCell>
-                        </TableRow>
-                      </TableHead>
+                      <TableHeads id={"tags"} />
 
                       {filtered.map((item, index) => (
                         <TableProduct
@@ -1216,25 +1076,30 @@ const Product = () => {
                         maxWidth="xs"
                         PaperComponent={PaperComponent}
                       >
-                        <DialogTitle id="delete" style={{ cursor: "move" }}>
+                        <FormTitle id="delete" style={{ cursor: "move" }}>
                           {"確定要刪除此項目?"}
-                        </DialogTitle>
-                        <DialogContent style={{ textAlign: "right" }}>
-                          <List aria-label="mailbox folders">
-                            <ListItem button>
-                              <ListItemText
-                                primary="調味料名稱 :"
-                                sx={{ maxWidth: "70%" }}
-                              />
-                              <Chip label={currentSauce.tag} />
-                            </ListItem>
-                            <Divider />
-                          </List>
+                        </FormTitle>
+                       
+                          <Stack mx={3} my={3} style={{ textAlign: "right" }}>
+                            <List aria-label="mailbox folders">
+                              <ListItem button>
+                                <ListItemText
+                                  primary="調味料名稱 :"
+                                  sx={{ maxWidth: "50%" }}
+                                />
+                                <Chip label={currentSauce.tag} />
+                              </ListItem>
+                              <Divider />
+                            </List>
+                            <DialogActions>
+                              <Button onClick={handleDeClose}>取消</Button>
 
-                          <Button onClick={handleDeClose}>取消</Button>
-
-                          <Button onClick={() => handleDelete()}>確認</Button>
-                        </DialogContent>
+                              <Button onClick={() => handleDelete()}>
+                                確認
+                              </Button>
+                            </DialogActions>
+                          </Stack>
+                      
                       </Dialog>
                       {/* 修改調味料Dialog */}
                       <Dialog
@@ -1247,48 +1112,50 @@ const Product = () => {
                         maxWidth="xs"
                         // PaperComponent={PaperComponent}
                       >
-                        <DialogTitle
+                        <FormTitle
                           id="edit"
                           style={{ textAlign: "center", cursor: "move" }}
                         >
                           {"修改調味料資訊"}
-                        </DialogTitle>
+                        </FormTitle>
 
-                        <AddForm
-                          style={{ height: "300px" }}
+                        <form
+                          // style={{ height: "300px" }}
                           onSubmit={handleEditSubmit}
                         >
-                          <DialogContent>
-                            <TextField
-                              onChange={handleSauceInfo}
-                              defaultValue={currentSauce.tag}
-                              name="tag"
-                              label="調味料名稱"
-                              variant="outlined"
-                              sx={{ width: 380 }}
-                            />
-                            <br /> <br />
-                            <TextField
-                              select
-                              onChange={handleSauceInfo}
-                              defaultValue={currentSauce.status}
-                              name="status"
-                              label="狀態"
-                              sx={{ width: 380 }}
-                            >
-                              <MenuItem value={0}>使用中</MenuItem>
-                              <MenuItem value={1}>未使用</MenuItem>
-                            </TextField>
-                            <br />
-                            <br />
-                          </DialogContent>
-                          <DialogActions sx={{ height: 40 }}>
-                            <Button onClick={handleEditClose}>取消</Button>
-                            <Button type="submit" onClick={handleEditClose}>
-                              確認
-                            </Button>
-                          </DialogActions>
-                        </AddForm>
+                          <Stack mx={7} my={2}>
+                            <DialogContent>
+                              <TextField
+                                onChange={handleSauceInfo}
+                                defaultValue={currentSauce.tag}
+                                name="tag"
+                                label="調味料名稱"
+                                variant="outlined"
+                                sx={{ width: 280 }}
+                              />
+                              <br /> <br />
+                              <TextField
+                                select
+                                onChange={handleSauceInfo}
+                                defaultValue={currentSauce.status}
+                                name="status"
+                                label="狀態"
+                                sx={{ width: 280 }}
+                              >
+                                <MenuItem value={0}>使用中</MenuItem>
+                                <MenuItem value={1}>未使用</MenuItem>
+                              </TextField>
+                              <br />
+                              <br />
+                            </DialogContent>
+                            <DialogActions>
+                              <Button onClick={handleEditClose}>取消</Button>
+                              <Button type="submit" onClick={handleEditClose}>
+                                確認
+                              </Button>
+                            </DialogActions>
+                          </Stack>
+                        </form>
                       </Dialog>
                     </Table>
                   </TableContainer>

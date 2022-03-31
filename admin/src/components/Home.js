@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BodyContainer, Navbar, Content } from "./Navbar";
 
 const Home = () => {

@@ -85,7 +85,7 @@ const Login = () => {
 
           localStorage.setItem(
             "UserAccount",
-            JSON.stringify(UserInfo.username)
+            UserInfo.username
           );
           localStorage.setItem(
             "StoreLogo",
@@ -96,7 +96,15 @@ const Login = () => {
             JSON.stringify(UserInfo.storeId.type)
           );
           localStorage.setItem(
+            "StoreId",
+            JSON.stringify(UserInfo.storeId.id)
+          );
+          localStorage.setItem(
             "Tabs",
+            JSON.stringify(1)
+          );
+          localStorage.setItem(
+            "StoreTabs",
             JSON.stringify(1)
           );
           history.push("/");

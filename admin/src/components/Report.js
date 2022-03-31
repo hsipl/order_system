@@ -51,6 +51,7 @@ const Report = () => {
     get_api();
   }, []);
 console.log(branch)
+
   return (
     <>
       <BodyContainer>
@@ -96,7 +97,7 @@ console.log(branch)
                   )}
                 />
               </LocalizationProvider>
-              <Button size="large" color="inherit">
+              <Button size="large" color="inherit" >
                 <Search fontSize="large" />
               </Button>
             </Stack>

@@ -1,6 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { styled, Button, TableCell, TableHead, TableRow } from "@mui/material";
-import { Edit, Delete } from "@material-ui/icons";
+import { Edit, Delete, Flag } from "@material-ui/icons";
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 export const TableHeads = (props) => {
   const TableTitle = styled(TableCell)({
@@ -10,7 +13,7 @@ export const TableHeads = (props) => {
   });
 
   const Heads = {
-    product: ["產品名稱", "價格", "圖片", "類別", "狀態", "操作"],
+    product: ["編號","產品名稱", "價格", "圖片", "類別", "狀態", "操作"],
     employee: ["姓名", "帳號", "職位", "操作"],
     shop: ["店家照片", "店家名稱", "類型", "狀態", "創店日期", "操作"],
     report: ["產品名稱", "銷售總額(元)", "銷售總數(份)"],
@@ -32,40 +35,115 @@ export const TableHeads = (props) => {
 export function ControlCell(props) {
   const DelBTN = props.Del;
   const EditBTN = props.Edit;
+  const ManageEdit = props.ManageEdit;
+  const BusinessCard = props.BusinessCard;
   const status = props.status;
-  if (status === "已歇業" || status === "已停用" || status === "已停售" ) {
-    return (
-      <Button onClick={EditBTN}>
-        <Edit />
-      </Button>
-    );
+  const Page = props.Page;
+  const idIdentity = props.idIdentity;
+
+  if (Page === "shop") {
+    if (status === "已歇業") {
+      return (
+        <>
+          <Button onClick={EditBTN}>
+            <Edit />
+          </Button>
+
+          <Button onClick={BusinessCard}>
+            <CreditScoreIcon />
+          </Button>
+        </>
+      );
+    } else if (idIdentity === false) {
+      return (
+        <>
+          <Button onClick={EditBTN}>
+            <Edit />
+          </Button>
+          <Button onClick={DelBTN}>
+            <Delete />
+          </Button>
+          <Button onClick={BusinessCard}>
+            <CreditScoreIcon />
+          </Button>
+        </>
+      );
+    } else if (idIdentity === true) {
+      return (
+        <>
+          <Button onClick={ManageEdit}>
+            <PersonAddIcon />
+          </Button>
+          <Button onClick={EditBTN}>
+            <Edit />
+          </Button>
+          <Button onClick={DelBTN}>
+            <Delete />
+          </Button>
+          {/* <Button onClick={BusinessCard}>
+            <CreditScoreIcon />
+          </Button> */}
+        </>
+      );
+    } else {
+      return (
+        <>
+          <Button onClick={ManageEdit}>
+            <PersonAddIcon />
+          </Button>
+          <Button onClick={EditBTN}>
+            <Edit />
+          </Button>
+          <Button onClick={DelBTN}>
+            <Delete />
+          </Button>
+          <Button onClick={BusinessCard}>
+            <CreditScoreIcon />
+          </Button>
+        </>
+      );
+    }
   } else {
-    return (
-      <>
-        <Button onClick={DelBTN}>
-          <Delete />
-        </Button>
-        <Button onClick={EditBTN}>
-          <Edit />
-        </Button>
-      </>
-    );
-  }
-}
-
-export function ControlHandoverCell(props) {
-
-    const EditBTN = props.Edit;
-
-   
+    if (status === "已歇業" || status === "已停用" || status === "已停售") {
       return (
         <Button onClick={EditBTN}>
           <Edit />
         </Button>
       );
-   
+    } else {
+      return (
+        <>
+          <Button onClick={DelBTN}>
+            <Delete />
+          </Button>
+          <Button onClick={EditBTN}>
+            <Edit />
+          </Button>
+        </>
+      );
     }
-  
+  }
+}
+
+export function ControlManageCell(props) {
+  const ManageEdit = props.ManageEdit;
+  const EditBTN = props.Edit;
+  return (
+    <Button onClick={EditBTN}>
+      <Edit />
+    </Button>
+  );
+}
+
+export function ControlHandoverCell(props) {
+  const EditBTN = props.Edit;
+
+  return (
+    <Button onClick={EditBTN}>
+      <Edit />
+    </Button>
+  );
+}
 
 export function TableShop(props) {
   const delBTN = props.Del;
@@ -76,6 +154,10 @@ export function TableShop(props) {
   const storeType = props.storeType;
   const storeStatus = props.storeStatus;
   const createdAt = props.createdAt;
+  const Page = props.Page;
+  const ManageEdit = props.ManageEdit;
+  const BusinessCard = props.BusinessCard;
+  const idIdentity = props.idIdentity;
 
   const ShopData = [
     <img src={"http://localhost:8000/" + Img} alt={Img} height="100" />,
@@ -83,7 +165,15 @@ export function TableShop(props) {
     storeType,
     storeStatus,
     createdAt,
-    <ControlCell status={storeStatus} Del={delBTN} Edit={editBTN} />,
+    <ControlCell
+      Page={Page}
+      status={storeStatus}
+      Del={delBTN}
+      Edit={editBTN}
+      ManageEdit={ManageEdit}
+      BusinessCard={BusinessCard}
+      idIdentity={idIdentity}
+    />,
   ];
 
   return (
@@ -184,7 +274,7 @@ export function TableHandover(props) {
     handoverSysmoney,
     handoverRealcash,
     handoverCreateAt,
-    <ControlHandoverCell  Edit={EditBTN} />,
+    <ControlHandoverCell Edit={EditBTN} />,
   ];
 
   return (
@@ -197,9 +287,7 @@ export function TableHandover(props) {
           }}
         >
           {item}
-          
         </TableCell>
-        
       ))}
     </TableRow>
   );
