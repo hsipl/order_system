@@ -52,8 +52,8 @@ class UserController {
   }
   async update(req: Request, res: Response, next: NextFunction) {
     const id: number = parseInt(req.params.id);
-    const { name, username, password, storeId, type, }: { name: string; username: string; password: string; storeId: number; type: number } = req.body;
-    const params: IUpdateUserParams = { id, name, username, password, storeId, type };
+    const { name, password, type, }: { name: string; password: string; type: number } = req.body;
+    const params: IUpdateUserParams = { id, name, password, type };
     try {
       const checkIsExist = await this.service.checkIsExitById(id);
       if (!checkIsExist) {
