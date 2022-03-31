@@ -182,7 +182,6 @@ const Employee = () => {
                     id="contained-button-file"
                     multiple
                     type="file"
-                    accept="image/png, image/jpeg"
                     onChange={onImageChange}
                   />
                   <img width="100#" src={image} />
