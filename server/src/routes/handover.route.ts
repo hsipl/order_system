@@ -4,6 +4,15 @@ import { HandoverService } from '../services/handover.service';
 import BasicRoute from "../bases/route.abstract";
 import HandoverController from "../controller/handover.controller";
 import CacheService from '../services/cache.service';
+import TurnoverController from '../controller/turnover.controller';
+import { TurnoverService } from '../services/turnover.service';
+import { TurnoverRepository } from '../repository/turnover.respository';
+import { OrderService } from '../services/order.service';
+import { OrderRepository } from '../repository/order.repository';
+import PopularProductController from '../controller/popularProduct.controller';
+import { PopularProductsService } from '../services/popularProducts.service';
+import { PopularProductsRepository } from '../repository/popularProducts.respository';
+
 /**
  * @swagger
  * /Handover:
@@ -116,6 +125,7 @@ export default class HandoverRoute extends BasicRoute {
     this.router.delete("/", auth.authAdmin.bind(auth), (req, res, next) =>
       controller.delete(req, res, next)
     );
+
 
   }
 }

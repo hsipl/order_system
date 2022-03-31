@@ -22,6 +22,7 @@ export interface IOrderProductParam {
     name?: string;
     productId?: number;
     description: string;
+    quantity: number;
 }
 
 export interface IOrderRequestParams extends IOrderParams {
