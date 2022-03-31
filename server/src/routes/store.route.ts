@@ -8,6 +8,112 @@ import { upload } from '../utils/fileUpload';
 import { StoreValidator } from '../validator/store';
 import CacheService from '../services/cache.service';
 
+/**
+ * @swagger
+ * /store:
+ *   get:
+ *     tags:
+ *     - Store
+ *     description: Get Store Data
+ *     responses:
+ *       200:
+ *         description: Get Store Data
+ *         content:
+ *           application/x-www-form-urlencoded:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Store'
+ *   post:
+ *     tags:
+ *     - Store
+ *     description: Create Store
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               type:
+ *                 type: number
+ *               status:
+ *                 type: number
+ *               image:
+ *                 type: file
+ *             required:
+ *             - name
+ *             - type
+ *             - status
+ *             - image
+ *     responses:
+ *       200:
+ *         description: Create Store Success
+ * /store/{storeId}:
+ *   get:
+ *     tags:
+ *     - Store
+ *     description: Get Store Data
+ *     parameters:
+ *     - name: storeId
+ *       in: path
+ *       required: true
+ *       schema:
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: Get Store Data
+ *   put:
+ *     tags:
+ *     - Store
+ *     description: Update Store Data
+ *     parameters:
+ *     - name: storeId
+ *       in: path
+ *       required: true
+ *       schema:
+ *         type: number
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               type:
+ *                 type: number
+ *               status:
+ *                 type: number
+ *               image:
+ *                 type: file
+ *             required:
+ *             - name
+ *             - type
+ *             - status
+ *             - image
+ *     responses:
+ *       200:
+ *         description: Update Store Success
+ *   delete:
+ *     tags:
+ *     - Store
+ *     description: Delete Store Data
+ *     parameters:
+ *     - name: storeId
+ *       in: path
+ *       required: true
+ *       schema:
+ *         type: number
+ *     responses:
+ *       200:
+ *         description: Delete Store Success
+ */ 
+
+
 export default class StoreRoute extends BasicRoute {
   constructor() {
     super();
@@ -21,7 +127,7 @@ export default class StoreRoute extends BasicRoute {
     );
     const validator = new StoreValidator();
     const auth = new Auth();
-    this.router.get('/', auth.authAdmin.bind(auth), controller.getAll.bind(controller));
+    this.router.get('/', auth.authAdmin.bind(auth), controller.get.bind(controller));
     this.router.get(
       '/:id',
       auth.authAdmin.bind(auth),

@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { UpdateResult } from 'typeorm';
+import { FindConditions, Like, UpdateResult } from 'typeorm';
 import { errorMsg, errorStatusCode } from '../bases/errorTypes';
 import ErrorHandler from '../controller/error.controller';
 import { Store } from '../entity/store';
@@ -15,10 +15,13 @@ export class StoreService {
   constructor(
     private readonly repository: StoreRepository,
     private readonly cacheService: CacheService,
-  ) {}
+  ) { }
 
-  async getAll(): Promise<Store[]> {
-    const store = await this.repository.getAll();
+  async get(query: FindConditions<Store>): Promise<Store[]> {
+    if (Object.keys(query).includes('name')) {
+      query.name = Like('%' + query.name + '%');
+    }
+    const store = await this.repository.get(query);
     return store;
   }
 
@@ -32,6 +35,11 @@ export class StoreService {
     return !!isExist;
   }
 
+  async checkByID(id: number): Promise<boolean> {
+    const isExist = await this.repository.get({ id: id });
+    return !!isExist;
+  }
+
   async checkExistByID(id: number): Promise<boolean> {
     const isExist = await this.repository.getById(id);
     return !!isExist;
@@ -41,7 +49,6 @@ export class StoreService {
     const { sessionID } = req;
     const sessionData = await this.cacheService.get(`sess:${sessionID}`);
     const { username, role, store } = JSON.parse(sessionData).user;
-    console.log('1');
     if (role !== 1 || store.type !== 1) {
       throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
     }

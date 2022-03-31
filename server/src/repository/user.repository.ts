@@ -1,5 +1,6 @@
 import { ICreateUserParams, IUserGetEmployee, IUserParams } from '../interafaces/user.interface';
 import { User } from '../entity/user';
+import { FindConditions } from 'typeorm';
 
 const field: (keyof User)[] = ['id', 'name', 'status', 'type', 'image', 'createdAt'];
 const loginField: (keyof User)[] = ['name', 'type', 'storeId'];
@@ -7,7 +8,12 @@ export class UserRepository {
   async create(user: User) {
     return await User.save(user);
   }
-
+  async getUsers(query: FindConditions<User>): Promise<User[]> {
+    return await User.find({
+      select: field,
+      where: query
+    })
+  }
   async getAllEmployee(params: IUserGetEmployee) {
     return await User.find({
       select: field,
@@ -30,7 +36,6 @@ export class UserRepository {
       where: params,
       relations: ['storeId'],
     });
-    // console.log(user);
     return user;
   }
 }

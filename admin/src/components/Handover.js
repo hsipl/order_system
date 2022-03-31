@@ -33,7 +33,8 @@ import ListItemText from "@mui/material/ListItemText";
 import { TableHandover } from "./Table";
 import { Search } from "@material-ui/icons";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
-
+import { SearchBox, SearchContainer } from "./SearchAndForm";
+import { TableHeads } from "./Table";
 
 import Chip from "@mui/material/Chip";
 const HandoverContainer = styled(Box)({
@@ -98,8 +99,6 @@ const Handover = () => {
       }
       setHandoverData(data);
       setHandoverFilter(data);
-
-
     };
     get_api();
   }, []);
@@ -166,202 +165,198 @@ const Handover = () => {
 
   return (
     <>
-    <BodyContainer>
-      <Navbar />
-      <HandoverContainer id="handover">
-        <Stack spacing={2}>
-          <Breadcrumbs
-            separator={<NavigateNextIcon fontSize="small" />}
-            aria-label="breadcrumb"
-          >
-            {breadcrumbs}
-          </Breadcrumbs>
-        </Stack>
-        <br />
-        <LocalizationProvider dateAdapter={AdapterDateFns}>
-          <DatePicker
-            label="選擇日期"
-            value={value}
-            onChange={(newValue) => {
-              setValue(
-                newValue === null
-                  ? null
-                  : newValue.getFullYear() +
-                      "-" +
-                      (newValue.getMonth() + 1 < 10
-                        ? "0" + (newValue.getMonth() + 1)
-                        : newValue.getMonth() + 1) +
-                      "-" +
-                      (newValue.getDate() < 10
-                        ? "0" + newValue.getDate()
-                        : newValue.getDate())
-              );
-            }}
-            inputFormat="yyyy-MM-dd"
-            renderInput={(params) => (
-              <TextField {...params} helperText={null} />
-            )}
-          />
-        </LocalizationProvider>
-        <Button
-          size="large"
-          color="inherit"
-          onClick={() => handleHandoverSearch()}
-        >
-          <Search fontSize="large" />
-        </Button>
-        <Button onClick={handleClean}>清除搜尋</Button>
-        <br />
+      <BodyContainer>
+        <Navbar />
+        <Content>
+          <Breadcrumb name="交班紀錄" />
+          <SearchContainer>
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                label="選擇日期"
+                value={value}
+                onChange={(newValue) => {
+                  setValue(
+                    newValue === null
+                      ? null
+                      : newValue.getFullYear() +
+                          "-" +
+                          (newValue.getMonth() + 1 < 10
+                            ? "0" + (newValue.getMonth() + 1)
+                            : newValue.getMonth() + 1) +
+                          "-" +
+                          (newValue.getDate() < 10
+                            ? "0" + newValue.getDate()
+                            : newValue.getDate())
+                  );
+                }}
+                inputFormat="yyyy-MM-dd"
+                renderInput={(params) => (
+                  <SearchBox variant="filled" {...params} helperText={null} />
+                )}
+              />
+            </LocalizationProvider>
 
-        <br />
-        <TableContainer component={Paper} sx={{ maxHeight: 610 }}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  align="center"
-                  style={{
-                    backgroundColor: "#6379A1",
-                    color: "white",
-                  }}
-                >
-                  交班人
-                </TableCell>
-                <TableCell
-                  align="center"
-                  style={{
-                    backgroundColor: "#6379A1",
-                    color: "white",
-                  }}
-                >
-                  系統金額
-                </TableCell>
-                <TableCell
-                  align="center"
-                  style={{
-                    backgroundColor: "#6379A1",
-                    color: "white",
-                  }}
-                >
-                  實際金額
-                </TableCell>
-                <TableCell
-                  align="center"
-                  style={{
-                    backgroundColor: "#6379A1",
-                    color: "white",
-                  }}
-                >
-                  交班時間
-                </TableCell>
-                <TableCell
-                  align="center"
-                  style={{
-                    backgroundColor: "#6379A1",
-                    color: "white",
-                  }}
-                >
-                  操作
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            {filtered.map(
-              (item, index) => (
-                <TableHandover
-                  handoverId={item.id}
-                  handoverSysmoney={item.sysmoney}
-                  handoverRealcash={item.realcash}
-                  handoverCreateAt={item.createdAt}
-                  Edit={() => handleHandoverEditOpen(item, index)}
-                />
-              )
-
-              // {
-              //   return (
-              //     <TableRow key={item.id}>
-              //       <TableCell align="center">{item.userId.name}</TableCell>
-
-              //       <TableCell align="center">{item.sysmoney}</TableCell>
-
-              //       <TableCell align="center">{item.realcash}</TableCell>
-
-              //       <TableCell align="center">{item.createdAt}</TableCell>
-              //       <TableCell align="center">
-              //         <Button onClick={() => handleHandoverEditOpen(item, index)}>
-              //           <EditIcon />
-              //         </Button>
-              //       </TableCell>
-              //     </TableRow>
-              //   );
-              // }
-            )}
-            <Dialog
-              open={openEdit}
-              onClose={handleHandoverEditClose}
-              aria-labelledby="edit"
-              aria-describedby="edit"
-              onBackdropClick="false"
-              fullWidth="true"
-              maxWidth="xs"
-              // PaperComponent={PaperComponent}
+            <Button
+              size="large"
+              color="inherit"
+              onClick={() => handleHandoverSearch()}
             >
-              <DialogTitle
-                id="edit"
-                style={{ textAlign: "center", cursor: "move" }}
-              >
-                {"修改實際金額"}
-              </DialogTitle>
-              <AddForm>
-                <DialogContent style={{ textAlign: "center" }}>
-                  <ListItem button>
-                    <ListItemText primary="交班人 :" sx={{ maxWidth: "50%" }} />
-                    <Chip
-                      label={currentHandover.userName}
-                      style={{ margin: "auto" }}
-                    />
-                  </ListItem>
-                  <br /> <br />
-                  <ListItem button>
-                    <ListItemText
-                      primary="系統金額 :"
-                      sx={{ maxWidth: "50%" }}
-                    />
-                    <Chip
-                      label={currentHandover.sysmoney}
-                      style={{ margin: "auto" }}
-                    />
-                  </ListItem>
-                  <br /> <br />
-                  <ListItem button>
-                    <ListItemText
-                      primary="交班時間 :"
-                      sx={{ maxWidth: "50%" }}
-                    />
-                    <Chip
-                      label={currentHandover.createdAt}
-                      style={{ margin: "auto" }}
-                    />
-                  </ListItem>
-                  <br /> <br />
-                  <TextField
-                    required="true"
-                    defaultValue={currentHandover.realcash}
-                    onChange={handleHandoverInfo}
-                    name="realCash"
-                    label="實際金額"
-                    variant="outlined"
-                    sx={{ width: 300 }}
+              <Search fontSize="large" />
+            </Button>
+            <Button onClick={handleClean}>清除搜尋</Button>
+          </SearchContainer>
+
+          <TableContainer component={Paper} sx={{ maxHeight: 610 }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    align="center"
+                    style={{
+                      backgroundColor: "#6379A1",
+                      color: "white",
+                    }}
+                  >
+                    交班人
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{
+                      backgroundColor: "#6379A1",
+                      color: "white",
+                    }}
+                  >
+                    系統金額
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{
+                      backgroundColor: "#6379A1",
+                      color: "white",
+                    }}
+                  >
+                    實際金額
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{
+                      backgroundColor: "#6379A1",
+                      color: "white",
+                    }}
+                  >
+                    交班時間
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    style={{
+                      backgroundColor: "#6379A1",
+                      color: "white",
+                    }}
+                  >
+                    操作
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              {filtered.map(
+                (item, index) => (
+                  <TableHandover
+                    handoverId={item.id}
+                    handoverSysmoney={item.sysmoney}
+                    handoverRealcash={item.realcash}
+                    handoverCreateAt={item.createdAt}
+                    Edit={() => handleHandoverEditOpen(item, index)}
                   />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleHandoverEditClose}>取消</Button>
-                  <Button onClick={handleHandoverEditSubmit}>確認</Button>
-                </DialogActions>
-              </AddForm>
-            </Dialog>
-          </Table>
-        </TableContainer>
-      </HandoverContainer>
+                )
+
+                // {
+                //   return (
+                //     <TableRow key={item.id}>
+                //       <TableCell align="center">{item.userId.name}</TableCell>
+
+                //       <TableCell align="center">{item.sysmoney}</TableCell>
+
+                //       <TableCell align="center">{item.realcash}</TableCell>
+
+                //       <TableCell align="center">{item.createdAt}</TableCell>
+                //       <TableCell align="center">
+                //         <Button onClick={() => handleHandoverEditOpen(item, index)}>
+                //           <EditIcon />
+                //         </Button>
+                //       </TableCell>
+                //     </TableRow>
+                //   );
+                // }
+              )}
+              <Dialog
+                open={openEdit}
+                onClose={handleHandoverEditClose}
+                aria-labelledby="edit"
+                aria-describedby="edit"
+                onBackdropClick="false"
+                fullWidth="true"
+                maxWidth="xs"
+                // PaperComponent={PaperComponent}
+              >
+                <DialogTitle
+                  id="edit"
+                  style={{ textAlign: "center", cursor: "move" }}
+                >
+                  {"修改實際金額"}
+                </DialogTitle>
+                <AddForm>
+                  <DialogContent style={{ textAlign: "center" }}>
+                    <ListItem button>
+                      <ListItemText
+                        primary="交班人 :"
+                        sx={{ maxWidth: "50%" }}
+                      />
+                      <Chip
+                        label={currentHandover.userName}
+                        style={{ margin: "auto" }}
+                      />
+                    </ListItem>
+                    <br /> <br />
+                    <ListItem button>
+                      <ListItemText
+                        primary="系統金額 :"
+                        sx={{ maxWidth: "50%" }}
+                      />
+                      <Chip
+                        label={currentHandover.sysmoney}
+                        style={{ margin: "auto" }}
+                      />
+                    </ListItem>
+                    <br /> <br />
+                    <ListItem button>
+                      <ListItemText
+                        primary="交班時間 :"
+                        sx={{ maxWidth: "50%" }}
+                      />
+                      <Chip
+                        label={currentHandover.createdAt}
+                        style={{ margin: "auto" }}
+                      />
+                    </ListItem>
+                    <br /> <br />
+                    <TextField
+                      required="true"
+                      defaultValue={currentHandover.realcash}
+                      onChange={handleHandoverInfo}
+                      name="realCash"
+                      label="實際金額"
+                      variant="outlined"
+                      sx={{ width: 300 }}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button onClick={handleHandoverEditClose}>取消</Button>
+                    <Button onClick={handleHandoverEditSubmit}>確認</Button>
+                  </DialogActions>
+                </AddForm>
+              </Dialog>
+            </Table>
+          </TableContainer>
+        </Content>
       </BodyContainer>
     </>
   );

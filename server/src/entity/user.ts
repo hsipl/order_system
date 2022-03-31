@@ -11,6 +11,53 @@ import {
 } from 'typeorm';
 import { Store } from './store';
 
+/**
+ * @swagger
+ *   components:
+ *     schemas:
+ *       User:
+ *         type: object
+ *         properties:
+ *           id:
+ *             type: integer
+ *             format: number
+ *             unsigned: true
+ *           name:
+ *             type: string
+ *             length: 64
+ *           username:
+ *             type: string
+ *             unique: true
+ *             length: 64
+ *           password:
+ *             type: string
+ *             length: 256
+ *           storeId:
+ *             $ref: '#/components/schemas/Store'
+ *           type:
+ *             type: tinyint
+ *             format: number
+ *             unsigned: true
+ *             description: 0 Normal Employee, 1 Store Manager
+ *             default: 0
+ *           status:
+ *             type: tinyint
+ *             format: number
+ *             unsigned: true
+ *             description: 0 On-boarding, 1 Quit
+ *             default: 0
+ *           image:
+ *             type: string
+ *             nullable: true
+ *             length: 256
+ *           createdAt:
+ *             type: string
+ *           updatedAt: 
+ *             type: string
+ *           deleteAt:
+ *             type: string
+ */
+
 @Entity()
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn({ unsigned: true })

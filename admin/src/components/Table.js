@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { styled, Button, TableCell, TableHead, TableRow } from "@mui/material";
+import { styled, Button, TableCell, TableHead, TableRow,Tooltip } from "@mui/material";
 import { Edit, Delete, Flag } from "@material-ui/icons";
 import CreditScoreIcon from "@mui/icons-material/CreditScore";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
@@ -45,41 +45,56 @@ export function ControlCell(props) {
     if (status === "已歇業") {
       return (
         <>
+        <Tooltip title="修改">
           <Button onClick={EditBTN}>
             <Edit />
           </Button>
-
+          </Tooltip>
+          <Tooltip title="檢視/修改店長資訊">
           <Button onClick={BusinessCard}>
             <CreditScoreIcon />
           </Button>
+          </Tooltip>
         </>
       );
     } else if (idIdentity === false) {
       return (
         <>
+         <Tooltip title="修改">
           <Button onClick={EditBTN}>
             <Edit />
           </Button>
+          </Tooltip>
+          <Tooltip title="刪除">
           <Button onClick={DelBTN}>
             <Delete />
           </Button>
+          </Tooltip>
+          <Tooltip title="檢視/修改店長資訊">
           <Button onClick={BusinessCard}>
             <CreditScoreIcon />
           </Button>
+          </Tooltip>
         </>
       );
     } else if (idIdentity === true) {
       return (
         <>
+        <Tooltip title="新增店長資訊">
           <Button onClick={ManageEdit}>
             <PersonAddIcon />
           </Button>
+          </Tooltip>
+          <Tooltip title="修改">
           <Button onClick={EditBTN}>
             <Edit />
           </Button>
+          </Tooltip>
+          <Tooltip title="刪除">
           <Button onClick={DelBTN}>
             <Delete />
           </Button>
+          </Tooltip>
           {/* <Button onClick={BusinessCard}>
             <CreditScoreIcon />
           </Button> */}
@@ -88,37 +103,52 @@ export function ControlCell(props) {
     } else {
       return (
         <>
+          <Tooltip title="新增店長資訊">
           <Button onClick={ManageEdit}>
             <PersonAddIcon />
           </Button>
+          </Tooltip>
+          <Tooltip title="修改">
           <Button onClick={EditBTN}>
             <Edit />
           </Button>
+          </Tooltip>
+          <Tooltip title="刪除">
           <Button onClick={DelBTN}>
             <Delete />
           </Button>
+          </Tooltip>
+          <Tooltip title="檢視/修改店長資訊">
           <Button onClick={BusinessCard}>
             <CreditScoreIcon />
           </Button>
+          </Tooltip>
         </>
       );
     }
   } else {
     if (status === "已歇業" || status === "已停用" || status === "已停售") {
       return (
+        <Tooltip title="修改">
         <Button onClick={EditBTN}>
           <Edit />
         </Button>
+        </Tooltip>
       );
     } else {
       return (
         <>
-          <Button onClick={DelBTN}>
-            <Delete />
-          </Button>
+         <Tooltip title="修改">
           <Button onClick={EditBTN}>
             <Edit />
           </Button>
+          </Tooltip>
+          <Tooltip title="刪除">
+          <Button onClick={DelBTN}>
+            <Delete />
+          </Button>
+          </Tooltip>
+         
         </>
       );
     }
@@ -129,9 +159,11 @@ export function ControlManageCell(props) {
   const ManageEdit = props.ManageEdit;
   const EditBTN = props.Edit;
   return (
-    <Button onClick={EditBTN}>
-      <Edit />
-    </Button>
+    <Tooltip title="修改">
+          <Button onClick={EditBTN}>
+            <Edit />
+          </Button>
+          </Tooltip>
   );
 }
 
@@ -139,9 +171,11 @@ export function ControlHandoverCell(props) {
   const EditBTN = props.Edit;
 
   return (
+    <Tooltip title="修改">
     <Button onClick={EditBTN}>
       <Edit />
     </Button>
+    </Tooltip>
   );
 }
 

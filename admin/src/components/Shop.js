@@ -61,7 +61,6 @@ const Shop = () => {
 
   const handleDeClickOpen = (item) => {
     setOpenDel(true);
-
     setCurrentShop({
       ["id"]: item.id,
       ["name"]: item.name,

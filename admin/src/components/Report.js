@@ -51,7 +51,6 @@ const Report = () => {
     get_api();
   }, []);
 console.log(branch)
-
   return (
     <>
       <BodyContainer>

@@ -2,7 +2,7 @@ import "./App.css";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Product from "./components/Product";
-import Order from "./components/Order";
+import Employee from "./components/Employee";
 import Shop from "./components/Shop";
 import Report from "./components/Report";
 import Home from "./components/Home";
@@ -34,7 +34,7 @@ function App() {
     { path: "/product", component: Product },
     { path: "/home", component: Home },
     { path: "/shop", component: Shop },
-    { path: "/order", component: Order },
+    { path: "/employee", component: Employee },
     { path: "/report", component: Report },
     { path: "/handover", component: Handover },
   ];

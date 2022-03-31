@@ -19,8 +19,9 @@ class ProductController {
         this.tagService = tagService;
     }
 
-    async getAll(req: Request, res: Response, next: NextFunction) {
-        const products = await this.service.getAll();
+    async get(req: Request, res: Response, next: NextFunction) {
+        const query = req.query;
+        const products = await this.service.get(query);
         res.status(200).json(products);
     }
 
@@ -49,7 +50,6 @@ class ProductController {
             return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
         }
         try {
-
             const checkforeignKeyExit = await this.storeService.getById(storeId);
             if (!checkforeignKeyExit) {
                 return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.StoreIdError));
@@ -146,23 +146,6 @@ class ProductController {
                 return next(
                     new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError)
                 );
-            }
-            // 刪除Relation
-            const product = await this.service.getById(id);
-            if (!product) {
-                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.DataNotFound));
-            }
-            const tagsId: number[] = [];
-            product?.tags.forEach(t => tagsId.push(t.id));
-            product.tags = product.tags.filter(t => {
-                tagsId.forEach(tId => {
-                    return t.id !== tId
-                })
-
-            })
-            const newProduct = await this.service.updateRelation(product);
-            if (newProduct === undefined) {
-                return next(new ErrorHandler(errorStatusCode.BadRequest, errorMsg.ParameterError));
             }
             const param: IProductDeleteParams = { id };
             const deletedRes = await this.service.delete(param);

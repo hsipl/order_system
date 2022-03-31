@@ -9,10 +9,55 @@ import {
     ManyToOne,
     BaseEntity,
     ManyToMany,
+    OneToMany,
     JoinTable
 } from "typeorm";
 import { Store } from "./store";
 import { Tag } from "./tag";
+
+/**
+ * @swagger
+ *   components:
+ *     schemas:
+ *       Product:
+ *         type: object
+ *         properties:
+ *           id:
+ *             type: integer
+ *             format: number
+ *           storeId:
+ *             $ref: '#/components/schemas/Store'
+ *           tags:
+ *             $ref: '#/components/schemas/Tag'
+ *           name:
+ *             type: string
+ *             length: 64
+ *           price:
+ *             type: integer
+ *             default: 0
+ *           image:
+ *             type: string
+ *             length: 128
+ *             nullable: true
+ *           category:
+ *             type: tinyint
+ *             format: number
+ *             unsigned: true
+ *             default: 0
+ *             description: 0 Chicken, 1 Processing, 2 Vegetable, 3 Other
+ *           status:
+ *             type: tinyint
+ *             format: number
+ *             unsigned: true
+ *             default: 0
+ *             description: 0 Sell, 1 Not for sale
+ *           createAt:
+ *             type: string
+ *           updatedAt:
+ *             type: string
+ *           deleteAt:
+ *             type: string
+ */
 
 @Entity()
 export class Product extends BaseEntity {
@@ -52,7 +97,7 @@ export class Product extends BaseEntity {
         }
     })
     tags: Tag[];
-
+    
     @Column({
         type: "tinyint",
         unsigned: true,
@@ -60,6 +105,7 @@ export class Product extends BaseEntity {
         default: 0,
     })
     status: number;
+
     @CreateDateColumn({ name: "createdAt" })
     createdAt: Date;
 

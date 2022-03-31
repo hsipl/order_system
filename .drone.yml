@@ -1,28 +1,86 @@
 kind: pipeline
-name: drone-CICD
+name: Build for production
+type: docker
+
+services:
+- name: db
+  image: mysql
+  environment:
+    MYSQL_USER: hsipl
+    MYSQL_PASSWORD: hsipl211
+    MYSQL_ROOT_PASSWORD: hsipl211
+    MYSQL_DATABASE: dev_db
+
+- name: redis
+  image: redis:alpine
 
 steps:
-- name: unit-test
-  image: python
+- name: Run Test
+  image: node:latest
+  depends_on:
+    - db
+    - redis
   commands:
-  - echo "ok!" 
+    - echo "start running test..."
+    - bash ./build.sh
 
-- name: ssh commands
-  image: appleboy/drone-ssh
+- name: slack
+  image: plugins/slack
+  depends_on:
+      - Run Test
   settings:
-    host: 
-      from_secret: host 
-    username: 
-      from_secret: user 
-    password: 
-      from_secret: password 
-    port: 22
-    script:
-      - cd /home/hsipl/feng/Order_System/prd/order_system
-      - git pull 
+    webhook:
+      from_secret: slack_webhook
+    channel: order_system
+  when:
+    status: [ success, failure ]
 
 trigger:
   branch: 
     - main
   event: 
     - pull_request
+---
+
+kind: pipeline
+type: docker
+name: drone-CICD for dev
+
+services:
+- name: db
+  image: mysql
+  environment:
+    MYSQL_USER: hsipl
+    MYSQL_PASSWORD: hsipl211
+    MYSQL_ROOT_PASSWORD: hsipl211
+    MYSQL_DATABASE: dev_db
+    
+- name: redis
+  image: redis:alpine
+
+steps:
+- name: Run Test
+  image: node:latest
+  depends_on:
+    - db
+    - redis
+  commands:
+    - echo "start running test..."
+    - bash ./build.sh
+
+- name: slack
+  image: plugins/slack
+  depends_on:
+      - Run Test
+  settings:
+    webhook:
+      from_secret: slack_webhook
+    channel: order_system
+  when:
+    status: [ success, failure ]
+
+trigger:
+  branch: 
+    - development
+  event: 
+    - push    

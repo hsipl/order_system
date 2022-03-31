@@ -9,6 +9,89 @@ import { UserService } from '../services/user.service';
 import { upload } from '../utils/fileUpload';
 import { UserValidator } from '../validator/user';
 
+/**
+ * @swagger
+ * /user/login:
+ *   post:
+ *     tags:
+ *     - User
+ *     description: Get Tag Data
+ *     requestBody:
+ *       content:
+ *         application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: number
+ *             required:
+ *             - username
+ *             - password
+ *     responses:
+ *       200:
+ *         description: login success
+ * /user/logout:
+ *   get:
+ *     tags:
+ *     - User
+ *     responses:
+ *       200:
+ *         description: logout success
+ * /user/register:
+ *    post:
+ *      tags:
+ *      - User
+ *      requestBody:
+ *        content:
+ *          multipart/form-data:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                username:
+ *                  type: string
+ *                password:
+ *                  type: number
+ *                name:
+ *                  type: string
+ *                type:
+ *                  type: number
+ *                status:
+ *                  type: number
+ *                image:
+ *                  type: file
+ *                storeId:
+ *                  type: number
+ *              required:
+ *              - username
+ *              - password
+ *              - name
+ *              - type
+ *              - status
+ *              - image
+ *              - storeId
+ *      responses:
+ *        200:
+ *          description: register success
+ * /user/employee:
+ *   get:
+ *     tags:
+ *     - User
+ *     description: ''
+ *     responses:
+ *       200:
+ *         description: logout success
+ *         content:
+ *           application/x-www-form-urlencoded:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       
+ * 
+ */
+
 export default class UserRoute extends BasicRoute {
   constructor() {
     super();
@@ -35,6 +118,11 @@ export default class UserRoute extends BasicRoute {
       '/employee',
       auth.authAdmin.bind(auth),
       controller.getAllEmployee.bind(controller),
+    );
+    this.router.get(
+      '/user',
+      auth.authAdmin.bind(auth),
+      controller.getUser.bind(controller),
     );
   }
 }

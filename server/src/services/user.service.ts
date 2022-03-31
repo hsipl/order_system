@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { FindConditions, Like } from 'typeorm';
 import { errorMsg, errorStatusCode } from '../bases/errorTypes';
 import ErrorHandler from '../controller/error.controller';
 import { User } from '../entity/user';
@@ -14,7 +15,7 @@ export class UserService {
     private readonly repository: UserRepository,
     private readonly cacheService: CacheService,
     private readonly StoreRepository: StoreRepository,
-  ) {}
+  ) { }
 
   public async create(params: ICreateUserParams, req: Request) {
     const { sessionID } = req;
@@ -60,12 +61,26 @@ export class UserService {
   public async getAllEmployee(req: Request) {
     const { sessionID } = req;
     const sessionData = await this.cacheService.get(`sess:${sessionID}`);
-    const { role, storeId } = JSON.parse(sessionData).user;
+    const { role, store } = JSON.parse(sessionData).user;
     if (role !== 1) {
       throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
     }
-    // console.log(storeId);
-    const employees = await this.repository.getAllEmployee({ storeId });
+
+    const employees = await this.repository.getAllEmployee({ storeId: store.id });
     return employees;
+  }
+
+  public async getAllUser(req: Request, query: FindConditions<User>) {
+    const { sessionID } = req;
+    const sessionData = await this.cacheService.get(`sess:${sessionID}`);
+    const { role, store } = JSON.parse(sessionData).user;
+    if (role !== 1) {
+      throw new ErrorHandler(errorStatusCode.UnAuthorization, errorMsg.AuthFailed);
+    }
+    if (Object.keys(query).includes('name')) {
+      query.name = Like('%' + query.name + '%');
+    }
+    const users = await this.repository.getUsers(query)
+    return users
   }
 }
