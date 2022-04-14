@@ -12,6 +12,11 @@ import {
   Stack,
   MenuItem,
   Alert,
+  ListItem,
+  ListItemText,
+  Divider,
+  Chip,
+  List,
 } from "@mui/material";
 import { Delete, Edit, Search } from "@material-ui/icons";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
@@ -19,6 +24,7 @@ import {
   DialogText,
   FormTitle,
   Input,
+  PaperComponent,
   SearchBox,
   SearchContainer,
 } from "./SearchAndForm";
@@ -38,20 +44,24 @@ const Employee = () => {
 
   const [image, setImage] = useState(null);
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const [employeeInfo, setEmployeeInfo] = useState({
     name: "",
     username: "",
     password: "",
-    status:0,
+    status: 0,
     type: 0,
+    passwordCheck: "",
+    image: "",
   });
-
-  const [errMes, setErrMes] = useState("");
 
   const [openEdit, setOpenEdit] = React.useState(false);
   const [currentInfo, setCurrentInfo] = useState({});
+  const [editInfo, setEditInfo] = useState({
+    password: "",
+    passwordCheck: "",
+  });
+
+  const [openDel, setOpenDel] = React.useState(false);
 
   const config = {
     headers: {
@@ -96,53 +106,6 @@ const Employee = () => {
     }));
   }
 
-  function handleUsername(e) {
-    setUsername(e.target.value);
-  }
-
-  function handleLength(e) {
-    const { value, name } = e.target;
-    if (value.length <= 5) {
-      setErrMes(0);
-      setEmployeeInfo((preData) => ({
-        ...preData,
-        [name]: "",
-      }));
-    } else if (value.length > 15) {
-      setErrMes(1);
-      setEmployeeInfo((preData) => ({
-        ...preData,
-        [name]: "",
-      }));
-    } else {
-      setErrMes("");
-      setEmployeeInfo((preData) => ({
-        ...preData,
-        [name]: value,
-      }));
-    }
-  }
-
-  function handlePassWord(e) {
-    setPassword(e.target.value);
-  }
-
-  function handleCheck(e) {
-    if (e.target.value !== password) {
-      setErrMes(2);
-      setEmployeeInfo((preData) => ({
-        ...preData,
-        password: "",
-      }));
-    } else {
-      setErrMes("");
-      setEmployeeInfo((preData) => ({
-        ...preData,
-        password: e.target.value,
-      }));
-    }
-  }
-
   const onImageChange = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));
     setEmployeeInfo((preData) => ({
@@ -154,15 +117,12 @@ const Employee = () => {
   const handleClose = () => {
     setOpen(false);
     setImage(null);
-    setErrMes("");
-    setUsername("");
-    setPassword("");
     setEmployeeInfo({
       name: "",
-
       username: "",
       password: "",
       type: 0,
+      passwordCheck: "",
     });
   };
 
@@ -170,20 +130,30 @@ const Employee = () => {
     if (searchInput.name === "" && searchInput.status === "") {
     } else if (searchInput.name === "" && searchInput.status !== "") {
       let { data } = await axios.get(
-        url + "/user?status=" + searchInput.status,
+        url +
+          "/user/?storeId=" +
+          localStorage.getItem("StoreId") +
+          "&status=" +
+          searchInput.status,
         config
       );
       toChinese(data);
     } else if (searchInput.name !== "" && searchInput.status === "") {
       let { data } = await axios.get(
-        url + "/user?name=" + searchInput.name,
+        url +
+          "/user/?storeId=" +
+          localStorage.getItem("StoreId") +
+          "&name=" +
+          searchInput.name,
         config
       );
       toChinese(data);
     } else {
       let { data } = await axios.get(
         url +
-          "/user?name=" +
+          "/user/?storeId=" +
+          localStorage.getItem("StoreId") +
+          "&name=" +
           searchInput.name +
           "&status=" +
           searchInput.status,
@@ -192,18 +162,18 @@ const Employee = () => {
       toChinese(data);
     }
   };
-
+  console.log(employeeInfo);
   const handleSubmit = async () => {
-    const formData = new FormData();
-    formData.append("storeId", localStorage.getItem("StoreId"));
-    formData.append("name", employeeInfo.name);
-    formData.append("type", employeeInfo.type);
-    formData.append("username", employeeInfo.username);
-    formData.append("password", employeeInfo.password);
-    formData.append("image", employeeInfo.image);
+    const newForm = new FormData();
+    newForm.append("storeId", localStorage.getItem("StoreId"));
+    newForm.append("name", employeeInfo.name);
+    newForm.append("type", employeeInfo.type);
+    newForm.append("username", employeeInfo.username);
+    newForm.append("password", employeeInfo.password);
+    newForm.append("image", employeeInfo.image);
 
     try {
-      await axios.post(url + "/register", formData, config);
+      await axios.post(url + "/register", newForm, config);
       window.location.reload();
     } catch (error) {
       console.log(error);
@@ -235,27 +205,51 @@ const Employee = () => {
     setCurrentInfo({
       ["id"]: item.id,
       ["name"]: item.name,
+      ["type"]: item.type === "店長" ? 1 : 0,
       ["status"]: item.status === "在職" ? 0 : 1,
+      ["image"]: item.image,
     });
+    setEditInfo((preData) => ({
+      ...preData,
+      name: item.name,
+    }));
   };
-  
+
   const handleEditClose = () => {
     setOpenEdit(false);
+    setEditInfo({ password: "", passwordCheck: "" });
   };
 
-  console.log(employeeInfo)
+  function handleEditInfo(e) {
+    const { value, name } = e.target;
+    setEditInfo((preData) => ({
+      ...preData,
+      [name]: value,
+    }));
+  }
+
+  console.log(currentInfo);
+  console.log(editInfo);
 
   const handleEditSubmit = async () => {
-    const formData = new FormData();
-    employeeInfo.name === ""
-      ? formData.append("name", currentInfo.name)
-      : formData.append("name", employeeInfo.name);
-    formData.append("status", employeeInfo.status);
-    employeeInfo.password === ""
-      ? formData.append("password", currentInfo.password)
-      : formData.append("password", employeeInfo.password);
     try {
-      await axios.put(url + "/user" + currentInfo.id, formData, config);
+      if (
+        editInfo.password === "" &&
+        editInfo.passwordCheck === "" &&
+        editInfo.name !== currentInfo.name
+      ) {
+        await axios.patch(
+          url + "/user/" + currentInfo.id,
+          JSON.stringify(editInfo, ["name"]),
+          config
+        );
+      } else {
+        await axios.patch(
+          url + "/user/" + currentInfo.id,
+          JSON.stringify(editInfo, ["name", "password"]),
+          config
+        );
+      }
       window.location.reload();
     } catch (error) {
       console.log(error);
@@ -264,7 +258,7 @@ const Employee = () => {
 
   const handleDeClickOpen = (item) => {
     setOpenDel(true);
-    setCurrentShop({
+    setCurrentInfo({
       ["id"]: item.id,
       ["name"]: item.name,
       ["type"]: item.type,
@@ -277,7 +271,14 @@ const Employee = () => {
     setOpenDel(false);
   };
 
-
+  const handleDelSubmit = async () => {
+    try {
+      await axios.patch(url + "/user/" + currentInfo.id, { status: 1 }, config);
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -373,41 +374,47 @@ const Employee = () => {
                   label="請輸入帳號"
                   variant="outlined"
                   required
-                  onChange={handleUsername}
-                  value={username}
-                  onBlur={handleLength}
+                  onBlur={handleEmployeeInfo}
                 />
+                {employeeInfo.username.length === 0 ? null : employeeInfo
+                    .username.length >= 5 &&
+                  employeeInfo.username.length <= 15 ? null : (
+                  <Alert severity="error" sx={{ marginX: "1.5rem" }}>
+                    帳號字數不符,限制為5-15字
+                  </Alert>
+                )}
                 <Input
                   name="password"
                   label="請輸入密碼"
                   variant="outlined"
                   type="password"
                   required
-                  onChange={handlePassWord}
-                  onBlur={handleLength}
+                  onBlur={handleEmployeeInfo}
                 />
-
+                {employeeInfo.password.length === 0 ? null : employeeInfo
+                    .password.length >= 5 &&
+                  employeeInfo.password.length <= 15 ? null : (
+                  <Alert severity="error" sx={{ marginX: "1.5rem" }}>
+                    密碼字數不符,限制為5-15字
+                  </Alert>
+                )}
                 <Input
-                  name="password"
+                  name="passwordCheck"
                   label="請再次輸入密碼"
                   variant="outlined"
                   type="password"
                   required
-                  onBlur={handleCheck}
+                  onBlur={handleEmployeeInfo}
                 />
-                {errMes === 0 && (
-                  <Alert severity="error" sx={{ marginX: "1.5rem" }}>
-                    帳號或密碼字數不足,限制為5-15字
+                {employeeInfo.passwordCheck.length ===
+                0 ? null : employeeInfo.passwordCheck ===
+                  employeeInfo.password ? (
+                  <Alert severity="success" sx={{ marginX: "1.5rem" }}>
+                    與密碼相符
                   </Alert>
-                )}
-                {errMes === 1 && (
+                ) : (
                   <Alert severity="error" sx={{ marginX: "1.5rem" }}>
-                    帳號或密碼字數過長,限制為5-15字
-                  </Alert>
-                )}
-                {errMes === 2 && (
-                  <Alert severity="error" px="1rem" sx={{ marginX: "1.5rem" }}>
-                    兩次密碼不相同，請重新輸入
+                    與密碼不符，請重新輸入
                   </Alert>
                 )}
                 <DialogText>員工照片:</DialogText>
@@ -425,9 +432,21 @@ const Employee = () => {
                   <Button onClick={handleClose} size="large">
                     取消
                   </Button>
-                  <Button type="submit" size="large">
-                    確認
-                  </Button>
+                  {employeeInfo.username.length >= 5 &&
+                  employeeInfo.username.length <= 15 &&
+                  employeeInfo.password.length >= 5 &&
+                  employeeInfo.password.length <= 15 &&
+                  employeeInfo.password === employeeInfo.passwordCheck &&
+                  employeeInfo.name !== "" &&
+                  employeeInfo.image !== "" ? (
+                    <Button type="submit" size="large">
+                      確認
+                    </Button>
+                  ) : (
+                    <Button type="submit" size="large" disabled>
+                      確認
+                    </Button>
+                  )}
                 </DialogActions>
               </Stack>
             </form>
@@ -436,20 +455,31 @@ const Employee = () => {
           <TableContainer component={Paper} sx={{ maxHeight: "38rem" }}>
             <Table stickyHeader>
               <TableHeads id={"employee"} />
-              {filtered.map((item) => (
-                <>
-                  <TableEmployee
-                    Page={"shop"}
-                    Img={item.image}
-                    Name={item.name}
-                    Type={item.type}
-                    Status={item.status}
-                    item={item}
-                    // Del={() => handleDeClickOpen(item)}
-                    Edit={() => handleEditOpen(item)}
-                  />
-                </>
-              ))}
+              {filtered.length === 0 ? (
+                <TableCell
+                  align="center"
+                  colSpan={5}
+                  size="medium"
+                  sx={{ fontSize: "1rem" }}
+                >
+                  查無資料
+                </TableCell>
+              ) : (
+                filtered.map((item) => (
+                  <>
+                    <TableEmployee
+                      Page={"shop"}
+                      Img={item.image}
+                      Name={item.name}
+                      Type={item.type}
+                      Status={item.status}
+                      item={item}
+                      Del={() => handleDeClickOpen(item)}
+                      Edit={() => handleEditOpen(item)}
+                    />
+                  </>
+                ))
+              )}
 
               <Dialog
                 open={openEdit}
@@ -468,84 +498,239 @@ const Employee = () => {
                 >
                   {"修改員工資訊"}
                 </FormTitle>
-
-                <form onSubmit={handleSubmit}>
-                  <Stack mx={5} my={2}>
-                    <Stack direction="row" justifyContent="space-between">
-                      <Input
-                        name="name"
-                        label="姓名"
-                        variant="outlined"
-                        required
-                        onChange={handleEmployeeInfo}
-                        defaultValue={currentInfo.name}
-                      />
-                      <Input
-                        name="status"
-                        label="狀態"
-                        variant="outlined"
-                        select
-                        required
-                        onChange={handleEmployeeInfo}
-                        defaultValue={currentInfo.status}
-                        sx={{ width: "12rem" }}
-                        // disabled
-                      >
-                        <MenuItem value={0}>在職</MenuItem>
-                        <MenuItem value={1} disabled>
-                        已離職
-                      </MenuItem>
-                      </Input>
+                {currentInfo.status === 1 ? (
+                  <form onSubmit={handleSubmit}>
+                    <Stack mx={5} my={2}>
+                      <Stack direction="row" justifyContent="space-between">
+                        <Input
+                          name="name"
+                          label="姓名"
+                          variant="outlined"
+                          disabled
+                          onChange={handleEditInfo}
+                          defaultValue={currentInfo.name}
+                        />
+                        <Input
+                          name="status"
+                          label="職位"
+                          variant="outlined"
+                          select
+                          required
+                          onChange={handleEmployeeInfo}
+                          value={currentInfo.type}
+                          sx={{ width: "12rem" }}
+                          disabled
+                        >
+                          <MenuItem value={0}>員工</MenuItem>
+                          <MenuItem value={1}>店長</MenuItem>
+                        </Input>
+                        <Input
+                          name="status"
+                          label="狀態"
+                          variant="outlined"
+                          select
+                          required
+                          onChange={handleEditInfo}
+                          defaultValue={currentInfo.status}
+                          sx={{ width: "12rem" }}
+                        >
+                          <MenuItem value={0}>在職</MenuItem>
+                          <MenuItem value={1} disabled>
+                            已離職
+                          </MenuItem>
+                        </Input>
+                      </Stack>
+                      {/* <Stack direction="row">
+                        <DialogText>員工照片:</DialogText>
+                        <img
+                          src={"http://localhost:8000/" + currentInfo.image}
+                          alt={currentInfo.image}
+                          width="150"
+                        />
+                      </Stack> */}
+                      <DialogActions>
+                        <Button onClick={handleEditClose} size="large">
+                          取消
+                        </Button>
+                        {editInfo.status === 0 ? (
+                          <Button
+                            type="submit"
+                            size="large"
+                            onClick={handleEditSubmit}
+                          >
+                            確認
+                          </Button>
+                        ) : (
+                          <Button type="submit" size="large" disabled>
+                            確認
+                          </Button>
+                        )}
+                      </DialogActions>
                     </Stack>
-                    <Input
-                      name="password"
-                      label="請輸入密碼"
-                      variant="outlined"
-                      type="password"
-                      required
-                      onChange={handlePassWord}
-                      onBlur={handleLength}
-                    />
+                  </form>
+                ) : (
+                  <form onSubmit={handleSubmit}>
+                    <Stack mx={5} my={2}>
+                      <Stack direction="row" justifyContent="space-between">
+                        <Input
+                          name="name"
+                          label="姓名"
+                          variant="outlined"
+                          required
+                          onChange={handleEditInfo}
+                          defaultValue={currentInfo.name}
+                        />
+                        <Input
+                          name="status"
+                          label="職位"
+                          variant="outlined"
+                          select
+                          required
+                          onChange={handleEmployeeInfo}
+                          value={currentInfo.type}
+                          sx={{ width: "12rem" }}
+                          disabled
+                        >
+                          <MenuItem value={0}>員工</MenuItem>
+                          <MenuItem value={1}>店長</MenuItem>
+                        </Input>
+                        <Input
+                          name="status"
+                          label="狀態"
+                          variant="outlined"
+                          select
+                          required
+                          onChange={handleEditInfo}
+                          defaultValue={currentInfo.status}
+                          sx={{ width: "12rem" }}
+                          disabled
+                        >
+                          <MenuItem value={0}>在職</MenuItem>
+                          <MenuItem value={1} disabled>
+                            已離職
+                          </MenuItem>
+                        </Input>
+                      </Stack>
+                      <Input
+                        name="password"
+                        label="如需修改，請輸入密碼"
+                        variant="outlined"
+                        type="password"
+                        onBlur={handleEditInfo}
+                      />
+                      {editInfo.password.length === 0 ? null : editInfo.password
+                          .length >= 5 &&
+                        editInfo.password.length <= 15 ? null : (
+                        <Alert severity="error" sx={{ marginX: "1.5rem" }}>
+                          密碼字數不符,限制為5-15字
+                        </Alert>
+                      )}
+                      <Input
+                        name="passwordCheck"
+                        label="請再次輸入密碼"
+                        variant="outlined"
+                        type="password"
+                        onBlur={handleEditInfo}
+                      />
+                      {editInfo.passwordCheck.length ===
+                      0 ? null : editInfo.passwordCheck ===
+                        editInfo.password ? (
+                        <Alert severity="success" sx={{ marginX: "1.5rem" }}>
+                          與密碼相符
+                        </Alert>
+                      ) : (
+                        <Alert severity="error" sx={{ marginX: "1.5rem" }}>
+                          與密碼不符，請重新輸入
+                        </Alert>
+                      )}
+                      <DialogActions>
+                        <Button onClick={handleEditClose} size="large">
+                          取消
+                        </Button>
 
-                    <Input
-                      name="password"
-                      label="請再次輸入密碼"
-                      variant="outlined"
-                      type="password"
-                      required
-                      onBlur={handleCheck}
-                    />
-                    {errMes === 0 && (
-                      <Alert severity="error" sx={{ marginX: "1.5rem" }}>
-                        帳號或密碼字數不足,限制為5-15字
-                      </Alert>
-                    )}
-                    {errMes === 1 && (
-                      <Alert severity="error" sx={{ marginX: "1.5rem" }}>
-                        帳號或密碼字數過長,限制為5-15字
-                      </Alert>
-                    )}
-                    {errMes === 2 && (
-                      <Alert
-                        severity="error"
-                        px="1rem"
-                        sx={{ marginX: "1.5rem" }}
-                      >
-                        兩次密碼不相同，請重新輸入
-                      </Alert>
-                    )}
-                    <DialogActions>
-                      <Button onClick={handleEditClose} size="large">
-                        取消
-                      </Button>
-                      <Button type="submit" size="large">
-                        確認
-                      </Button>
-                    </DialogActions>
-                  </Stack>
-                </form>
+                        {editInfo.password !== "" ||
+                        editInfo.passwordCheck !== "" ? (
+                          editInfo.password.length >= 5 &&
+                          editInfo.password.length <= 15 &&
+                          editInfo.password === editInfo.passwordCheck ? (
+                            <Button
+                              type="submit"
+                              size="large"
+                              onClick={handleEditSubmit}
+                            >
+                              確認
+                            </Button>
+                          ) : (
+                            <Button type="submit" size="large" disabled>
+                              確認
+                            </Button>
+                          )
+                        ) : (
+                          <Button
+                            type="submit"
+                            size="large"
+                            onClick={handleEditSubmit}
+                          >
+                            確認
+                          </Button>
+                        )}
+                      </DialogActions>
+                    </Stack>
+                  </form>
+                )}
               </Dialog>
 
+              <Dialog
+                open={openDel}
+                onClose={handleDeClose}
+                onBackdropClick="false"
+                fullWidth="true"
+                maxWidth="xs"
+                PaperComponent={PaperComponent}
+                aria-labelledby="draggable-dialog-title"
+              >
+                <FormTitle
+                  variant="h6"
+                  style={{ cursor: "move" }}
+                  id="draggable-dialog-title"
+                >
+                  {"確定要刪除此員工?"}
+                </FormTitle>
+                <Stack mx={5} my={3} style={{ textAlign: "right" }}>
+                  <List aria-label="mailbox folders">
+                    <ListItem button>
+                      <ListItemText primary="姓名 :" sx={{ maxWidth: "50%" }} />
+                      <Chip label={currentInfo.name} />
+                    </ListItem>
+                    <Divider />
+                    <ListItem button>
+                      <ListItemText primary="職位 :" sx={{ maxWidth: "50%" }} />
+                      <Chip label={currentInfo.type} />
+                    </ListItem>
+                    <Divider />
+                    <ListItem button>
+                      <ListItemText primary="狀態 :" sx={{ maxWidth: "50%" }} />
+                      <Chip label={currentInfo.status} />
+                    </ListItem>
+                    <Divider />
+                    <ListItem button>
+                      <ListItemText
+                        primary="員工照片 :"
+                        sx={{ maxWidth: "40%" }}
+                      />
+                      <img
+                        src={"http://localhost:8000/" + currentInfo.image}
+                        alt={currentInfo.image}
+                        width="150"
+                      />
+                    </ListItem>
+                  </List>
+                  <DialogActions>
+                    <Button onClick={handleDeClose}>取消</Button>
+                    <Button onClick={() => handleDelSubmit()}>確認</Button>
+                  </DialogActions>
+                </Stack>
+              </Dialog>
             </Table>
           </TableContainer>
         </Content>
