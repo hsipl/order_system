@@ -20,10 +20,10 @@ import {
   Alert,
 } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
-import { Nightlife, Search } from "@material-ui/icons";
-import { TableShop, TableHeads, ControlCell } from "./Table";
-import { UploadImgButton } from "./Buttons";
+import { BodyContainer, Navbar, Content, Breadcrumb } from "../Navbar";
+import { Search } from "@material-ui/icons";
+import { TableShop, TableHeads } from "../Table";
+import { UploadImgButton } from "../Buttons";
 import {
   DialogText,
   FormTitle,
@@ -31,7 +31,9 @@ import {
   SearchContainer,
   Input,
   PaperComponent,
-} from "./SearchAndForm";
+} from "../SearchAndForm";
+
+import ShopProduct from "./ShopProduct";
 
 const Shop = () => {
   const [arrayData, setArratData] = useState([]);
@@ -123,7 +125,6 @@ const Shop = () => {
         console.log(data);
       } catch (e) {
         localStorage.removeItem("UserAccount");
-        // console.log(e+"store error")
       }
     };
 
@@ -143,7 +144,7 @@ const Shop = () => {
             : (data[i].type = "店長");
         }
         setEmployeeData(data);
-        console.log(data)
+        console.log(data);
       } catch (e) {
         localStorage.removeItem("UserAccount");
       }
@@ -276,6 +277,16 @@ const Shop = () => {
   /*處理manage*/
   const [openManager, setOpenManager] = useState(false);
 
+  const [manageInfo, setManageInfo] = useState({
+    name: "",
+    type: 1,
+    status: 0,
+    account: "",
+    password: "",
+    passwordVal: "",
+  });
+  const [check, setCheck] = useState(0); //wrong
+
   const handleEmployee = (item) => {
     setOpenManager(true);
     setCurrentShop({
@@ -287,14 +298,15 @@ const Shop = () => {
     setOpenManager(false);
   };
 
-  const [manageInfo, setManageInfo] = useState({
-    name: "",
-    type: 1,
-    status: 0,
-    account: "",
-    password: "",
-    passwordVal: "",
-  });
+  function handleCheck(e) {
+    e.target.value.length >= 5 &&
+    e.target.value.length <= 15 &&
+    e.target.value != null
+      ? setCheck(1)
+      : setCheck(0);
+
+    manageInfo.password === e.target.value ? setCheck(1) : setCheck(0);
+  }
 
   function onManagerImageChange(e) {
     setImage(URL.createObjectURL(e.target.files[0]));
@@ -331,6 +343,7 @@ const Shop = () => {
 
   /*處理 BusinessCard*/
   const [openBuinessCard, setopenBuinessCard] = useState(false);
+  const [bussineCheck, setBussineCheck] = useState(0); //wrong
   const [businessCard, setBusinessCard] = useState({
     name: "",
     password: "",
@@ -353,41 +366,41 @@ const Shop = () => {
 
   function handleBusinessCardChange(e) {
     const { value, name } = e.target;
-
-    setBusinessCard((preData) => ({
-      ...preData,
-      [name]: value,
-    }));
-    
-    
+    if (businessCard.name === "") {
+      setBusinessCard((preData) => ({
+        ...preData,
+        ["name"]: getemployeeName[currentShop.id],
+      }));
+      // console.log("is null")
+    } else {
+      setBusinessCard((preData) => ({
+        ...preData,
+        [name]: value,
+      }));
+    }
   }
 
-  // function onImageBusinessCardChange(e) {
-  //   setImage(URL.createObjectURL(e.target.files[0]));
-  //   setBusinessCard((preData) => ({
-  //     ...preData,
-  //     ["image"]: e.target.files[0],
-  //   }));
-  // }
+  function handleBussineCheck(e) {
+    e.target.value.length >= 5 &&
+    e.target.value.length <= 15 &&
+    e.target.value != null
+      ? setBussineCheck(1)
+      : setBussineCheck(0);
+
+    businessCard.password === e.target.value
+      ? setBussineCheck(1)
+      : setBussineCheck(0);
+  }
 
   const handleBusinessCardSubmit = async () => {
-    
-    var id = currentShop.id+1
-    // if(businessCard.name===""){
-    // }
-    // JSON.stringify(businessCard);
-    console.log(businessCard);
+    var id = currentShop.id + 1;
+
+    JSON.stringify(businessCard);
+
     try {
       await axios.put(
-       
-       employee_url+"/"+id
-       ,
-        JSON.stringify(businessCard, [
-          "password",
-          "name",
-          "type",
-          "status",
-        ]),
+        employee_url + "/" + id,
+        JSON.stringify(businessCard, ["password", "name", "type", "status"]),
 
         config
       );
@@ -476,18 +489,8 @@ const Shop = () => {
                     onBackdropClick="false"
                     fullWidth="true"
                     maxWidth="sm"
-                    // 移動部分尚未解決
-                    // PaperComponent={PaperComponent}
-                    // aria-labelledby="draggable-dialog-title"
                   >
-                    <FormTitle
-                      variant="h6"
-                      // 移動部分尚未解決
-                      // style={{ cursor: "move" }}
-                      // id="draggable-dialog-title"
-                    >
-                      {"新增店鋪資訊"}
-                    </FormTitle>
+                    <FormTitle variant="h6">{"新增店鋪資訊"}</FormTitle>
 
                     <form>
                       <Stack mx={5} my={3}>
@@ -527,7 +530,6 @@ const Shop = () => {
                             id="contained-button-file"
                             multiple
                             type="file"
-                          
                             onChange={onImageChange}
                           />
                           <img width="100#" src={image} />
@@ -548,7 +550,7 @@ const Shop = () => {
                     </form>
                   </Dialog>
 
-                  <TableContainer component={Paper} sx={{ maxHeight: "38rem" }}>
+                  <TableContainer component={Paper} sx={{ maxHeight: 530 }}>
                     <Table stickyHeader>
                       <TableHeads id={"shop"} />
                       {filtered.map((item) => (
@@ -634,8 +636,8 @@ const Shop = () => {
                             <Input
                               placeholder="帳號"
                               name="account"
-                              // value={manageInfo.account}
                               onBlur={handleManagerChange}
+                              onChange={handleCheck}
                               required
                               label="帳號"
                             />
@@ -646,16 +648,16 @@ const Shop = () => {
                                 帳號長度不足(需再5~15碼之間)!
                               </Alert>
                             )}
+
                             <Input
                               id="InputPassword"
                               type="password"
                               placeholder="新密碼"
                               name="password"
-                              // value={manageInfo.password}
                               onBlur={handleManagerChange}
+                              onChange={handleCheck}
                               required
                               label="新密碼"
-                              // onKeyPress={handleKeypress}
                             />
                             <DialogText sx={{ width: "85%" }}>
                               {manageInfo.password.length ===
@@ -671,11 +673,10 @@ const Shop = () => {
                               type="password"
                               name="passwordVal"
                               placeholder="請再次輸入新密碼"
-                              // value={manageInfo.passwordRe}
                               onBlur={handleManagerChange}
+                              onChange={handleCheck}
                               required
                               label="請再次輸入新密碼"
-                              // onKeyPress={handleKeypress}
                             />
                             <DialogText sx={{ width: "85%" }}>
                               {manageInfo.passwordVal.length ===
@@ -695,19 +696,22 @@ const Shop = () => {
                                 id="contained-button-file"
                                 multiple
                                 type="file"
-                               
                                 onChange={onManagerImageChange}
                               />
                               <img width="100#" src={image} />
                             </Container>
                             <DialogActions>
                               <Button onClick={handleManageClose}>取消</Button>
-                              <Button
-                                type="submit"
-                                onClick={handleManagerSubmit}
-                              >
-                                確認
-                              </Button>
+                              {check === 1 ? (
+                                <Button
+                                  type="submit"
+                                  onClick={handleManagerSubmit}
+                                >
+                                  確認
+                                </Button>
+                              ) : (
+                                <Button disabled>確認</Button>
+                              )}
                             </DialogActions>
                           </Stack>
                         </form>
@@ -722,11 +726,7 @@ const Shop = () => {
                         PaperComponent={PaperComponent}
                         aria-labelledby="draggable-dialog-title"
                       >
-                        <FormTitle
-                          variant="h6"
-                          // style={{ cursor: "move" }}
-                          id="draggable-dialog-title"
-                        >
+                        <FormTitle variant="h6" id="draggable-dialog-title">
                           {"確認/修改店長資訊"}
                         </FormTitle>
                         {/*.........................................................................*/}
@@ -800,6 +800,7 @@ const Shop = () => {
                                 placeholder="新密碼"
                                 name="password"
                                 onBlur={handleBusinessCardChange}
+                                onChange={handleBussineCheck}
                                 required
                                 label="新密碼"
                               />
@@ -817,6 +818,7 @@ const Shop = () => {
                                 name="passwordVal"
                                 placeholder="請再次輸入新密碼"
                                 onBlur={handleBusinessCardChange}
+                                onChange={handleBussineCheck}
                                 required
                                 label="請再次輸入新密碼"
                               />
@@ -829,32 +831,22 @@ const Shop = () => {
                                   <Alert severity="error">與密碼不相符!</Alert>
                                 )}
                               </DialogText>
-
-                              {/* <DialogText>照片:</DialogText>
-                              <Container>
-                                <UploadImgButton
-                                  name="file"
-                                  accept="image/*"
-                                  id="contained-button-file"
-                                  multiple
-                                  type="file"
-                                  accept="image/png, image/jpeg"
-                                  onChange={onImageBusinessCardChange}
-                                />
-                                <img width="100#" src={image} />
-                              </Container> */}
                             </Stack>
                             <DialogActions>
                               <Button onClick={handleBusinessCardClose}>
                                 關閉
                               </Button>
                               <Button onClick={goPrePage}>上一步</Button>
-                              <Button
-                                type="submit"
-                                onClick={handleBusinessCardSubmit}
-                              >
-                                提交
-                              </Button>
+                              {bussineCheck === 1 ? (
+                                <Button
+                                  type="submit"
+                                  onClick={handleBusinessCardSubmit}
+                                >
+                                  提交
+                                </Button>
+                              ) : (
+                                <Button disabled>提交</Button>
+                              )}
                             </DialogActions>
                           </form>
                         )}
@@ -933,14 +925,7 @@ const Shop = () => {
                         fullWidth="true"
                         maxWidth="sm"
                       >
-                        <FormTitle
-                          variant="h6"
-                          // 可移動部分尚未解決
-                          // style={{ cursor: "move" }}
-                          // id="draggable-dialog-title"
-                        >
-                          {"修改店鋪資訊"}
-                        </FormTitle>
+                        <FormTitle variant="h6">{"修改店鋪資訊"}</FormTitle>
 
                         <form>
                           <Stack mx={5} my={3}>
@@ -981,7 +966,6 @@ const Shop = () => {
                                 id="contained-button-file"
                                 multiple
                                 type="file"
-                        
                                 onChange={onImageChange}
                               />
                               <img width="100#" src={image} />
@@ -1002,7 +986,7 @@ const Shop = () => {
                   <div>This is report tabs.</div>
                 </TabPanel>
                 <TabPanel value="3">
-                  <div>This is product tabs.</div>
+                  <ShopProduct />
                 </TabPanel>
               </Box>
             </TabContext>

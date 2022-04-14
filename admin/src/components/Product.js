@@ -33,12 +33,9 @@ import {
 } from "@mui/material";
 
 import {
-  DialogText,
   FormTitle,
   SearchBox,
   SearchContainer,
-  Input,
-  PaperComponent,
 } from "./SearchAndForm";
 
 import Stack from "@mui/material/Stack";
@@ -47,10 +44,10 @@ import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Draggable from "react-draggable";
 
-import { ToastContainer, toast } from "react-toastify";
+
 import "react-toastify/dist/ReactToastify.css";
-import { TableContent, TableHeads, TableProduct } from "./Table";
-import { Nightlife, Search } from "@material-ui/icons";
+import {  TableHeads, TableProduct } from "./Table";
+import {  Search } from "@material-ui/icons";
 
 
 const AddForm = styled.form`
@@ -89,7 +86,7 @@ const Product = () => {
     price: "",
     category: "",
     status: 0,
-    storeId: localStorage.getItem("StoreType"),
+    storeId: localStorage.getItem("StoreId"),
   });
   const [currentSauce, setCurrentSauce] = useState({});
   const [currentInfo, setCurrentInfo] = useState({});
@@ -139,7 +136,6 @@ const Product = () => {
     setOpen(false);
   };
 
-  const [selectTag, setSelectTag] = useState([]);
   const handleProductEditOpen = (id, item, index) => {
     setOpenEdit(true);
 
@@ -371,7 +367,7 @@ const Product = () => {
             : data[i].category === 2
             ? (data[i].category = "加工類")
             : (data[i].category = "其他類");
-          data[i].image === null ? (data[i].category = "無") : console.log();
+          data[i].image === null ? (data[i].image = "無") : "";
         }
         setChangeProductData(data);
         console.log(data);
@@ -512,7 +508,8 @@ const Product = () => {
         });
   };
 
-  const handleProductSubmit = async () => {
+  const handleProductSubmit = async (e) => {
+    e.preventDefault()
     const formData = new FormData();
     formData.append("name", productInfo.name);
     formData.append("price", productInfo.price);
@@ -527,6 +524,7 @@ const Product = () => {
 
     try {
       await axios.post(url_Product, formData, config);
+      console.log("scuess")
     } catch (error) {
       console.log(error);
     }
@@ -751,7 +749,7 @@ const Product = () => {
                   <br />
                   <br />
 
-                  <TableContainer sx={{ maxHeight: 500 }} component={Paper}>
+                  <TableContainer sx={{ maxHeight: 480 }} component={Paper}>
                     <Table stickyHeader>
                       <TableHeads id={"product"} />
 
@@ -1052,7 +1050,7 @@ const Product = () => {
 
                   <br />
                   <br />
-                  <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                  <TableContainer component={Paper} sx={{ maxHeight: 480 }}>
                     <Table stickyHeader>
                       <TableHeads id={"tags"} />
 

@@ -3,7 +3,7 @@ import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import Product from "./components/Product";
 import Employee from "./components/Employee";
-import Shop from "./components/Shop";
+import Shop from "./components/Shop/Shop";
 import Report from "./components/Report";
 import Home from "./components/Home";
 import Handover from "./components/Handover";

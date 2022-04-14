@@ -14,6 +14,7 @@ export const TableHeads = (props) => {
 
   const Heads = {
     product: ["編號","產品名稱", "價格", "圖片", "類別", "狀態", "操作"],
+    productShop: ["編號","產品名稱", "價格", "圖片", "類別", "狀態"],
     employee: ["姓名", "帳號", "職位", "操作"],
     shop: ["店家照片", "店家名稱", "類型", "狀態", "創店日期", "操作"],
     report: ["產品名稱", "銷售總額(元)", "銷售總數(份)"],
@@ -294,6 +295,83 @@ export function TableProduct(props) {
     );
   }
 }
+
+
+
+/*tableshop*/
+export function TableShopProduct(props) {
+  const TagId = props.TagId;
+  const TagTag = props.TagTag;
+  const TagStatus = props.TagStatus;
+
+  const productId = props.productId;
+  const productName = props.productName;
+  const productCategory = props.productCategory;
+  const productImage = props.productImage;
+  const productPrice = props.productPrice;
+  const productStatus = props.productStatus;
+  const productTag = props.ProductTag;
+  // const DelBTN = props.Del;
+  // const EditBTN = props.Edit;
+
+  const tagData = [
+    TagId,
+    TagTag,
+    TagStatus,
+    // <ControlCell status={TagStatus} Del={DelBTN} Edit={EditBTN} />,
+  ];
+
+  const productData = [
+    productId,
+    productName,
+    productPrice,
+    <img
+      src={"http://localhost:8000/" + productImage}
+      alt={productImage}
+      height="100"
+    />,
+    productCategory,
+    productStatus,
+    // <ControlCell status={productStatus} Del={DelBTN} Edit={EditBTN} />,
+  ];
+
+  if (localStorage.getItem("Tabs") === "2") {
+    return (
+      <TableRow key={TagId} hover={true} title={TagTag}>
+        {tagData.map((item) => (
+          <TableCell
+            align="center"
+            sx={{
+              height: "5rem",
+            }}
+          >
+            {item}
+          </TableCell>
+        ))}
+      </TableRow>
+    );
+  } else {
+    return (
+      <TableRow key={productId} hover={true} title={productTag}>
+        {productData.map((item) => (
+          <TableCell
+            align="center"
+            sx={{
+              height: "5rem",
+            }}
+          >
+            {item}
+          </TableCell>
+        ))}
+      </TableRow>
+    );
+  }
+}
+
+
+
+
+
 
 export function TableHandover(props) {
   const handoverId = props.handoverId;
