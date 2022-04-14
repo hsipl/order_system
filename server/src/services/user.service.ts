@@ -46,7 +46,9 @@ export class UserService {
     return await this.repository.create(user);
   }
   public async update(params: IUpdateUserParams) {
-    params.password = encrypt(params.password);
+    if(params.password != undefined){
+      params.password = encrypt(params.password);
+    }
     let user = new User();
     user = Object.assign(user, params);
     return await this.repository.update(params.id, user);

@@ -18,8 +18,6 @@ export interface ICreateUserParams extends IUserParams {
 
 export interface IUpdateUserParams extends IUserParams {
   id: number;
-  name: string;
-  password: string;
 }
 
 export interface ILoginUserParams extends IUserParams {

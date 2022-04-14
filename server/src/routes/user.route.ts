@@ -120,6 +120,6 @@ export default class UserRoute extends BasicRoute {
       controller.getAllEmployee.bind(controller),
     );
     this.router.get('/user', auth.authAdmin.bind(auth), controller.getUser.bind(controller));
-    this.router.put('/user/:id', auth.authAdmin.bind(auth), controller.update.bind(controller))
+    this.router.patch('/user/:id', auth.authAdmin.bind(auth), controller.update.bind(controller))
   }
 }
