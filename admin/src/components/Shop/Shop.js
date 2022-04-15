@@ -18,12 +18,14 @@ import {
   Box,
   Tab,
   Alert,
+  TableCell,
 } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "../Navbar";
 import { Search } from "@material-ui/icons";
 import { TableShop, TableHeads } from "../Table";
 import { UploadImgButton } from "../Buttons";
+import ShopProduct from "./ShopProduct";
 import {
   DialogText,
   FormTitle,
@@ -33,11 +35,9 @@ import {
   PaperComponent,
 } from "../SearchAndForm";
 
-import ShopProduct from "./ShopProduct";
-
 const Shop = () => {
   const [arrayData, setArratData] = useState([]);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [openDel, setOpenDel] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [shopInfo, setShopInfo] = useState({
@@ -46,9 +46,7 @@ const Shop = () => {
     status: 0,
   });
   const [image, setImage] = useState(null);
-
   const [currentShop, setCurrentShop] = useState({});
-
   const [searchInput, setSearchInput] = useState({
     name: "",
     status: "",
@@ -56,6 +54,25 @@ const Shop = () => {
   const [searchData, setSearchData] = useState([]);
   const [employeeData, setEmployeeData] = useState([]);
   const [value, setValue] = useState(localStorage.getItem("StoreTabs"));
+  const [openManager, setOpenManager] = useState(false);
+  const [manageInfo, setManageInfo] = useState({
+    name: "",
+    type: 1,
+    status: 0,
+    account: "",
+    password: "",
+    passwordVal: "",
+  });
+  const [check, setCheck] = useState(0); //wrong
+  const [openBuinessCard, setopenBuinessCard] = useState(false);
+  const [bussineCheck, setBussineCheck] = useState(0); //wrong
+  const [businessCard, setBusinessCard] = useState({
+    name: "",
+    password: "",
+    passwordVal: "",
+    type: 1,
+    status: 0,
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -122,7 +139,6 @@ const Shop = () => {
         }
         setArratData(data);
         toChinese(data);
-        console.log(data);
       } catch (e) {
         localStorage.removeItem("UserAccount");
       }
@@ -144,7 +160,6 @@ const Shop = () => {
             : (data[i].type = "店長");
         }
         setEmployeeData(data);
-        console.log(data);
       } catch (e) {
         localStorage.removeItem("UserAccount");
       }
@@ -152,27 +167,22 @@ const Shop = () => {
     get_api();
   }, []);
 
-  let getemployeeId = employeeData.map((id1) => id1.id);
-  let getemployeeName = employeeData.map((name1) => name1.name);
-  let getemployeeType = employeeData.map((type1) => type1.type);
-  let getemployeeStatus = employeeData.map((Status1) => Status1.status);
-  let getemployeeImage = employeeData.map((image1) => image1.image);
+  let getemployeeId = employeeData.map((employeeId) => employeeId.id);
+  let getemployeeName = employeeData.map((employeeName) => employeeName.name);
+  let getemployeeType = employeeData.map((employeeType) => employeeType.type);
+  let getemployeeStatus = employeeData.map(
+    (employeeStatus) => employeeStatus.status
+  );
+  let getemployeeImage = employeeData.map(
+    (employeeImage) => employeeImage.image
+  );
 
+  //Search part
+  const filtered = searchData === null ? arrayData : searchData;
   function SearchOnChange(e) {
     const { value, name } = e.target;
 
     setSearchInput((preData) => ({
-      ...preData,
-      [name]: value,
-    }));
-  }
-
-  const filtered = searchData === null ? arrayData : searchData;
-
-  function handleShopInfo(e) {
-    const { value, name } = e.target;
-
-    setShopInfo((preData) => ({
       ...preData,
       [name]: value,
     }));
@@ -217,6 +227,15 @@ const Shop = () => {
     }
 
     setSearchData(data);
+  }
+
+  function handleShopInfo(e) {
+    const { value, name } = e.target;
+
+    setShopInfo((preData) => ({
+      ...preData,
+      [name]: value,
+    }));
   }
 
   function onImageChange(e) {
@@ -274,18 +293,7 @@ const Shop = () => {
     }
   };
 
-  /*處理manage*/
-  const [openManager, setOpenManager] = useState(false);
-
-  const [manageInfo, setManageInfo] = useState({
-    name: "",
-    type: 1,
-    status: 0,
-    account: "",
-    password: "",
-    passwordVal: "",
-  });
-  const [check, setCheck] = useState(0); //wrong
+  //Handle manage
 
   const handleEmployee = (item) => {
     setOpenManager(true);
@@ -342,22 +350,12 @@ const Shop = () => {
   };
 
   /*處理 BusinessCard*/
-  const [openBuinessCard, setopenBuinessCard] = useState(false);
-  const [bussineCheck, setBussineCheck] = useState(0); //wrong
-  const [businessCard, setBusinessCard] = useState({
-    name: "",
-    password: "",
-    passwordVal: "",
-    type: 1,
-    status: 0,
-  });
 
   const handleBusinessCard = (item) => {
     setopenBuinessCard(true);
     setCurrentShop({
       ["id"]: item.id - 1,
     });
-    console.log(getemployeeId[item.id - 1] === undefined);
   };
 
   const handleBusinessCardClose = () => {
@@ -371,7 +369,6 @@ const Shop = () => {
         ...preData,
         ["name"]: getemployeeName[currentShop.id],
       }));
-      // console.log("is null")
     } else {
       setBusinessCard((preData) => ({
         ...preData,
@@ -401,12 +398,9 @@ const Shop = () => {
       await axios.put(
         employee_url + "/" + id,
         JSON.stringify(businessCard, ["password", "name", "type", "status"]),
-
         config
       );
-      console.log("success");
     } catch (error) {
-      console.log("error");
       console.log(error);
     }
   };
@@ -553,26 +547,36 @@ const Shop = () => {
                   <TableContainer component={Paper} sx={{ maxHeight: 530 }}>
                     <Table stickyHeader>
                       <TableHeads id={"shop"} />
-                      {filtered.map((item) => (
-                        <>
-                          <TableShop
-                            Page={"shop"}
-                            Img={item.image}
-                            storeName={item.name}
-                            storeType={item.type}
-                            storeStatus={item.status}
-                            createdAt={item.createdAt}
-                            item={item}
-                            idIdentity={
-                              getemployeeId[item.id - 1] === undefined
-                            }
-                            Del={() => handleDeClickOpen(item)}
-                            Edit={() => handleEditOpen(item)}
-                            ManageEdit={() => handleEmployee(item)}
-                            BusinessCard={() => handleBusinessCard(item)}
-                          />
-                        </>
-                      ))}
+                      {filtered.length === 0 ? (
+                        <TableCell
+                          colSpan={6}
+                          align="center"
+                          style={{ fontSize: "1.5rem" }}
+                        >
+                          查無此資料
+                        </TableCell>
+                      ) : (
+                        filtered.map((item, index) => (
+                          <>
+                            <TableShop
+                              Page={"shop"}
+                              Img={item.image}
+                              storeName={item.name}
+                              storeType={item.type}
+                              storeStatus={item.status}
+                              createdAt={item.createdAt}
+                              item={item}
+                              idIdentity={
+                                getemployeeId[item.id - 1] === undefined
+                              }
+                              Del={() => handleDeClickOpen(item)}
+                              Edit={() => handleEditOpen(item)}
+                              ManageEdit={() => handleEmployee(item)}
+                              BusinessCard={() => handleBusinessCard(item)}
+                            />
+                          </>
+                        ))
+                      )}
                       {/*設定管理者資訊Doalog*/}
                       <Dialog
                         open={openManager}
@@ -928,55 +932,108 @@ const Shop = () => {
                         <FormTitle variant="h6">{"修改店鋪資訊"}</FormTitle>
 
                         <form>
-                          <Stack mx={5} my={3}>
-                            <Input
-                              defaultValue={currentShop.name}
-                              onChange={handleShopInfo}
-                              name="name"
-                              label="店家名稱"
-                              variant="outlined"
-                            />
-                            <Input
-                              select
-                              onChange={handleShopInfo}
-                              defaultValue={currentShop.type}
-                              label="類型"
-                              name="type"
-                            >
-                              <MenuItem value={0}>分店</MenuItem>
-                              <MenuItem value={1}>總店</MenuItem>
-                            </Input>
-                            <Input
-                              select
-                              onChange={handleShopInfo}
-                              defaultValue={currentShop.status}
-                              name="status"
-                              label="狀態"
-                            >
-                              <MenuItem value={0}>營業中</MenuItem>
-                              <MenuItem value={1} disabled>
-                                已歇業
-                              </MenuItem>
-                            </Input>
-                            <DialogText>Logo圖片:</DialogText>
-                            <Container>
-                              <UploadImgButton
-                                name="file"
-                                accept="image/*"
-                                id="contained-button-file"
-                                multiple
-                                type="file"
-                                onChange={onImageChange}
+                          {currentShop.status === 0 ? (
+                            <Stack mx={5} my={3}>
+                              <Input
+                                defaultValue={currentShop.name}
+                                onChange={handleShopInfo}
+                                name="name"
+                                label="店家名稱"
+                                variant="outlined"
                               />
-                              <img width="100#" src={image} />
-                            </Container>
-                            <DialogActions>
-                              <Button onClick={handleEditClose}>取消</Button>
-                              <Button onClick={() => handleEditSubmit()}>
-                                確認
-                              </Button>
-                            </DialogActions>
-                          </Stack>
+                              <Input
+                                select
+                                onChange={handleShopInfo}
+                                defaultValue={currentShop.type}
+                                label="類型"
+                                name="type"
+                              >
+                                <MenuItem value={0}>分店</MenuItem>
+                                <MenuItem value={1}>總店</MenuItem>
+                              </Input>
+                              <Input
+                                select
+                                onChange={handleShopInfo}
+                                defaultValue={currentShop.status}
+                                name="status"
+                                label="狀態"
+                              >
+                                <MenuItem value={0}>營業中</MenuItem>
+                                <MenuItem value={1} disabled>
+                                  已歇業
+                                </MenuItem>
+                              </Input>
+                              <DialogText>Logo圖片:</DialogText>
+                              <Container>
+                                <UploadImgButton
+                                  name="file"
+                                  accept="image/*"
+                                  id="contained-button-file"
+                                  multiple
+                                  type="file"
+                                  onChange={onImageChange}
+                                />
+                                <img width="100#" src={image} />
+                              </Container>
+                              <DialogActions>
+                                <Button onClick={handleEditClose}>取消</Button>
+                                <Button onClick={() => handleEditSubmit()}>
+                                  確認
+                                </Button>
+                              </DialogActions>
+                            </Stack>
+                          ) : (
+                            <Stack mx={5} my={3}>
+                              <Input
+                                defaultValue={currentShop.name}
+                                name="name"
+                                label="店家名稱"
+                                disabled
+                                variant="outlined"
+                              />
+                              <Input
+                                select
+                                onChange={handleShopInfo}
+                                defaultValue={currentShop.type}
+                                label="類型"
+                                name="type"
+                                disabled
+                              >
+                                <MenuItem value={0}>分店</MenuItem>
+                                <MenuItem value={1}>總店</MenuItem>
+                              </Input>
+                              <Input
+                                select
+                                onChange={handleShopInfo}
+                                defaultValue={currentShop.status}
+                                name="status"
+                                label="狀態"
+                              >
+                                <MenuItem value={0}>營業中</MenuItem>
+                                <MenuItem value={1} disabled>
+                                  已歇業
+                                </MenuItem>
+                              </Input>
+                              <DialogText>Logo圖片:</DialogText>
+                              <Container>
+                                <UploadImgButton
+                                  name="file"
+                                  accept="image/*"
+                                  id="contained-button-file"
+                                  multiple
+                                  type="file"
+                                  onChange={onImageChange}
+                                />
+                                <img width="100#" src={image} />
+                              </Container>
+                              <DialogActions>
+                                <Button onClick={handleEditClose}>取消</Button>
+                                <Button onClick={() => handleEditSubmit()}>
+                                  確認
+                                </Button>
+                              </DialogActions>
+                            </Stack>
+                          )}
                         </form>
                       </Dialog>
                     </Table>

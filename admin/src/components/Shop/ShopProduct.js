@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { SearchBox, SearchContainer } from "../SearchAndForm";
-
-import { Table, TableContainer, Paper, Button, MenuItem } from "@mui/material";
-
-import { Nightlife, Search } from "@material-ui/icons";
-
+import {
+  Table,
+  TableContainer,
+  Paper,
+  Button,
+  MenuItem,
+  TableCell,
+} from "@mui/material";
+import { Search } from "@material-ui/icons";
 import { TableHeads, TableShopProduct } from "../Table";
 
 const ShopProduct = () => {
@@ -20,6 +24,7 @@ const ShopProduct = () => {
     category: "",
     status: "",
   });
+  const [check, setCheck] = useState(0); //  0鎖 1 name input 2 price input 3 category select 4 status select
 
   const url_Store = "http://localhost:8000/api/store";
   const url_Product = "http://localhost:8000/api/product";
@@ -35,7 +40,6 @@ const ShopProduct = () => {
       try {
         let { data } = await axios.get(url_Store, config);
         setShopData(data);
-        console.log(data);
       } catch (e) {
         localStorage.removeItem("UserAccount");
       }
@@ -48,7 +52,6 @@ const ShopProduct = () => {
       try {
         let { data } = await axios.get(url_Product, config);
         setProductData(data);
-        console.log(data);
       } catch (e) {
         localStorage.removeItem("UserAccount");
       }
@@ -57,7 +60,9 @@ const ShopProduct = () => {
   }, []);
 
   const storeName = shopData.map((name, index) => (
-    <MenuItem value={name.id}>{name.name}</MenuItem>
+    <MenuItem value={name.id} key={index}>
+      {name.name}
+    </MenuItem>
   ));
 
   function SearchOnChange(e) {
@@ -67,8 +72,6 @@ const ShopProduct = () => {
       ...preData,
       [name]: value,
     }));
-    console.log(e.target.value);
-    console.log(searchInput);
   }
 
   const handleSearch = async () => {
@@ -77,12 +80,7 @@ const ShopProduct = () => {
         url_Product + "?storeId=" + searchInput.id,
         config
       );
-      if (data.length === 0) {
-        toChinese(data);
-        alert("查無此資料");
-      } else {
-        toChinese(data);
-      }
+      toChinese(data);
       if (searchInput.type === 1) {
         let { data } = await axios.get(
           url_Product +
@@ -92,12 +90,7 @@ const ShopProduct = () => {
             searchInput.name,
           config
         );
-        if (data.length === 0) {
-          toChinese(data);
-          alert("查無此資料");
-        } else {
-          toChinese(data);
-        }
+        toChinese(data);
       } else if (searchInput.type === 2) {
         let { data } = await axios.get(
           url_Product +
@@ -107,12 +100,7 @@ const ShopProduct = () => {
             searchInput.price,
           config
         );
-        if (data.length === 0) {
-          toChinese(data);
-          alert("查無此資料");
-        } else {
-          toChinese(data);
-        }
+        toChinese(data);
       } else if (searchInput.type === 3) {
         let { data } = await axios.get(
           url_Product +
@@ -122,12 +110,7 @@ const ShopProduct = () => {
             searchInput.category,
           config
         );
-        if (data.length === 0) {
-          toChinese(data);
-          alert("查無此資料");
-        } else {
-          toChinese(data);
-        }
+        toChinese(data);
       } else if (searchInput.type === 4) {
         let { data } = await axios.get(
           url_Product +
@@ -137,26 +120,14 @@ const ShopProduct = () => {
             searchInput.status,
           config
         );
-        if (data.length === 0) {
-          toChinese(data);
-          alert("查無此資料");
-        } else {
-          toChinese(data);
-        }
+        toChinese(data);
       } else if (searchInput.type === "") {
         let { data } = await axios.get(
           url_Product + "?storeId=" + searchInput.id,
           config
         );
-        if (data.length === 0) {
-          toChinese(data);
-          alert("查無此資料");
-        } else {
-          toChinese(data);
-        }
+        toChinese(data);
       }
-    } else {
-      alert("欲使用搜尋功能，請選擇分店");
     }
   };
 
@@ -187,7 +158,7 @@ const ShopProduct = () => {
       price: "",
     });
   };
-  const [check, setCheck] = useState(0); //  0鎖 1 name input 2 price input 3 category select 4 status select
+
   const handleCheck = () => {
     searchInput.type === 0
       ? setCheck(0)
@@ -234,11 +205,21 @@ const ShopProduct = () => {
           name="type"
           sx={{ width: "10rem" }}
         >
-          <MenuItem value={0}>無</MenuItem>
-          <MenuItem value={1}>產品名稱</MenuItem>
-          <MenuItem value={2}>價格</MenuItem>
-          <MenuItem value={3}>類別</MenuItem>
-          <MenuItem value={4}>狀態</MenuItem>
+          <MenuItem value={0} key={0}>
+            無
+          </MenuItem>
+          <MenuItem value={1} key={1}>
+            產品名稱
+          </MenuItem>
+          <MenuItem value={2} key={2}>
+            價格
+          </MenuItem>
+          <MenuItem value={3} key={3}>
+            類別
+          </MenuItem>
+          <MenuItem value={4} key={4}>
+            狀態
+          </MenuItem>
         </SearchBox>
         {check === 0 ? (
           <SearchBox disabled />
@@ -271,10 +252,18 @@ const ShopProduct = () => {
             name="category"
             value={searchInput.category}
           >
-            <MenuItem value={0}>肉類</MenuItem>
-            <MenuItem value={1}>蔬菜類</MenuItem>
-            <MenuItem value={2}>加工類</MenuItem>
-            <MenuItem value={3}>其他類</MenuItem>
+            <MenuItem value={0} key={0}>
+              肉類
+            </MenuItem>
+            <MenuItem value={1} key={1}>
+              蔬菜類
+            </MenuItem>
+            <MenuItem value={2} key={2}>
+              加工類
+            </MenuItem>
+            <MenuItem value={3} key={3}>
+              其他類
+            </MenuItem>
           </SearchBox>
         ) : check === 4 ? (
           <SearchBox
@@ -285,8 +274,12 @@ const ShopProduct = () => {
             name="status"
             value={searchInput.status}
           >
-            <MenuItem value={0}>販售中</MenuItem>
-            <MenuItem value={1}>已停售</MenuItem>
+            <MenuItem value={0} key={0}>
+              販售中
+            </MenuItem>
+            <MenuItem value={1} key={1}>
+              已停售
+            </MenuItem>
           </SearchBox>
         ) : (
           <SearchBox disabled sx={{ width: "10rem" }} />
@@ -301,17 +294,27 @@ const ShopProduct = () => {
         <Table stickyHeader>
           <TableHeads id={"productShop"} />
 
-          {filtered.map((item, index) => (
-            <TableShopProduct
-              productId={item.id}
-              productName={item.name}
-              productCategory={item.category}
-              productImage={item.image}
-              productPrice={item.price}
-              ProductTag={getProductTag[index]}
-              productStatus={item.status}
-            />
-          ))}
+          {filtered.length === 0 ? (
+            <TableCell
+              colSpan={6}
+              align="center"
+              style={{ fontSize: "1.5rem" }}
+            >
+              查無此資料
+            </TableCell>
+          ) : (
+            filtered.map((item, index) => (
+              <TableShopProduct
+                productId={item.id}
+                productName={item.name}
+                productCategory={item.category}
+                productImage={item.image}
+                productPrice={item.price}
+                ProductTag={getProductTag[index]}
+                productStatus={item.status}
+              />
+            ))
+          )}
         </Table>
       </TableContainer>
     </>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import {
@@ -19,16 +19,9 @@ import { TableHeads } from "./Table";
 
 const Report = () => {
   const [branch, setBranch] = React.useState("");
-
-  const handleChange = (event) => {
-    setBranch(event.target.value);
-  };
-
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
-
   const [allStore, setAllStore] = React.useState([]);
-
   const url = "http://localhost:8000/api/store";
 
   let config = {
@@ -38,19 +31,20 @@ const Report = () => {
     withCredentials: true,
   };
 
+  const handleChange = (event) => {
+    setBranch(event.target.value);
+  };
+
   useEffect(() => {
     const get_api = async () => {
       let { data } = await axios.get(url, config);
       for (var i = 0; i < data.length; i++) {
-        setAllStore((preData) => ([
-          ...preData,
-          data[i].name,
-        ]))
-      } 
+        setAllStore((preData) => [...preData, data[i].name]);
+      }
     };
     get_api();
   }, []);
-console.log(branch)
+
   return (
     <>
       <BodyContainer>
@@ -66,10 +60,9 @@ console.log(branch)
               onChange={handleChange}
               sx={{ width: "10rem" }}
             >
-              {allStore.map((item,index) => (
+              {allStore.map((item, index) => (
                 <MenuItem value={index}>{item}</MenuItem>
               ))}
-              
             </SearchBox>
             <Stack direction="row">
               <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -96,7 +89,7 @@ console.log(branch)
                   )}
                 />
               </LocalizationProvider>
-              <Button size="large" color="inherit" >
+              <Button size="large" color="inherit">
                 <Search fontSize="large" />
               </Button>
             </Stack>

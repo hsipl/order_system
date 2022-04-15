@@ -1,16 +1,10 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
-import Breadcrumbs from "@mui/material/Breadcrumbs";
 import {
-  Typography,
-  Link,
   Table,
   TableCell,
   TableContainer,
-  TableHead,
-  TableRow,
   Paper,
   Button,
   TextField,
@@ -31,29 +25,18 @@ import {
   ListItemText,
   Tab,
 } from "@mui/material";
-
-import {
-  FormTitle,
-  SearchBox,
-  SearchContainer,
-} from "./SearchAndForm";
-
+import { FormTitle, SearchBox, SearchContainer } from "./SearchAndForm";
 import Stack from "@mui/material/Stack";
-
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 import Draggable from "react-draggable";
-
-
 import "react-toastify/dist/ReactToastify.css";
-import {  TableHeads, TableProduct } from "./Table";
-import {  Search } from "@material-ui/icons";
-
+import { TableHeads, TableProduct } from "./Table";
+import { Search } from "@material-ui/icons";
 
 const AddForm = styled.form`
   height: 400px;
 `;
-
 
 const Product = () => {
   const [sauceData, setSauceData] = useState([]);
@@ -194,22 +177,12 @@ const Product = () => {
         }
         setChangeArrayData(data);
         setSauceFilter(data);
-        console.log(data);
       } catch (e) {
         localStorage.removeItem("UserAccount");
       }
     };
     get_SauceApi();
   }, []);
-
-  // const mounted=useRef();
-
-  // useEffect(() => {
-  //   mounted.current===false?
-  //   mounted.current = true:
-  //   setSnackbarOpen(true)
-
-  // }, sauceData.length);
 
   function handleSauceInfo(e) {
     const { value, name } = e.target;
@@ -245,9 +218,7 @@ const Product = () => {
       await axios.post(url_Sauce, JSON.stringify(sauceInfo), config);
     } catch (error) {
       console.log(error);
-      console.log(JSON.stringify(sauceInfo));
     }
-    // setSnackbarOpen(true)
   };
 
   const handleEditSubmit = async () => {
@@ -257,9 +228,9 @@ const Product = () => {
         JSON.stringify(sauceInfo),
         config
       );
-      window.location.reload();
-      console.log("sucess");
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDelete = async () => {
@@ -353,8 +324,11 @@ const Product = () => {
   useEffect(() => {
     const get_ProductApi = async () => {
       try {
-        let { data } = await axios.get(url_Product+"?storeId="+localStorage.getItem("StoreId"), config);
-        console.log(data);
+        let { data } = await axios.get(
+          url_Product + "?storeId=" + localStorage.getItem("StoreId"),
+          config
+        );
+
         setProductData(data);
         for (var i = 0; i < data.length; i++) {
           data[i].status === 0
@@ -370,7 +344,7 @@ const Product = () => {
           data[i].image === null ? (data[i].image = "無") : "";
         }
         setChangeProductData(data);
-        console.log(data);
+
         setProductFilter(data);
       } catch (e) {
         localStorage.removeItem("UserAccount");
@@ -509,7 +483,7 @@ const Product = () => {
   };
 
   const handleProductSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const formData = new FormData();
     formData.append("name", productInfo.name);
     formData.append("price", productInfo.price);
@@ -524,7 +498,6 @@ const Product = () => {
 
     try {
       await axios.post(url_Product, formData, config);
-      console.log("scuess")
     } catch (error) {
       console.log(error);
     }
@@ -566,6 +539,7 @@ const Product = () => {
   const sauceTag = sauceData.map((sauce, index) =>
     sauce.status === "已停用" ? null : (
       <FormControlLabel
+        key={index}
         control={
           <Checkbox
             onChange={handleCheckChange}
@@ -746,32 +720,37 @@ const Product = () => {
                     </form>
                   </Dialog>
 
-                  <br />
-                  <br />
-
-                  <TableContainer sx={{ maxHeight: 480 }} component={Paper}>
+                  <TableContainer sx={{ maxHeight: 530 }} component={Paper}>
                     <Table stickyHeader>
                       <TableHeads id={"product"} />
 
-                      {filteredProduct.map((item, index) => (
-                        <TableProduct
-                          productId={item.id}
-                          productName={item.name}
-                          productCategory={item.category}
-                          productImage={item.image}
-                          productPrice={item.price}
-                          ProductTag={getProductTag[index]}
-                          productStatus={item.status}
-                          // CreatedAt={item.createdAt}
-                          // item={item}
-                          Del={() =>
-                            handleProductDeClickOpen(item.id, item, index)
-                          }
-                          Edit={() =>
-                            handleProductEditOpen(item.id, item, index)
-                          }
-                        />
-                      ))}
+                      {filteredProduct.length === 0 ? (
+                        <TableCell
+                          colSpan={7}
+                          align="center"
+                          style={{ fontSize: "1.5rem" }}
+                        >
+                          查無此資料
+                        </TableCell>
+                      ) : (
+                        filteredProduct.map((item, index) => (
+                          <TableProduct
+                            productId={item.id}
+                            productName={item.name}
+                            productCategory={item.category}
+                            productImage={item.image}
+                            productPrice={item.price}
+                            ProductTag={getProductTag[index]}
+                            productStatus={item.status}
+                            Del={() =>
+                              handleProductDeClickOpen(item.id, item, index)
+                            }
+                            Edit={() =>
+                              handleProductEditOpen(item.id, item, index)
+                            }
+                          />
+                        ))
+                      )}
                       {/* 刪除商品Dialog */}
                       <Dialog
                         open={openDe}
@@ -871,8 +850,6 @@ const Product = () => {
                         onBackdropClick="false"
                         fullWidth="true"
                         maxWidth="xs"
-
-                        // PaperComponent={PaperComponent}
                       >
                         <FormTitle
                           id="edit"
@@ -927,8 +904,6 @@ const Product = () => {
                                 type="file"
                                 accept="image/png, image/jpeg"
                                 onChange={onImageChange}
-                                // value={"http://localhost:8000/" + currentInfo.image}
-                                // value="C:/Users/user/Desktop/gogoro.jfif"
                               ></input>
                               <img width="100#" src={image} />
                             </DialogContent>
@@ -955,7 +930,6 @@ const Product = () => {
                         label="調味料名稱"
                         variant="filled"
                         autoComplete
-                        // type="search"
                         name="name"
                         value={searchSauceInput.name}
                         onChange={SearchSauceOnChange}
@@ -1000,7 +974,6 @@ const Product = () => {
                     open={open}
                     onClose={handleClose}
                     onBackdropClick="false"
-                    // PaperComponent={PaperComponent}
                   >
                     <DialogTitle
                       id="alert-dialog-title"
@@ -1048,21 +1021,29 @@ const Product = () => {
                     </AddForm>
                   </Dialog>
 
-                  <br />
-                  <br />
-                  <TableContainer component={Paper} sx={{ maxHeight: 480 }}>
+                  <TableContainer component={Paper} sx={{ maxHeight: 530 }}>
                     <Table stickyHeader>
                       <TableHeads id={"tags"} />
 
-                      {filtered.map((item, index) => (
-                        <TableProduct
-                          TagId={item.id}
-                          TagTag={item.tag}
-                          TagStatus={item.status}
-                          Del={() => handleSauceDeClickOpen(item)}
-                          Edit={() => handleSauceEditOpen(item)}
-                        />
-                      ))}
+                      {filtered.length === 0 ? (
+                        <TableCell
+                          colSpan={4}
+                          align="center"
+                          style={{ fontSize: "1.5rem" }}
+                        >
+                          查無此資料
+                        </TableCell>
+                      ) : (
+                        filtered.map((item, index) => (
+                          <TableProduct
+                            TagId={item.id}
+                            TagTag={item.tag}
+                            TagStatus={item.status}
+                            Del={() => handleSauceDeClickOpen(item)}
+                            Edit={() => handleSauceEditOpen(item)}
+                          />
+                        ))
+                      )}
                       {/* 刪除調味料Dialog */}
                       <Dialog
                         open={openDe}
@@ -1077,27 +1058,24 @@ const Product = () => {
                         <FormTitle id="delete" style={{ cursor: "move" }}>
                           {"確定要刪除此項目?"}
                         </FormTitle>
-                       
-                          <Stack mx={3} my={3} style={{ textAlign: "right" }}>
-                            <List aria-label="mailbox folders">
-                              <ListItem button>
-                                <ListItemText
-                                  primary="調味料名稱 :"
-                                  sx={{ maxWidth: "50%" }}
-                                />
-                                <Chip label={currentSauce.tag} />
-                              </ListItem>
-                              <Divider />
-                            </List>
-                            <DialogActions>
-                              <Button onClick={handleDeClose}>取消</Button>
 
-                              <Button onClick={() => handleDelete()}>
-                                確認
-                              </Button>
-                            </DialogActions>
-                          </Stack>
-                      
+                        <Stack mx={3} my={3} style={{ textAlign: "right" }}>
+                          <List aria-label="mailbox folders">
+                            <ListItem button>
+                              <ListItemText
+                                primary="調味料名稱 :"
+                                sx={{ maxWidth: "50%" }}
+                              />
+                              <Chip label={currentSauce.tag} />
+                            </ListItem>
+                            <Divider />
+                          </List>
+                          <DialogActions>
+                            <Button onClick={handleDeClose}>取消</Button>
+
+                            <Button onClick={() => handleDelete()}>確認</Button>
+                          </DialogActions>
+                        </Stack>
                       </Dialog>
                       {/* 修改調味料Dialog */}
                       <Dialog
@@ -1108,7 +1086,6 @@ const Product = () => {
                         onBackdropClick="false"
                         fullWidth="true"
                         maxWidth="xs"
-                        // PaperComponent={PaperComponent}
                       >
                         <FormTitle
                           id="edit"
@@ -1117,10 +1094,7 @@ const Product = () => {
                           {"修改調味料資訊"}
                         </FormTitle>
 
-                        <form
-                          // style={{ height: "300px" }}
-                          onSubmit={handleEditSubmit}
-                        >
+                        <form onSubmit={handleEditSubmit}>
                           <Stack mx={7} my={2}>
                             <DialogContent>
                               <TextField
