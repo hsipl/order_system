@@ -518,8 +518,7 @@ const Product = () => {
     }
   };
 
-  const handleProductEditSubmit = async (e) => {
-    e.preventDefault()
+  const handleProductEditSubmit = async () => {
     try {
       const formData = new FormData();
       productInfo.name === ""
