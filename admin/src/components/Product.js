@@ -489,8 +489,7 @@ const Product = () => {
         });
   };
 
-  const handleProductSubmit = async (e) => {
-    e.preventDefault();
+  const handleProductSubmit = async () => {
     const formData = new FormData();
     formData.append("name", productInfo.name);
     formData.append("price", productInfo.price);
