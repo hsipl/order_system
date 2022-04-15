@@ -60,8 +60,8 @@ const Login = () => {
     setPassword(e.target.value);
   }
 
-  async function handleSubmit() {
- 
+  async function handleSubmit(e) {
+    e.preventDefault();
     axios
       .post(url, { username, password }, config)
       .then((result) => {
