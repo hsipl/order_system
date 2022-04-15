@@ -518,7 +518,8 @@ const Product = () => {
     }
   };
 
-  const handleProductEditSubmit = async () => {
+  const handleProductEditSubmit = async (e) => {
+    e.preventDefault()
     try {
       const formData = new FormData();
       productInfo.name === ""
@@ -527,7 +528,7 @@ const Product = () => {
       productInfo.price === ""
         ? formData.append("price", currentInfo.price)
         : formData.append("price", productInfo.price);
-      productInfo.price === ""
+      productInfo.category === ""
         ? formData.append("category", currentInfo.category)
         : formData.append("category", productInfo.category);
       formData.append("status", productInfo.status);
@@ -711,7 +712,6 @@ const Product = () => {
                           調味料選項:
                         </InputLabel>
                         <FormGroup row={true}>{sauceTag}</FormGroup>
-                      
                         <InputLabel id="demo-simple-select-label">
                           產品圖片:
                         </InputLabel>
@@ -913,12 +913,19 @@ const Product = () => {
                               </InputLabel>
                               <FormGroup row={true}>{sauceTag}</FormGroup>
                               <br />
-                              <input
+                              <InputLabel id="demo-simple-select-label">
+                                產品圖片:
+                              </InputLabel>
+                              <UploadImgButton
+                                accept="image/*"
+                                id="contained-button-file"
+                                multiple
                                 type="file"
-                                accept="image/png, image/jpeg"
                                 onChange={onImageChange}
-                              ></input>
-                              <img width="100#" src={image} />
+                              />
+                              <br />
+                              <br />
+                              <img width="200#" src={image} />
                             </DialogContent>
                             <DialogActions sx={{ height: 0 }}>
                               <Button onClick={handleEditClose}>取消</Button>
