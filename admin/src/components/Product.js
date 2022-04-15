@@ -24,11 +24,18 @@ import {
   Chip,
   ListItemText,
   Tab,
+  Container,
 } from "@mui/material";
-import { FormTitle, SearchBox, SearchContainer } from "./SearchAndForm";
+import {
+  FormTitle,
+  SearchBox,
+  SearchContainer,
+  DialogText,
+} from "./SearchAndForm";
 import Stack from "@mui/material/Stack";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { UploadImgButton } from "./Buttons";
 import Draggable from "react-draggable";
 import "react-toastify/dist/ReactToastify.css";
 import { TableHeads, TableProduct } from "./Table";
@@ -702,16 +709,23 @@ const Product = () => {
                         <br />
                         <br />
                         <InputLabel id="demo-simple-select-label">
-                          調味料選項
+                          調味料選項:
                         </InputLabel>
                         <FormGroup row={true}>{sauceTag}</FormGroup>
-                        <br />
-                        <input
+                      
+                        <InputLabel id="demo-simple-select-label">
+                          產品圖片:
+                        </InputLabel>
+                        <UploadImgButton
+                          accept="image/*"
+                          id="contained-button-file"
+                          multiple
                           type="file"
-                          accept="image/png, image/jpeg"
                           onChange={onImageChange}
-                        ></input>
-                        <img width="100#" src={image} />
+                        />
+                        <br />
+                        <br />
+                        <img width="200#" src={image} />
                       </DialogContent>
                       <DialogActions>
                         <Button onClick={handleClose}>取消</Button>
