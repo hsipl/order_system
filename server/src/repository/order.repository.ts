@@ -1,5 +1,7 @@
-import { UpdateResult, Not } from "typeorm";
+import { subDays } from "date-fns";
+import { UpdateResult, Not, Between } from "typeorm";
 import { Order } from "../entity/order";
+import { getRepository } from "typeorm";
 
 const field: (keyof Order)[] = ["id", "storeId", "status", "pay"];
 
@@ -8,6 +10,26 @@ export class OrderRepository {
         return await Order.find({
             relations: ["orderProducts"],
             where: { status: 0 },
+            select: field
+        })
+    }
+
+    async getByDate(date: Date): Promise<Order[]> {
+        const begin = subDays(date, 1)
+        const end = date
+        return await Order.find({
+            relations: ["orderProducts", "storeId"],
+            where: { createdAt: Between(begin, end) },
+            select: field
+        })
+    }
+
+    async getByDateAndStoreId(date: Date, storeId: number): Promise<Order[]> {
+        const begin = subDays(date, 1)
+        const end = date
+        return await Order.find({
+            relations: ["orderProducts"],
+            where: { createdAt: Between(begin, end), storeId: storeId },
             select: field
         })
     }

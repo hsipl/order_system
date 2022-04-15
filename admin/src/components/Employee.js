@@ -236,6 +236,17 @@ const Employee = () => {
       if (
         editInfo.password === "" &&
         editInfo.passwordCheck === "" &&
+        editInfo.name === currentInfo.name
+      ) {
+        await axios.patch(
+          url + "/user/" + currentInfo.id,
+          JSON.stringify(editInfo, ["status"]),
+          config
+        );
+      }
+      else if (
+        editInfo.password === "" &&
+        editInfo.passwordCheck === "" &&
         editInfo.name !== currentInfo.name
       ) {
         await axios.patch(

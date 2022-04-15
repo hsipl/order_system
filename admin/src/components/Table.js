@@ -53,21 +53,20 @@ export function ControlCell(props) {
   } else {
     return (
       <>
-        <Tooltip title="刪除">
-          <Button onClick={DelBTN}>
-            <Delete />
-          </Button>
-        </Tooltip>
         <Tooltip title="修改">
           <Button onClick={EditBTN}>
             <Edit />
+          </Button>
+        </Tooltip>
+        <Tooltip title="刪除">
+          <Button onClick={DelBTN}>
+            <Delete />
           </Button>
         </Tooltip>
       </>
     );
   }
 }
-
 export function TableShop(props) {
   const delBTN = props.Del;
   const editBTN = props.Edit;
