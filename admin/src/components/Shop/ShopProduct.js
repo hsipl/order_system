@@ -128,6 +128,8 @@ const ShopProduct = () => {
         );
         toChinese(data);
       }
+    }else{
+      alert("欲使用搜尋功能，需選擇店家")
     }
   };
 
@@ -180,7 +182,7 @@ const ShopProduct = () => {
       <SearchContainer>
         <SearchBox
           id="SearchProductName"
-          label="請選擇分店"
+          label="請選擇店家"
           variant="filled"
           name="id"
           select

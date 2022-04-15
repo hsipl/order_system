@@ -224,8 +224,10 @@ const Shop = () => {
       data[i].status === 0
         ? (data[i].status = "營業中")
         : (data[i].status = "已歇業");
+      data[i].createdAt = data[i].createdAt.replace("Z", "");
+      data[i].createdAt = data[i].createdAt.replace("T", " ");
+      data[i].createdAt = data[i].createdAt.substring(0, 19);
     }
-
     setSearchData(data);
   }
 

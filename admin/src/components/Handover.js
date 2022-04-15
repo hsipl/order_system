@@ -89,6 +89,7 @@ const Handover = () => {
         JSON.stringify(handoverInfo),
         config
       );
+      window.location.reload();
     } catch (error) {
       console.log(error)
     }
