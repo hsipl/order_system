@@ -74,6 +74,8 @@ const Shop = () => {
     status: 0,
   });
 
+  const searchboxMenuShopStatus = [{ name: "營業中" }, { name: "已歇業" }];
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -458,8 +460,11 @@ const Shop = () => {
                       <MenuItem value="">
                         <em style={{ color: "gray" }}>請選擇</em>
                       </MenuItem>
-                      <MenuItem value={0}>營業中</MenuItem>
-                      <MenuItem value={1}>已歇業</MenuItem>
+                      {searchboxMenuShopStatus.map((item, index) => (
+                        <MenuItem value={index} key={index}>
+                          {item.name}
+                        </MenuItem>
+                      ))}
                     </SearchBox>
                     <Button
                       size="large"

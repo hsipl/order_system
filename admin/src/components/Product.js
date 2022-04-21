@@ -45,7 +45,7 @@ const AddForm = styled.form`
   height: 400px;
 `;
 
-const Product = () => {
+const Product = (props) => {
   const [sauceData, setSauceData] = useState([]);
   const [currentId, setCurrentId] = useState("");
   const [changeArrayData, setChangeArrayData] = useState([]);
@@ -84,6 +84,19 @@ const Product = () => {
   /*Tab*/
 
   const [value, setValue] = useState(localStorage.getItem("Tabs"));
+
+  const searchboxMenuStatus = [{ name: "販賣中" }, { name: "已停售" }];
+
+  const searchboxMenuTagsStatus = [{ name: "使用中" }, { name: "已停用" }];
+
+  const searchboxMenuNewTagsStatus = [{ name: "使用中" }, { name: "未使用" }];
+
+  const searchboxMenuCategory = [
+    { name: "肉類" },
+    { name: "蔬菜類" },
+    { name: "加工類" },
+    { name: "其他類" },
+  ];
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -565,13 +578,6 @@ const Product = () => {
   return (
     <>
       <BodyContainer>
-        {/* <Snackbar
-        open={SnackbarOpen}
-        autoHideDuration={1000}
-        onClose={handleSnackClose}
-        message="Sucess!"
-      ></Snackbar> */}
-        {/* <ToastContainer /> */}
         <Navbar />
         <Content>
           <Breadcrumb name="商品管理" />
@@ -613,8 +619,11 @@ const Product = () => {
                       <MenuItem value="">
                         <em style={{ color: "gray" }}>請選擇</em>
                       </MenuItem>
-                      <MenuItem value={0}>販賣中</MenuItem>
-                      <MenuItem value={1}>已停售</MenuItem>
+                      {searchboxMenuStatus.map((item, index) => (
+                        <MenuItem value={index} key={index}>
+                          {item.name}
+                        </MenuItem>
+                      ))}
                     </SearchBox>
                     <SearchBox
                       id="SearchSauceStatus"
@@ -629,10 +638,11 @@ const Product = () => {
                       <MenuItem value="">
                         <em style={{ color: "gray" }}>請選擇</em>
                       </MenuItem>
-                      <MenuItem value={0}>肉類</MenuItem>
-                      <MenuItem value={1}>蔬菜類</MenuItem>
-                      <MenuItem value={2}>加工類</MenuItem>
-                      <MenuItem value={3}>其他類</MenuItem>
+                      {searchboxMenuCategory.map((item, index) => (
+                        <MenuItem value={index} key={index}>
+                          {item.name}
+                        </MenuItem>
+                      ))}
                     </SearchBox>
                     <Button
                       size="large"
@@ -700,10 +710,11 @@ const Product = () => {
                           label="種類"
                           sx={{ width: 350 }}
                         >
-                          <MenuItem value={0}>肉類</MenuItem>
-                          <MenuItem value={1}>蔬菜類</MenuItem>
-                          <MenuItem value={2}>加工類</MenuItem>
-                          <MenuItem value={3}>其他類</MenuItem>
+                          {searchboxMenuCategory.map((item, index) => (
+                            <MenuItem value={index} key={index}>
+                              {item.name}
+                            </MenuItem>
+                          ))}
                         </TextField>
                         <br />
                         <br />
@@ -842,7 +853,7 @@ const Product = () => {
                                 />
                               </ListItem>
                             </List>
-                            <br/>
+                            <br />
                             <DialogActions sx={{ height: 0 }}>
                               <Button onClick={handleDeClose}>取消</Button>
 
@@ -900,10 +911,11 @@ const Product = () => {
                                 sx={{ width: 300 }}
                                 defaultValue={currentInfo.category}
                               >
-                                <MenuItem value={0}>肉類</MenuItem>
-                                <MenuItem value={1}>蔬菜類</MenuItem>
-                                <MenuItem value={2}>加工類</MenuItem>
-                                <MenuItem value={3}>其他類</MenuItem>
+                                {searchboxMenuCategory.map((item, index) => (
+                                  <MenuItem value={index} key={index}>
+                                    {item.name}
+                                  </MenuItem>
+                                ))}
                               </TextField>
                               <br />
                               <br />
@@ -966,8 +978,11 @@ const Product = () => {
                         <MenuItem value="">
                           <em style={{ color: "gray" }}>請選擇</em>
                         </MenuItem>
-                        <MenuItem value={0}>使用中</MenuItem>
-                        <MenuItem value={1}>已停用</MenuItem>
+                        {searchboxMenuTagsStatus.map((item, index) => (
+                          <MenuItem value={index} key={index}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
                       </SearchBox>
                     </Box>
                     <Button
@@ -1025,8 +1040,11 @@ const Product = () => {
                           sx={{ width: 300 }}
                           defaultValue={0}
                         >
-                          <MenuItem value={0}>使用中</MenuItem>
-                          <MenuItem value={1}>未使用</MenuItem>
+                          {searchboxMenuNewTagsStatus.map((item, index) => (
+                            <MenuItem value={index} key={index}>
+                              {item.name}
+                            </MenuItem>
+                          ))}
                         </TextField>
                         <br />
                         <br />
@@ -1133,8 +1151,13 @@ const Product = () => {
                                 label="狀態"
                                 sx={{ width: 280 }}
                               >
-                                <MenuItem value={0}>使用中</MenuItem>
-                                <MenuItem value={1}>未使用</MenuItem>
+                                {searchboxMenuNewTagsStatus.map(
+                                  (item, index) => (
+                                    <MenuItem value={index} key={index}>
+                                      {item.name}
+                                    </MenuItem>
+                                  )
+                                )}
                               </TextField>
                               <br />
                               <br />

@@ -25,7 +25,22 @@ const ShopProduct = () => {
     status: "",
   });
   const [check, setCheck] = useState(0); //  0鎖 1 name input 2 price input 3 category select 4 status select
+  const searchboxMenuType = [
+    { name: "無" },
+    { name: "產品名稱" },
+    { name: "價格" },
+    { name: "類別" },
+    { name: "狀態" },
+  ];
 
+  const searchboxMenuCategory = [
+    { name: "肉類" },
+    { name: "蔬菜類" },
+    { name: "加工類" },
+    { name: "其他類" },
+  ];
+
+  const searchboxMenuStatus = [{ name: "販售中" }, { name: "已停售" }];
   const url_Store = "http://localhost:8000/api/store";
   const url_Product = "http://localhost:8000/api/product";
   let config = {
@@ -72,6 +87,7 @@ const ShopProduct = () => {
       ...preData,
       [name]: value,
     }));
+    console.log(searchInput)
   }
 
   const handleSearch = async () => {
@@ -128,8 +144,8 @@ const ShopProduct = () => {
         );
         toChinese(data);
       }
-    }else{
-      alert("欲使用搜尋功能，需選擇店家")
+    } else {
+      alert("欲使用搜尋功能，需選擇店家");
     }
   };
 
@@ -207,21 +223,11 @@ const ShopProduct = () => {
           name="type"
           sx={{ width: "10rem" }}
         >
-          <MenuItem value={0} key={0}>
-            無
-          </MenuItem>
-          <MenuItem value={1} key={1}>
-            產品名稱
-          </MenuItem>
-          <MenuItem value={2} key={2}>
-            價格
-          </MenuItem>
-          <MenuItem value={3} key={3}>
-            類別
-          </MenuItem>
-          <MenuItem value={4} key={4}>
-            狀態
-          </MenuItem>
+          {searchboxMenuType.map((item, index) => (
+            <MenuItem value={index} key={index}>
+              {item.name}
+            </MenuItem>
+          ))}
         </SearchBox>
         {check === 0 ? (
           <SearchBox disabled />
@@ -254,18 +260,11 @@ const ShopProduct = () => {
             name="category"
             value={searchInput.category}
           >
-            <MenuItem value={0} key={0}>
-              肉類
-            </MenuItem>
-            <MenuItem value={1} key={1}>
-              蔬菜類
-            </MenuItem>
-            <MenuItem value={2} key={2}>
-              加工類
-            </MenuItem>
-            <MenuItem value={3} key={3}>
-              其他類
-            </MenuItem>
+            {searchboxMenuCategory.map((item, index) => (
+              <MenuItem value={index} key={index}>
+                {item.name}
+              </MenuItem>
+            ))}
           </SearchBox>
         ) : check === 4 ? (
           <SearchBox
@@ -276,12 +275,13 @@ const ShopProduct = () => {
             name="status"
             value={searchInput.status}
           >
-            <MenuItem value={0} key={0}>
-              販售中
-            </MenuItem>
-            <MenuItem value={1} key={1}>
-              已停售
-            </MenuItem>
+            {searchboxMenuStatus.map((item, index) => (
+              <MenuItem value={index} key={index}>
+                {item.name}
+              </MenuItem>
+            ))}
+            <MenuList type="sellStatus" ></MenuList>
+
           </SearchBox>
         ) : (
           <SearchBox disabled sx={{ width: "10rem" }} />
