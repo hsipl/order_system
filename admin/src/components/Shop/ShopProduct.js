@@ -87,7 +87,6 @@ const ShopProduct = () => {
       ...preData,
       [name]: value,
     }));
-    console.log(searchInput)
   }
 
   const handleSearch = async () => {
