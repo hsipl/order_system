@@ -26,12 +26,7 @@ import {
   Tab,
   Container,
 } from "@mui/material";
-import {
-  FormTitle,
-  SearchBox,
-  SearchContainer,
-  DialogText,
-} from "./SearchAndForm";
+import { FormTitle, SearchBox, SearchContainer } from "./SearchAndForm";
 import Stack from "@mui/material/Stack";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
@@ -40,6 +35,7 @@ import Draggable from "react-draggable";
 import "react-toastify/dist/ReactToastify.css";
 import { TableHeads, TableProduct } from "./Table";
 import { Search } from "@material-ui/icons";
+import MenuList from "./Menu";
 
 const AddForm = styled.form`
   height: 400px;
@@ -575,6 +571,23 @@ const Product = (props) => {
   let getProductTag = productData.map((taggs) => taggs.tags.map((k) => k.tag));
   let getProductId = productData.map((taggs) => taggs.tags.map((k) => k.id));
 
+  const onChangeSearchValue = (onChangeSearchName, onChangeSearchValue) => {
+    setSearchInput((preData) => ({
+      ...preData,
+      [onChangeSearchName]: onChangeSearchValue,
+    }));
+  };
+
+  const onChangeSearchSauceValue = (
+    onChangeSearchName,
+    onChangeSearchValue
+  ) => {
+    setSearchSauceInput((preData) => ({
+      ...preData,
+      [onChangeSearchName]: onChangeSearchValue,
+    }));
+  };
+
   return (
     <>
       <BodyContainer>
@@ -606,44 +619,21 @@ const Product = (props) => {
                         onChange={SearchOnChange}
                       />
                     </Box>
-                    <SearchBox
-                      id="SearchSauceStatus"
-                      select
+
+                    <MenuList
                       label="使用狀態"
                       value={searchInput.status}
-                      onChange={SearchOnChange}
-                      variant="filled"
+                      onChange={onChangeSearchValue}
                       name="status"
-                      sx={{ width: "10rem" }}
-                    >
-                      <MenuItem value="">
-                        <em style={{ color: "gray" }}>請選擇</em>
-                      </MenuItem>
-                      {searchboxMenuStatus.map((item, index) => (
-                        <MenuItem value={index} key={index}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                    </SearchBox>
-                    <SearchBox
-                      id="SearchSauceStatus"
-                      select
-                      label="類別"
+                      type="SellStatus"
+                    />
+                    <MenuList
+                      label="使用狀態"
                       value={searchInput.category}
-                      onChange={SearchOnChange}
-                      variant="filled"
+                      onChange={onChangeSearchValue}
                       name="category"
-                      sx={{ width: "10rem" }}
-                    >
-                      <MenuItem value="">
-                        <em style={{ color: "gray" }}>請選擇</em>
-                      </MenuItem>
-                      {searchboxMenuCategory.map((item, index) => (
-                        <MenuItem value={index} key={index}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                    </SearchBox>
+                      type="Category"
+                    />
                     <Button
                       size="large"
                       color="inherit"
@@ -965,25 +955,14 @@ const Product = (props) => {
                         value={searchSauceInput.name}
                         onChange={SearchSauceOnChange}
                       />
-                      <SearchBox
-                        id="SearchSauceStatus"
-                        select
+
+                      <MenuList
                         label="使用狀態"
                         value={searchSauceInput.status}
-                        onChange={SearchSauceOnChange}
-                        variant="filled"
+                        onChange={onChangeSearchSauceValue}
                         name="status"
-                        sx={{ width: "10rem" }}
-                      >
-                        <MenuItem value="">
-                          <em style={{ color: "gray" }}>請選擇</em>
-                        </MenuItem>
-                        {searchboxMenuTagsStatus.map((item, index) => (
-                          <MenuItem value={index} key={index}>
-                            {item.name}
-                          </MenuItem>
-                        ))}
-                      </SearchBox>
+                        type="TagStatus"
+                      />
                     </Box>
                     <Button
                       size="large"

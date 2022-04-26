@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   styled,
   Button,
@@ -38,6 +39,24 @@ export const TableHeads = (props) => {
     </TableHead>
   );
 };
+/*檢查型別*/
+TableHeads.propTypes = {
+  id: PropTypes.oneOf([
+    "product",
+    "productShop",
+    "employee",
+    "shop",
+    "report",
+    "handover",
+    "tags",
+  ]).isRequired,
+};
+/*預設值*/
+TableHeads.defaultProps ={
+
+  id: "product"
+
+}
 
 export function ControlCell(props) {
   const DelBTN = props.Del;

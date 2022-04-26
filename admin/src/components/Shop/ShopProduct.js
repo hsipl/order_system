@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { Search } from "@material-ui/icons";
 import { TableHeads, TableShopProduct } from "../Table";
+import MenuList from "../Menu";
 
 const ShopProduct = () => {
   const [shopData, setShopData] = useState([]);
@@ -25,22 +26,7 @@ const ShopProduct = () => {
     status: "",
   });
   const [check, setCheck] = useState(0); //  0鎖 1 name input 2 price input 3 category select 4 status select
-  const searchboxMenuType = [
-    { name: "無" },
-    { name: "產品名稱" },
-    { name: "價格" },
-    { name: "類別" },
-    { name: "狀態" },
-  ];
 
-  const searchboxMenuCategory = [
-    { name: "肉類" },
-    { name: "蔬菜類" },
-    { name: "加工類" },
-    { name: "其他類" },
-  ];
-
-  const searchboxMenuStatus = [{ name: "販售中" }, { name: "已停售" }];
   const url_Store = "http://localhost:8000/api/store";
   const url_Product = "http://localhost:8000/api/product";
   let config = {
@@ -176,21 +162,16 @@ const ShopProduct = () => {
     });
   };
 
-  const handleCheck = () => {
-    searchInput.type === 0
-      ? setCheck(0)
-      : searchInput.type === 1
-      ? setCheck(1)
-      : searchInput.type === 2
-      ? setCheck(2)
-      : searchInput.type === 3
-      ? setCheck(3)
-      : searchInput.type === 4
-      ? setCheck(4)
-      : null;
-  };
   const filtered = searchData === null ? [] : searchData;
   let getProductTag = productData.map((taggs) => taggs.tags.map((k) => k.tag));
+
+  const onChangeSearchValue = (onChangeSearchName, onChangeSearchValue) => {
+    setSearchInput((preData) => ({
+      ...preData,
+      [onChangeSearchName]: onChangeSearchValue,
+    }));
+    onChangeSearchName === "type" ? setCheck(onChangeSearchValue) : null;
+  };
 
   return (
     <>
@@ -211,23 +192,14 @@ const ShopProduct = () => {
           {storeName}
         </SearchBox>
 
-        <SearchBox
-          id="SearchProductStatus"
-          select
+        <MenuList
           label="類型"
           value={searchInput.type}
-          onChange={SearchOnChange}
-          onBlur={handleCheck}
-          variant="filled"
+          onChange={onChangeSearchValue}
           name="type"
-          sx={{ width: "10rem" }}
-        >
-          {searchboxMenuType.map((item, index) => (
-            <MenuItem value={index} key={index}>
-              {item.name}
-            </MenuItem>
-          ))}
-        </SearchBox>
+          type="Type"
+        />
+
         {check === 0 ? (
           <SearchBox disabled />
         ) : check === 1 ? (
@@ -251,37 +223,21 @@ const ShopProduct = () => {
             sx={{ width: "10rem" }}
           />
         ) : check === 3 ? (
-          <SearchBox
-            select
+          <MenuList
             label="選擇類別"
-            sx={{ width: "10rem" }}
-            onChange={SearchOnChange}
-            name="category"
             value={searchInput.category}
-          >
-            {searchboxMenuCategory.map((item, index) => (
-              <MenuItem value={index} key={index}>
-                {item.name}
-              </MenuItem>
-            ))}
-          </SearchBox>
+            onChange={onChangeSearchValue}
+            name="category"
+            type="Category"
+          />
         ) : check === 4 ? (
-          <SearchBox
-            sx={{ width: "10rem" }}
-            onChange={SearchOnChange}
+          <MenuList
             label="選擇狀態"
-            select
-            name="status"
             value={searchInput.status}
-          >
-            {searchboxMenuStatus.map((item, index) => (
-              <MenuItem value={index} key={index}>
-                {item.name}
-              </MenuItem>
-            ))}
-            <MenuList type="sellStatus" ></MenuList>
-
-          </SearchBox>
+            onChange={onChangeSearchValue}
+            name="status"
+            type="SellStatus"
+          />
         ) : (
           <SearchBox disabled sx={{ width: "10rem" }} />
         )}

@@ -34,6 +34,7 @@ import {
   Input,
   PaperComponent,
 } from "../SearchAndForm";
+import MenuList from "../Menu";
 
 const Shop = () => {
   const [arrayData, setArratData] = useState([]);
@@ -73,8 +74,6 @@ const Shop = () => {
     type: 1,
     status: 0,
   });
-
-  const searchboxMenuShopStatus = [{ name: "營業中" }, { name: "已歇業" }];
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -420,6 +419,13 @@ const Shop = () => {
     setPage((page) => page - 1);
   }
 
+  const onChangeSearchValue = (onChangeSearchName, onChangeSearchValue) => {
+    setSearchInput((preData) => ({
+      ...preData,
+      [onChangeSearchName]: onChangeSearchValue,
+    }));
+  };
+
   return (
     <>
       <BodyContainer>
@@ -447,25 +453,13 @@ const Shop = () => {
                       value={searchInput.name}
                       onChange={SearchOnChange}
                     />
-                    <SearchBox
-                      id="SearchProductStatus"
-                      select
+                    <MenuList
                       label="營業狀態"
                       value={searchInput.status}
-                      onChange={SearchOnChange}
-                      variant="filled"
+                      onChange={onChangeSearchValue}
                       name="status"
-                      sx={{ width: "10rem" }}
-                    >
-                      <MenuItem value="">
-                        <em style={{ color: "gray" }}>請選擇</em>
-                      </MenuItem>
-                      {searchboxMenuShopStatus.map((item, index) => (
-                        <MenuItem value={index} key={index}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                    </SearchBox>
+                      type="ShopStauts"
+                    />
                     <Button
                       size="large"
                       color="inherit"
