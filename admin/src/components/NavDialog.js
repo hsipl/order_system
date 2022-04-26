@@ -66,7 +66,7 @@ export const NavDialog = (props) => {
   const StoreStatus =
     JSON.parse(localStorage.getItem("StoreStatus")) === 0 ? "營業中" : "已歇業";
   const UserName = JSON.parse(localStorage.getItem("UserName"));
-  const UserAccount = JSON.parse(localStorage.getItem("UserAccount"));
+  const UserAccount = (localStorage.getItem("UserAccount"));
   const StoreLogo = JSON.parse(localStorage.getItem("StoreLogo"));
 
   const StoreInfo = [
