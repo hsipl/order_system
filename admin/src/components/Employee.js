@@ -228,9 +228,6 @@ const Employee = () => {
     }));
   }
 
-  console.log(currentInfo);
-  console.log(editInfo);
-
   const handleEditSubmit = async () => {
     try {
       if (

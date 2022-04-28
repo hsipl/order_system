@@ -37,6 +37,15 @@ const Login = () => {
   const [userLogin, setUserLogin] = useState(false);
   const [errMes, setErrMes] = useState("");
 
+  const url = "http://localhost:8000/api/user/login";
+  const config = {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    withCredentials: true,
+  };
+
   useEffect(() => {
     if (localStorage.getItem("user-info")) {
       history.push("/");
@@ -50,16 +59,6 @@ const Login = () => {
   function handlePassWord(e) {
     setPassword(e.target.value);
   }
-
-  const config = {
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-    withCredentials: true,
-  };
-
-  const url = "http://localhost:8000/api/user/login";
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -84,10 +83,7 @@ const Login = () => {
             JSON.stringify(UserInfo.storeId.status)
           );
 
-          localStorage.setItem(
-            "UserAccount",
-            JSON.stringify(UserInfo.username)
-          );
+          localStorage.setItem("UserAccount", UserInfo.username);
           localStorage.setItem(
             "StoreLogo",
             JSON.stringify(UserInfo.storeId.image)
@@ -96,6 +92,9 @@ const Login = () => {
             "StoreType",
             JSON.stringify(UserInfo.storeId.type)
           );
+          localStorage.setItem("StoreId", JSON.stringify(UserInfo.storeId.id));
+          localStorage.setItem("Tabs", JSON.stringify(1));
+          localStorage.setItem("StoreTabs", JSON.stringify(1));
           history.push("/");
         } else {
           setUserLogin(false);

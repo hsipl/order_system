@@ -16,6 +16,10 @@ export interface ICreateUserParams extends IUserParams {
   image: string;
 }
 
+export interface IUpdateUserParams extends IUserParams {
+  id: number;
+}
+
 export interface ILoginUserParams extends IUserParams {
   username: string;
   password: string;
