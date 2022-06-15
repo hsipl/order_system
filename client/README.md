@@ -8,7 +8,7 @@ A new Flutter project for order system
 [X] get product from sever  
 [X] order dialog  
 [X] shopping list  
-[]  confirm dialog  
+[X]  confirm dialog  
 []  connect printer  
 []  print  
 []  theme switch  
