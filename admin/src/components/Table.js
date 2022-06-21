@@ -148,12 +148,7 @@ export function ControlCell(props) {
       );
     }
   } else {
-    if (
-      status === "已歇業" ||
-      status === "已停用" ||
-      status === "已停售" ||
-      status === "已離職"
-    ) {
+    if (status === "已歇業" || status === "已離職") {
       return (
         <Tooltip title="修改">
           <Button onClick={EditBTN}>
@@ -161,6 +156,8 @@ export function ControlCell(props) {
           </Button>
         </Tooltip>
       );
+    } else if (status === "已停用" || status === "已停售") {
+      return <></>;
     } else {
       return (
         <>

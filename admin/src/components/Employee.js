@@ -4,7 +4,6 @@ import {
   Table,
   TableCell,
   TableContainer,
-  TableRow,
   Paper,
   Dialog,
   DialogActions,
@@ -14,11 +13,10 @@ import {
   Alert,
   ListItem,
   ListItemText,
-  Divider,
   Chip,
   List,
 } from "@mui/material";
-import { Delete, Edit, Search } from "@material-ui/icons";
+import { Search } from "@material-ui/icons";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
 import {
   DialogText,
@@ -240,8 +238,7 @@ const Employee = () => {
           JSON.stringify(editInfo, ["status"]),
           config
         );
-      }
-      else if (
+      } else if (
         editInfo.password === "" &&
         editInfo.passwordCheck === "" &&
         editInfo.name !== currentInfo.name
@@ -339,7 +336,7 @@ const Employee = () => {
             onClose={handleClose}
             onBackdropClick="false"
             fullWidth="true"
-            maxWidth="sm"
+            maxWidth="xs"
             // 移動部分尚未解決
             // PaperComponent={PaperComponent}
             // aria-labelledby="draggable-dialog-title"
@@ -468,7 +465,7 @@ const Employee = () => {
                   align="center"
                   colSpan={5}
                   size="medium"
-                  sx={{ fontSize: "1rem" }}
+                  sx={{ fontSize: "1.5rem" }}
                 >
                   查無資料
                 </TableCell>
@@ -496,7 +493,7 @@ const Employee = () => {
                 aria-labelledby="edit"
                 aria-describedby="edit"
                 fullWidth="true"
-                maxWidth="sm"
+                maxWidth="xs"
               >
                 <FormTitle
                   variant="h6"
@@ -532,30 +529,22 @@ const Employee = () => {
                           <MenuItem value={0}>員工</MenuItem>
                           <MenuItem value={1}>店長</MenuItem>
                         </Input>
-                        <Input
-                          name="status"
-                          label="狀態"
-                          variant="outlined"
-                          select
-                          required
-                          onChange={handleEditInfo}
-                          defaultValue={currentInfo.status}
-                          sx={{ width: "12rem" }}
-                        >
-                          <MenuItem value={0}>在職</MenuItem>
-                          <MenuItem value={1} disabled>
-                            已離職
-                          </MenuItem>
-                        </Input>
                       </Stack>
-                      {/* <Stack direction="row">
-                        <DialogText>員工照片:</DialogText>
-                        <img
-                          src={"http://localhost:8000/" + currentInfo.image}
-                          alt={currentInfo.image}
-                          width="150"
-                        />
-                      </Stack> */}
+                      <Input
+                        name="status"
+                        label="狀態"
+                        variant="outlined"
+                        select
+                        required
+                        onChange={handleEditInfo}
+                        defaultValue={currentInfo.status}
+                      >
+                        <MenuItem value={0}>在職</MenuItem>
+                        <MenuItem value={1} disabled>
+                          已離職
+                        </MenuItem>
+                      </Input>
+
                       <DialogActions>
                         <Button onClick={handleEditClose} size="large">
                           取消
@@ -579,7 +568,7 @@ const Employee = () => {
                 ) : (
                   <form onSubmit={handleSubmit}>
                     <Stack mx={5} my={2}>
-                      <Stack direction="row" justifyContent="space-between">
+                      
                         <Input
                           name="name"
                           label="姓名"
@@ -588,6 +577,7 @@ const Employee = () => {
                           onChange={handleEditInfo}
                           defaultValue={currentInfo.name}
                         />
+                        <Stack direction="row" justifyContent="space-between">
                         <Input
                           name="status"
                           label="職位"
@@ -704,28 +694,24 @@ const Employee = () => {
                 >
                   {"確定要刪除此員工?"}
                 </FormTitle>
-                <Stack mx={5} my={3} style={{ textAlign: "right" }}>
+                <Stack mx={5} my={2} >
                   <List aria-label="mailbox folders">
-                    <ListItem button>
-                      <ListItemText primary="姓名 :" sx={{ maxWidth: "50%" }} />
+                    <ListItem button divider disableGutters>
+                      <ListItemText primary="姓名 :" sx={{ maxWidth: "50%" }} inset/>
                       <Chip label={currentInfo.name} />
                     </ListItem>
-                    <Divider />
-                    <ListItem button>
-                      <ListItemText primary="職位 :" sx={{ maxWidth: "50%" }} />
+                    <ListItem button divider disableGutters>
+                      <ListItemText primary="職位 :" sx={{ maxWidth: "50%" }} inset/>
                       <Chip label={currentInfo.type} />
                     </ListItem>
-                    <Divider />
-                    <ListItem button>
-                      <ListItemText primary="狀態 :" sx={{ maxWidth: "50%" }} />
+                    <ListItem button divider disableGutters>
+                      <ListItemText primary="狀態 :" sx={{ maxWidth: "50%" }} inset/>
                       <Chip label={currentInfo.status} />
                     </ListItem>
-                    <Divider />
-                    <ListItem button>
+                    <ListItem button divider disableGutters>
                       <ListItemText
                         primary="員工照片 :"
-                        sx={{ maxWidth: "40%" }}
-                      />
+                        sx={{ maxWidth: "37.5%" }} inset/>
                       <img
                         src={"http://localhost:8000/" + currentInfo.image}
                         alt={currentInfo.image}

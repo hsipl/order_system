@@ -269,7 +269,9 @@ const Shop = () => {
     shopInfo.name === ""
       ? formData.append("name", currentShop.name)
       : formData.append("name", shopInfo.name);
-    formData.append("type", shopInfo.type);
+    currentShop.type===shopInfo.type?
+    formData.append("type", shopInfo.type):
+    formData.append("type", currentShop.type)
     formData.append("status", shopInfo.status);
     formData.append("image", shopInfo.image);
     try {
@@ -307,6 +309,7 @@ const Shop = () => {
 
   const handleManageClose = () => {
     setOpenManager(false);
+    setImage(null);
   };
 
   function handleCheck(e) {
@@ -439,7 +442,7 @@ const Shop = () => {
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList onChange={handleChange}>
                   <Tab label="分店資訊" value="1" />
-                  <Tab label="財務報表" value="2" />
+                  {/* <Tab label="財務報表" value="2" /> */}
                   <Tab label="商品資訊" value="3" />
                 </TabList>
                 <TabPanel value="1">
@@ -483,12 +486,12 @@ const Shop = () => {
                     onClose={handleClose}
                     onBackdropClick="false"
                     fullWidth="true"
-                    maxWidth="sm"
+                    maxWidth="xs"
                   >
                     <FormTitle variant="h6">{"新增店鋪資訊"}</FormTitle>
 
                     <form>
-                      <Stack mx={5} my={3}>
+                      <Stack mx={5} my={2}>
                         <Input
                           onChange={handleShopInfo}
                           value={shopInfo.name}
@@ -497,29 +500,34 @@ const Shop = () => {
                           variant="outlined"
                           required
                         />
-                        <Input
-                          select
-                          onChange={handleShopInfo}
-                          value={shopInfo.type}
-                          label="類型"
-                          name="type"
-                          required
-                        >
-                          <MenuItem value={0}>分店</MenuItem>
-                          <MenuItem value={1}>總店</MenuItem>
-                        </Input>
-                        <Input
-                          select
-                          onChange={handleShopInfo}
-                          value={shopInfo.status}
-                          name="status"
-                          label="狀態"
-                          required
-                        >
-                          <MenuItem value={0}>營業中</MenuItem>
-                        </Input>
+                        <Stack direction="row" justifyContent="space-between">
+                          <Input
+                            select
+                            onChange={handleShopInfo}
+                            value={shopInfo.type}
+                            label="類型"
+                            name="type"
+                            required
+                            sx={{ width: "10rem" }}
+                          >
+                            <MenuItem value={0}>分店</MenuItem>
+                            <MenuItem value={1}>總店</MenuItem>
+                          </Input>
+                          <Input
+                            select
+                            onChange={handleShopInfo}
+                            value={shopInfo.status}
+                            name="status"
+                            label="狀態"
+                            required
+                            sx={{ width: "10rem" }}
+                          >
+                            <MenuItem value={0}>營業中</MenuItem>
+                          </Input>
+                        </Stack>
                         <DialogText>Logo圖片:</DialogText>
                         <Container>
+                          <img width="150#" src={image} />
                           <UploadImgButton
                             accept="image/*"
                             id="contained-button-file"
@@ -527,7 +535,6 @@ const Shop = () => {
                             type="file"
                             onChange={onImageChange}
                           />
-                          <img width="100#" src={image} />
                         </Container>
                         <DialogActions>
                           <Button onClick={handleClose} size="large">
@@ -586,6 +593,7 @@ const Shop = () => {
                         fullWidth="true"
                         PaperComponent={PaperComponent}
                         aria-labelledby="draggable-dialog-title"
+                        maxWidth="xs"
                       >
                         <FormTitle
                           variant="h6"
@@ -596,48 +604,62 @@ const Shop = () => {
                         </FormTitle>
 
                         <form>
-                          <Stack mx={8} my={1}>
-                            <Input
-                              name="storeId"
-                              label="分店編號"
-                              variant="outlined"
-                              defaultValue={currentShop.id}
-                              disabled
-                            />
-                            <Input
-                              select
-                              onChange={handleManagerChange}
-                              defaultValue={1}
-                              label="類型"
-                              name="type"
-                              disabled
+                          <Stack mx={5} my={1}>
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
                             >
-                              <MenuItem value={0} disabled>
-                                員工
-                              </MenuItem>
-                              <MenuItem value={1}>店長</MenuItem>
-                            </Input>
-                            <Input
-                              select
-                              onChange={handleManagerChange}
-                              defaultValue={0}
-                              name="status"
-                              label="狀態"
-                              disabled
+                              <Input
+                                name="storeId"
+                                label="分店編號"
+                                variant="outlined"
+                                defaultValue={currentShop.id}
+                                disabled
+                                sx={{ width: "10rem" }}
+                              />
+                              <Input
+                                select
+                                onChange={handleManagerChange}
+                                defaultValue={1}
+                                label="類型"
+                                name="type"
+                                disabled
+                                sx={{ width: "10rem" }}
+                              >
+                                <MenuItem value={0} disabled>
+                                  員工
+                                </MenuItem>
+                                <MenuItem value={1}>店長</MenuItem>
+                              </Input>
+                            </Stack>
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
                             >
-                              <MenuItem value={0}>在職中</MenuItem>
-                              <MenuItem value={1} disabled>
-                                已停職
-                              </MenuItem>
-                            </Input>
-                            <Input
-                              autoFocus
-                              onChange={handleManagerChange}
-                              name="name"
-                              label="使用者名稱"
-                              variant="outlined"
-                              required
-                            />
+                              <Input
+                                select
+                                onChange={handleManagerChange}
+                                defaultValue={0}
+                                name="status"
+                                label="狀態"
+                                disabled
+                                sx={{ width: "10rem" }}
+                              >
+                                <MenuItem value={0}>在職中</MenuItem>
+                                <MenuItem value={1} disabled>
+                                  已停職
+                                </MenuItem>
+                              </Input>
+
+                              <Input
+                                autoFocus
+                                onChange={handleManagerChange}
+                                name="name"
+                                label="店長姓名"
+                                variant="outlined"
+                                required
+                              />
+                            </Stack>
                             <Input
                               placeholder="帳號"
                               name="account"
@@ -646,14 +668,15 @@ const Shop = () => {
                               required
                               label="帳號"
                             />
-                            {manageInfo.account.length === 0 ? null : manageInfo
-                                .account.length >= 5 &&
-                              manageInfo.account.length <= 15 ? null : (
-                              <Alert severity="error">
-                                帳號長度不足(需再5~15碼之間)!
-                              </Alert>
-                            )}
-
+                            <DialogText sx={{ width: "85%" }}>
+                              {manageInfo.account.length ===
+                              0 ? null : manageInfo.account.length >= 5 &&
+                                manageInfo.account.length <= 15 ? null : (
+                                <Alert severity="error">
+                                  帳號長度不足(需再5~15碼之間)!
+                                </Alert>
+                              )}
+                            </DialogText>
                             <Input
                               id="InputPassword"
                               type="password"
@@ -694,7 +717,8 @@ const Shop = () => {
                             </DialogText>
 
                             <DialogText>照片:</DialogText>
-                            <Container>
+                            <DialogText>
+                            <img width="150#" src={image} />
                               <UploadImgButton
                                 name="file"
                                 accept="image/*"
@@ -703,8 +727,8 @@ const Shop = () => {
                                 type="file"
                                 onChange={onManagerImageChange}
                               />
-                              <img width="100#" src={image} />
-                            </Container>
+                              
+                            </DialogText>
                             <DialogActions>
                               <Button onClick={handleManageClose}>取消</Button>
                               {check === 1 ? (
@@ -736,26 +760,27 @@ const Shop = () => {
                         </FormTitle>
                         {/*.........................................................................*/}
                         {page === 1 && (
-                          <Stack mx={5} my={3} style={{ textAlign: "right" }}>
+                          <Stack mx={5} my={2}>
                             <List aria-label="mailbox folders">
-                              <ListItem button>
+                              <ListItem button divider disableGutters>
                                 <ListItemText
+                                  inset
                                   primary="店長名稱 :"
                                   sx={{ maxWidth: "50%" }}
                                 />
                                 <Chip label={getemployeeName[currentShop.id]} />
                               </ListItem>
-                              <Divider />
-                              <ListItem button>
+                              <ListItem button divider disableGutters>
                                 <ListItemText
+                                  inset
                                   primary="類型 :"
                                   sx={{ maxWidth: "50%" }}
                                 />
                                 <Chip label={getemployeeType[currentShop.id]} />
                               </ListItem>
-                              <Divider />
-                              <ListItem button>
+                              <ListItem button divider disableGutters>
                                 <ListItemText
+                                  inset
                                   primary="狀態 :"
                                   sx={{ maxWidth: "50%" }}
                                 />
@@ -763,11 +788,11 @@ const Shop = () => {
                                   label={getemployeeStatus[currentShop.id]}
                                 />
                               </ListItem>
-                              <Divider />
-                              <ListItem button>
+                              <ListItem button divider disableGutters>
                                 <ListItemText
+                                  inset
                                   primary="店長照片 :"
-                                  sx={{ maxWidth: "40%" }}
+                                  sx={{ maxWidth: "37.5%" }}
                                 />
                                 <img
                                   src={
@@ -791,7 +816,6 @@ const Shop = () => {
                           <form>
                             <Stack mx={8} my={1}>
                               <Input
-                                autoFocus
                                 onChange={handleBusinessCardChange}
                                 name="name"
                                 defaultValue={getemployeeName[currentShop.id]}
@@ -874,36 +898,37 @@ const Shop = () => {
                         >
                           {"確定要刪除此項目?"}
                         </FormTitle>
-                        <Stack mx={5} my={3} style={{ textAlign: "right" }}>
+                        <Stack mx={5} my={2}>
                           <List aria-label="mailbox folders">
-                            <ListItem button>
+                            <ListItem button divider disableGutters>
                               <ListItemText
+                                inset
                                 primary="店家名稱 :"
                                 sx={{ maxWidth: "50%" }}
                               />
                               <Chip label={currentShop.name} />
                             </ListItem>
-                            <Divider />
-                            <ListItem button>
+                            <ListItem button divider disableGutters>
                               <ListItemText
+                                inset
                                 primary="類型 :"
                                 sx={{ maxWidth: "50%" }}
                               />
                               <Chip label={currentShop.type} />
                             </ListItem>
-                            <Divider />
-                            <ListItem button>
+                            <ListItem button divider disableGutters>
                               <ListItemText
+                                inset
                                 primary="狀態 :"
                                 sx={{ maxWidth: "50%" }}
                               />
                               <Chip label={currentShop.status} />
                             </ListItem>
-                            <Divider />
-                            <ListItem button>
+                            <ListItem button divider disableGutters>
                               <ListItemText
+                                inset
                                 primary="店家照片 :"
-                                sx={{ maxWidth: "40%" }}
+                                sx={{ maxWidth: "37.5%" }}
                               />
                               <img
                                 src={
@@ -928,7 +953,7 @@ const Shop = () => {
                         aria-labelledby="edit"
                         aria-describedby="edit"
                         fullWidth="true"
-                        maxWidth="sm"
+                        maxWidth="xs"
                       >
                         <FormTitle variant="h6">{"修改店鋪資訊"}</FormTitle>
 
@@ -942,30 +967,38 @@ const Shop = () => {
                                 label="店家名稱"
                                 variant="outlined"
                               />
-                              <Input
-                                select
-                                onChange={handleShopInfo}
-                                defaultValue={currentShop.type}
-                                label="類型"
-                                name="type"
+                              <Stack
+                                direction="row"
+                                justifyContent="space-between"
                               >
-                                <MenuItem value={0}>分店</MenuItem>
-                                <MenuItem value={1}>總店</MenuItem>
-                              </Input>
-                              <Input
-                                select
-                                onChange={handleShopInfo}
-                                defaultValue={currentShop.status}
-                                name="status"
-                                label="狀態"
-                              >
-                                <MenuItem value={0}>營業中</MenuItem>
-                                <MenuItem value={1} disabled>
-                                  已歇業
-                                </MenuItem>
-                              </Input>
+                                <Input
+                                  select
+                                  onChange={handleShopInfo}
+                                  defaultValue={currentShop.type}
+                                  label="類型"
+                                  name="type"
+                                  sx={{ width: "10rem" }}
+                                >
+                                  <MenuItem value={0}>分店</MenuItem>
+                                  <MenuItem value={1}>總店</MenuItem>
+                                </Input>
+                                <Input
+                                  select
+                                  onChange={handleShopInfo}
+                                  defaultValue={currentShop.status}
+                                  name="status"
+                                  label="狀態"
+                                  sx={{ width: "10rem" }}
+                                >
+                                  <MenuItem value={0}>營業中</MenuItem>
+                                  <MenuItem value={1} disabled>
+                                    已歇業
+                                  </MenuItem>
+                                </Input>
+                              </Stack>
                               <DialogText>Logo圖片:</DialogText>
-                              <Container>
+                              <DialogText>
+                                <img width="150#" src={image} />
                                 <UploadImgButton
                                   name="file"
                                   accept="image/*"
@@ -974,8 +1007,7 @@ const Shop = () => {
                                   type="file"
                                   onChange={onImageChange}
                                 />
-                                <img width="100#" src={image} />
-                              </Container>
+                              </DialogText>
                               <DialogActions>
                                 <Button onClick={handleEditClose}>取消</Button>
                                 <Button onClick={() => handleEditSubmit()}>
@@ -1015,8 +1047,9 @@ const Shop = () => {
                                   已歇業
                                 </MenuItem>
                               </Input>
-                              <DialogText>Logo圖片:</DialogText>
-                              <Container>
+                              {/* <DialogText>Logo圖片:</DialogText>
+                              <DialogText>
+                                <img width="150#" src={image} />
                                 <UploadImgButton
                                   name="file"
                                   accept="image/*"
@@ -1025,8 +1058,7 @@ const Shop = () => {
                                   type="file"
                                   onChange={onImageChange}
                                 />
-                                <img width="100#" src={image} />
-                              </Container>
+                              </DialogText> */}
                               <DialogActions>
                                 <Button onClick={handleEditClose}>取消</Button>
                                 <Button onClick={() => handleEditSubmit()}>
@@ -1040,9 +1072,9 @@ const Shop = () => {
                     </Table>
                   </TableContainer>
                 </TabPanel>
-                <TabPanel value="2">
+                {/* <TabPanel value="2">
                   <div>This is report tabs.</div>
-                </TabPanel>
+                </TabPanel> */}
                 <TabPanel value="3">
                   <ShopProduct />
                 </TabPanel>

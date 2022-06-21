@@ -7,12 +7,11 @@ import {
   TextField,
   Button,
   DialogActions,
-  DialogContent,
-  DialogTitle,
   ListItem,
   ListItemText,
   Dialog,
   Chip,
+  Stack,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
@@ -20,7 +19,7 @@ import axios from "axios";
 import { TableHandover, TableHeads } from "./Table";
 import { Search } from "@material-ui/icons";
 import { BodyContainer, Navbar, Content, Breadcrumb } from "./Navbar";
-import { SearchBox, SearchContainer } from "./SearchAndForm";
+import { FormTitle, SearchBox, SearchContainer } from "./SearchAndForm";
 
 const Handover = () => {
   const [value, setValue] = React.useState(null);
@@ -91,7 +90,7 @@ const Handover = () => {
       );
       window.location.reload();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   };
 
@@ -196,58 +195,62 @@ const Handover = () => {
                 fullWidth="true"
                 maxWidth="xs"
               >
-                <DialogTitle
+                <FormTitle
+                  variant="h6"
                   id="edit"
                   style={{ textAlign: "center", cursor: "move" }}
                 >
                   {"修改實際金額"}
-                </DialogTitle>
+                </FormTitle>
 
-                <DialogContent style={{ textAlign: "center" }}>
-                  <ListItem button>
-                    <ListItemText primary="交班人 :" sx={{ maxWidth: "50%" }} />
-                    <Chip
-                      label={currentHandover.userName}
-                      style={{ margin: "auto" }}
+                <form>
+                  <Stack mx={10} my={3} spacing={5}>
+                    <ListItem button disableGutters>
+                      <ListItemText
+                        primary="交班人 :"
+                        sx={{ maxWidth: "50%" }}
+                      />
+                      <Chip
+                        label={currentHandover.userName}
+                        style={{ margin: "auto" }}
+                      />
+                    </ListItem>
+                    <ListItem button disableGutters>
+                      <ListItemText
+                        primary="系統金額 :"
+                        sx={{ maxWidth: "50%" }}
+                      />
+                      <Chip
+                        label={currentHandover.sysmoney}
+                        style={{ margin: "auto" }}
+                      />
+                    </ListItem>
+                    <ListItem button disableGutters>
+                      <ListItemText
+                        primary="交班時間 :"
+                        sx={{ maxWidth: "50%" }}
+                      />
+                      <Chip
+                        label={currentHandover.createdAt}
+                        style={{ margin: "auto" }}
+                      />
+                    </ListItem>
+                    <TextField
+                      required="true"
+                      defaultValue={currentHandover.realcash}
+                      onChange={handleHandoverInfo}
+                      name="realCash"
+                      label="實際金額"
+                      variant="outlined"
                     />
-                  </ListItem>
-                  <br /> <br />
-                  <ListItem button>
-                    <ListItemText
-                      primary="系統金額 :"
-                      sx={{ maxWidth: "50%" }}
-                    />
-                    <Chip
-                      label={currentHandover.sysmoney}
-                      style={{ margin: "auto" }}
-                    />
-                  </ListItem>
-                  <br /> <br />
-                  <ListItem button>
-                    <ListItemText
-                      primary="交班時間 :"
-                      sx={{ maxWidth: "50%" }}
-                    />
-                    <Chip
-                      label={currentHandover.createdAt}
-                      style={{ margin: "auto" }}
-                    />
-                  </ListItem>
-                  <br /> <br />
-                  <TextField
-                    required="true"
-                    defaultValue={currentHandover.realcash}
-                    onChange={handleHandoverInfo}
-                    name="realCash"
-                    label="實際金額"
-                    variant="outlined"
-                    sx={{ width: 300 }}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleHandoverEditClose}>取消</Button>
-                  <Button onClick={handleHandoverEditSubmit}>確認</Button>
-                </DialogActions>
+                  </Stack>
+                  <Stack mx={5} my={2}>
+                    <DialogActions>
+                      <Button onClick={handleHandoverEditClose}>取消</Button>
+                      <Button onClick={handleHandoverEditSubmit}>確認</Button>
+                    </DialogActions>
+                  </Stack>
+                </form>
               </Dialog>
             </Table>
           </TableContainer>

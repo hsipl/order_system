@@ -170,7 +170,9 @@ const ShopProduct = () => {
       ...preData,
       [onChangeSearchName]: onChangeSearchValue,
     }));
-    onChangeSearchName === "type" ? setCheck(onChangeSearchValue) : null;
+    if (onChangeSearchName === "type") {
+      setCheck(onChangeSearchValue);
+    }
   };
 
   return (
