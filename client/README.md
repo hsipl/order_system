@@ -1,6 +1,7 @@
 # client
+![image](https://user-images.githubusercontent.com/19197054/175075256-0b7b172f-da90-4e4f-b09b-d95a2898e46a.png)
 
-A new Flutter project for order system
+A new Flutter project for order system for pad
 
 ## feature
 
