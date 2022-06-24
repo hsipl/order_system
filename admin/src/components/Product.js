@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -41,7 +40,7 @@ import MenuList from "./Menu";
 const Product = (props) => {
   const [sauceData, setSauceData] = useState([]);
   const [currentId, setCurrentId] = useState("");
-  const [changeArrayData, setChangeArrayData] = useState([]);
+  const [, /*changeArrayData*/ setChangeArrayData] = useState([]);
   const [searchSauceInput, setSearchSauceInput] = useState({
     name: "",
     status: "",
@@ -62,7 +61,7 @@ const Product = (props) => {
   const [sauceFilter, setSauceFilter] = useState([]);
   const [productData, setProductData] = useState([]);
   const [productFilter, setProductFilter] = useState([]);
-  const [changeProductData, setChangeProductData] = useState([]);
+  const [changeProductData, setChangeProductData] = useState([]); // eslint-disable-line no-unused-vars
   const [image, setImage] = useState(null);
   const [productInfo, setProductInfo] = useState({
     name: "",
@@ -78,10 +77,6 @@ const Product = (props) => {
 
   const [value, setValue] = useState(localStorage.getItem("Tabs"));
 
-  const searchboxMenuStatus = [{ name: "販賣中" }, { name: "已停售" }];
-
-  const searchboxMenuTagsStatus = [{ name: "使用中" }, { name: "已停用" }];
-
   const searchboxMenuNewTagsStatus = [{ name: "使用中" }];
 
   const searchboxMenuCategory = [
@@ -93,12 +88,12 @@ const Product = (props) => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    {
+    { // eslint-disable-line no-lone-blocks
       localStorage.setItem("Tabs", newValue);
     }
   };
 
-  const handleClickOpen = () => {
+  const handleClickOpen = () => { // eslint-disable-line no-lone-blocks
     setOpen(true);
   };
 
@@ -106,9 +101,9 @@ const Product = (props) => {
     setOpenDe(true);
     setCurrentId(id);
     setCurrentInfo({
-      ["name"]: item.name,
-      ["price"]: item.price,
-      ["category"]:
+      name: item.name,
+      price: item.price,
+      category:
         item.category === "肉類"
           ? 0
           : item.category === "蔬菜類"
@@ -116,11 +111,11 @@ const Product = (props) => {
           : item.category === "加工類"
           ? 2
           : 3,
-      ["category2"]: item.category,
-      ["image"]: item.image,
+      category2: item.category,
+      image: item.image,
 
-      ["tag"]: getProductId[index],
-      ["tagName"]: getProductTag[index],
+      tag: getProductId[index],
+      tagName: getProductTag[index],
     });
   };
 
@@ -137,9 +132,9 @@ const Product = (props) => {
     setOpenEdit(true);
 
     setCurrentInfo({
-      ["name"]: item.name,
-      ["price"]: item.price,
-      ["category"]:
+      "name": item.name,
+      "price": item.price,
+      "category":
         item.category === "肉類"
           ? 0
           : item.category === "蔬菜類"
@@ -147,11 +142,11 @@ const Product = (props) => {
           : item.category === "加工類"
           ? 2
           : 3,
-      ["category2"]: item.category,
-      ["image"]: item.image,
+      "category2": item.category,
+      "image": item.image,
 
-      ["tag"]: getProductId[index],
-      ["tagName"]: getProductTag[index],
+      "tag": getProductId[index],
+      "tagName": getProductTag[index],
     });
 
     setCurrentId(id);
@@ -197,7 +192,7 @@ const Product = (props) => {
       }
     };
     get_SauceApi();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleSauceInfo(e) {
     const { value, name } = e.target;
@@ -212,9 +207,9 @@ const Product = (props) => {
     setOpenDe(true);
 
     setCurrentSauce({
-      ["id"]: item.id,
-      ["tag"]: item.tag,
-      ["status"]: item.status === "使用中" ? 0 : 1,
+      "id": item.id,
+      "tag": item.tag,
+      "status": item.status === "使用中" ? 0 : 1,
     });
   };
 
@@ -222,9 +217,9 @@ const Product = (props) => {
     setOpenEdit(true);
 
     setCurrentSauce({
-      ["id"]: item.id,
-      ["tag"]: item.tag,
-      ["status"]: item.status === "使用中" ? 0 : 1,
+      "id": item.id,
+      "tag": item.tag,
+      "status": item.status === "使用中" ? 0 : 1,
     });
   };
 
@@ -366,7 +361,7 @@ const Product = (props) => {
       }
     };
     get_ProductApi();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleProductInfo(e) {
     const { value, name } = e.target;
@@ -427,7 +422,7 @@ const Product = (props) => {
         let { data } = await axios.get(
           url_Product +
             "?name=" +
-            searchInput.category +
+            searchInput.name +
             "&status=" +
             searchInput.status,
           config
@@ -453,7 +448,9 @@ const Product = (props) => {
             "?name=" +
             searchInput.name +
             "&category=" +
-            searchInput.category,
+            searchInput.category +
+            "&status=" +
+            searchInput.status,
           config
         );
         productChange(data);
@@ -481,7 +478,7 @@ const Product = (props) => {
     setImage(URL.createObjectURL(e.target.files[0]));
     setProductInfo((preData) => ({
       ...preData,
-      ["image"]: e.target.files[0],
+      "image": e.target.files[0],
     }));
   };
 
@@ -714,7 +711,7 @@ const Product = (props) => {
                           產品圖片:
                         </DialogText>
                         <Container>
-                          <img width="150#" src={image} />
+                          <img width="150#" src={image} alt={image}/>
                           <UploadImgButton
                             accept="image/*"
                             z
@@ -911,7 +908,7 @@ const Product = (props) => {
                               產品圖片:
                             </DialogText>
                             <Container>
-                              <img width="150#" src={image} />
+                              <img width="150#" src={image} alt={image}/>
                               <UploadImgButton
                                 accept="image/*"
                                 id="contained-button-file"

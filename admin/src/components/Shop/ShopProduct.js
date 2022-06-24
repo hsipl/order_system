@@ -46,7 +46,7 @@ const ShopProduct = () => {
       }
     };
     get_Store();
-  }, []);
+  }, []);// eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const get_Product = async () => {
@@ -58,7 +58,7 @@ const ShopProduct = () => {
       }
     };
     get_Product();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const storeName = shopData.map((name, index) => (
     <MenuItem value={name.id} key={index}>

@@ -3,7 +3,6 @@ import axios from "axios";
 import {
   Chip,
   Container,
-  Divider,
   List,
   ListItem,
   ListItemText,
@@ -82,11 +81,11 @@ const Shop = () => {
   const handleDeClickOpen = (item) => {
     setOpenDel(true);
     setCurrentShop({
-      ["id"]: item.id,
-      ["name"]: item.name,
-      ["type"]: item.type,
-      ["status"]: item.status,
-      ["image"]: item.image,
+      "id": item.id,
+      "name": item.name,
+      "type": item.type,
+      "status": item.status,
+      "image": item.image,
     });
   };
 
@@ -107,10 +106,10 @@ const Shop = () => {
   const handleEditOpen = (item) => {
     setOpenEdit(true);
     setCurrentShop({
-      ["id"]: item.id,
-      ["name"]: item.name,
-      ["type"]: item.type === "總店" ? 1 : 0,
-      ["status"]: item.status === "營業中" ? 0 : 1,
+      "id": item.id,
+      "name": item.name,
+      "type": item.type === "總店" ? 1 : 0,
+      "status": item.status === "營業中" ? 0 : 1,
     });
   };
 
@@ -146,7 +145,7 @@ const Shop = () => {
     };
 
     get_api();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     const get_api = async () => {
@@ -166,7 +165,7 @@ const Shop = () => {
       }
     };
     get_api();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   let getemployeeId = employeeData.map((employeeId) => employeeId.id);
   let getemployeeName = employeeData.map((employeeName) => employeeName.name);
@@ -245,7 +244,7 @@ const Shop = () => {
     setImage(URL.createObjectURL(e.target.files[0]));
     setShopInfo((preData) => ({
       ...preData,
-      ["image"]: e.target.files[0],
+      "image": e.target.files[0],
     }));
   }
 
@@ -293,7 +292,7 @@ const Shop = () => {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    {
+    {  // eslint-disable-line no-lone-blocks
       localStorage.setItem("StoreTabs", newValue);
     }
   };
@@ -303,7 +302,7 @@ const Shop = () => {
   const handleEmployee = (item) => {
     setOpenManager(true);
     setCurrentShop({
-      ["id"]: item.id,
+      "id": item.id,
     });
   };
 
@@ -326,7 +325,7 @@ const Shop = () => {
     setImage(URL.createObjectURL(e.target.files[0]));
     setManageInfo((preData) => ({
       ...preData,
-      ["image"]: e.target.files[0],
+      "image": e.target.files[0],
     }));
   }
 
@@ -360,7 +359,7 @@ const Shop = () => {
   const handleBusinessCard = (item) => {
     setopenBuinessCard(true);
     setCurrentShop({
-      ["id"]: item.id - 1,
+      "id": item.id - 1,
     });
   };
 
@@ -373,7 +372,7 @@ const Shop = () => {
     if (businessCard.name === "") {
       setBusinessCard((preData) => ({
         ...preData,
-        ["name"]: getemployeeName[currentShop.id],
+        "name": getemployeeName[currentShop.id],
       }));
     } else {
       setBusinessCard((preData) => ({
@@ -527,7 +526,7 @@ const Shop = () => {
                         </Stack>
                         <DialogText>Logo圖片:</DialogText>
                         <Container>
-                          <img width="150#" src={image} />
+                          <img width="150#" src={image} alt={image}/>
                           <UploadImgButton
                             accept="image/*"
                             id="contained-button-file"
@@ -718,7 +717,7 @@ const Shop = () => {
 
                             <DialogText>照片:</DialogText>
                             <DialogText>
-                            <img width="150#" src={image} />
+                            <img width="150#" src={image} alt={image}/>
                               <UploadImgButton
                                 name="file"
                                 accept="image/*"
@@ -998,7 +997,7 @@ const Shop = () => {
                               </Stack>
                               <DialogText>Logo圖片:</DialogText>
                               <DialogText>
-                                <img width="150#" src={image} />
+                                <img width="150#" src={image} alt={image}/>
                                 <UploadImgButton
                                   name="file"
                                   accept="image/*"

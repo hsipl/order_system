@@ -178,7 +178,7 @@ export function ControlCell(props) {
 }
 
 export function ControlManageCell(props) {
-  const ManageEdit = props.ManageEdit;
+  // const ManageEdit = props.ManageEdit;
   const EditBTN = props.Edit;
   return (
     <Tooltip title="修改">

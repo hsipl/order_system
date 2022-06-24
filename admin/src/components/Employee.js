@@ -78,7 +78,7 @@ const Employee = () => {
       toChinese(data);
     };
     get_api();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function toChinese(data) {
     for (var i = 0; i < data.length; i++) {
@@ -108,7 +108,7 @@ const Employee = () => {
     setImage(URL.createObjectURL(e.target.files[0]));
     setEmployeeInfo((preData) => ({
       ...preData,
-      ["image"]: e.target.files[0],
+      ["image"]: e.target.files[0],// eslint-disable-line no-useless-computed-key
     }));
   };
 
@@ -201,11 +201,11 @@ const Employee = () => {
     setOpenEdit(true);
 
     setCurrentInfo({
-      ["id"]: item.id,
-      ["name"]: item.name,
-      ["type"]: item.type === "店長" ? 1 : 0,
-      ["status"]: item.status === "在職" ? 0 : 1,
-      ["image"]: item.image,
+      "id": item.id,
+      "name": item.name,
+      "type": item.type === "店長" ? 1 : 0,
+      "status": item.status === "在職" ? 0 : 1,
+      "image": item.image,// eslint-disable-line no-useless-computed-key
     });
     setEditInfo((preData) => ({
       ...preData,
@@ -264,11 +264,11 @@ const Employee = () => {
   const handleDeClickOpen = (item) => {
     setOpenDel(true);
     setCurrentInfo({
-      ["id"]: item.id,
-      ["name"]: item.name,
-      ["type"]: item.type,
-      ["status"]: item.status,
-      ["image"]: item.image,
+      "id": item.id,
+      "name": item.name,
+      "type": item.type,
+      "status": item.status,
+      "image": item.image,
     });
   };
 
@@ -431,7 +431,7 @@ const Employee = () => {
                     type="file"
                     onChange={onImageChange}
                   />
-                  <img width="100#" src={image} />
+                  <img width="100#" src={image}  alt={image}/>
                 </Container>
                 <DialogActions>
                   <Button onClick={handleClose} size="large">

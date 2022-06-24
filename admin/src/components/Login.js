@@ -34,7 +34,7 @@ const Login = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
-  const [userLogin, setUserLogin] = useState(false);
+  const [/*userLogin*/, setUserLogin] = useState(false);
   const [errMes, setErrMes] = useState("");
 
   const url = "http://localhost:8000/api/user/login";

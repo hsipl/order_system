@@ -33,7 +33,6 @@ const Handover = () => {
     sysmoney: "",
     realcash: "",
     status: "",
-    realcash: "",
   });
 
   const url_Handover = "http://localhost:8000/api/handover";
@@ -57,23 +56,23 @@ const Handover = () => {
       setHandoverFilter(data);
     };
     get_api();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleHandoverEditOpen = (item, index) => {
     setOpenEdit(true);
     setCurrentHandover({
-      ["id"]: item.id,
-      ["userId"]: item.userId.id,
-      ["userName"]: item.userId.name,
-      ["sysmoney"]: item.sysmoney,
-      ["realcash"]: item.realcash,
-      ["createdAt"]: item.createdAt,
-      ["status"]: item.status,
+      "id": item.id,
+      "userId": item.userId.id,
+      "userName": item.userId.name,
+      "sysmoney": item.sysmoney,
+      "realcash": item.realcash,
+      "createdAt": item.createdAt,
+      "status": item.status,
     });
     setHandoverInfo({
-      ["userId"]: item.userId.id,
-      ["sysmoney"]: item.sysmoney,
-      ["status"]: item.status,
+      "userId": item.userId.id,
+      "sysmoney": item.sysmoney,
+      "status": item.status,
     });
   };
 
@@ -97,7 +96,7 @@ const Handover = () => {
   function handleHandoverInfo(e) {
     setHandoverInfo((preData) => ({
       ...preData,
-      ["realcash"]: e.target.value,
+      "realcash": e.target.value,
     }));
   }
 
