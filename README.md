@@ -101,6 +101,8 @@ project: Add a new  API for x functionality
 |
 +-------> Type:Admin,Backend,App,DB,...etc
 ```
+### DB Design
+![image](https://user-images.githubusercontent.com/54132183/175983184-1ca72f61-e1d3-4362-9cdc-497d275dd15f.png)
 
 
 ### Git Process
