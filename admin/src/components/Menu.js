@@ -1,5 +1,4 @@
 import { MenuItem } from "@mui/material";
-import { useMemo } from "react";
 import { SearchBox } from "./SearchAndForm";
 
 const MenuList = (props) => {

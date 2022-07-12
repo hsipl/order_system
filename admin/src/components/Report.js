@@ -14,7 +14,7 @@ import {
 import { LocalizationProvider, DatePicker } from "@mui/lab/";
 import AdapterDateFns from "@mui/lab/AdapterDateFns";
 import { Search } from "@material-ui/icons";
-import { SearchBox, SearchContainer } from "./SearchAndForm";
+import { SearchBox } from "./SearchAndForm";
 import { TableHeads } from "./Table";
 
 const Report = () => {
@@ -39,11 +39,11 @@ const Report = () => {
     const get_api = async () => {
       let { data } = await axios.get(url, config);
       for (var i = 0; i < data.length; i++) {
-        setAllStore((preData) => [...preData, data[i].name]);
+        setAllStore((preData) => [...preData, data[i].name]); // eslint-disable-line no-loop-func
       }
     };
     get_api();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>

@@ -29,7 +29,7 @@ export const LeftButtonsInfo = [
   { name: "商品管理", id: "BtnProduct", url: "/product", isMain: false },
   { name: "員工管理", id: "BtnEmployee", url: "/employee", isMain: false },
   { name: "分店管理", id: "BtnShop", url: "/shop", isMain: true },
-  { name: "財務報表", id: "BtnReport", url: "/report", isMain: false },
+  // { name: "財務報表", id: "BtnReport", url: "/report", isMain: false },
   { name: "交班紀錄", id: "BtnHandover", url: "/handover", isMain: false },
 ];
 
