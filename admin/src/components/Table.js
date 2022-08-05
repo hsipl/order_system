@@ -22,7 +22,7 @@ export const TableHeads = (props) => {
   const Heads = {
     product: ["編號", "產品名稱", "價格", "圖片", "類別", "狀態", "操作"],
     productShop: ["編號", "產品名稱", "價格", "圖片", "類別", "狀態"],
-    employee: ["姓名", "帳號", "職位", "操作"],
+    employee: ["照片", "姓名", "職位", "狀態", "操作"],
     shop: ["店家照片", "店家名稱", "類型", "狀態", "創店日期", "操作"],
     report: ["產品名稱", "銷售總額(元)", "銷售總數(份)"],
     handover: ["交班人", "系統金額", "實際金額", "交班時間", "操作"],
@@ -52,11 +52,9 @@ TableHeads.propTypes = {
   ]).isRequired,
 };
 /*預設值*/
-TableHeads.defaultProps ={
-
-  id: "product"
-
-}
+TableHeads.defaultProps = {
+  id: "product",
+};
 
 export function ControlCell(props) {
   const DelBTN = props.Del;
@@ -150,7 +148,7 @@ export function ControlCell(props) {
       );
     }
   } else {
-    if (status === "已歇業" || status === "已停用" || status === "已停售") {
+    if (status === "已歇業" || status === "已離職") {
       return (
         <Tooltip title="修改">
           <Button onClick={EditBTN}>
@@ -158,6 +156,8 @@ export function ControlCell(props) {
           </Button>
         </Tooltip>
       );
+    } else if (status === "已停用" || status === "已停售") {
+      return <></>;
     } else {
       return (
         <>
@@ -178,7 +178,7 @@ export function ControlCell(props) {
 }
 
 export function ControlManageCell(props) {
-  const ManageEdit = props.ManageEdit;
+  // const ManageEdit = props.ManageEdit;
   const EditBTN = props.Edit;
   return (
     <Tooltip title="修改">
@@ -408,6 +408,42 @@ export function TableHandover(props) {
           align="center"
           sx={{
             height: "5rem",
+            width: "15%",
+          }}
+        >
+          {item}
+        </TableCell>
+      ))}
+    </TableRow>
+  );
+}
+
+export function TableEmployee(props) {
+  const delBTN = props.Del;
+  const editBTN = props.Edit;
+  const Id = props.Id;
+  const Img = props.Img;
+  const Name = props.Name;
+  const Type = props.Type;
+  const Status = props.Status;
+  // const createdAt = props.createdAt;
+
+  const EmployeeData = [
+    <img src={"http://localhost:8000/" + Img} alt={Img} height="100" />,
+    Name,
+    Type,
+    Status,
+    <ControlCell status={Status} Del={delBTN} Edit={editBTN} />,
+  ];
+
+  return (
+    <TableRow key={Id}>
+      {EmployeeData.map((item) => (
+        <TableCell
+          align="center"
+          sx={{
+            height: "5rem",
+            width: "15%",
           }}
         >
           {item}

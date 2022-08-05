@@ -34,7 +34,7 @@ const Login = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const history = useHistory();
-  const [userLogin, setUserLogin] = useState(false);
+  const [/*userLogin*/, setUserLogin] = useState(false);
   const [errMes, setErrMes] = useState("");
 
   const url = "http://localhost:8000/api/user/login";
@@ -72,6 +72,7 @@ const Login = () => {
           setUserLogin(true);
 
           localStorage.setItem("UserName", JSON.stringify(UserInfo.name));
+          localStorage.setItem("StoreId", JSON.stringify(UserInfo.storeId.id));
 
           localStorage.setItem(
             "StoreName",

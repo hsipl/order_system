@@ -17,10 +17,10 @@ import { FilterLeftButtons, NonLineLink } from "./Buttons";
 
 const TopNav = styled(Stack)({
   backgroundColor: "rgb(208, 216, 229)",
-  boxShadow:"1px 1px 5px gray",
+  boxShadow: "1px 1px 5px gray",
   width: "100%",
   position: "fixed",
-  zIndex:"10"
+  zIndex: "10",
 });
 
 export const LogoImg = styled(CardMedia)({
@@ -34,7 +34,7 @@ const LeftNav = styled(Stack)({
   width: "10rem",
   height: "100%",
   backgroundColor: "rgb(208, 216, 229)",
-  zIndex:"10"
+  zIndex: "10",
 });
 
 export const BodyContainer = styled(Paper)({
@@ -100,21 +100,23 @@ export const Navbar = () => {
       });
   };
 
-  const LogoUrl =
-    localStorage.getItem("StoreLogo") !== ""
-      ? "http://localhost:8000/" + JSON.parse(localStorage.getItem("StoreLogo"))
-      : "";
+  const LogoUrl = JSON.parse(localStorage.getItem("StoreLogo"));
 
   return (
     <>
-      <TopNav 
+      <TopNav
         direction="row"
         justifyContent="space-between"
         alignItems="center"
       >
-        <NonLineLink to="/">
+        {LogoUrl !== "" ? (
+          <NonLineLink to="/">
+            <LogoImg image={"http://localhost:8000/" + LogoUrl} />
+          </NonLineLink>
+        ) : (
           <LogoImg image={LogoUrl} />
-        </NonLineLink>
+        )}
+
         <Stack
           direction="row"
           justifyContent="end"
